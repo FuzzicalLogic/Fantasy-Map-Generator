@@ -4,6 +4,7 @@ import { editCultures } from "./cultures-editor.js";
 import { editDiplomacy } from "./diplomacy-editor.js";
 import { overviewMilitary } from "./military-overview";
 import { editNamesbase } from "./namesbase-editor.js";
+import { editNotes } from "./notes-editor.js";
 
 toolsContent.addEventListener("click", function (event) {
     if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }

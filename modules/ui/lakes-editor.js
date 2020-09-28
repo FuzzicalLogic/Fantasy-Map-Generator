@@ -1,3 +1,5 @@
+import { editNotes } from "./notes-editor.js";
+
 export function editLake() {
     if (customization) return;
     closeDialogs(".stable");

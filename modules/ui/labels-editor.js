@@ -1,3 +1,5 @@
+import { editNotes } from "./notes-editor.js";
+
 export function editLabel() {
     if (customization) return;
     closeDialogs();

@@ -1,3 +1,5 @@
+import { editNotes } from "./notes-editor.js";
+
 export function editRiver(id) {
     if (customization) return;
     if (elSelected && d3.event && d3.event.target.id === elSelected.attr("id")) return;

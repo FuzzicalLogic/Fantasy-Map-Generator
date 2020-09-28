@@ -1,4 +1,5 @@
 import { Battle } from "./battle-screen.js";
+import { editNotes } from "./notes-editor.js";
 
 export function editRegiment(selector) {
     if (customization) return;

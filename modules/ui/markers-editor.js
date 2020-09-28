@@ -1,3 +1,5 @@
+import { editNotes } from "./notes-editor.js";
+
 export function editMarker() {
     if (customization) return;
     closeDialogs("#markerEditor, .stable");

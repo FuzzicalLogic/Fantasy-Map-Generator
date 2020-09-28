@@ -1,3 +1,5 @@
+import { editNotes } from "./notes-editor.js";
+
 export function editRoute(onClick) {
     if (customization) return;
     if (!onClick && elSelected && d3.event.target.id === elSelected.attr("id")) return;
