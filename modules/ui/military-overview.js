@@ -1,4 +1,3 @@
-"use strict";
 export function overviewMilitary() {
     if (customization) return;
     closeDialogs("#militaryOverview, .stable");
