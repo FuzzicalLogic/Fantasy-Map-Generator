@@ -1,3 +1,5 @@
+import { editStates } from "./states-editor.js";
+
 export function editProvinces() {
     if (customization) return;
     closeDialogs("#provincesEditor, .stable");
