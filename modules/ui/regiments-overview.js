@@ -1,3 +1,5 @@
+import { editRegiment } from "./regiment-editor.js";
+
 export function overviewRegiments(state) {
     if (customization) return;
     closeDialogs(".stable");
