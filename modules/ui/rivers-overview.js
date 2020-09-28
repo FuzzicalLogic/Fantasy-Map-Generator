@@ -1,3 +1,5 @@
+import { editRiver } from "./rivers-editor.js";
+
 export function overviewRivers() {
     if (customization) return;
     closeDialogs("#riversOverview, .stable");
