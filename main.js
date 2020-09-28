@@ -598,6 +598,7 @@ export function placePoints() {
 }
 
 // calculate Delaunay and then Voronoi diagram
+import { Voronoi } from "./modules/voronoi.js";
 export function calculateVoronoi(graph, points) {
     console.time("calculateDelaunay");
     const n = points.length;

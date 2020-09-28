@@ -1,4 +1,6 @@
-// on map regeneration restore layers if they was turned on 
+import * as ThreeD from "./3d.js";
+
+// on map regeneration restore layers if they was turned on
 export function restoreLayers() {
     if (layerIsOn("toggleHeight")) drawHeightmap();
     if (layerIsOn("toggleCells")) drawCells();

@@ -1,3 +1,5 @@
+import * as ThreeD from "./3d.js";
+
 $("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
 $("#exitCustomization").draggable({ handle: "div" });
 $("#mapLayers").disableSelection();

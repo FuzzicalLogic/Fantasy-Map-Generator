@@ -1,3 +1,5 @@
+import * as ThreeD from "./3d.js";
+
 function editHeightmap() {
     void function selectEditMode() {
         alertMessage.innerHTML = `Heightmap is a core element on which all other data (rivers, burgs, states etc) is based.
