@@ -374,6 +374,7 @@ export const updateCultures = function () {
 }
 
 // calculate and draw curved state labels for a list of states
+import { Voronoi } from "./voronoi.js";
 export const drawStateLabels = function (list) {
     console.time("drawStateLabels");
     const cells = pack.cells, features = pack.features, states = pack.states;

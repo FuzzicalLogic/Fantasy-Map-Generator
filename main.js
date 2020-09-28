@@ -6,7 +6,6 @@
 // I don't mind of any help with programming.
 // See also https://github.com/Azgaar/Fantasy-Map-Generator/issues/153
 
-"use strict";
 export const version = "1.4"; // generator version
 document.title += " v" + version;
 
