@@ -6,6 +6,7 @@ import { editHeightmap } from "./heightmap-editor.js";
 import { overviewMilitary } from "./military-overview";
 import { editNotes } from "./notes-editor.js";
 import { editProvinces } from "./provinces-editor.js";
+import { editReligions } from "./religions-editor.js";
 
 // fit full-screen map if window is resized
 $(window).resize(function(e) {
