@@ -3,6 +3,7 @@ import { overviewBurgs } from "./burgs-overview.js";
 import { editCultures } from "./cultures-editor.js";
 import { editDiplomacy } from "./diplomacy-editor.js";
 import { editHeightmap } from "./heightmap-editor.js";
+import { overviewMilitary } from "./military-overview";
 
 // fit full-screen map if window is resized
 $(window).resize(function(e) {
