@@ -9,6 +9,7 @@ import { editProvinces } from "./provinces-editor.js";
 import { editReligions } from "./religions-editor.js";
 import { overviewRivers } from "./rivers-overview";
 import { editStates } from "./states-editor.js";
+import { editUnits } from "./units-editor.js";
 
 // fit full-screen map if window is resized
 $(window).resize(function(e) {

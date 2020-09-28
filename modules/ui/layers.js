@@ -1,4 +1,5 @@
 import * as ThreeD from "./3d.js";
+import { editUnits } from "./units-editor.js";
 
 // on map regeneration restore layers if they was turned on
 export function restoreLayers() {
