@@ -63,7 +63,7 @@ export const stop = function() {
   geometry = undefined;
   mesh = undefined;
 
-  ThreeD.options.isOn = false;
+  options.isOn = false;
 }
 
 export const setScale = function(scale) {
