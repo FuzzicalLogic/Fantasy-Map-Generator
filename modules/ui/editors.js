@@ -4,6 +4,7 @@ import { editHeightmap } from "./heightmap-editor.js";
 import { editIce } from "./ice-editor.js";
 import { editLabel } from "./label-editor.js";
 import { editLake } from "./lakes-editor.js";
+import { editMarker } from "./markers-editor.js";
 
 restoreDefaultEvents(); // apply default viewbox events on load
 
