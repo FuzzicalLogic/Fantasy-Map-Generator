@@ -1,4 +1,6 @@
 
+import { editBurg } from "./burg-editor.js";
+
 export function overviewBurgs() {
     if (customization) return;
     closeDialogs("#burgsOverview, .stable");

@@ -1,3 +1,5 @@
+import * as ThreeD from "./3d.js";
+
 export function editWorld() {
     if (customization) return;
     $("#worldConfigurator").dialog({

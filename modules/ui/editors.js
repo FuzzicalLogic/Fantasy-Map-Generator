@@ -1,3 +1,10 @@
+import { editBurg } from "./burg-editor.js";
+import { editCoastline } from "./coastline-editor.js";
+import { editHeightmap } from "./heightmap-editor.js";
+import { editIce } from "./ice-editor.js";
+import { editLabel } from "./label-editor.js";
+import { editLake } from "./lakes-editor.js";
+
 restoreDefaultEvents(); // apply default viewbox events on load
 
 // restore default viewbox events

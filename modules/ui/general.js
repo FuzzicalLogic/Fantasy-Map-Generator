@@ -1,3 +1,9 @@
+import { editBiomes } from "./biomes-editor.js";
+import { overviewBurgs } from "./burgs-overview.js";
+import { editCultures } from "./cultures-editor.js";
+import { editDiplomacy } from "./diplomacy-editor.js";
+import { editHeightmap } from "./heightmap-editor.js";
+
 // fit full-screen map if window is resized
 $(window).resize(function(e) {
   if (localStorage.getItem("mapWidth") && localStorage.getItem("mapHeight")) return;

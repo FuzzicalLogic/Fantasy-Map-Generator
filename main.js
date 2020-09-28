@@ -15,6 +15,8 @@ if (rn(localStorage.getItem("version"), 2) !== rn(version, 2)) {
     setTimeout(showWelcomeMessage, 8000);
 }
 
+import * as ThreeD from "./modules/ui/3d.js";
+
 // append svg layers (in default order)
 export let svg = d3.select("#map");
 export let defs = svg.select("#deftemp");

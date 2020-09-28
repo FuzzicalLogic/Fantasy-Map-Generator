@@ -1,3 +1,5 @@
+import { Battle } from "./battle-screen.js";
+
 export function editRegiment(selector) {
     if (customization) return;
     closeDialogs(".stable");
