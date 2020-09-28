@@ -1,3 +1,5 @@
+import { editNamesbase } from "./namesbase-editor.js";
+
 export function editCultures() {
     if (customization) return;
     closeDialogs("#culturesEditor, .stable");
