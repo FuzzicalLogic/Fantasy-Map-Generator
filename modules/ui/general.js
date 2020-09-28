@@ -1,6 +1,3 @@
-// Module to store general UI functions
-"use strict";
-
 // fit full-screen map if window is resized
 $(window).resize(function(e) {
   if (localStorage.getItem("mapWidth") && localStorage.getItem("mapHeight")) return;
@@ -12,14 +9,14 @@ $(window).resize(function(e) {
 //window.onbeforeunload = () => "Are you sure you want to navigate away?";
 
 // Tooltips
-const tooltip = document.getElementById("tooltip");
+export const tooltip = document.getElementById("tooltip");
 
 // show tip for non-svg elemets with data-tip
 document.getElementById("dialogs").addEventListener("mousemove", showDataTip);
 document.getElementById("optionsContainer").addEventListener("mousemove", showDataTip);
 document.getElementById("exitCustomization").addEventListener("mousemove", showDataTip);
 
-function tip(tip = "Tip is undefined", main, type, time) {
+export function tip(tip = "Tip is undefined", main, type, time) {
   tooltip.innerHTML = tip;
   tooltip.style.background = "linear-gradient(0.1turn, #ffffff00, #5e5c5c80, #ffffff00)";
   if (type === "error") tooltip.style.background = "linear-gradient(0.1turn, #ffffff00, #e11d1dcc, #ffffff00)"; else
@@ -30,17 +27,17 @@ function tip(tip = "Tip is undefined", main, type, time) {
   if (time) setTimeout(tooltip.dataset.main = "", time); // clear main in some time
 }
 
-function showMainTip() {
+export function showMainTip() {
   tooltip.innerHTML = tooltip.dataset.main;
 }
 
-function clearMainTip() {
+export function clearMainTip() {
   tooltip.dataset.main = "";
   tooltip.innerHTML = "";
 }
 
 // show tip at the bottom of the screen, consider possible translation
-function showDataTip(e) {
+export function showDataTip(e) {
   if (!e.target) return;
   let dataTip = e.target.dataset.tip;
   if (!dataTip && e.target.parentNode.dataset.tip) dataTip = e.target.parentNode.dataset.tip;
@@ -49,7 +46,7 @@ function showDataTip(e) {
   tip(dataTip);
 }
 
-function moved() {
+export function moved() {
   const point = d3.mouse(this);
   const i = findCell(point[0], point[1]); // pack cell id
   if (i === undefined) return;
@@ -60,7 +57,7 @@ function moved() {
 }
 
 // show note box on hover (if any)
-function showNotes(e, i) {
+export function showNotes(e, i) {
   if (notesEditor.offsetParent) return;
   let id = e.target.id || e.target.parentNode.id || e.target.parentNode.parentNode.id;
   if (e.target.parentNode.parentNode.id === "burgLabels") id = "burg" + e.target.dataset.id; else
@@ -79,7 +76,7 @@ function showNotes(e, i) {
 }
 
 // show viewbox tooltip if main tooltip is blank
-function showMapTooltip(point, e, i, g) {
+export function showMapTooltip(point, e, i, g) {
   tip(""); // clear tip
   const tag = e.target.tagName;
   const path = e.composedPath ? e.composedPath() : getComposedPath(e.target); // apply polyfill
@@ -129,13 +126,13 @@ function showMapTooltip(point, e, i, g) {
   if (layerIsOn("toggleHeight")) tip("Height: " + getFriendlyHeight(point));
 }
 
-function getRiverName(id) {
+export function getRiverName(id) {
   const r = pack.rivers.find(r => r.i == id.slice(5));
   return r ? r.name + " " + r.type + ". " : "";
 }
 
 // get cell info on mouse move
-function updateCellInfo(point, i, g) {
+export function updateCellInfo(point, i, g) {
   const cells = pack.cells;
   const x = infoX.innerHTML = rn(point[0]);
   const y = infoY.innerHTML = rn(point[1]);
@@ -162,7 +159,7 @@ function updateCellInfo(point, i, g) {
 }
 
 // convert coordinate to DMS format
-function toDMS(coord, c) {
+export function toDMS(coord, c) {
   const degrees = Math.floor(Math.abs(coord));
   const minutesNotTruncated = (Math.abs(coord) - degrees) * 60;
   const minutes = Math.floor(minutesNotTruncated);
@@ -172,7 +169,7 @@ function toDMS(coord, c) {
 }
 
 // get surface elevation
-function getElevation(f, h) {
+export function getElevation(f, h) {
   if (f.land) return getHeight(h) + " (" + h + ")"; // land: usual height
   if (f.border) return "0 " + heightUnit.value; // ocean: 0
 
@@ -184,7 +181,7 @@ function getElevation(f, h) {
 }
 
 // get water depth
-function getDepth(f, h, p) {
+export function getDepth(f, h, p) {
   if (f.land) return "0 " + heightUnit.value; // land: 0
   if (!f.border) return getHeight(h, "abs"); // lake: pack abs height
   const gridH = grid.cells.h[findGridCell(p[0], p[1])];
@@ -192,14 +189,14 @@ function getDepth(f, h, p) {
 }
 
 // get user-friendly (real-world) height value from map data
-function getFriendlyHeight(p) {
+export function getFriendlyHeight(p) {
   const packH = pack.cells.h[findCell(p[0], p[1])];
   const gridH = grid.cells.h[findGridCell(p[0], p[1])];
   const h = packH < 20 ? gridH : packH;
   return getHeight(h);
 }
 
-function getHeight(h, abs) {
+export function getHeight(h, abs) {
   const unit = heightUnit.value;
   let unitRatio = 3.281; // default calculations are in feet
   if (unit === "m") unitRatio = 1; // if meter
@@ -214,29 +211,29 @@ function getHeight(h, abs) {
 }
 
 // get user-friendly (real-world) precipitation value from map data
-function getFriendlyPrecipitation(i) {
+export function getFriendlyPrecipitation(i) {
   const prec = grid.cells.prec[pack.cells.g[i]];
   return prec * 100 + " mm";
 }
 
-function getRiverInfo(id) {
+export function getRiverInfo(id) {
   const r = pack.rivers.find(r => r.i == id);
   return r ? `${r.name} ${r.type} (${id})` : "n/a";
 }
 
-function getCellPopulation(i) {
+export function getCellPopulation(i) {
   const rural = pack.cells.pop[i] * populationRate.value;
   const urban = pack.cells.burg[i] ? pack.burgs[pack.cells.burg[i]].population * populationRate.value * urbanization.value : 0;
   return [rural, urban];
 }
 
 // get user-friendly (real-world) population value from map data
-function getFriendlyPopulation(i) {
+export function getFriendlyPopulation(i) {
   const [rural, urban] = getCellPopulation(i);
   return `${si(rural+urban)} (${si(rural)} rural, urban ${si(urban)})`;
 }
 
-function getPopulationTip(i) {
+export function getPopulationTip(i) {
   const [rural, urban] = getCellPopulation(i);
   return `Cell population: ${si(rural+urban)}; Rural: ${si(rural)}; Urban: ${si(urban)}`;
 }
@@ -257,7 +254,7 @@ document.querySelectorAll("[data-locked]").forEach(function(e) {
 });
 
 // lock option
-function lock(id) {
+export function lock(id) {
   const input = document.querySelector("[data-stored='"+id+"']");
   if (input) localStorage.setItem(id, input.value);
   const el = document.getElementById("lock_" + id);
@@ -267,7 +264,7 @@ function lock(id) {
 }
 
 // unlock option
-function unlock(id) {
+export function unlock(id) {
   localStorage.removeItem(id);
   const el = document.getElementById("lock_" + id);
   if(!el) return;
@@ -276,25 +273,25 @@ function unlock(id) {
 }
 
 // check if option is locked
-function locked(id) {
+export function locked(id) {
   const lockEl = document.getElementById("lock_" + id);
   return lockEl.dataset.locked == 1;
 }
 
 // check if option is stored in localStorage
-function stored(option) {
+export function stored(option) {
   return localStorage.getItem(option);
 }
 
 // apply drop-down menu option. If the value is not in options, add it
-function applyOption(select, id, name = id) {
+export function applyOption(select, id, name = id) {
   const custom = !Array.from(select.options).some(o => o.value == id);
   if (custom) select.options.add(new Option(name, id));
   select.value = id;
 }
 
 // show info about the generator in a popup
-function showInfo() {
+export function showInfo() {
   const Discord = link("https://discordapp.com/invite/X7E84HU", "Discord");
   const Reddit = link("https://www.reddit.com/r/FantasyMapGenerator", "Reddit")
   const Patreon = link("https://www.patreon.com/azgaar", "Patreon");
@@ -436,7 +433,7 @@ document.addEventListener("keyup", event => {
   else if (ctrl) pressControl(); // Control to toggle mode
 });
 
-function pressNumpadSign(key) {
+export function pressNumpadSign(key) {
   // if brush sliders are displayed, decrease brush size
   let brush = null;
   const d = key === 107 ? 1 : -1;
@@ -459,14 +456,14 @@ function pressNumpadSign(key) {
   zoom.scaleBy(svg, scaleBy); // if no, zoom map
 }
 
-function pressControl() {
+export function pressControl() {
   if (zonesRemove.offsetParent) {
     zonesRemove.classList.contains("pressed") ? zonesRemove.classList.remove("pressed") : zonesRemove.classList.add("pressed");
   }
 }
 
 // trigger trash button click on "Delete" keypress
-function removeElementOnKey() {
+export function removeElementOnKey() {
   $(".dialog:visible .fastDelete").click();
   $("button:visible:contains('Remove')").click();
 }

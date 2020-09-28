@@ -1,26 +1,30 @@
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.ThreeD = factory());
-}(this, (function () {'use strict';
-
 // set default options
-const options = {scale: 50, lightness: .7, shadow: .5, sun: {x: 100, y: 600, z: 1000}, rotateMesh: 0, rotateGlobe: .5,
-  skyColor: "#9ecef5", waterColor: "#466eab", extendedWater: 0, resolution: 2};
+export const options = {
+    scale: 50,
+    lightness: .7,
+    shadow: .5,
+    sun: { x: 100, y: 600, z: 1000 },
+    rotateMesh: 0,
+    rotateGlobe: .5,
+    skyColor: "#9ecef5",
+    waterColor: "#466eab",
+    extendedWater: 0,
+    resolution: 2
+};
 
 // set variables
 let Renderer, scene, camera, controls, animationFrame, material, texture,
   geometry, mesh, ambientLight, spotLight, waterPlane, waterMaterial, waterMesh;
 
 // initiate 3d scene
-const create = async function(canvas, type = "viewMesh") {
+export const create = async function(canvas, type = "viewMesh") {
   options.isOn = true;
   options.isGlobe = type === "viewGlobe";
   return options.isGlobe ? newGlobe(canvas) : newMesh(canvas);
 }
 
 // redraw 3d scene
-const redraw = function() {
+export const redraw = function() {
   scene.remove(mesh);
   Renderer.setSize(Renderer.domElement.width, Renderer.domElement.height);
   if (options.isGlobe) updateGlobeTexure();
@@ -29,12 +33,12 @@ const redraw = function() {
 }
 
 // update 3d texture
-const update = function() {
+export const update = function() {
   if (options.isGlobe) updateGlobeTexure(); else update3dTexture();
 }
 
 // try to clean the memory as much as possible
-const stop = function() {
+export const stop = function() {
   cancelAnimationFrame(animationFrame);
   texture.dispose();
   geometry.dispose();
@@ -62,7 +66,7 @@ const stop = function() {
   ThreeD.options.isOn = false;
 }
 
-const setScale = function(scale) {
+export const setScale = function(scale) {
   options.scale = scale;
   geometry.vertices.forEach((v, i) => v.z = getMeshHeight(i));
   geometry.verticesNeedUpdate = true;
@@ -71,19 +75,19 @@ const setScale = function(scale) {
   geometry.verticesNeedUpdate = false;
 }
 
-const setLightness = function(intensity) {
+export const setLightness = function(intensity) {
   options.lightness = intensity;
   ambientLight.intensity = intensity;
   render();
 }
 
-const setSun = function(x, y, z) {
+export const setSun = function(x, y, z) {
   options.sun = {x, y, z};
   spotLight.position.set(x, y, z);
   render();
 }
 
-const setRotation = function(speed) {
+export const setRotation = function(speed) {
   cancelAnimationFrame(animationFrame);
   if (options.isGlobe) options.rotateGlobe = speed; else options.rotateMesh = speed;
   controls.autoRotateSpeed = speed;
@@ -91,7 +95,7 @@ const setRotation = function(speed) {
   if (controls.autoRotate) animate();
 }
 
-const toggleSky = function() {
+export const toggleSky = function() {
   if (options.extendedWater) {
     scene.background = null;
     scene.fog = null;
@@ -102,7 +106,7 @@ const toggleSky = function() {
   redraw();
 }
 
-const setColors = function(sky, water) {
+export const setColors = function(sky, water) {
   options.skyColor = sky;
   scene.background = scene.fog.color = new THREE.Color(sky);
   options.waterColor = water;
@@ -110,13 +114,13 @@ const setColors = function(sky, water) {
   render();
 }
 
-const setResolution = function(resolution) {
+export const setResolution = function(resolution) {
   options.resolution = resolution;
   update();
 }
 
 // download screenshot
-const saveScreenshot = async function() {
+export const saveScreenshot = async function() {
   const URL = Renderer.domElement.toDataURL("image/jpeg");
   const link = document.createElement("a");
   link.download = getFileName() + ".jpeg";
@@ -332,7 +336,3 @@ function OrbitControls(camera, domElement) {
     script.onerror = () => resolve(false);
   });
 }
-
-return {create, redraw, update, stop, options, setScale, setLightness, setSun, setRotation, toggleSky, setResolution, setColors, saveScreenshot};
-
-})));

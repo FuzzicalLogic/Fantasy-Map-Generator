@@ -1,8 +1,5 @@
-// UI module to control the style
-"use strict";
-
 // select element to be edited
-function editStyle(element, group) {
+export function editStyle(element, group) {
   showOptions();
   styleTab.click();
   styleElementSelect.value = element;
@@ -19,7 +16,7 @@ function editStyle(element, group) {
 
 // Toggle style sections on element select
 styleElementSelect.addEventListener("change", selectStyleElement);
-function selectStyleElement() {
+export function selectStyleElement() {
   const sel = styleElementSelect.value;
   let el = d3.select("#"+sel);
 
@@ -250,7 +247,7 @@ function selectStyleElement() {
 // Handle style inputs change
 styleGroupSelect.addEventListener("change", selectStyleElement);
 
-function getEl() {
+export function getEl() {
   const el = styleElementSelect.value, g = styleGroupSelect.value;
   if (g === el) return svg.select("#"+el); else return svg.select("#"+el).select("#"+g);
 }
@@ -321,7 +318,7 @@ styleGridSize.addEventListener("input", function() {
   calculateFriendlyGridSize();
 });
 
-function calculateFriendlyGridSize() {
+export function calculateFriendlyGridSize() {
   const square = styleGridType.value === "square";
   const size = square ? styleGridSize.value : styleGridSize.value * Math.cos(30 * Math.PI / 180) * 2;
   const friendly = `${rn(size * distanceScaleInput.value, 2)} ${distanceUnitInput.value}`;
@@ -331,7 +328,7 @@ function calculateFriendlyGridSize() {
 styleShiftX.addEventListener("input", shiftElement);
 styleShiftY.addEventListener("input", shiftElement);
 
-function shiftElement() {
+export function shiftElement() {
   const x = styleShiftX.value || 0;
   const y = styleShiftY.value || 0;
   getEl().attr("transform", `translate(${x},${y})`);
@@ -459,7 +456,7 @@ styleCompassSizeInput.addEventListener("input", function() {
 styleCompassShiftX.addEventListener("input", shiftCompass);
 styleCompassShiftY.addEventListener("input", shiftCompass);
 
-function shiftCompass() {
+export function shiftCompass() {
   const tr = `translate(${styleCompassShiftX.value} ${styleCompassShiftY.value}) scale(${styleCompassSizeInput.value})`;
   d3.select("#rose").attr("transform", tr);
 }
@@ -481,7 +478,7 @@ styleLegendOpacity.addEventListener("input", function() {
 });
 
 styleSelectFont.addEventListener("change", changeFont);
-function changeFont() {
+export function changeFont() {
   const value = styleSelectFont.value;
   const font = fonts[value].split(':')[0].replace(/\+/g, " ");
   getEl().attr("font-family", font).attr("data-font", fonts[value]);
@@ -525,7 +522,7 @@ styleFontMinus.addEventListener("click", function() {
   changeFontSize(size);
 });
 
-function changeFontSize(size) {
+export function changeFontSize(size) {
   const legend = styleElementSelect.value === "legend";
   const coords = styleElementSelect.value === "coordinates";
 
@@ -549,7 +546,7 @@ styleRadiusMinus.addEventListener("click", function() {
   changeRadius(size);
 });
 
-function changeRadius(size, group) {
+export function changeRadius(size, group) {
   const el = group ? burgIcons.select("#"+group) : getEl();
   const g = el.attr("id");
   el.attr("size", size)
@@ -573,7 +570,7 @@ styleIconSizeMinus.addEventListener("click", function() {
   changeIconSize(size);
 });
 
-function changeIconSize(size, group) {
+export function changeIconSize(size, group) {
   const el = group ? anchors.select("#"+group) : getEl();
   const oldSize = +el.attr("size");
   const shift = (size - oldSize) / 2;
@@ -615,7 +612,7 @@ styleArmiesSize.addEventListener("input", function() {
 });
 
 // request a URL to image to be used as a texture
-function textureProvideURL() {
+export function textureProvideURL() {
   alertMessage.innerHTML = `Provide an image URL to be used as a texture:
     <input id="textureURL" type="url" style="width: 100%" placeholder="http://www.example.com/image.jpg" oninput="fetchTextureURL(this.value)">
     <canvas id="texturePreview" width="256px" height="144px"></canvas>`;
@@ -638,7 +635,7 @@ function textureProvideURL() {
   });
 }
 
-function setBase64Texture(url) {
+export function setBase64Texture(url) {
   const xhr = new XMLHttpRequest();
   xhr.onload = function() {
     const reader = new FileReader();
@@ -652,7 +649,7 @@ function setBase64Texture(url) {
   xhr.send();
 };
 
-function fetchTextureURL(url) {
+export function fetchTextureURL(url) {
   console.log("Provided URL is", url);
   const img = new Image();
   img.onload = function () {
@@ -664,12 +661,12 @@ function fetchTextureURL(url) {
   img.src = url;
 }
 
-function armiesStyle() {
+export function armiesStyle() {
   return `#armies text {stroke: none; fill: #fff; text-shadow: 0 0 4px #000; dominant-baseline: central; text-anchor: middle; font-family: Helvetica; fill-opacity: 1;}#armies text.regimentIcon {font-size: .8em;}`;
 }
 
 // apply default or custom style settings on load
-function applyStyleOnLoad() {
+export function applyStyleOnLoad() {
   addDefaulsStyles(); // add FMG system styles to localStorage
   svg.select("defs").append("style").text(armiesStyle()); // add armies style
 
@@ -689,7 +686,7 @@ function applyStyleOnLoad() {
   }
 }
 
-function addDefaulsStyles() {
+export function addDefaulsStyles() {
   if (!localStorage.getItem("styleClean")) {
     const clean = `{"#map":{"background-color":"#000000","filter":null,"data-filter":null},"#armies":{"font-size":6,"box-size":3,"stroke":"#000","stroke-width":0,"opacity":1,"fill-opacity":1,"filter":null},"#biomes":{"opacity":0.5,"filter":"url(#blur7)","mask":"url(#land)"},"#stateBorders":{"opacity":0.8,"stroke":"#414141","stroke-width":0.7,"stroke-dasharray":0,"stroke-linecap":"butt","filter":""},"#provinceBorders":{"opacity":0.8,"stroke":"#414141","stroke-width":0.45,"stroke-dasharray":1,"stroke-linecap":"butt","filter":null},"#cells":{"opacity":null,"stroke":"#808080","stroke-width":0.09,"filter":null,"mask":"url(#land)"},"#gridOverlay":{"opacity":0.8,"size":10,"type":"pointyHex","stroke":"#808080","stroke-width":0.5,"stroke-dasharray":null,"stroke-linecap":null,"transform":null,"filter":null,"mask":null},"#coordinates":{"opacity":1,"data-size":12,"font-size":12,"stroke":"#414141","stroke-width":0.45,"stroke-dasharray":3,"stroke-linecap":null,"filter":null,"mask":null},"#compass":{"opacity":0.8,"transform":null,"filter":null,"mask":"url(#water)","shape-rendering":"optimizespeed"},"#rose":{"transform":null},"#relig":{"opacity":0.7,"stroke":"#404040","stroke-width":0.7,"filter":null},"#cults":{"opacity":0.6,"stroke":"#777777","stroke-width":0.5,"stroke-dasharray":null,"stroke-linecap":null,"filter":null},"#landmass":{"opacity":1,"fill":"#eeedeb","filter":null},"#markers":{"opacity":null,"rescale":null,"filter":"url(#dropShadow01)"},"#prec":{"opacity":null,"stroke":"#000000","stroke-width":0,"fill":"#0080ff","filter":null},"#population":{"opacity":null,"stroke-width":2.58,"stroke-dasharray":0,"stroke-linecap":"butt","filter":"url(#blur3)"},"#rural":{"stroke":"#ff0000"},"#urban":{"stroke":"#800000"},"#freshwater":{"opacity":0.5,"fill":"#aadaff","stroke":"#5f799d","stroke-width":0,"filter":null},"#salt":{"opacity":0.5,"fill":"#409b8a","stroke":"#388985","stroke-width":0.7,"filter":null},"#sinkhole":{"opacity":1,"fill":"#5bc9fd","stroke":"#53a3b0","stroke-width":0.7,"filter":null},"#frozen":{"opacity":0.95,"fill":"#cdd4e7","stroke":"#cfe0eb","stroke-width":0,"filter":null},"#lava":{"opacity":0.7,"fill":"#90270d","stroke":"#f93e0c","stroke-width":2,"filter":"url(#crumpled)"},"#dry":{"opacity":0.7,"fill":"#c9bfa7","stroke":"#8e816f","stroke-width":0.7,"filter":null},"#sea_island":{"opacity":0.6,"stroke":"#595959","stroke-width":0.4,"filter":"","auto-filter":0},"#lake_island":{"opacity":0,"stroke":"#7c8eaf","stroke-width":0,"filter":null},"#terrain":{"opacity":null,"set":"simple","size":1,"density":0.4,"filter":null,"mask":null},"#rivers":{"opacity":null,"filter":null,"fill":"#aadaff"},"#ruler":{"opacity":null,"filter":null},"#roads":{"opacity":0.9,"stroke":"#f6d068","stroke-width":0.7,"stroke-dasharray":0,"stroke-linecap":"inherit","filter":null,"mask":null},"#trails":{"opacity":1,"stroke":"#ffffff","stroke-width":0.25,"stroke-dasharray":"","stroke-linecap":"round","filter":null,"mask":null},"#searoutes":{"opacity":0.8,"stroke":"#4f82c6","stroke-width":0.45,"stroke-dasharray":2,"stroke-linecap":"butt","filter":null,"mask":"url(#water)"},"#regions":{"opacity":0.4,"filter":null},"#statesHalo":{"opacity":0,"data-width":null,"stroke-width":0},"#provs":{"opacity":0.6,"filter":null},"#temperature":{"opacity":null,"font-size":"8px","fill":"#000000","fill-opacity":0.3,"stroke":null,"stroke-width":1.8,"stroke-dasharray":null,"stroke-linecap":null,"filter":null},"#ice":{"opacity":0.8,"fill":"#e8f0f6","stroke":"#e8f0f6","stroke-width":1,"filter":"url(#dropShadow01)"},"#texture":{"opacity":null,"filter":null,"mask":"url(#land)"},"#textureImage":{},"#zones":{"opacity":0.7,"stroke":"#ff6262","stroke-width":0,"stroke-dasharray":"","stroke-linecap":"butt","filter":null,"mask":null},"#ocean":{"opacity":null},"#oceanLayers":{"filter":"","layers":"none"},"#oceanBase":{"fill":"#aadaff"},"#oceanPattern":{"opacity":null},"#oceanicPattern":{"filter":"url(#emptyImage)"},"#terrs":{"opacity":0.5,"scheme":"bright","terracing":0,"skip":5,"relax":0,"curve":0,"filter":"","mask":"url(#land)"},"#legend":{"data-size":12.74,"font-size":12.74,"data-font":"Arial","font-family":"Arial","stroke":"#909090","stroke-width":1.13,"stroke-dasharray":0,"stroke-linecap":"round","data-x":98.39,"data-y":12.67,"data-columns":null},"#legendBox":{},"#burgLabels > #cities":{"opacity":1,"fill":"#414141","data-size":7,"font-size":7,"data-font":"Arial","font-family":"Arial"},"#burgIcons > #cities":{"opacity":1,"fill":"#ffffff","fill-opacity":0.7,"size":1,"stroke":"#3e3e4b","stroke-width":0.24,"stroke-dasharray":"","stroke-linecap":"butt"},"#anchors > #cities":{"opacity":1,"fill":"#ffffff","size":2,"stroke":"#303030","stroke-width":1.7},"#burgLabels > #towns":{"opacity":1,"fill":"#414141","data-size":3,"font-size":3,"data-font":"Arial","font-family":"Arial"},"#burgIcons > #towns":{"opacity":1,"fill":"#ffffff","fill-opacity":0.7,"size":0.5,"stroke":"#3e3e4b","stroke-width":0.12,"stroke-dasharray":"","stroke-linecap":"butt"},"#anchors > #towns":{"opacity":1,"fill":"#ffffff","size":1,"stroke":"#3e3e4b","stroke-width":1.06},"#labels > #states":{"opacity":1,"fill":"#292929","stroke":"#303030","stroke-width":0,"data-size":10,"font-size":10,"data-font":"Arial","font-family":"Arial","filter":null},"#labels > #addedLabels":{"opacity":1,"fill":"#414141","stroke":"#3a3a3a","stroke-width":0,"data-size":18,"font-size":18,"data-font":"Arial","font-family":"Arial","filter":null},"#fogging":{"opacity":1,"fill":"#ffffff","filter":null}}`;
     localStorage.setItem("styleClean", clean);
@@ -712,7 +709,7 @@ function addDefaulsStyles() {
 }
 
 // set default style
-function applyDefaultStyle() {
+export function applyDefaultStyle() {
   armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
   biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
@@ -798,7 +795,7 @@ function applyDefaultStyle() {
 }
 
 // apply style settings in JSON
-function applyStyle(style) {
+export function applyStyle(style) {
   for (const selector in style) {
     const el = document.querySelector(selector);
     if (!el) continue;
@@ -811,7 +808,7 @@ function applyStyle(style) {
 }
 
 // change current style preset to another saved one
-function changeStylePreset(preset) {
+export function changeStylePreset(preset) {
   if (customization) {tip("Please exit the customization mode first", false, "error"); return;}
   alertMessage.innerHTML = "Are you sure you want to change the style preset? All unsaved style changes will be lost";
   $("#alert").dialog({resizable: false, title: "Change style preset", width: "23em",
@@ -837,7 +834,7 @@ function changeStylePreset(preset) {
   });
 }
 
-function updateElements() {
+export function updateElements() {
   // burgIcons to desired size
   burgIcons.selectAll("g").each(function(d) {
     const size = +this.getAttribute("size");
@@ -866,7 +863,7 @@ function updateElements() {
   invokeActiveZooming();
 }
 
-function addStylePreset() {
+export function addStylePreset() {
   $("#styleSaver").dialog({
     title: "Style Saver", width: "26em",
     position: {my: "center", at: "center", of: "svg"}
@@ -1008,7 +1005,7 @@ function addStylePreset() {
   }
 }
 
-function removeStylePreset() {
+export function removeStylePreset() {
   if (stylePreset.selectedOptions[0].dataset.system) {tip("Cannot remove system preset", false, "error"); return;};
   localStorage.removeItem("presetStyle");
   localStorage.removeItem(stylePreset.value);
@@ -1018,7 +1015,7 @@ function removeStylePreset() {
 
 // GLOBAL FILTERS
 mapFilters.addEventListener("click", applyMapFilter);
-function applyMapFilter(event) {
+export function applyMapFilter(event) {
   if (event.target.tagName !== "BUTTON") return;
   const button = event.target;
   svg.attr("data-filter", null).attr("filter", null);
@@ -1028,7 +1025,7 @@ function applyMapFilter(event) {
   svg.attr("data-filter", button.id).attr("filter", "url(#filter-" + button.id + ")");
 }
 
-function updateMapFilter() {
+export function updateMapFilter() {
   const filter = svg.attr("data-filter");
   mapFilters.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
   if (!filter) return;
@@ -1037,7 +1034,7 @@ function updateMapFilter() {
 
 // FONTS
 // fetch default fonts if not done before
-function loadDefaultFonts() {
+export function loadDefaultFonts() {
   if (!$('link[href="fonts.css"]').length) {
     $("head").append('<link rel="stylesheet" type="text/css" href="fonts.css">');
     const fontsToAdd = ["Amatic+SC:700", "IM+Fell+English", "Great+Vibes", "MedievalSharp", "Metamorphous",
@@ -1049,7 +1046,7 @@ function loadDefaultFonts() {
   }
 }
 
-function fetchFonts(url) {
+export function fetchFonts(url) {
   return new Promise((resolve, reject) => {
     if (url === "") {
       tip("Use a direct link to any @font-face declaration or just font name to fetch from Google Fonts");
@@ -1079,7 +1076,7 @@ function fetchFonts(url) {
   })
 }
 
-function addFonts(url) {
+export function addFonts(url) {
   $("head").append('<link rel="stylesheet" type="text/css" href="' + url + '">');
   return fetch(url)
     .then(resp => resp.text())
@@ -1109,7 +1106,7 @@ function addFonts(url) {
 }
 
 // Update font list for Label and Burg Editors
-function updateFontOptions() {
+export function updateFontOptions() {
   styleSelectFont.innerHTML = "";
   for (let i=0; i < fonts.length; i++) {
     const opt = document.createElement('option');

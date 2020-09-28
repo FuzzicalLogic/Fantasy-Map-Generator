@@ -1,8 +1,5 @@
-// Functions to save and load the map
-"use strict";
-
 // download map as SVG
-async function saveSVG() {
+export async function saveSVG() {
   console.time("saveSVG");
   const url = await getMapURL("svg");
   const link = document.createElement("a");
@@ -16,7 +13,7 @@ async function saveSVG() {
 }
 
 // download map as PNG
-async function savePNG() {
+export async function savePNG() {
   console.time("savePNG");
   const url = await getMapURL("png");
 
@@ -47,7 +44,7 @@ async function savePNG() {
 }
 
 // download map as JPEG
-async function saveJPEG() {
+export async function saveJPEG() {
   console.time("saveJPEG");
   const url = await getMapURL("png");
 
@@ -74,7 +71,7 @@ async function saveJPEG() {
 }
 
 // parse map svg to object url
-async function getMapURL(type, subtype) {
+export async function getMapURL(type, subtype) {
   const cloneEl = document.getElementById("map").cloneNode(true); // clone svg
   cloneEl.id = "fantasyMap";
   document.body.appendChild(cloneEl);
@@ -108,7 +105,7 @@ async function getMapURL(type, subtype) {
 }
 
 // remove hidden g elements and g elements without children to make downloaded svg smaller in size
-function removeUnusedElements(clone) {
+export function removeUnusedElements(clone) {
   if (!terrain.selectAll("use").size()) clone.select("#defs-relief").remove();
   if (markers.style("display") === "none") clone.select("#defs-markers").remove();
 
@@ -121,7 +118,7 @@ function removeUnusedElements(clone) {
   }
 }
 
-function updateMeshCells(clone) {
+export function updateMeshCells(clone) {
   const data = renderOcean.checked ? grid.cells.i : grid.cells.i.filter(i => grid.cells.h[i] >= 20);
   const scheme = getColorScheme();
   clone.select("#heights").attr("filter", "url(#blur1)");
@@ -130,7 +127,7 @@ function updateMeshCells(clone) {
 }
 
 // for each g element get inline style
-function inlineStyle(clone) {
+export function inlineStyle(clone) {
   const emptyG = clone.append("g").node();
   const defaultStyles = window.getComputedStyle(emptyG);
 
@@ -170,7 +167,7 @@ function inlineStyle(clone) {
 }
 
 // get non-standard fonts used for labels to fetch them from web
-function getFontsToLoad() {
+export function getFontsToLoad() {
   const webSafe = ["Georgia", "Times+New+Roman", "Comic+Sans+MS", "Lucida+Sans+Unicode", "Courier+New", "Verdana", "Arial", "Impact"]; // fonts to not fetch
 
   const fontsInUse = new Set(); // to store fonts currently in use
@@ -187,7 +184,7 @@ function getFontsToLoad() {
 }
 
 // code from Kaiido's answer https://stackoverflow.com/questions/42402584/how-to-use-google-fonts-in-canvas-when-drawing-dom-objects-in-svg
-function GFontToDataURI(url) {
+export function GFontToDataURI(url) {
   if (!url) return Promise.resolve();
   return fetch(url) // first fecth the embed stylesheet page
     .then(resp => resp.text()) // we only need the text of it
@@ -227,7 +224,7 @@ function GFontToDataURI(url) {
 }
 
 // prepare map data for saving
-function getMapData() {
+export function getMapData() {
   console.time("createMapDataBlob");
 
   return new Promise(resolve => {
@@ -290,7 +287,7 @@ function getMapData() {
 }
 
 // Download .map file
-async function saveMap() {
+export async function saveMap() {
   if (customization) {tip("Map cannot be saved when edit mode is active, please exit the mode and retry", false, "error"); return;}
   closeDialogs("#alert");
 
@@ -305,7 +302,7 @@ async function saveMap() {
   window.URL.revokeObjectURL(URL);
 }
 
-function saveGeoJSON_Cells() {
+export function saveGeoJSON_Cells() {
   let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
   const cells = pack.cells, v = pack.vertices;
   const getPopulation = i => {const [r, u] = getCellPopulation(i); return rn(r+u)};
@@ -345,7 +342,7 @@ function saveGeoJSON_Cells() {
   downloadFile(data, name, "application/json");
 }
 
-function saveGeoJSON_Roads() {
+export function saveGeoJSON_Roads() {
   let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
 
   routes._groups[0][0].childNodes.forEach(n => {
@@ -365,7 +362,7 @@ function saveGeoJSON_Roads() {
   downloadFile(data, name, "application/json");
 }
 
-function saveGeoJSON_Rivers() {
+export function saveGeoJSON_Rivers() {
   let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
 
   rivers._groups[0][0].childNodes.forEach(n => {
@@ -384,7 +381,7 @@ function saveGeoJSON_Rivers() {
   downloadFile(data, name, "application/json");
 }
 
-function saveGeoJSON_Markers() {
+export function saveGeoJSON_Markers() {
   let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
 
   markers._groups[0][0].childNodes.forEach(n => {
@@ -405,7 +402,7 @@ function saveGeoJSON_Markers() {
   downloadFile(data, name, "application/json");
 }
 
-function getRoadPoints(node) {
+export function getRoadPoints(node) {
   let points = [];
   const l = node.getTotalLength();
   const increment = l / Math.ceil(l / 2);
@@ -420,7 +417,7 @@ function getRoadPoints(node) {
   return points;
 }
 
-function getRiverPoints(node) {
+export function getRiverPoints(node) {
   let points = [];
   const l = node.getTotalLength() / 2; // half-length
   const increment = 0.25; // defines density of points
@@ -435,14 +432,14 @@ function getRiverPoints(node) {
   return points;
 }
 
-async function quickSave() {
+export async function quickSave() {
   if (customization) {tip("Map cannot be saved when edit mode is active, please exit the mode and retry", false, "error"); return;}
   const blob = await getMapData();
   if (blob) ldb.set("lastMap", blob); // auto-save map
   tip("Map is saved to browser memory", true, "success", 2000);
 }
 
-function quickLoad() {
+export function quickLoad() {
   ldb.get("lastMap", blob => {
     if (blob) {
       loadMapPrompt(blob);
@@ -453,7 +450,7 @@ function quickLoad() {
   });
 }
 
-function loadMapPrompt(blob) {
+export function loadMapPrompt(blob) {
   const workingTime = (Date.now() - last(mapHistory).created) / 60000; // minutes
   if (workingTime < 5) {loadLastSavedMap(); return;}
 
@@ -478,7 +475,7 @@ function loadMapPrompt(blob) {
   }
 }
 
-const saveReminder = function() {
+export const saveReminder = function() {
   if (localStorage.getItem("noReminder")) return;
   const message = ["Please don't forget to save your work as a .map file",
     "Please remember to save work as a .map file",
@@ -498,7 +495,7 @@ const saveReminder = function() {
 
 saveReminder();
 
-function toggleSaveReminder() {
+export function toggleSaveReminder() {
   if (saveReminder.status) {
     tip("Save reminder is turned off. Press CTRL+Q again to re-initiate", true, "warn", 2000);
     clearInterval(saveReminder.reminder);
@@ -511,7 +508,7 @@ function toggleSaveReminder() {
   }
 }
 
-function uploadMap(file, callback) {
+export function uploadMap(file, callback) {
   uploadMap.timeStart = performance.now();
 
   const fileReader = new FileReader();
@@ -546,7 +543,7 @@ function uploadMap(file, callback) {
   fileReader.readAsText(file, "UTF-8");
 }
 
-function parseLoadedData(data) {
+export function parseLoadedData(data) {
   try {
     // exit customization
     if (window.closeDialogs) closeDialogs();
