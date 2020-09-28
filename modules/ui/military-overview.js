@@ -1,3 +1,5 @@
+import { overviewRegiments } from "./regiments-overview.js";
+
 export function overviewMilitary() {
     if (customization) return;
     closeDialogs("#militaryOverview, .stable");
