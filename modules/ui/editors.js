@@ -9,6 +9,7 @@ import { editNamesbase } from "./namesbase-editor.js";
 import { editRegiment } from "./regiment-editor.js";
 import { editReliefIcon } from "./relief-editor.js";
 import { editRiver } from "./rivers-editor.js";
+import { editRoute } from "./routes-editor.js";
 
 restoreDefaultEvents(); // apply default viewbox events on load
 
