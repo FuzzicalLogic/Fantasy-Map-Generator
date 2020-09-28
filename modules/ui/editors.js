@@ -7,6 +7,7 @@ import { editLake } from "./lakes-editor.js";
 import { editMarker } from "./markers-editor.js";
 import { editNamesbase } from "./namesbase-editor.js";
 import { editRegiment } from "./regiment-editor.js";
+import { editReliefIcon } from "./relief-editor.js";
 
 restoreDefaultEvents(); // apply default viewbox events on load
 
