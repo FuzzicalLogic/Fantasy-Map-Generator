@@ -8,6 +8,7 @@ import * as Religions from "../religions-generator.js";
 import * as Military from "../military-generator.js";
 
 import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon } from "../utils.js";
+import { restoreDefaultEvents, moveCircle } from "./editors.js";
 
 import { saveMap } from "../save-and-load.js";
 

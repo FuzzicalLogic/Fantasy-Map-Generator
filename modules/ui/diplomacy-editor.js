@@ -1,6 +1,7 @@
 import * as BurgsAndStates from "../burgs-and-states.js";
 
 import { findCell } from "../utils.js";
+import { restoreDefaultEvents } from "./editors.js";
 
 export function editDiplomacy() {
     if (customization) return;

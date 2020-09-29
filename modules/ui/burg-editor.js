@@ -2,6 +2,7 @@ import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
 import { findCell } from "../utils.js";
+import { clicked, unselect } from "./editors.js";
 
 export function editBurg(id) {
     if (customization) return;

@@ -3,6 +3,7 @@ import * as BurgsAndStates from "../burgs-and-states.js";
 import { editStates } from "./states-editor.js";
 
 import { findCell, getPackPolygon, isLand, getRandomColor } from "../utils.js";
+import { restoreDefaultEvents, moveCircle } from "./editors.js";
 
 export function editProvinces() {
     if (customization) return;

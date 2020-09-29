@@ -1,3 +1,5 @@
+import { unselect } from "./editors.js";
+
 import { editNotes } from "./notes-editor.js";
 
 import { getPackPolygon } from "../utils.js";

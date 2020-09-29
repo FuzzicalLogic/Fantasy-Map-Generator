@@ -1,4 +1,5 @@
 import { findCell, getPackPolygon } from "../utils.js";
+import { restoreDefaultEvents, moveCircle } from "./editors.js";
 
 export function editZones() {
     closeDialogs();

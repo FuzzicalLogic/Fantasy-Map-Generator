@@ -1,3 +1,5 @@
+import { clicked, unselect } from "./editors.js";
+
 import * as Rivers from "../river-generator.js";
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";

@@ -1,4 +1,5 @@
-import { findGridCell, getGridPolygon } from "../utils.js";
+import { clicked } from "./editors.js";
+import { findGridCell, getGridPolygon, unselect } from "../utils.js";
 
 export function editIce() {
     if (customization) return;

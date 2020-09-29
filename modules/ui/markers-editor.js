@@ -1,4 +1,5 @@
 import { editNotes } from "./notes-editor.js";
+import { restoreDefaultEvents, unselect } from "./editors.js";
 
 export function editMarker() {
     if (customization) return;

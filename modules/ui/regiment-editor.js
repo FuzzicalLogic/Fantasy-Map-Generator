@@ -1,8 +1,11 @@
+import { clicked } from "./editors.js";
+
 import * as Military from "../military-generator.js";
 import { Battle } from "./battle-screen.js";
 import { editNotes } from "./notes-editor.js";
 
 import { findCell } from "../utils.js";
+import { restoreDefaultEvents } from "./editors.js";
 
 export function editRegiment(selector) {
     if (customization) return;

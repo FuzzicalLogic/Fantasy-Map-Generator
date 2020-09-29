@@ -23,6 +23,7 @@ import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
 
 import { findCell } from "../utils.js";
+import { restoreDefaultEvents } from "./editors.js";
 
 toolsContent.addEventListener("click", function (event) {
     if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }

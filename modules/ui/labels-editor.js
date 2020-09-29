@@ -1,3 +1,5 @@
+import { unselect } from "./editors.js";
+
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 

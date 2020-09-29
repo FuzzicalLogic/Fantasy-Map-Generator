@@ -3,6 +3,7 @@ import * as Cultures from "../cultures-generator.js";
 import { editNamesbase } from "./namesbase-editor.js";
 
 import { findCell, getPackPolygon, isLand } from "../utils.js";
+import { restoreDefaultEvents, moveCircle } from "./editors.js";
 
 export function editCultures() {
     if (customization) return;

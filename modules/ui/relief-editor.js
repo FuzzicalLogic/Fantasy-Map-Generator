@@ -1,4 +1,5 @@
 import { findCell } from "../utils.js";
+import { restoreDefaultEvents, unselect, moveCircle } from "./editors.js";
 
 export function editReliefIcon() {
     if (customization) return;

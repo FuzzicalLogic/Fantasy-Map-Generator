@@ -1,3 +1,4 @@
+import { clicked, unselect } from "./editors.js";
 import { editNotes } from "./notes-editor.js";
 
 export function editRoute(onClick) {
