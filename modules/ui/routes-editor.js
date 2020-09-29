@@ -1,5 +1,6 @@
 import { clicked, unselect } from "./editors.js";
 import { editNotes } from "./notes-editor.js";
+import { showEPForRoute, showElevationProfile } from "./elevation-profile.js";
 
 export function editRoute(onClick) {
     if (customization) return;

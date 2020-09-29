@@ -3,6 +3,7 @@ import { clicked, unselect } from "./editors.js";
 import * as Rivers from "../river-generator.js";
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
+import { showEPForRiver, showElevationProfile } from "./elevation-profile.js";
 
 export function editRiver(id) {
     if (customization) return;
