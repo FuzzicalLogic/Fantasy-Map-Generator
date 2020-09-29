@@ -14,7 +14,7 @@ import { editZones } from "./zones-editor.js";
 import { editNamesbase } from "./namesbase-editor.js";
 
 import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleAddRoute, toggleAddMarker } from "./tools.js";
-import { findGridCell, findCell, convertTemperature } from "../utils.js";
+import { findGridCell, findCell, convertTemperature, rn } from "../utils.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
 

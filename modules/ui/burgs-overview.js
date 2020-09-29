@@ -1,9 +1,9 @@
 import * as Names from "../names-generator.js";
 import { editBurg } from "./burg-editor.js";
 
-import { tip, getHeight, clearMainTip } from "./general.js";
 import { restoreDefaultEvents } from "./editors.js";
-import { findCell } from "../utils.js";
+import { tip, getHeight, clearMainTip } from "./general.js";
+import { findCell, rn } from "../utils.js";
 
 export function overviewBurgs() {
     if (customization) return;

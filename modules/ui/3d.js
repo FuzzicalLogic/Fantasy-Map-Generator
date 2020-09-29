@@ -1,6 +1,7 @@
 import { getMapURL } from "../save-and-load.js";
 
 import { tip } from "./general.js";
+import { rn } from "../utils.js";
 
 // set default options
 export const options = {

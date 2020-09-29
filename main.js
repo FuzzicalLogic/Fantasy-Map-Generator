@@ -32,7 +32,7 @@ import { closeDialogs } from "../modules/ui/editors.js";
 import { addRuler, drawScaleBar } from "../modules/ui/measurers.js";
 
 import { getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
-import { getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P } from "./modules/utils.js";
+import { getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate } from "./modules/utils.js";
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");

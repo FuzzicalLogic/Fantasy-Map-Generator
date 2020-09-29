@@ -1,8 +1,8 @@
 import * as Religions from "../religions-generator.js";
 
-import { tip, showMainTip, clearMainTip } from "./general.js";
-import { findCell, getPackPolygon, isLand } from "../utils.js";
 import { restoreDefaultEvents, moveCircle } from "./editors.js";
+import { tip, showMainTip, clearMainTip } from "./general.js";
+import { findCell, getPackPolygon, isLand, rn, isCtrlClick } from "../utils.js";
 
 export function editReligions() {
     if (customization) return;

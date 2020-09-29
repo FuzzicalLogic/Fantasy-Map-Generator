@@ -7,7 +7,7 @@ import { fitScaleBar } from "./measurers.js";
 import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_Markers, uploadMap } from "../save-and-load.js";
 
 import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
-import { P } from "../utils.js";
+import { P, gauss, rn } from "../utils.js";
 
 $("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
 $("#exitCustomization").draggable({ handle: "div" });

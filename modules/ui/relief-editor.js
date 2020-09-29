@@ -1,6 +1,6 @@
-import { tip, showMainTip, clearMainTip } from "./general.js";
-import { findCell } from "../utils.js";
 import { restoreDefaultEvents, unselect, moveCircle } from "./editors.js";
+import { tip, showMainTip, clearMainTip } from "./general.js";
+import { findCell, rn } from "../utils.js";
 
 export function editReliefIcon() {
     if (customization) return;

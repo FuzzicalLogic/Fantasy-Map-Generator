@@ -6,7 +6,7 @@ import * as Names from "./names-generator.js";
 
 import { tip, getCellPopulation, getFriendlyHeight, applyOption, clearMainTip } from "./ui/general.js";
 import { restoreDefaultEvents } from "./ui/editors.js";
-import { findCell, getGridPolygon, P } from "./utils.js";
+import { findCell, getGridPolygon, P, rn } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 

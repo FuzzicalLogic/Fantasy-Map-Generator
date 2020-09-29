@@ -3,6 +3,7 @@ import { editNotes } from "./notes-editor.js";
 import { showEPForRoute, showElevationProfile } from "./elevation-profile.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
+import { rn } from "../utils.js";
 
 export function editRoute(onClick) {
     if (customization) return;

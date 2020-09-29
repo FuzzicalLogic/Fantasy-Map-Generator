@@ -3,6 +3,7 @@ import { ReliefIcons } from "../relief-icons.js";
 import * as Military from "../military-generator.js";
 
 import { tip, applyOption } from "./general.js";
+import { rn } from "../utils.js";
 
 // select element to be edited
 export function editStyle(element, group) {

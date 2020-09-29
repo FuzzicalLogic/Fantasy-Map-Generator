@@ -1,4 +1,4 @@
-import { poissonDiscSampler, getPackPolygon } from "./utils.js";
+import { poissonDiscSampler, getPackPolygon, rn } from "./utils.js";
 
 export const ReliefIcons = function () {
     console.time('drawRelief');

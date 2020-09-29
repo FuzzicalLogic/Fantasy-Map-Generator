@@ -1,9 +1,9 @@
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
-import { tip, clearMainTip } from "./general.js";
-import { findCell } from "../utils.js";
 import { clicked, unselect } from "./editors.js";
+import { tip, clearMainTip } from "./general.js";
+import { findCell, rn, isCtrlClick } from "../utils.js";
 
 export function editBurg(id) {
     if (customization) return;

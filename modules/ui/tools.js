@@ -23,9 +23,9 @@ import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
 
-import { tip, clearMainTip } from "./general.js";
-import { findCell } from "../utils.js";
 import { restoreDefaultEvents } from "./editors.js";
+import { tip, clearMainTip } from "./general.js";
+import { findCell, gauss, rn, isCtrlClick } from "../utils.js";
 
 toolsContent.addEventListener("click", function (event) {
     if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }

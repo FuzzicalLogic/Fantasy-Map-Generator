@@ -1,3 +1,5 @@
+import { gauss, rn } from "./ui/utils.js";
+
 let cells, p, states;
 
 export const generate = function () {

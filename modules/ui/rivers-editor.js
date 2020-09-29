@@ -6,6 +6,7 @@ import { editNotes } from "./notes-editor.js";
 import { showEPForRiver, showElevationProfile } from "./elevation-profile.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
+import { rn } from "../utils.js";
 
 export function editRiver(id) {
     if (customization) return;

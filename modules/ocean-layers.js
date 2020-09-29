@@ -1,4 +1,4 @@
-import { P } from "./utils.js";
+import { P, rn } from "./utils.js";
 
 let cells, vertices, pointsN, used;
 
