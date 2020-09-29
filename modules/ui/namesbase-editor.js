@@ -1,3 +1,5 @@
+import * as Names from "../names-generator.js";
+
 export function editNamesbase() {
     if (customization) return;
     closeDialogs("#namesbaseEditor, .stable");

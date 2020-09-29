@@ -20,6 +20,8 @@ import * as Cultures from "./modules/cultures-generator.js";
 import * as BurgsAndStates from "./modules/burgs-and-states.js";
 import * as Religions from "./modules/religions-generator.js";
 import * as Military from "./modules/military-generator.js";
+import * as Names from "./modules/names-generator.js";
+
 import { editWorld } from "./modules/ui/world-configurator.js";
 
 // append svg layers (in default order)

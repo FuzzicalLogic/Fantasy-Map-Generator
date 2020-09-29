@@ -1,3 +1,4 @@
+import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
 import { editNamesbase } from "./namesbase-editor.js";
 

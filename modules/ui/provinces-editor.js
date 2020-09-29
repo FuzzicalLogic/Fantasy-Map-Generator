@@ -1,3 +1,4 @@
+import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import { editStates } from "./states-editor.js";
 

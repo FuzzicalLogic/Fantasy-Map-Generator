@@ -1,3 +1,5 @@
+import * as Names from "./names-generator.js";
+
 export const generate = function () {
     const cells = pack.cells, cultures = pack.cultures, n = cells.i.length;
 

@@ -1,4 +1,4 @@
-
+import * as Names from "../names-generator.js";
 import { editBurg } from "./burg-editor.js";
 
 export function overviewBurgs() {

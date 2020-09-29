@@ -2,6 +2,7 @@ import * as BurgsAndStates from "../burgs-and-states.js";
 import * as Cultures from "../cultures-generator.js";
 import * as Religions from "../religions-generator.js";
 import * as Military from "../military-generator.js";
+import * as Names from "../names-generator.js";
 
 import { editBiomes } from "./biomes-editor.js";
 import { overviewBurgs } from "./burgs-overview.js";

@@ -1,3 +1,5 @@
+import * as Names from "./names-generator.js";
+
 let cells;
 
 export const generate = function () {

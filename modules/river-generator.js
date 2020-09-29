@@ -1,3 +1,4 @@
+import * as Names from "./names-generator.js";
 
 export const generate = function (changeHeights = true) {
     console.time('generateRivers');

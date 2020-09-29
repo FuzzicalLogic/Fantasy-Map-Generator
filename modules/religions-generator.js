@@ -1,3 +1,5 @@
+import * as Names from "./names-generator.js";
+
   // name generation approach and relative chance to be selected
 const approach = {
     "Number": 1, "Being": 3, "Adjective": 5, "Color + Animal": 5,
