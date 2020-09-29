@@ -11,6 +11,7 @@ import { overviewRivers } from "./rivers-overview";
 import { editRoute } from "./routes-editor.js";
 import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
+import { editZones } from "./zones-editor.js";
 
 toolsContent.addEventListener("click", function (event) {
     if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }
