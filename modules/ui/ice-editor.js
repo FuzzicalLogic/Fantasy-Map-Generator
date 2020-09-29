@@ -1,3 +1,5 @@
+import { findGridCell, getGridPolygon } from "../utils.js";
+
 export function editIce() {
     if (customization) return;
     closeDialogs(".stable");

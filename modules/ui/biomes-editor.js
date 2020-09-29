@@ -1,5 +1,7 @@
 import { ReliefIcons } from "../relief-icons.js";
 
+import { findCell, getPackPolygon, isLand, getRandomColor } from "../utils.js";
+
 export function editBiomes() {
     if (customization) return;
     closeDialogs("#biomesEditor, .stable");

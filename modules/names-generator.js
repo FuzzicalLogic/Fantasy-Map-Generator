@@ -1,3 +1,5 @@
+import { P } from "./utils.js";
+
 let chains = [];
 
   // calculate Markov chain for a namesbase

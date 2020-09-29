@@ -4,6 +4,8 @@ import * as Religions from "./religions-generator.js";
 import * as Military from "./military-generator.js";
 import * as Names from "./names-generator.js";
 
+import { findCell, getGridPolygon, P } from "./utils.js";
+
 // download map as SVG
 export async function saveSVG() {
   console.time("saveSVG");

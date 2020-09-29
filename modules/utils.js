@@ -69,7 +69,7 @@ export function findGridAll(x, y, radius) {
 }
 
 // return closest pack points quadtree datum
-export function find(x, y, radius = Infinity) {
+function find(x, y, radius = Infinity) {
   return pack.cells.q.find(x, y, radius);
 }
 
@@ -163,12 +163,12 @@ export function isLand(i) {
 }
 
 // filter water cells
-export function isWater(i) {
+function isWater(i) {
   return pack.cells.h[i] < 20;
 }
 
 // convert RGB color string to HEX without #
-export function toHEX(rgb){
+function toHEX(rgb){
   if (rgb.charAt(0) === "#") {return rgb;}
   rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
     return (rgb && rgb.length === 4) ? "#" +

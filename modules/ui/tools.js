@@ -22,6 +22,8 @@ import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
 
+import { findCell } from "../utils.js";
+
 toolsContent.addEventListener("click", function (event) {
     if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }
     if (event.target.tagName !== "BUTTON") return;

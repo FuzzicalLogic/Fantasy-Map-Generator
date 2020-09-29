@@ -1,6 +1,8 @@
 import * as Names from "../names-generator.js";
 import { editBurg } from "./burg-editor.js";
 
+import { findCell } from "../utils.js";
+
 export function overviewBurgs() {
     if (customization) return;
     closeDialogs("#burgsOverview, .stable");

@@ -1,3 +1,5 @@
+import { findGridCell, P } from "./utils.js";
+
 let cells, p;
 
 export const generate = function () {

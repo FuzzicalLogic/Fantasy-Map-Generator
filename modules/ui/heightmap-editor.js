@@ -7,6 +7,8 @@ import * as Cultures from "../cultures-generator.js";
 import * as Religions from "../religions-generator.js";
 import * as Military from "../military-generator.js";
 
+import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon } from "../utils.js";
+
 import { saveMap } from "../save-and-load.js";
 
 function editHeightmap() {

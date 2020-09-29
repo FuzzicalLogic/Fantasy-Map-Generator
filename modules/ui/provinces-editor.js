@@ -2,6 +2,8 @@ import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import { editStates } from "./states-editor.js";
 
+import { findCell, getPackPolygon, isLand, getRandomColor } from "../utils.js";
+
 export function editProvinces() {
     if (customization) return;
     closeDialogs("#provincesEditor, .stable");

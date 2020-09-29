@@ -1,3 +1,5 @@
+import { poissonDiscSampler, getPackPolygon } from "./utils.js";
+
 export const ReliefIcons = function () {
     console.time('drawRelief');
     terrain.selectAll("*").remove();

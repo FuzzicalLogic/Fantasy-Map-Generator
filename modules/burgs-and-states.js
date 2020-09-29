@@ -1,6 +1,9 @@
 import * as Names from "./names-generator.js";
 import * as Routes from "./routes-generator.js";
 
+import { findCell, getColors, getRandomColor, getMixedColor, P } from "./utils.js";
+
+
 export const generate = function () {
     const cells = pack.cells, cultures = pack.cultures, n = cells.i.length;
 

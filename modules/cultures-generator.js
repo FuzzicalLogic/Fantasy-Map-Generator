@@ -1,5 +1,7 @@
 import * as Names from "./names-generator.js";
 
+import { getColors, P } from "./utils.js";
+
 let cells;
 
 export const generate = function () {

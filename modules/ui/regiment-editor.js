@@ -2,6 +2,8 @@ import * as Military from "../military-generator.js";
 import { Battle } from "./battle-screen.js";
 import { editNotes } from "./notes-editor.js";
 
+import { findCell } from "../utils.js";
+
 export function editRegiment(selector) {
     if (customization) return;
     closeDialogs(".stable");

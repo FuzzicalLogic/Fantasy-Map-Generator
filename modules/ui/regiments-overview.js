@@ -1,6 +1,8 @@
 import * as Military from "../military-generator.js";
 import { editRegiment } from "./regiment-editor.js";
 
+import { findCell } from "../utils.js";
+
 export function overviewRegiments(state) {
     if (customization) return;
     closeDialogs(".stable");

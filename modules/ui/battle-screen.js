@@ -1,6 +1,8 @@
 import * as Names from "../names-generator.js";
 import * as Military from "../military-generator.js";
 
+import { findCell, P } from "../utils.js";
+
 export class Battle {
 
     constructor(attacker, defender) {

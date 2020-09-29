@@ -28,6 +28,7 @@ import * as Names from "./modules/names-generator.js";
 
 import { editWorld } from "./modules/ui/world-configurator.js";
 import { uploadMap } from "./modules/save-and-load.js";
+import { getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P } from "./modules/utils.js";
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");

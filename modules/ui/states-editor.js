@@ -1,6 +1,8 @@
 import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 
+import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P } from "../utils.js";
+
 function editStates() {
     if (customization) return;
     closeDialogs("#statesEditor, .stable");

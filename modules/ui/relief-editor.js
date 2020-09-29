@@ -1,3 +1,5 @@
+import { findCell } from "../utils.js";
+
 export function editReliefIcon() {
     if (customization) return;
     closeDialogs(".stable");

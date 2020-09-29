@@ -1,6 +1,8 @@
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
+import { findCell } from "../utils.js";
+
 export function editLabel() {
     if (customization) return;
     closeDialogs();

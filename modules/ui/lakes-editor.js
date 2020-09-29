@@ -1,5 +1,7 @@
 import { editNotes } from "./notes-editor.js";
 
+import { getPackPolygon } from "../utils.js";
+
 export function editLake() {
     if (customization) return;
     closeDialogs(".stable");

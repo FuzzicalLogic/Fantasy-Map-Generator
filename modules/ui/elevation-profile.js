@@ -1,3 +1,5 @@
+import { findCell } from "../utils.js";
+
 export function showEPForRoute(node) {
     const points = [];
     debug.select("#controlPoints").selectAll("circle").each(function () {
