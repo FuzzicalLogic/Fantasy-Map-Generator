@@ -27,6 +27,7 @@ import * as Military from "./modules/military-generator.js";
 import * as Names from "./modules/names-generator.js";
 
 import { editWorld } from "./modules/ui/world-configurator.js";
+import { uploadMap } from "./modules/save-and-load.js";
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");

@@ -7,6 +7,8 @@ import * as Cultures from "../cultures-generator.js";
 import * as Religions from "../religions-generator.js";
 import * as Military from "../military-generator.js";
 
+import { saveMap } from "../save-and-load.js";
+
 function editHeightmap() {
     void function selectEditMode() {
         alertMessage.innerHTML = `Heightmap is a core element on which all other data (rivers, burgs, states etc) is based.

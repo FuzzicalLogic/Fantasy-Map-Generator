@@ -12,6 +12,8 @@ import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
 
+import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
+
 // fit full-screen map if window is resized
 $(window).resize(function(e) {
   if (localStorage.getItem("mapWidth") && localStorage.getItem("mapHeight")) return;

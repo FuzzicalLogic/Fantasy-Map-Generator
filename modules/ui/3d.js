@@ -1,3 +1,5 @@
+import { getMapURL } from "../save-and-load.js";
+
 // set default options
 export const options = {
     scale: 50,

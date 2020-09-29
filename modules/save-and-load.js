@@ -111,7 +111,7 @@ export async function getMapURL(type, subtype) {
 }
 
 // remove hidden g elements and g elements without children to make downloaded svg smaller in size
-export function removeUnusedElements(clone) {
+function removeUnusedElements(clone) {
   if (!terrain.selectAll("use").size()) clone.select("#defs-relief").remove();
   if (markers.style("display") === "none") clone.select("#defs-markers").remove();
 
@@ -124,7 +124,7 @@ export function removeUnusedElements(clone) {
   }
 }
 
-export function updateMeshCells(clone) {
+function updateMeshCells(clone) {
   const data = renderOcean.checked ? grid.cells.i : grid.cells.i.filter(i => grid.cells.h[i] >= 20);
   const scheme = getColorScheme();
   clone.select("#heights").attr("filter", "url(#blur1)");
@@ -133,7 +133,7 @@ export function updateMeshCells(clone) {
 }
 
 // for each g element get inline style
-export function inlineStyle(clone) {
+function inlineStyle(clone) {
   const emptyG = clone.append("g").node();
   const defaultStyles = window.getComputedStyle(emptyG);
 
@@ -173,7 +173,7 @@ export function inlineStyle(clone) {
 }
 
 // get non-standard fonts used for labels to fetch them from web
-export function getFontsToLoad() {
+function getFontsToLoad() {
   const webSafe = ["Georgia", "Times+New+Roman", "Comic+Sans+MS", "Lucida+Sans+Unicode", "Courier+New", "Verdana", "Arial", "Impact"]; // fonts to not fetch
 
   const fontsInUse = new Set(); // to store fonts currently in use
@@ -190,7 +190,7 @@ export function getFontsToLoad() {
 }
 
 // code from Kaiido's answer https://stackoverflow.com/questions/42402584/how-to-use-google-fonts-in-canvas-when-drawing-dom-objects-in-svg
-export function GFontToDataURI(url) {
+function GFontToDataURI(url) {
   if (!url) return Promise.resolve();
   return fetch(url) // first fecth the embed stylesheet page
     .then(resp => resp.text()) // we only need the text of it
@@ -230,7 +230,7 @@ export function GFontToDataURI(url) {
 }
 
 // prepare map data for saving
-export function getMapData() {
+function getMapData() {
   console.time("createMapDataBlob");
 
   return new Promise(resolve => {
@@ -408,7 +408,7 @@ export function saveGeoJSON_Markers() {
   downloadFile(data, name, "application/json");
 }
 
-export function getRoadPoints(node) {
+function getRoadPoints(node) {
   let points = [];
   const l = node.getTotalLength();
   const increment = l / Math.ceil(l / 2);
@@ -423,7 +423,7 @@ export function getRoadPoints(node) {
   return points;
 }
 
-export function getRiverPoints(node) {
+function getRiverPoints(node) {
   let points = [];
   const l = node.getTotalLength() / 2; // half-length
   const increment = 0.25; // defines density of points
@@ -456,7 +456,7 @@ export function quickLoad() {
   });
 }
 
-export function loadMapPrompt(blob) {
+function loadMapPrompt(blob) {
   const workingTime = (Date.now() - last(mapHistory).created) / 60000; // minutes
   if (workingTime < 5) {loadLastSavedMap(); return;}
 
@@ -481,7 +481,7 @@ export function loadMapPrompt(blob) {
   }
 }
 
-export const saveReminder = function() {
+const saveReminder = function() {
   if (localStorage.getItem("noReminder")) return;
   const message = ["Please don't forget to save your work as a .map file",
     "Please remember to save work as a .map file",
@@ -549,7 +549,7 @@ export function uploadMap(file, callback) {
   fileReader.readAsText(file, "UTF-8");
 }
 
-export function parseLoadedData(data) {
+function parseLoadedData(data) {
   try {
     // exit customization
     if (window.closeDialogs) closeDialogs();
