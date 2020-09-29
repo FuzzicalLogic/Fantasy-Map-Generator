@@ -1,3 +1,5 @@
+import * as Military from "../military-generator.js";
+
 export class Battle {
 
     constructor(attacker, defender) {

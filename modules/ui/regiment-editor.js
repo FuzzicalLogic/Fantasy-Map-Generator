@@ -1,3 +1,4 @@
+import * as Military from "../military-generator.js";
 import { Battle } from "./battle-screen.js";
 import { editNotes } from "./notes-editor.js";
 

@@ -1,3 +1,4 @@
+import * as Military from "../military-generator.js";
 import { editRegiment } from "./regiment-editor.js";
 
 export function overviewRegiments(state) {

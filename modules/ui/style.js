@@ -1,3 +1,5 @@
+import * as Military from "../military-generator.js";
+
 // select element to be edited
 export function editStyle(element, group) {
   showOptions();
