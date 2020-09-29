@@ -1,3 +1,4 @@
+import * as Cultures from "../cultures-generator.js";
 import { editNamesbase } from "./namesbase-editor.js";
 
 export function editCultures() {

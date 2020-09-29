@@ -1,3 +1,5 @@
+import * as Cultures from "../cultures-generator.js";
+
 import { editBiomes } from "./biomes-editor.js";
 import { overviewBurgs } from "./burgs-overview.js";
 import { editCultures } from "./cultures-editor.js";

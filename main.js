@@ -16,6 +16,7 @@ if (rn(localStorage.getItem("version"), 2) !== rn(version, 2)) {
 }
 
 import * as ThreeD from "./modules/ui/3d.js";
+import * as Cultures from "./modules/cultures-generator.js";
 import { editWorld } from "./modules/ui/world-configurator.js";
 
 // append svg layers (in default order)
