@@ -22,14 +22,14 @@ let Renderer, scene, camera, controls, animationFrame, material, texture,
   geometry, mesh, ambientLight, spotLight, waterPlane, waterMaterial, waterMesh;
 
 // initiate 3d scene
-export const create = async function(canvas, type = "viewMesh") {
+export async function create(canvas, type = "viewMesh") {
   options.isOn = true;
   options.isGlobe = type === "viewGlobe";
   return options.isGlobe ? newGlobe(canvas) : newMesh(canvas);
 }
 
 // redraw 3d scene
-export const redraw = function() {
+export function redraw() {
   scene.remove(mesh);
   Renderer.setSize(Renderer.domElement.width, Renderer.domElement.height);
   if (options.isGlobe) updateGlobeTexure();
@@ -38,12 +38,12 @@ export const redraw = function() {
 }
 
 // update 3d texture
-export const update = function() {
+export function update() {
   if (options.isGlobe) updateGlobeTexure(); else update3dTexture();
 }
 
 // try to clean the memory as much as possible
-export const stop = function() {
+export function stop() {
   cancelAnimationFrame(animationFrame);
   texture.dispose();
   geometry.dispose();
@@ -71,7 +71,7 @@ export const stop = function() {
   options.isOn = false;
 }
 
-export const setScale = function(scale) {
+export function setScale(scale) {
   options.scale = scale;
   geometry.vertices.forEach((v, i) => v.z = getMeshHeight(i));
   geometry.verticesNeedUpdate = true;
@@ -80,19 +80,19 @@ export const setScale = function(scale) {
   geometry.verticesNeedUpdate = false;
 }
 
-export const setLightness = function(intensity) {
+export function setLightness(intensity) {
   options.lightness = intensity;
   ambientLight.intensity = intensity;
   render();
 }
 
-export const setSun = function(x, y, z) {
+export function setSun(x, y, z) {
   options.sun = {x, y, z};
   spotLight.position.set(x, y, z);
   render();
 }
 
-export const setRotation = function(speed) {
+export function setRotation(speed) {
   cancelAnimationFrame(animationFrame);
   if (options.isGlobe) options.rotateGlobe = speed; else options.rotateMesh = speed;
   controls.autoRotateSpeed = speed;
@@ -100,7 +100,7 @@ export const setRotation = function(speed) {
   if (controls.autoRotate) animate();
 }
 
-export const toggleSky = function() {
+export function toggleSky() {
   if (options.extendedWater) {
     scene.background = null;
     scene.fog = null;
@@ -111,7 +111,7 @@ export const toggleSky = function() {
   redraw();
 }
 
-export const setColors = function(sky, water) {
+export function setColors(sky, water) {
   options.skyColor = sky;
   scene.background = scene.fog.color = new THREE.Color(sky);
   options.waterColor = water;
@@ -119,13 +119,13 @@ export const setColors = function(sky, water) {
   render();
 }
 
-export const setResolution = function(resolution) {
+export function setResolution(resolution) {
   options.resolution = resolution;
   update();
 }
 
 // download screenshot
-export const saveScreenshot = async function() {
+export async function saveScreenshot() {
   const URL = Renderer.domElement.toDataURL("image/jpeg");
   const link = document.createElement("a");
   link.download = getFileName() + ".jpeg";

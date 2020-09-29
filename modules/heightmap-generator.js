@@ -2,7 +2,7 @@ import { findGridCell, P, link } from "./utils.js";
 
 let cells, p;
 
-export const generate = function () {
+export function generate() {
     console.time('generateHeightmap');
     cells = grid.cells, p = grid.points;
     cells.h = new Uint8Array(grid.points.length);

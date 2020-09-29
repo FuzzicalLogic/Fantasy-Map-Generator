@@ -1,6 +1,6 @@
 import { poissonDiscSampler, getPackPolygon, rn } from "./utils.js";
 
-export const ReliefIcons = function () {
+export function ReliefIcons() {
     console.time('drawRelief');
     terrain.selectAll("*").remove();
     const density = terrain.attr("density") || .4;
