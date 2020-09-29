@@ -17,7 +17,9 @@ if (rn(localStorage.getItem("version"), 2) !== rn(version, 2)) {
 
 import * as ThreeD from "./modules/ui/3d.js";
 import * as HeightmapGenerator from "./modules/heightmap-generator.js";
+import { OceanLayers } from "./modules/ocean-layers.js";
 import * as Rivers from "./modules/river-generator.js";
+
 import * as Cultures from "./modules/cultures-generator.js";
 import * as BurgsAndStates from "./modules/burgs-and-states.js";
 import * as Religions from "./modules/religions-generator.js";

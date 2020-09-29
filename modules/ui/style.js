@@ -1,3 +1,4 @@
+import { OceanLayers } from "../ocean-layers.js";
 import * as Military from "../military-generator.js";
 
 // select element to be edited
