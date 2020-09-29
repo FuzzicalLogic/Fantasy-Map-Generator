@@ -1,3 +1,4 @@
+import { ReliefIcons } from "../relief-icons.js";
 import * as ThreeD from "./3d.js";
 import { editUnits } from "./units-editor.js";
 

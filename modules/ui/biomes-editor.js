@@ -1,3 +1,5 @@
+import { ReliefIcons } from "../relief-icons.js";
+
 export function editBiomes() {
     if (customization) return;
     closeDialogs("#biomesEditor, .stable");
