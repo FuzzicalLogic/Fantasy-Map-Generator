@@ -2,6 +2,7 @@ import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
 import { editNamesbase } from "./namesbase-editor.js";
 
+import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand } from "../utils.js";
 import { restoreDefaultEvents, moveCircle } from "./editors.js";
 

@@ -28,7 +28,7 @@ $(window).resize(function(e) {
 //window.onbeforeunload = () => "Are you sure you want to navigate away?";
 
 // Tooltips
-export const tooltip = document.getElementById("tooltip");
+const tooltip = document.getElementById("tooltip");
 
 // show tip for non-svg elemets with data-tip
 document.getElementById("dialogs").addEventListener("mousemove", showDataTip);
@@ -56,7 +56,7 @@ export function clearMainTip() {
 }
 
 // show tip at the bottom of the screen, consider possible translation
-export function showDataTip(e) {
+function showDataTip(e) {
   if (!e.target) return;
   let dataTip = e.target.dataset.tip;
   if (!dataTip && e.target.parentNode.dataset.tip) dataTip = e.target.parentNode.dataset.tip;
@@ -76,7 +76,7 @@ export function moved() {
 }
 
 // show note box on hover (if any)
-export function showNotes(e, i) {
+function showNotes(e, i) {
   if (notesEditor.offsetParent) return;
   let id = e.target.id || e.target.parentNode.id || e.target.parentNode.parentNode.id;
   if (e.target.parentNode.parentNode.id === "burgLabels") id = "burg" + e.target.dataset.id; else
@@ -95,7 +95,7 @@ export function showNotes(e, i) {
 }
 
 // show viewbox tooltip if main tooltip is blank
-export function showMapTooltip(point, e, i, g) {
+function showMapTooltip(point, e, i, g) {
   tip(""); // clear tip
   const tag = e.target.tagName;
   const path = e.composedPath ? e.composedPath() : getComposedPath(e.target); // apply polyfill
@@ -145,13 +145,13 @@ export function showMapTooltip(point, e, i, g) {
   if (layerIsOn("toggleHeight")) tip("Height: " + getFriendlyHeight(point));
 }
 
-export function getRiverName(id) {
+function getRiverName(id) {
   const r = pack.rivers.find(r => r.i == id.slice(5));
   return r ? r.name + " " + r.type + ". " : "";
 }
 
 // get cell info on mouse move
-export function updateCellInfo(point, i, g) {
+function updateCellInfo(point, i, g) {
   const cells = pack.cells;
   const x = infoX.innerHTML = rn(point[0]);
   const y = infoY.innerHTML = rn(point[1]);
@@ -178,7 +178,7 @@ export function updateCellInfo(point, i, g) {
 }
 
 // convert coordinate to DMS format
-export function toDMS(coord, c) {
+function toDMS(coord, c) {
   const degrees = Math.floor(Math.abs(coord));
   const minutesNotTruncated = (Math.abs(coord) - degrees) * 60;
   const minutes = Math.floor(minutesNotTruncated);
@@ -188,7 +188,7 @@ export function toDMS(coord, c) {
 }
 
 // get surface elevation
-export function getElevation(f, h) {
+function getElevation(f, h) {
   if (f.land) return getHeight(h) + " (" + h + ")"; // land: usual height
   if (f.border) return "0 " + heightUnit.value; // ocean: 0
 
@@ -200,7 +200,7 @@ export function getElevation(f, h) {
 }
 
 // get water depth
-export function getDepth(f, h, p) {
+function getDepth(f, h, p) {
   if (f.land) return "0 " + heightUnit.value; // land: 0
   if (!f.border) return getHeight(h, "abs"); // lake: pack abs height
   const gridH = grid.cells.h[findGridCell(p[0], p[1])];
@@ -230,12 +230,12 @@ export function getHeight(h, abs) {
 }
 
 // get user-friendly (real-world) precipitation value from map data
-export function getFriendlyPrecipitation(i) {
+function getFriendlyPrecipitation(i) {
   const prec = grid.cells.prec[pack.cells.g[i]];
   return prec * 100 + " mm";
 }
 
-export function getRiverInfo(id) {
+function getRiverInfo(id) {
   const r = pack.rivers.find(r => r.i == id);
   return r ? `${r.name} ${r.type} (${id})` : "n/a";
 }
@@ -247,12 +247,12 @@ export function getCellPopulation(i) {
 }
 
 // get user-friendly (real-world) population value from map data
-export function getFriendlyPopulation(i) {
+function getFriendlyPopulation(i) {
   const [rural, urban] = getCellPopulation(i);
   return `${si(rural+urban)} (${si(rural)} rural, urban ${si(urban)})`;
 }
 
-export function getPopulationTip(i) {
+function getPopulationTip(i) {
   const [rural, urban] = getCellPopulation(i);
   return `Cell population: ${si(rural+urban)}; Rural: ${si(rural)}; Urban: ${si(urban)}`;
 }
@@ -310,7 +310,7 @@ export function applyOption(select, id, name = id) {
 }
 
 // show info about the generator in a popup
-export function showInfo() {
+function showInfo() {
   const Discord = link("https://discordapp.com/invite/X7E84HU", "Discord");
   const Reddit = link("https://www.reddit.com/r/FantasyMapGenerator", "Reddit")
   const Patreon = link("https://www.patreon.com/azgaar", "Patreon");
@@ -452,7 +452,7 @@ document.addEventListener("keyup", event => {
   else if (ctrl) pressControl(); // Control to toggle mode
 });
 
-export function pressNumpadSign(key) {
+function pressNumpadSign(key) {
   // if brush sliders are displayed, decrease brush size
   let brush = null;
   const d = key === 107 ? 1 : -1;
@@ -475,14 +475,14 @@ export function pressNumpadSign(key) {
   zoom.scaleBy(svg, scaleBy); // if no, zoom map
 }
 
-export function pressControl() {
+function pressControl() {
   if (zonesRemove.offsetParent) {
     zonesRemove.classList.contains("pressed") ? zonesRemove.classList.remove("pressed") : zonesRemove.classList.add("pressed");
   }
 }
 
 // trigger trash button click on "Delete" keypress
-export function removeElementOnKey() {
+function removeElementOnKey() {
   $(".dialog:visible .fastDelete").click();
   $("button:visible:contains('Remove')").click();
 }

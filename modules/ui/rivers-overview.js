@@ -1,6 +1,7 @@
 import * as Rivers from "../river-generator.js";
 import { editRiver } from "./rivers-editor.js";
 
+import { tip } from "./general.js";
 import { findCell, getColors } from "../utils.js";
 
 export function overviewRivers() {

@@ -1,5 +1,6 @@
 import * as BurgsAndStates from "../burgs-and-states.js";
 
+import { tip, clearMainTip } from "./general.js";
 import { findCell } from "../utils.js";
 import { restoreDefaultEvents } from "./editors.js";
 

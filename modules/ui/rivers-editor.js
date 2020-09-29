@@ -5,6 +5,8 @@ import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 import { showEPForRiver, showElevationProfile } from "./elevation-profile.js";
 
+import { tip, showMainTip, clearMainTip } from "./general.js";
+
 export function editRiver(id) {
     if (customization) return;
     if (elSelected && d3.event && d3.event.target.id === elSelected.attr("id")) return;

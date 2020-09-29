@@ -1,3 +1,4 @@
+import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon } from "../utils.js";
 import { restoreDefaultEvents, moveCircle } from "./editors.js";
 

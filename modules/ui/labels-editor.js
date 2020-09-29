@@ -3,6 +3,7 @@ import { unselect } from "./editors.js";
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
+import { tip, showMainTip } from "./general.js";
 import { findCell } from "../utils.js";
 
 export function editLabel() {

@@ -2,6 +2,7 @@ import { ReliefIcons } from "../relief-icons.js";
 import * as ThreeD from "./3d.js";
 import { editUnits } from "./units-editor.js";
 
+import { tip } from "./general.js";
 import { getGridPolygon, getPackPolygon, convertTemperature, P } from "../utils.js";
 
 // on map regeneration restore layers if they was turned on

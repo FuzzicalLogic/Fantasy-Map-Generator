@@ -1,3 +1,4 @@
+import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell } from "../utils.js";
 import { restoreDefaultEvents, unselect, moveCircle } from "./editors.js";
 

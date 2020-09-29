@@ -12,6 +12,7 @@ import { editReliefIcon } from "./relief-editor.js";
 import { editRiver } from "./rivers-editor.js";
 import { editRoute } from "./routes-editor.js";
 
+import { tip, moved } from "./general.js";
 import { findCell } from "../utils.js";
 
 restoreDefaultEvents(); // apply default viewbox events on load

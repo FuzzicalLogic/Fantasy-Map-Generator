@@ -1,6 +1,8 @@
 import { editNotes } from "./notes-editor.js";
 import { restoreDefaultEvents, unselect } from "./editors.js";
 
+import { tip, clearMainTip } from "./general.js";
+
 export function editMarker() {
     if (customization) return;
     closeDialogs("#markerEditor, .stable");

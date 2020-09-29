@@ -1,4 +1,5 @@
 import { clicked } from "./editors.js";
+import { tip, clearMainTip } from "./general";
 import { findGridCell, getGridPolygon, unselect } from "../utils.js";
 
 export function editIce() {

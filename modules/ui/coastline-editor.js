@@ -1,5 +1,6 @@
 import { unselect } from "./editors.js";
 
+import { tip } from "./general.js";
 import { getPackPolygon } from "../utils.js";
 
 export function editCoastline(node = d3.event.target) {

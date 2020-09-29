@@ -5,6 +5,8 @@ import * as ThreeD from "./3d.js";
 import { fitScaleBar } from "./measurers.js";
 
 import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_Markers, uploadMap } from "../save-and-load.js";
+
+import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
 import { P } from "../utils.js";
 
 $("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
@@ -265,6 +267,7 @@ export function changeUIsize(value) {
 }
 
 export function changeTooltipSize(value) {
+    const tooltip = document.getElementById("tooltip");
     tooltipSizeInput.value = tooltipSizeOutput.value = value;
     tooltip.style.fontSize = `calc(${value}px + 0.5vw)`;
 }

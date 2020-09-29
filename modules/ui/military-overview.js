@@ -1,6 +1,8 @@
 import * as Military from "../military-generator.js";
 import { overviewRegiments } from "./regiments-overview.js";
 
+import { tip } from "./general.js";
+
 export function overviewMilitary() {
     if (customization) return;
     closeDialogs("#militaryOverview, .stable");

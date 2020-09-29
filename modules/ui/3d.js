@@ -1,5 +1,7 @@
 import { getMapURL } from "../save-and-load.js";
 
+import { tip } from "./general.js";
+
 // set default options
 export const options = {
     scale: 50,

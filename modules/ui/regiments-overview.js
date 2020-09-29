@@ -3,6 +3,7 @@ import { clicked } from "./editors.js";
 import * as Military from "../military-generator.js";
 import { editRegiment } from "./regiment-editor.js";
 
+import { tip, clearMainTip } from "./general.js";
 import { findCell } from "../utils.js";
 
 export function overviewRegiments(state) {

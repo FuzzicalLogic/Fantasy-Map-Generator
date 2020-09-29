@@ -1,3 +1,5 @@
+import { tip } from "./general.js";
+
 export function editNotes(id, name) {
     // update list of objects
     const select = document.getElementById("notesSelect");

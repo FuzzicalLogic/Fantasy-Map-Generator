@@ -1,6 +1,8 @@
 import { restoreDefaultEvents } from "./editors.js";
 import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } from "../measurers.js";
 
+import { tip, clearMainTip, lock, unlock } from "./general.js";
+
 export function editUnits() {
     closeDialogs("#unitsEditor, .stable");
     $("#unitsEditor").dialog();

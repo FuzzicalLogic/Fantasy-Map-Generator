@@ -2,6 +2,7 @@ import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import { editStates } from "./states-editor.js";
 
+import { tip, applyOption, showMainTip, clearMainTip } from "general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor } from "../utils.js";
 import { restoreDefaultEvents, moveCircle } from "./editors.js";
 

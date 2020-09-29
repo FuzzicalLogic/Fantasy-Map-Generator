@@ -1,5 +1,7 @@
 import { restoreDefaultEvents } from "./editors.js";
 
+import { clearMainTip } from "./general.js";
+
 // Linear measurer (one is added by default)
 export function addRuler(x1, y1, x2, y2) {
     const cx = rn((x1 + x2) / 2, 2), cy = rn((y1 + y2) / 2, 2);

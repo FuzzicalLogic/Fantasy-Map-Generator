@@ -7,6 +7,7 @@ import * as Cultures from "../cultures-generator.js";
 import * as Religions from "../religions-generator.js";
 import * as Military from "../military-generator.js";
 
+import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon } from "../utils.js";
 import { restoreDefaultEvents, moveCircle } from "./editors.js";
 
@@ -108,6 +109,8 @@ function editHeightmap() {
         heightmapInfoY.innerHTML = rn(p[1]);
         heightmapInfoCell.innerHTML = cell;
         heightmapInfoHeight.innerHTML = `${grid.cells.h[cell]} (${getHeight(grid.cells.h[cell])})`;
+
+        const tooltip = document.getElementById("tooltip");
         if (tooltip.dataset.main) showMainTip();
 
         // move radius circle if drag mode is active

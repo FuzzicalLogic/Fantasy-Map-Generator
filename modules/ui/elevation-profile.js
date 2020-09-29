@@ -1,3 +1,4 @@
+import { getHeight } from "./general.js";
 import { findCell } from "../utils.js";
 
 export function showEPForRoute(node) {

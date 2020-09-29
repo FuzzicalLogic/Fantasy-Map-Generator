@@ -1,5 +1,7 @@
 import * as Names from "../names-generator.js";
 
+import { tip } from "./general.js";
+
 export function editNamesbase() {
     if (customization) return;
     closeDialogs("#namesbaseEditor, .stable");
