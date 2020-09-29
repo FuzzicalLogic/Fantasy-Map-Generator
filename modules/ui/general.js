@@ -14,16 +14,16 @@ import { editZones } from "./zones-editor.js";
 import { editNamesbase } from "./namesbase-editor.js";
 
 import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleAddRoute, toggleAddMarker } from "./tools.js";
-import { findGridCell, findCell, convertTemperature, rn } from "../utils.js";
+import { findGridCell, findCell, convertTemperature, rn, link } from "../utils.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
 
 // fit full-screen map if window is resized
-$(window).resize(function(e) {
-  if (localStorage.getItem("mapWidth") && localStorage.getItem("mapHeight")) return;
-  mapWidthInput.value = window.innerWidth;
-  mapHeightInput.value = window.innerHeight;
-  changeMapSize();
+$(window).resize(function (e) {
+    if (localStorage.getItem("mapWidth") && localStorage.getItem("mapHeight")) return;
+    mapWidthInput.value = window.innerWidth;
+    mapHeightInput.value = window.innerHeight;
+    changeMapSize();
 });
 
 //window.onbeforeunload = () => "Are you sure you want to navigate away?";

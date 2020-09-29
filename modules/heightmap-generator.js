@@ -1,4 +1,4 @@
-import { findGridCell, P } from "./utils.js";
+import { findGridCell, P, link } from "./utils.js";
 
 let cells, p;
 
