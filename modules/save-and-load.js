@@ -1,4 +1,5 @@
 import * as BurgsAndStates from "./burgs-and-states.js";
+import * as Religions from "./religions-generator.js";
 
 // download map as SVG
 export async function saveSVG() {

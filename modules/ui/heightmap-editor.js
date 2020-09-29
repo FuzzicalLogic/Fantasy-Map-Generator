@@ -1,6 +1,7 @@
 import * as ThreeD from "./3d.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import * as Cultures from "../cultures-generator.js";
+import * as Religions from "../religions-generator.js";
 
 function editHeightmap() {
     void function selectEditMode() {

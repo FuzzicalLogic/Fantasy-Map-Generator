@@ -1,3 +1,5 @@
+import * as Religions from "../religions-generator.js";
+
 export function editReligions() {
     if (customization) return;
     closeDialogs("#religionsEditor, .stable");
