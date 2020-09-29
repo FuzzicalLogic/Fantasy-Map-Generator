@@ -1,4 +1,3 @@
-import * as Rivers from "../river-generator.js";
 import * as Names from "../names-generator.js";
 
 import * as ThreeD from "./3d.js";
