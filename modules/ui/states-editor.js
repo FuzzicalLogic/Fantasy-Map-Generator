@@ -5,7 +5,7 @@ import { restoreDefaultEvents, moveCircle } from "./editors.js";
 import { tip, applyOption, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P, rn, isCtrlClick } from "../utils.js";
 
-function editStates() {
+export function editStates() {
     if (customization) return;
     closeDialogs("#statesEditor, .stable");
     if (!layerIsOn("toggleStates")) toggleStates();

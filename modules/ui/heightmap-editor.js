@@ -13,7 +13,7 @@ import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon, rn
 
 import { saveMap } from "../save-and-load.js";
 
-function editHeightmap() {
+export function editHeightmap() {
     void function selectEditMode() {
         alertMessage.innerHTML = `Heightmap is a core element on which all other data (rivers, burgs, states etc) is based.
       So the best edit approach is to <i>erase</i> the secondary data and let the system automatically regenerate it on edit completion.
