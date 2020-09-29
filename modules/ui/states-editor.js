@@ -1,3 +1,5 @@
+import * as BurgsAndStates from "../burgs-and-states.js";
+
 function editStates() {
     if (customization) return;
     closeDialogs("#statesEditor, .stable");

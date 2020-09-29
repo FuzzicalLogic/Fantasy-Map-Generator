@@ -1,3 +1,5 @@
+import * as BurgsAndStates from "../burgs-and-states.js";
+
 import { editBurg } from "./burg-editor.js";
 import { editCoastline } from "./coastline-editor.js";
 import { editHeightmap } from "./heightmap-editor.js";

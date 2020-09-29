@@ -1,3 +1,4 @@
+import * as BurgsAndStates from "../burgs-and-states.js";
 import { editStates } from "./states-editor.js";
 
 export function editProvinces() {

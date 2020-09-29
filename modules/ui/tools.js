@@ -1,3 +1,4 @@
+import * as BurgsAndStates from "../burgs-and-states.js";
 import * as Cultures from "../cultures-generator.js";
 
 import { editBiomes } from "./biomes-editor.js";

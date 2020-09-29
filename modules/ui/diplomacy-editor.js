@@ -1,3 +1,5 @@
+import * as BurgsAndStates from "../burgs-and-states.js";
+
 export function editDiplomacy() {
     if (customization) return;
     if (pack.states.filter(s => s.i && !s.removed).length < 2) {

@@ -1,3 +1,5 @@
+import * as BurgsAndStates from "./burgs-and-states.js";
+
 // download map as SVG
 export async function saveSVG() {
   console.time("saveSVG");
