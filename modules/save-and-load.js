@@ -449,12 +449,12 @@ function getRiverPoints(node) {
 export async function quickSave() {
   if (customization) {tip("Map cannot be saved when edit mode is active, please exit the mode and retry", false, "error"); return;}
   const blob = await getMapData();
-  if (blob) ldb.set("lastMap", blob); // auto-save map
+  if (blob) getDatabase().set("lastMap", blob); // auto-save map
   tip("Map is saved to browser memory", true, "success", 2000);
 }
 
 export function quickLoad() {
-  ldb.get("lastMap", blob => {
+    getDatabase().get("lastMap", blob => {
     if (blob) {
       loadMapPrompt(blob);
     } else {

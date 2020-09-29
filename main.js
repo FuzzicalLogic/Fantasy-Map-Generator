@@ -32,7 +32,7 @@ import { closeDialogs } from "../modules/ui/editors.js";
 import { addRuler, drawScaleBar } from "../modules/ui/measurers.js";
 
 import { getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
-import { getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate } from "./modules/utils.js";
+import { init, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate, debounce, link } from "./modules/utils.js";
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");
@@ -177,7 +177,7 @@ void function checkLoadParameters() {
 
     // open latest map if option is active and map is stored
     if (onloadMap.value === "saved") {
-        ldb.get("lastMap", blob => {
+        getDatabase().get("lastMap", blob => {
             if (blob) {
                 console.warn("Load last saved map");
                 try {
