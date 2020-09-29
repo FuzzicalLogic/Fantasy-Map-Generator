@@ -561,7 +561,7 @@ function parseLoadedData(data) {
   try {
     // exit customization
     if (window.closeDialogs) closeDialogs();
-    customization = 0;
+    window.customization = 0;
     if (customizationMenu.offsetParent) styleTab.click();
 
     const reliefIcons = document.getElementById("defs-relief").innerHTML; // save relief icons

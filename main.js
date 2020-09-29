@@ -28,11 +28,14 @@ import * as Names from "./modules/names-generator.js";
 
 import { editWorld } from "./modules/ui/world-configurator.js";
 import { uploadMap } from "./modules/save-and-load.js";
-import { closeDialogs } from "../modules/ui/editors.js";
-import { addRuler, drawScaleBar } from "../modules/ui/measurers.js";
+import { restoreDefaultEvents, closeDialogs } from "./modules/ui/editors.js";
+import { addRuler, drawScaleBar } from "./modules/ui/measurers.js";
 
 import { getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import { init, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate, debounce, link } from "./modules/utils.js";
+
+import { applyStoredOptions } from "./modules/ui/options.js";
+
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");
@@ -199,6 +202,49 @@ void function checkLoadParameters() {
     console.warn("Generate random map");
     generateMapOnLoad();
 }()
+
+
+// add drag to upload logic, pull request from @evyatron
+void function addDragToUpload() {
+    document.addEventListener("dragover", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        document.getElementById("mapOverlay").style.display = null;
+    });
+
+    document.addEventListener('dragleave', function (e) {
+        document.getElementById("mapOverlay").style.display = "none";
+    });
+
+    document.addEventListener("drop", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const overlay = document.getElementById("mapOverlay");
+        overlay.style.display = "none";
+        if (e.dataTransfer.items == null || e.dataTransfer.items.length !== 1) return; // no files or more than one
+        const file = e.dataTransfer.items[0].getAsFile();
+        if (file.name.indexOf('.map') == -1) { // not a .map file
+            alertMessage.innerHTML = 'Please upload a <b>.map</b> file you have previously downloaded';
+            $("#alert").dialog({
+                resizable: false, title: "Invalid file format", position: { my: "center", at: "center", of: "svg" },
+                buttons: { Close: function () { $(this).dialog("close"); } }
+            });
+            return;
+        }
+
+        // all good - show uploading text and load the map
+        overlay.style.display = null;
+        overlay.innerHTML = "Uploading<span>.</span><span>.</span><span>.</span>";
+        if (closeDialogs) closeDialogs();
+        uploadMap(file, () => {
+            overlay.style.display = "none";
+            overlay.innerHTML = "Drop a .map file to open";
+        });
+    });
+}()
+
+restoreDefaultEvents();
 
 export function loadMapFromURL(maplink, random) {
     const URL = decodeURIComponent(maplink);
@@ -385,7 +431,7 @@ export function showWelcomeMessage() {
     );
 }
 
-export function zoomed() {
+function zoomed() {
     const transform = d3.event.transform;
     const scaleDiff = scale - transform.k;
     const positionDiff = viewX - transform.x | viewY - transform.y;
@@ -481,46 +527,6 @@ export function invokeActiveZooming() {
         ruler.selectAll("line, path").attr("stroke-width", size);
     }
 }
-
-// add drag to upload logic, pull request from @evyatron
-void function addDragToUpload() {
-    document.addEventListener("dragover", function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        document.getElementById("mapOverlay").style.display = null;
-    });
-
-    document.addEventListener('dragleave', function (e) {
-        document.getElementById("mapOverlay").style.display = "none";
-    });
-
-    document.addEventListener("drop", function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-
-        const overlay = document.getElementById("mapOverlay");
-        overlay.style.display = "none";
-        if (e.dataTransfer.items == null || e.dataTransfer.items.length !== 1) return; // no files or more than one
-        const file = e.dataTransfer.items[0].getAsFile();
-        if (file.name.indexOf('.map') == -1) { // not a .map file
-            alertMessage.innerHTML = 'Please upload a <b>.map</b> file you have previously downloaded';
-            $("#alert").dialog({
-                resizable: false, title: "Invalid file format", position: { my: "center", at: "center", of: "svg" },
-                buttons: { Close: function () { $(this).dialog("close"); } }
-            });
-            return;
-        }
-
-        // all good - show uploading text and load the map
-        overlay.style.display = null;
-        overlay.innerHTML = "Uploading<span>.</span><span>.</span><span>.</span>";
-        if (closeDialogs) closeDialogs();
-        uploadMap(file, () => {
-            overlay.style.display = "none";
-            overlay.innerHTML = "Drop a .map file to open";
-        });
-    });
-}()
 
 export function generate() {
     try {
