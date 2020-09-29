@@ -5,7 +5,7 @@ import { editUnits } from "./units-editor.js";
 import { tip } from "./general.js";
 import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick } from "../utils.js";
 
-export const presets = {}; // global object
+let presets = {}; // global object
 
 export function initialize() {
     restoreLayers(); // run on-load
