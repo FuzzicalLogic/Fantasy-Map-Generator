@@ -838,7 +838,7 @@ export function changeStylePreset(preset) {
   });
 }
 
-export function updateElements() {
+function updateElements() {
   // burgIcons to desired size
   burgIcons.selectAll("g").each(function(d) {
     const size = +this.getAttribute("size");
@@ -1080,7 +1080,7 @@ export function fetchFonts(url) {
   })
 }
 
-export function addFonts(url) {
+function addFonts(url) {
   $("head").append('<link rel="stylesheet" type="text/css" href="' + url + '">');
   return fetch(url)
     .then(resp => resp.text())
@@ -1110,7 +1110,7 @@ export function addFonts(url) {
 }
 
 // Update font list for Label and Burg Editors
-export function updateFontOptions() {
+function updateFontOptions() {
   styleSelectFont.innerHTML = "";
   for (let i=0; i < fonts.length; i++) {
     const opt = document.createElement('option');
