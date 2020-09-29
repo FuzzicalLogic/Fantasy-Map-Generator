@@ -12,11 +12,6 @@ const approach = {
 
   // turn weighted array into simple array
 const approaches = [];
-for (const a in approach) {
-    for (let j = 0; j < approach[a]; j++) {
-        approaches.push(a);
-    }
-}
 
 const base = {
     number: ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"],
@@ -52,6 +47,14 @@ const types = {
 
     "Heresy": { "Heresy": 3, "Sect": 2, "Schism": 1, "Dissenters": 1, "Circle": 1, "Brotherhood": 1, "Society": 1, "Iconoclasm": 1, "Dissent": 1, "Apostates": 1 }
 };
+
+export function initialize() {
+    for (const a in approach) {
+        for (let j = 0; j < approach[a]; j++) {
+            approaches.push(a);
+        }
+    }
+}
 
 export function generate() {
     console.time('generateReligions');

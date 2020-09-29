@@ -9,14 +9,113 @@ import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_M
 import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
 import { P, gauss, rn, link } from "../utils.js";
 
-$("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
-$("#exitCustomization").draggable({ handle: "div" });
-$("#mapLayers").disableSelection();
+export const optionsContent = document.getElementById("optionsContent");
 
-// remove glow if tip is aknowledged
-if (localStorage.getItem("disable_click_arrow_tooltip")) {
-    clearMainTip();
-    optionsTrigger.classList.remove("glow");
+export function initialize() {
+    $("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
+    $("#exitCustomization").draggable({ handle: "div" });
+    $("#mapLayers").disableSelection();
+
+    // remove glow if tip is aknowledged
+    if (localStorage.getItem("disable_click_arrow_tooltip")) {
+        clearMainTip();
+        optionsTrigger.classList.remove("glow");
+    }
+
+    // Toggle "New Map!" pane on hover
+    optionsTrigger.addEventListener("mouseenter", function () {
+        if (optionsTrigger.classList.contains("glow")) return;
+        if (document.getElementById("options").style.display === "none") regenerate.style.display = "block";
+    });
+
+    collapsible.addEventListener("mouseleave", function () {
+        regenerate.style.display = "none";
+    });
+
+    // Activate options tab on click
+    document.getElementById("options").querySelector("div.tab").addEventListener("click", function (event) {
+        if (event.target.tagName !== "BUTTON") return;
+        const id = event.target.id;
+        const active = document.getElementById("options").querySelector(".tab > button.active");
+        if (active && id === active.id) return; // already active tab is clicked
+
+        if (active) active.classList.remove("active");
+        document.getElementById(id).classList.add("active");
+        document.getElementById("options").querySelectorAll(".tabcontent").forEach(e => e.style.display = "none");
+
+        if (id === "layersTab") layersContent.style.display = "block"; else
+            if (id === "styleTab") styleContent.style.display = "block"; else
+                if (id === "optionsTab") optionsContent.style.display = "block"; else
+                    if (id === "toolsTab") customization === 1
+                        ? customizationMenu.style.display = "block"
+                        : toolsContent.style.display = "block"; else
+                        if (id === "aboutTab") aboutContent.style.display = "block";
+    });
+
+    optionsContent.addEventListener("input", function (event) {
+        const id = event.target.id, value = event.target.value;
+        if (id === "mapWidthInput" || id === "mapHeightInput") mapSizeInputChange();
+        else if (id === "densityInput" || id === "densityOutput") changeCellsDensity(+value);
+        else if (id === "culturesInput") culturesOutput.value = value;
+        else if (id === "culturesOutput") culturesInput.value = value;
+        else if (id === "culturesSet") changeCultureSet();
+        else if (id === "regionsInput" || id === "regionsOutput") changeStatesNumber(value);
+        else if (id === "provincesInput") provincesOutput.value = value;
+        else if (id === "provincesOutput") provincesOutput.value = value;
+        else if (id === "provincesOutput") powerOutput.value = value;
+        else if (id === "powerInput") powerOutput.value = value;
+        else if (id === "powerOutput") powerInput.value = value;
+        else if (id === "neutralInput") neutralOutput.value = value;
+        else if (id === "neutralOutput") neutralInput.value = value;
+        else if (id === "manorsInput") changeBurgsNumberSlider(value);
+        else if (id === "religionsInput") religionsOutput.value = value;
+        else if (id === "uiSizeInput") uiSizeOutput.value = value;
+        else if (id === "uiSizeOutput") changeUIsize(value);
+        else if (id === "tooltipSizeInput" || id === "tooltipSizeOutput") changeTooltipSize(value);
+        else if (id === "transparencyInput") changeDialogsTransparency(value);
+    });
+
+    optionsContent.addEventListener("change", function (event) {
+        if (event.target.dataset.stored) lock(event.target.dataset.stored);
+        const id = event.target.id, value = event.target.value;
+        if (id === "zoomExtentMin" || id === "zoomExtentMax") changeZoomExtent(value);
+        else if (id === "optionsSeed") generateMapWithSeed();
+        else if (id === "uiSizeInput") changeUIsize(value);
+        else if (id === "yearInput") changeYear();
+        else if (id === "eraInput") changeEra();
+    });
+
+    optionsContent.addEventListener("click", function (event) {
+        const id = event.target.id;
+        if (id === "toggleFullscreen") toggleFullscreen();
+        else if (id === "optionsSeedGenerate") generateMapWithSeed();
+        else if (id === "optionsMapHistory") showSeedHistoryDialog();
+        else if (id === "optionsCopySeed") copyMapURL();
+        else if (id === "optionsEraRegenerate") regenerateEra();
+        else if (id === "zoomExtentDefault") restoreDefaultZoomExtent();
+        else if (id === "translateExtent") toggleTranslateExtent(event.target);
+    });
+
+
+    // Sticked menu Options listeners
+    document.getElementById("sticked").addEventListener("click", function (event) {
+        const id = event.target.id;
+        if (id === "newMapButton") regeneratePrompt();
+        else if (id === "saveButton") showSavePane();
+        else if (id === "loadButton") showLoadPane();
+        else if (id === "zoomReset") resetZoom(1000);
+    });
+
+    // load map
+    document.getElementById("mapToLoad").addEventListener("change", function () {
+        const fileToLoad = this.files[0];
+        this.value = "";
+        closeDialogs();
+        uploadMap(fileToLoad);
+    });
+
+    // View mode
+    viewMode.addEventListener("click", changeViewMode);
 }
 
 // Show options pane on trigger click
@@ -47,36 +146,6 @@ export function toggleOptions(event) {
     else hideOptions(event);
 }
 
-// Toggle "New Map!" pane on hover
-optionsTrigger.addEventListener("mouseenter", function () {
-    if (optionsTrigger.classList.contains("glow")) return;
-    if (document.getElementById("options").style.display === "none") regenerate.style.display = "block";
-});
-
-collapsible.addEventListener("mouseleave", function () {
-    regenerate.style.display = "none";
-});
-
-// Activate options tab on click
-document.getElementById("options").querySelector("div.tab").addEventListener("click", function (event) {
-    if (event.target.tagName !== "BUTTON") return;
-    const id = event.target.id;
-    const active = document.getElementById("options").querySelector(".tab > button.active");
-    if (active && id === active.id) return; // already active tab is clicked
-
-    if (active) active.classList.remove("active");
-    document.getElementById(id).classList.add("active");
-    document.getElementById("options").querySelectorAll(".tabcontent").forEach(e => e.style.display = "none");
-
-    if (id === "layersTab") layersContent.style.display = "block"; else
-        if (id === "styleTab") styleContent.style.display = "block"; else
-            if (id === "optionsTab") optionsContent.style.display = "block"; else
-                if (id === "toolsTab") customization === 1
-                    ? customizationMenu.style.display = "block"
-                    : toolsContent.style.display = "block"; else
-                    if (id === "aboutTab") aboutContent.style.display = "block";
-});
-
 // show popup with a list of Patreon supportes (updated manually, to be replaced with API call)
 export function showSupporters() {
     const supporters = "Aaron Meyer, Ahmad Amerih, AstralJacks, aymeric, Billy Dean Goehring, Branndon Edwards, Chase Mayers, Curt Flood, cyninge, Dino Princip, E.M. White, es, Fondue, Fritjof Olsson, Gatsu, Johan Fröberg, Jonathan Moore, Joseph Miranda, Kate, KC138, Luke Nelson, Markus Finster, Massimo Vella, Mikey, Nathan Mitchell, Paavi1, Pat, Ryan Westcott, Sasquatch, Shawn Spencer, Sizz_TV, Timothée CALLET, UTG community, Vlad Tomash, Wil Sisney, William Merriott, Xariun, Gun Metal Games, Scott Marner, Spencer Sherman, Valerii Matskevych, Alloyed Clavicle, Stewart Walsh, Ruthlyn Mollett (Javan), Benjamin Mair-Pratt, Diagonath, Alexander Thomas, Ashley Wilson-Savoury, William Henry, Preston Brooks, JOSHUA QUALTIERI, Hilton Williams, Katharina Haase, Hisham Bedri, Ian arless, Karnat, Bird, Kevin, Jessica Thomas, Steve Hyatt, Logicspren, Alfred García, Jonathan Killstring, John Ackley, Invad3r233, Norbert Žigmund, Jennifer, PoliticsBuff, _gfx_, Maggie, Connor McMartin, Jared McDaris, BlastWind, Franc Casanova Ferrer, Dead & Devil, Michael Carmody, Valerie Elise, naikibens220, Jordon Phillips, William Pucs, The Dungeon Masters, Brady R Rathbun, J, Shadow, Matthew Tiffany, Huw Williams, Joseph Hamilton, FlippantFeline, Tamashi Toh, kms, Stephen Herron, MidnightMoon, Whakomatic x, Barished, Aaron bateson, Brice Moss, Diklyquill, PatronUser, Michael Greiner, Steven Bennett, Jacob Harrington, Miguel C., Reya C., Giant Monster Games, Noirbard, Brian Drennen, Ben Craigie, Alex Smolin, Endwords, Joshua E Goodwin, SirTobit , Allen S. Rout, Allen Bull Bear, Pippa Mitchell, R K, G0atfather, Ryan Lege, Caner Oleas Pekgönenç, Bradley Edwards, Tertiary , Austin Miller, Jesse Holmes, Jan Dvořák, Marten F, Erin D. Smale, Maxwell Hill, Drunken_Legends, rob bee, Jesse Holmes, YYako, Detocroix, Anoplexian, Hannah, Paul, Sandra Krohn, Lucid, Richard Keating, Allen Varney, Rick Falkvinge, Seth Fusion, Adam Butler, Gus, StroboWolf, Sadie Blackthorne, Zewen Senpai, Dell McKnight, Oneiris, Darinius Dragonclaw Studios, Christopher Whitney, Rhodes HvZ, Jeppe Skov Jensen, María Martín López, Martin Seeger, Annie Rishor, Aram Sabatés, MadNomadMedia";
@@ -85,51 +154,6 @@ export function showSupporters() {
 }
 
 // Option listeners
-export const optionsContent = document.getElementById("optionsContent");
-optionsContent.addEventListener("input", function (event) {
-    const id = event.target.id, value = event.target.value;
-    if (id === "mapWidthInput" || id === "mapHeightInput") mapSizeInputChange();
-    else if (id === "densityInput" || id === "densityOutput") changeCellsDensity(+value);
-    else if (id === "culturesInput") culturesOutput.value = value;
-    else if (id === "culturesOutput") culturesInput.value = value;
-    else if (id === "culturesSet") changeCultureSet();
-    else if (id === "regionsInput" || id === "regionsOutput") changeStatesNumber(value);
-    else if (id === "provincesInput") provincesOutput.value = value;
-    else if (id === "provincesOutput") provincesOutput.value = value;
-    else if (id === "provincesOutput") powerOutput.value = value;
-    else if (id === "powerInput") powerOutput.value = value;
-    else if (id === "powerOutput") powerInput.value = value;
-    else if (id === "neutralInput") neutralOutput.value = value;
-    else if (id === "neutralOutput") neutralInput.value = value;
-    else if (id === "manorsInput") changeBurgsNumberSlider(value);
-    else if (id === "religionsInput") religionsOutput.value = value;
-    else if (id === "uiSizeInput") uiSizeOutput.value = value;
-    else if (id === "uiSizeOutput") changeUIsize(value);
-    else if (id === "tooltipSizeInput" || id === "tooltipSizeOutput") changeTooltipSize(value);
-    else if (id === "transparencyInput") changeDialogsTransparency(value);
-});
-
-optionsContent.addEventListener("change", function (event) {
-    if (event.target.dataset.stored) lock(event.target.dataset.stored);
-    const id = event.target.id, value = event.target.value;
-    if (id === "zoomExtentMin" || id === "zoomExtentMax") changeZoomExtent(value);
-    else if (id === "optionsSeed") generateMapWithSeed();
-    else if (id === "uiSizeInput") changeUIsize(value);
-    else if (id === "yearInput") changeYear();
-    else if (id === "eraInput") changeEra();
-});
-
-optionsContent.addEventListener("click", function (event) {
-    const id = event.target.id;
-    if (id === "toggleFullscreen") toggleFullscreen();
-    else if (id === "optionsSeedGenerate") generateMapWithSeed();
-    else if (id === "optionsMapHistory") showSeedHistoryDialog();
-    else if (id === "optionsCopySeed") copyMapURL();
-    else if (id === "optionsEraRegenerate") regenerateEra();
-    else if (id === "zoomExtentDefault") restoreDefaultZoomExtent();
-    else if (id === "translateExtent") toggleTranslateExtent(event.target);
-});
-
 export function mapSizeInputChange() {
     changeMapSize();
     localStorage.setItem("mapWidth", mapWidthInput.value);
@@ -436,15 +460,6 @@ export function restoreDefaultOptions() {
     location.reload();
 }
 
-// Sticked menu Options listeners
-document.getElementById("sticked").addEventListener("click", function (event) {
-    const id = event.target.id;
-    if (id === "newMapButton") regeneratePrompt();
-    else if (id === "saveButton") showSavePane();
-    else if (id === "loadButton") showLoadPane();
-    else if (id === "zoomReset") resetZoom(1000);
-});
-
 export function regeneratePrompt() {
     if (customization) { tip("New map cannot be generated when edit mode is active, please exit the mode and retry", false, "error"); return; }
     const workingTime = (Date.now() - last(mapHistory).created) / 60000; // minutes
@@ -514,16 +529,6 @@ export function loadURL() {
     });
 }
 
-// load map
-document.getElementById("mapToLoad").addEventListener("change", function () {
-    const fileToLoad = this.files[0];
-    this.value = "";
-    closeDialogs();
-    uploadMap(fileToLoad);
-});
-
-// View mode
-viewMode.addEventListener("click", changeViewMode);
 export function changeViewMode() {
     const button = event.target;
     if (button.tagName !== "BUTTON") return;

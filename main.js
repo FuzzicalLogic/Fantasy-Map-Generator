@@ -27,15 +27,25 @@ import * as Military from "./modules/military-generator.js";
 import * as Names from "./modules/names-generator.js";
 
 import { editWorld } from "./modules/ui/world-configurator.js";
-import { uploadMap } from "./modules/save-and-load.js";
+import { initialize as initStorage, uploadMap } from "./modules/save-and-load.js";
 import { restoreDefaultEvents, closeDialogs } from "./modules/ui/editors.js";
 import { addRuler, drawScaleBar } from "./modules/ui/measurers.js";
 
-import { getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
-import { init, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate, debounce, link } from "./modules/utils.js";
+import { initialize as initLayers } from "./modules/ui/layers.js";
+import { initialize as initStyle } from "./modules/ui/style.js";
+import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
+import { initialize as initUtilities, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate, debounce, link } from "./modules/utils.js";
 
-import { applyStoredOptions } from "./modules/ui/options.js";
+import { initialize as initOptions, applyStoredOptions } from "./modules/ui/options.js";
 
+// Necessary Load order
+initUtilities();
+Religions.initialize();
+initLayers();
+initGeneral();
+initOption();
+initStyle();
+initStorage();
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");

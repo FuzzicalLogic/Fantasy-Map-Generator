@@ -5,6 +5,15 @@ import { editUnits } from "./units-editor.js";
 import { tip } from "./general.js";
 import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick } from "../utils.js";
 
+export const presets = {}; // global object
+
+export function initialize() {
+    restoreLayers(); // run on-load
+    restoreCustomPresets(); // run on-load
+
+    $("#mapLayers").sortable({ items: "li:not(.solid)", containment: "parent", cancel: ".solid", update: moveLayer });
+}
+
 // on map regeneration restore layers if they was turned on
 export function restoreLayers() {
     if (layerIsOn("toggleHeight")) drawHeightmap();
@@ -26,10 +35,6 @@ export function restoreLayers() {
     if (!layerIsOn("toggleBorders")) $('#borders').fadeOut();
     if (!layerIsOn("toggleStates")) regions.style("display", "none").selectAll("path").remove();
 }
-
-restoreLayers(); // run on-load
-export const presets = {}; // global object
-restoreCustomPresets(); // run on-load
 
 export function getDefaultPresets() {
     return {
@@ -1240,7 +1245,6 @@ export function turnButtonOn(el) {
 }
 
 // move layers on mapLayers dragging (jquery sortable)
-$("#mapLayers").sortable({ items: "li:not(.solid)", containment: "parent", cancel: ".solid", update: moveLayer });
 export function moveLayer(event, ui) {
     const el = getLayer(ui.item.attr("id"));
     if (!el) return;

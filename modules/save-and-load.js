@@ -12,6 +12,10 @@ import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError } from "
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 
+export function initialize() {
+    saveReminder();
+}
+
 // download map as SVG
 export async function saveSVG() {
   console.time("saveSVG");
@@ -506,8 +510,6 @@ function saveReminder() {
   }, 1e6);
   saveReminder.status = 1;
 }
-
-saveReminder();
 
 export function toggleSaveReminder() {
   if (saveReminder.status) {
