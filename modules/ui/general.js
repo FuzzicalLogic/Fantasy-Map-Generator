@@ -11,6 +11,7 @@ import { overviewRivers } from "./rivers-overview";
 import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
+import { editNamesbase } from "./namesbase-editor.js";
 
 import { findGridCell, findCell, convertTemperature } from "../utils.js";
 
