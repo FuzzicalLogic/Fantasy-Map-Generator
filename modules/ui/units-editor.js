@@ -1,5 +1,5 @@
 import { restoreDefaultEvents } from "./editors.js";
-import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } from "../measurers.js";
+import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } from "./measurers.js";
 
 import { tip, clearMainTip, lock, unlock } from "./general.js";
 import { rn } from "../utils.js";
