@@ -7,6 +7,7 @@ import * as Names from "../names-generator.js";
 import * as Routes from "../routes-generator.js";
 import { ReliefIcons } from "../relief-icons.js";
 
+import { editHeightmap } from "./heightmap-editor.js";
 import { editBiomes } from "./biomes-editor.js";
 import { overviewBurgs } from "./burgs-overview.js";
 import { editCultures } from "./cultures-editor.js";
