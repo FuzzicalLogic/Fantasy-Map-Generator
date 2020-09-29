@@ -1,4 +1,4 @@
-export const getRoads = function () {
+export function getRoads() {
     console.time("generateMainRoads");
     const cells = pack.cells, burgs = pack.burgs.filter(b => b.i && !b.removed);
     const capitals = burgs.filter(b => b.capital);
@@ -19,7 +19,7 @@ export const getRoads = function () {
     return paths;
 }
 
-export const getTrails = function () {
+export function getTrails() {
     console.time("generateTrails");
     const cells = pack.cells, burgs = pack.burgs.filter(b => b.i && !b.removed);
     if (burgs.length < 2) return []; // not enough burgs to build trails
@@ -53,7 +53,7 @@ export const getTrails = function () {
     return paths;
 }
 
-export const getSearoutes = function () {
+export function getSearoutes() {
     console.time("generateSearoutes");
     const allPorts = pack.burgs.filter(b => b.port > 0 && !b.removed);
     if (allPorts.length < 2) return [];
@@ -91,7 +91,7 @@ export const getSearoutes = function () {
     return paths;
 }
 
-export const draw = function (main, small, ocean) {
+export function draw(main, small, ocean) {
     console.time("drawRoutes");
     const cells = pack.cells, burgs = pack.burgs;
     lineGen.curve(d3.curveCatmullRom.alpha(0.1));
@@ -130,7 +130,7 @@ export const draw = function (main, small, ocean) {
     console.timeEnd("drawRoutes");
 }
 
-export const regenerate = function () {
+export function regenerate() {
     routes.selectAll("path").remove();
     pack.cells.road = new Uint16Array(pack.cells.i.length);
     pack.cells.crossroad = new Uint16Array(pack.cells.i.length);

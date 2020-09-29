@@ -4,7 +4,7 @@ import { P } from "./utils.js";
 let chains = [];
 
   // calculate Markov chain for a namesbase
-export const calculateChain = function (string) {
+export function calculateChain(string) {
     const chain = [], array = string.split(",");
 
     for (const n of array) {
@@ -46,10 +46,10 @@ export const calculateChain = function (string) {
 }
 
   // update chain for specific base
-export const updateChain = (i) => chains[i] = nameBases[i] || nameBases[i].b ? calculateChain(nameBases[i].b) : null;
+export function updateChain(i) { chains[i] = nameBases[i] || nameBases[i].b ? calculateChain(nameBases[i].b) : null; }
 
   // update chains for all used bases
-export const clearChains = () => chains = [];
+export function clearChains() { chains = []; }
 
   // generate name using Markov's chain
 export const getBase = function (base, min, max, dupl) {
@@ -111,20 +111,20 @@ export const getBase = function (base, min, max, dupl) {
 }
 
   // generate name for culture
-export const getCulture = function (culture, min, max, dupl) {
+export function getCulture(culture, min, max, dupl) {
     if (culture === undefined) { console.error("Please define a culture"); return; }
     const base = pack.cultures[culture].base;
     return getBase(base, min, max, dupl);
 }
 
   // generate short name for culture
-export const getCultureShort = function (culture) {
+export function getCultureShort(culture) {
     if (culture === undefined) { console.error("Please define a culture"); return; }
     return getBaseShort(pack.cultures[culture].base);
 }
 
   // generate short name for base
-export const getBaseShort = function (base) {
+export function getBaseShort(base) {
     if (nameBases[base] === undefined) {
         tip(`Namebase ${base} does not exist. Please upload custom namebases of change the base in Cultures Editor`, false, "error");
         base = 1;
@@ -135,7 +135,7 @@ export const getBaseShort = function (base) {
 }
 
   // generate state name based on capital or random name and culture-specific suffix
-export const getState = function (name, culture, base) {
+export function getState(name, culture, base) {
     if (name === undefined) { console.error("Please define a base name"); return; }
     if (culture === undefined && base === undefined) { console.error("Please define a culture"); return; }
     if (base === undefined) base = pack.cultures[culture].base;
@@ -194,7 +194,7 @@ function validateSuffix(name, suffix) {
 }
 
   // generato name for the map
-export const getMapName = function (force) {
+export function getMapName(force) {
     if (!force && locked("mapName")) return;
     if (force && locked("mapName")) unlock("mapName");
     const base = P(.7) ? 2 : P(.5) ? rand(0, 6) : rand(0, 31);

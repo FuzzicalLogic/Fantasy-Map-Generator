@@ -211,7 +211,7 @@ function getLinePower() {
     }
 }
 
-export const addHill = function (count, height, rangeX, rangeY) {
+export function addHill(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
     const power = getBlobPower();
     while (count > 0) { addOneHill(); count--; }
@@ -245,7 +245,7 @@ export const addHill = function (count, height, rangeX, rangeY) {
 
 }
 
-export const addPit = function (count, height, rangeX, rangeY) {
+export function addPit(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
     while (count > 0) { addOnePit(); count--; }
 
@@ -277,7 +277,7 @@ export const addPit = function (count, height, rangeX, rangeY) {
     }
 }
 
-export const addRange = function (count, height, rangeX, rangeY) {
+export function addRange(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
     const power = getLinePower();
     while (count > 0) { addOneRange(); count--; }
@@ -352,7 +352,7 @@ export const addRange = function (count, height, rangeX, rangeY) {
     }
 }
 
-export const addTrough = function (count, height, rangeX, rangeY) {
+export function addTrough(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
     const power = getLinePower();
     while (count > 0) { addOneTrough(); count--; }
@@ -432,7 +432,7 @@ export const addTrough = function (count, height, rangeX, rangeY) {
     }
 }
 
-export const addStrait = function (width, direction = "vertical") {
+export function addStrait(width, direction = "vertical") {
     width = Math.min(getNumberInRange(width), grid.cellsX / 3);
     if (width < 1 && P(width)) return;
     const used = new Uint8Array(cells.h.length);
@@ -481,7 +481,7 @@ export const addStrait = function (width, direction = "vertical") {
     }
 }
 
-export const modify = function (range, add, mult, power) {
+export function modify(range, add, mult, power) {
     const min = range === "land" ? 20 : range === "all" ? 0 : +range.split("-")[0];
     const max = range === "land" || range === "all" ? 100 : +range.split("-")[1];
     grid.cells.h = grid.cells.h.map(h => h >= min && h <= max ? mod(h) : h);
@@ -494,7 +494,7 @@ export const modify = function (range, add, mult, power) {
     }
 }
 
-export const smooth = function (fr = 2, add = 0) {
+export function smooth(fr = 2, add = 0) {
     cells.h = cells.h.map((h, i) => {
         const a = [h];
         cells.c[i].forEach(c => a.push(cells.h[c]));

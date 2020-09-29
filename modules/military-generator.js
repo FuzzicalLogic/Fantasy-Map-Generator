@@ -2,7 +2,7 @@ import { gauss, rn } from "./utils.js";
 
 let cells, p, states;
 
-export const generate = function () {
+export function generate() {
     console.time("generateMilitaryForces");
     cells = pack.cells, p = cells.p, states = pack.states;
     const valid = states.filter(s => s.i && !s.removed); // valid states
@@ -175,7 +175,7 @@ export const generate = function () {
     console.timeEnd("generateMilitaryForces");
 }
 
-export const getDefaultOptions = function () {
+export function getDefaultOptions() {
     return [
         { icon: "⚔️", name: "infantry", rural: .25, urban: .2, crew: 1, power: 1, type: "melee", separate: 0 },
         { icon: "🏹", name: "archers", rural: .12, urban: .2, crew: 1, power: 1, type: "ranged", separate: 0 },
@@ -185,7 +185,7 @@ export const getDefaultOptions = function () {
     ];
 }
 
-export const drawRegiments = function (regiments, s) {
+export function drawRegiments(regiments, s) {
     const size = +armies.attr("box-size");
     const w = d => d.n ? size * 4 : size * 6;
     const h = size * 2;
@@ -204,7 +204,7 @@ export const drawRegiments = function (regiments, s) {
     g.append("text").attr("class", "regimentIcon").attr("x", d => x(d) - size).attr("y", d => d.y).text(d => d.icon);
 }
 
-export const drawRegiment = function (reg, s) {
+export function drawRegiment(reg, s) {
     const size = +armies.attr("box-size");
     const w = reg.n ? size * 4 : size * 6;
     const h = size * 2;
@@ -226,7 +226,7 @@ export const drawRegiment = function (reg, s) {
 }
 
 // move one regiment to another
-export const moveRegiment = function (reg, x, y) {
+export function moveRegiment(reg, x, y) {
     const el = armies.select("g#army" + reg.state).select("g#regiment" + reg.state + "-" + reg.i);
     if (!el.size()) return;
 
@@ -246,9 +246,9 @@ export const moveRegiment = function (reg, x, y) {
 }
 
 // utilize si function to make regiment total text fit regiment box
-export const getTotal = reg => reg.a > (reg.n ? 999 : 99999) ? si(reg.a) : reg.a;
+export function getTotal(reg) { return reg.a > (reg.n ? 999 : 99999) ? si(reg.a) : reg.a; }
 
-export const getName = function (r, regiments) {
+export function getName(r, regiments) {
     const proper = r.n ? null :
         cells.province[r.cell] && pack.provinces[cells.province[r.cell]] ? pack.provinces[cells.province[r.cell]].name :
             cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]] ? pack.burgs[cells.burg[r.cell]].name : null
@@ -258,7 +258,7 @@ export const getName = function (r, regiments) {
 }
 
 // get default regiment emblem
-export const getEmblem = function (r) {
+export function getEmblem(r) {
     if (!r.n && !Object.values(r.u).length) return "🔰"; // "Newbie" regiment without troops
     if (!r.n && pack.states[r.state].form === "Monarchy" && cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]].capital) return "👑"; // "Royal" regiment based in capital
     const mainUnit = Object.entries(r.u).sort((a, b) => b[1] - a[1])[0][0]; // unit with more troops in regiment
@@ -266,7 +266,7 @@ export const getEmblem = function (r) {
     return unit.icon;
 }
 
-export const generateNote = function (r, s) {
+export function generateNote(r, s) {
     const base = cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]] ? pack.burgs[cells.burg[r.cell]].name :
         cells.province[r.cell] && pack.provinces[cells.province[r.cell]] ? pack.provinces[cells.province[r.cell]].fullName : null;
     const station = base ? `${r.name} is ${r.n ? "based" : "stationed"} in ${base}. ` : "";

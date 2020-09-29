@@ -4,7 +4,7 @@ import * as Routes from "./routes-generator.js";
 import { findCell, getColors, getRandomColor, getMixedColor, P, gauss, rn } from "./utils.js";
 
 
-export const generate = function () {
+export function generate() {
     const cells = pack.cells, cultures = pack.cultures, n = cells.i.length;
 
     cells.burg = new Uint16Array(n); // cell burg
@@ -138,7 +138,7 @@ export const generate = function () {
 }
 
 // define burg coordinates, port status and define details
-export const specifyBurgs = function () {
+export function specifyBurgs() {
     console.time("specifyBurgs");
     const cells = pack.cells, vertices = pack.vertices, features = pack.features, temp = grid.cells.temp;
 
@@ -188,7 +188,7 @@ export const specifyBurgs = function () {
     console.timeEnd("specifyBurgs");
 }
 
-export const defineBurgFeatures = function (newburg) {
+export function defineBurgFeatures(newburg) {
     pack.burgs.filter(b => newburg ? b.i == newburg.i : (b.i && !b.removed)).forEach(b => {
         const pop = b.population;
         b.citadel = b.capital || pop > 50 && P(.75) || P(.5) ? 1 : 0;
@@ -201,7 +201,7 @@ export const defineBurgFeatures = function (newburg) {
     });
 }
 
-export const drawBurgs = function () {
+export function drawBurgs() {
     console.time("drawBurgs");
 
     // remove old data
@@ -255,7 +255,7 @@ export const drawBurgs = function () {
 }
 
 // growth algorithm to assign cells to states like we did for cultures
-export const expandStates = function () {
+export function expandStates() {
     console.time("expandStates");
     const cells = pack.cells, states = pack.states, cultures = pack.cultures, burgs = pack.burgs;
 
@@ -334,7 +334,7 @@ export const expandStates = function () {
     console.timeEnd("expandStates");
 }
 
-export const normalizeStates = function () {
+export function normalizeStates() {
     console.time("normalizeStates");
     const cells = pack.cells, burgs = pack.burgs;
 
@@ -355,7 +355,7 @@ export const normalizeStates = function () {
 
 // Resets the cultures of all burgs and states to their
 // cell or center cell's (respectively) culture.
-export const updateCultures = function () {
+export function updateCultures() {
     console.time('updateCulturesForBurgsAndStates');
 
     // Assign the culture associated with the burgs cell.
@@ -381,7 +381,7 @@ export const updateCultures = function () {
 
 // calculate and draw curved state labels for a list of states
 import { Voronoi } from "./voronoi.js";
-export const drawStateLabels = function (list) {
+export function drawStateLabels(list) {
     console.time("drawStateLabels");
     const cells = pack.cells, features = pack.features, states = pack.states;
     const paths = []; // text paths
@@ -568,7 +568,7 @@ export const drawStateLabels = function (list) {
 }
 
 // calculate states data like area, population etc.
-export const collectStatistics = function () {
+export function collectStatistics() {
     console.time("collectStatistics");
     const cells = pack.cells, states = pack.states;
     states.forEach(s => {
@@ -599,7 +599,7 @@ export const collectStatistics = function () {
     console.timeEnd("collectStatistics");
 }
 
-export const assignColors = function () {
+export function assignColors() {
     console.time("assignColors");
     const colors = ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f"]; // d3.schemeSet2;
 
@@ -625,7 +625,7 @@ export const assignColors = function () {
 }
 
 // generate historical conflicts of each state
-export const generateCampaigns = function () {
+export function generateCampaigns() {
     const wars = { "War": 6, "Conflict": 2, "Campaign": 4, "Invasion": 2, "Rebellion": 2, "Conquest": 2, "Intervention": 1, "Expedition": 1, "Crusade": 1 };
 
     pack.states.forEach(s => {
@@ -641,7 +641,7 @@ export const generateCampaigns = function () {
 }
 
 // generate Diplomatic Relationships
-export const generateDiplomacy = function () {
+export function generateDiplomacy() {
     console.time("generateDiplomacy");
     const cells = pack.cells, states = pack.states;
     const chronicle = states[0].diplomacy = [];
@@ -792,7 +792,7 @@ export const generateDiplomacy = function () {
 }
 
 // select a forms for listed or all valid states
-export const defineStateForms = function (list) {
+export function defineStateForms(list) {
     console.time("defineStateForms");
     const states = pack.states.filter(s => s.i && !s.removed);
     if (states.length < 1) return;
@@ -886,7 +886,7 @@ export const defineStateForms = function (list) {
     console.timeEnd("defineStateForms");
 }
 
-export const getFullName = function (s) {
+export function getFullName(s) {
     if (!s.formName) return s.name;
     if (!s.name && s.formName) return "The " + s.formName;
     // state forms requiring Adjective + Name, all other forms use scheme Form + Of + Name
@@ -894,7 +894,7 @@ export const getFullName = function (s) {
     return adj.includes(s.formName) ? getAdjective(s.name) + " " + s.formName : s.formName + " of " + s.name;
 }
 
-export const generateProvinces = function (regenerate) {
+export function generateProvinces(regenerate) {
     console.time("generateProvinces");
     const localSeed = regenerate ? Math.floor(Math.random() * 1e9).toString() : seed;
     Math.seedrandom(localSeed);

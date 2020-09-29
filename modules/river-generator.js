@@ -138,7 +138,7 @@ export const generate = function (changeHeights = true) {
 }
 
   // depression filling algorithm (for a correct water flux modeling)
-export const resolveDepressions = function (h) {
+export function resolveDepressions(h) {
     const cells = pack.cells;
     const land = cells.i.filter(i => h[i] >= 20 && h[i] < 100 && !cells.b[i]); // exclude near-border cells
     land.sort((a, b) => h[b] - h[a]); // highest cells go first
@@ -161,7 +161,7 @@ export const resolveDepressions = function (h) {
 }
 
   // add more river points on 1/3 and 2/3 of length
-export const addMeandring = function (segments, rndFactor = 0.3) {
+export function addMeandring(segments, rndFactor = 0.3) {
     const riverEnhanced = []; // to store enhanced segments
     let side = 1; // to control meandring direction
 
@@ -198,7 +198,7 @@ export const addMeandring = function (segments, rndFactor = 0.3) {
     return riverEnhanced;
 }
 
-export const getPath = function (points, width = 1, increment = 1) {
+export function getPath(points, width = 1, increment = 1) {
     let offset, extraOffset = .1; // starting river width (to make river source visible)
     const riverLength = points.reduce((s, v, i, p) => s + (i ? Math.hypot(v[0] - p[i - 1][0], v[1] - p[i - 1][1]) : 0), 0); // summ of segments length
     const widening = rn((1000 + (riverLength * 30)) * increment);
@@ -249,7 +249,7 @@ export const getPath = function (points, width = 1, increment = 1) {
     return [round(right + left, 2), rn(riverLength, 2)];
 }
 
-export const specify = function () {
+export function specify() {
     if (!pack.rivers.length) return;
     Math.seedrandom(seed);
     const smallLength = pack.rivers.map(r => r.length || 0).sort((a, b) => a - b)[Math.ceil(pack.rivers.length * .15)];
@@ -264,12 +264,12 @@ export const specify = function () {
     }
 }
 
-export const getName = function (cell) {
+export function getName(cell) {
     return Names.getCulture(pack.cells.culture[cell]);
 }
 
   // remove river and all its tributaries
-export const remove = function (id) {
+export function remove(id) {
     const cells = pack.cells;
     const riversToRemove = pack.rivers.filter(r => r.i === id || getBasin(r.i, r.parent, id) === id).map(r => r.i);
     riversToRemove.forEach(r => rivers.select("#river" + r).remove());
@@ -282,7 +282,7 @@ export const remove = function (id) {
     pack.rivers = pack.rivers.filter(r => !riversToRemove.includes(r.i));
 }
 
-export const getBasin = function (r, p, e) {
+export function getBasin(r, p, e) {
     while (p && r !== p && r !== e) {
         const parent = pack.rivers.find(r => r.i === p);
         if (!parent) return r;

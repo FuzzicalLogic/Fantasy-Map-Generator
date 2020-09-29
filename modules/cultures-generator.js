@@ -4,7 +4,7 @@ import { getColors, P, rn } from "./utils.js";
 
 let cells;
 
-export const generate = function () {
+export function generate() {
     console.time('generateCultures');
     cells = pack.cells;
     cells.culture = new Uint16Array(cells.i.length); // cell cultures
@@ -121,7 +121,7 @@ function getCode(name) {
     return code;
 }
 
-export const add = function (center) {
+export function add(center) {
     const defaultCultures = getDefault();
     let culture, base, name;
     if (pack.cultures.length < defaultCultures.length) {
@@ -141,7 +141,7 @@ export const add = function (center) {
     pack.cultures.push({ name, color, base, center, i, expansionism: 1, type: "Generic", cells: 0, area: 0, rural: 0, urban: 0, origin: 0, code });
 }
 
-export const getDefault = function (count) {
+export function getDefault(count) {
     // generic sorting functions
     const cells = pack.cells, s = cells.s, sMax = d3.max(s), t = cells.t, h = cells.h, temp = grid.cells.temp;
     const n = cell => Math.ceil(s[cell] / sMax * 3) // normalized cell score
@@ -354,7 +354,7 @@ export const getDefault = function (count) {
 }
 
 // expand cultures across the map (Dijkstra-like algorithm)
-export const expand = function () {
+export function expand() {
     console.time('expandCultures');
     cells = pack.cells;
 

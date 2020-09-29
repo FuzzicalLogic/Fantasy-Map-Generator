@@ -53,7 +53,7 @@ const types = {
     "Heresy": { "Heresy": 3, "Sect": 2, "Schism": 1, "Dissenters": 1, "Circle": 1, "Brotherhood": 1, "Society": 1, "Iconoclasm": 1, "Dissent": 1, "Apostates": 1 }
 };
 
-export const generate = function () {
+export function generate() {
     console.time('generateReligions');
     const cells = pack.cells, states = pack.states, cultures = pack.cultures;
     const religions = pack.religions = [];
@@ -167,7 +167,7 @@ export const generate = function () {
     console.timeEnd('generateReligions');
 }
 
-export const add = function (center) {
+export function add(center) {
     const cells = pack.cells, religions = pack.religions;
     const r = cells.religion[center];
     const i = religions.length;
@@ -188,7 +188,7 @@ export const add = function (center) {
 }
 
   // growth algorithm to assign cells to religions
-export const expandReligions = function () {
+export function expandReligions() {
     const cells = pack.cells, religions = pack.religions;
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
@@ -229,7 +229,7 @@ export const expandReligions = function () {
 }
 
   // growth algorithm to assign cells to heresies
-const expandHeresies = function () {
+function expandHeresies() {
     const cells = pack.cells, religions = pack.religions;
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
@@ -302,7 +302,7 @@ function getCode(rawName) {
 }
 
   // get supreme deity name
-export const getDeityName = function (culture) {
+export function getDeityName(culture) {
     if (culture === undefined) { console.error("Please define a culture"); return; }
     const meaning = generateMeaning();
     const cultureName = Names.getCulture(culture, null, null, "", .8);

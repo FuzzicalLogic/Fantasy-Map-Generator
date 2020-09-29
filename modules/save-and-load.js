@@ -447,7 +447,7 @@ function getRiverPoints(node) {
 }
 
 export async function quickSave() {
-  if (customization) {tip("Map cannot be saved when edit mode is active, please exit the mode and retry", false, "error"); return;}
+    if (customization) { tip("Map cannot be saved when edit mode is active, please exit the mode and retry", false, "error"); return; }
   const blob = await getMapData();
   if (blob) getDatabase().set("lastMap", blob); // auto-save map
   tip("Map is saved to browser memory", true, "success", 2000);
@@ -489,7 +489,7 @@ function loadMapPrompt(blob) {
   }
 }
 
-const saveReminder = function() {
+function saveReminder() {
   if (localStorage.getItem("noReminder")) return;
   const message = ["Please don't forget to save your work as a .map file",
     "Please remember to save work as a .map file",
