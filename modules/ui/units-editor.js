@@ -1,4 +1,5 @@
 import { restoreDefaultEvents } from "./editors.js";
+import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } from "../measurers.js";
 
 export function editUnits() {
     closeDialogs("#unitsEditor, .stable");

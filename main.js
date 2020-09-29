@@ -29,6 +29,8 @@ import * as Names from "./modules/names-generator.js";
 import { editWorld } from "./modules/ui/world-configurator.js";
 import { uploadMap } from "./modules/save-and-load.js";
 import { closeDialogs } from "../modules/ui/editors.js";
+import { addRuler, drawScaleBar } from "../modules/ui/measurers.js";
+
 import { getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P } from "./modules/utils.js";
 
 // append svg layers (in default order)

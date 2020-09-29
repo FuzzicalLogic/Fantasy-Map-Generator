@@ -7,6 +7,7 @@ import * as Names from "./names-generator.js";
 import { findCell, getGridPolygon, P } from "./utils.js";
 
 import { restoreDefaultEvents } from "./ui/editors.js";
+import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 
 // download map as SVG
 export async function saveSVG() {

@@ -3,6 +3,8 @@ import * as Names from "../names-generator.js";
 
 import * as ThreeD from "./3d.js";
 
+import { fitScaleBar } from "./measurers.js";
+
 import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_Markers, uploadMap } from "../save-and-load.js";
 import { P } from "../utils.js";
 
