@@ -213,7 +213,7 @@ function addSuffix(name) {
     return validateSuffix(name, suffix);
 }
 
-export const getNameBases = function () {
+export function getNameBases() {
     // name, min length, max length, letters to allow duplication, multi-word name rate [deprecated]
     return [
         // real-world bases by Azgaar:
