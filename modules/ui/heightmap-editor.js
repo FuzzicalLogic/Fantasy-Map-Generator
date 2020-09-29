@@ -1,4 +1,5 @@
 import * as HeightmapGenerator from "../heightmap-generator.js";
+import * as Rivers from "../river-generator.js";
 import * as ThreeD from "./3d.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import * as Cultures from "../cultures-generator.js";

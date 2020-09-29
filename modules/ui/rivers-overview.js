@@ -1,3 +1,4 @@
+import * as Rivers from "../river-generator.js";
 import { editRiver } from "./rivers-editor.js";
 
 export function overviewRivers() {

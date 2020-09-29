@@ -1,3 +1,4 @@
+import * as Rivers from "../river-generator.js";
 import * as ThreeD from "./3d.js";
 
 export function editWorld() {

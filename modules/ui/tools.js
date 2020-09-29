@@ -1,3 +1,4 @@
+import * as Rivers from "../river-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import * as Cultures from "../cultures-generator.js";
 import * as Religions from "../religions-generator.js";
