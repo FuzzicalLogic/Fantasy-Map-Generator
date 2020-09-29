@@ -81,7 +81,7 @@ toolsContent.addEventListener("click", function (event) {
                     if (button === "addMarker") toggleAddMarker();
 });
 
-export function processFeatureRegeneration(event, button) {
+function processFeatureRegeneration(event, button) {
     if (button === "regenerateStateLabels") { BurgsAndStates.drawStateLabels(); if (!layerIsOn("toggleLabels")) toggleLabels(); } else
         if (button === "regenerateReliefIcons") { ReliefIcons(); if (!layerIsOn("toggleRelief")) toggleRelief(); } else
             if (button === "regenerateRoutes") { Routes.regenerate(); if (!layerIsOn("toggleRoutes")) toggleRoutes(); } else
@@ -98,7 +98,7 @@ export function processFeatureRegeneration(event, button) {
                                                         if (button === "regenerateZones") regenerateZones(event);
 }
 
-export function regenerateRivers() {
+function regenerateRivers() {
     elevateLakes();
     Rivers.generate();
     for (const i of pack.cells.i) {
@@ -122,7 +122,7 @@ export function recalculatePopulation() {
     });
 }
 
-export function regenerateBurgs() {
+function regenerateBurgs() {
     const cells = pack.cells, states = pack.states;
     rankCells();
     cells.burg = new Uint16Array(cells.i.length);
@@ -175,7 +175,7 @@ export function regenerateBurgs() {
     if (document.getElementById("statesEditorRefresh").offsetParent) statesEditorRefresh.click();
 }
 
-export function regenerateStates() {
+function regenerateStates() {
     Math.seedrandom(Math.floor(Math.random() * 1e9)); // new random seed
     const burgs = pack.burgs.filter(b => b.i && !b.removed);
     if (!burgs.length) {
@@ -260,19 +260,19 @@ export function regenerateStates() {
     if (document.getElementById("militaryOverviewRefresh").offsetParent) militaryOverviewRefresh.click();
 }
 
-export function regenerateProvinces() {
+function regenerateProvinces() {
     unfog();
     BurgsAndStates.generateProvinces(true);
     drawBorders();
     if (layerIsOn("toggleProvinces")) drawProvinces();
 }
 
-export function regenerateReligions() {
+function regenerateReligions() {
     Religions.generate();
     if (!layerIsOn("toggleReligions")) toggleReligions(); else drawReligions();
 }
 
-export function regenerateCultures() {
+function regenerateCultures() {
     Cultures.generate();
     Cultures.expand();
     BurgsAndStates.updateCultures();
@@ -281,19 +281,19 @@ export function regenerateCultures() {
     refreshAllEditors();
 }
 
-export function regenerateMilitary() {
+function regenerateMilitary() {
     Military.generate();
     if (!layerIsOn("toggleMilitary")) toggleMilitary();
     if (document.getElementById("militaryOverviewRefresh").offsetParent) militaryOverviewRefresh.click();
 }
 
-export function regenerateIce() {
+function regenerateIce() {
     if (!layerIsOn("toggleIce")) toggleIce();
     ice.selectAll("*").remove();
     drawIce();
 }
 
-export function regenerateMarkers(event) {
+function regenerateMarkers(event) {
     if (isCtrlClick(event)) prompt("Please provide markers number multiplier", { default: 1, step: .01, min: 0, max: 100 }, v => addNumberOfMarkers(v));
     else addNumberOfMarkers(gauss(1, .5, .3, 5, 2));
 
@@ -309,7 +309,7 @@ export function regenerateMarkers(event) {
     }
 }
 
-export function regenerateZones(event) {
+function regenerateZones(event) {
     if (isCtrlClick(event)) prompt("Please provide zones number multiplier", { default: 1, step: .01, min: 0, max: 100 }, v => addNumberOfZones(v));
     else addNumberOfZones(gauss(1, .5, .6, 5, 2));
 
@@ -321,7 +321,7 @@ export function regenerateZones(event) {
     }
 }
 
-export function unpressClickToAddButton() {
+function unpressClickToAddButton() {
     addFeature.querySelectorAll("button.pressed").forEach(b => b.classList.remove("pressed"));
     restoreDefaultEvents();
     clearMainTip();
@@ -339,7 +339,7 @@ export function toggleAddLabel() {
     if (!layerIsOn("toggleLabels")) toggleLabels();
 }
 
-export function addLabelOnClick() {
+function addLabelOnClick() {
     const point = d3.mouse(this);
 
     // get culture in clicked point to generate a name
@@ -395,7 +395,7 @@ export function toggleAddRiver() {
     if (!layerIsOn("toggleRivers")) toggleRivers();
 }
 
-export function addRiverOnClick() {
+function addRiverOnClick() {
     const cells = pack.cells;
     const point = d3.mouse(this);
     let i = findCell(point[0], point[1]);
@@ -496,7 +496,7 @@ export function toggleAddRoute() {
     if (!layerIsOn("toggleRoutes")) toggleRoutes();
 }
 
-export function addRouteOnClick() {
+function addRouteOnClick() {
     unpressClickToAddButton();
     const point = d3.mouse(this);
     const id = getNextId("route");
@@ -516,7 +516,7 @@ export function toggleAddMarker() {
     if (!layerIsOn("toggleMarkers")) toggleMarkers();
 }
 
-export function addMarkerOnClick() {
+function addMarkerOnClick() {
     const point = d3.mouse(this);
     const x = rn(point[0], 2), y = rn(point[1], 2);
     const id = getNextId("markerElement");

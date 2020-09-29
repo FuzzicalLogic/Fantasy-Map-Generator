@@ -1,6 +1,7 @@
 import { ReliefIcons } from "../relief-icons.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
+import { recalculatePopulation } from "./tools.js";
 import { findCell, getPackPolygon, isLand, getRandomColor } from "../utils.js";
 
 import { restoreDefaultEvents, moveCircle } from "./editors.js";

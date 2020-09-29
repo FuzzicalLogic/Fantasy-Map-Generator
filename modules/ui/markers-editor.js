@@ -2,6 +2,7 @@ import { editNotes } from "./notes-editor.js";
 import { restoreDefaultEvents, unselect } from "./editors.js";
 
 import { tip, clearMainTip } from "./general.js";
+import { toggleAddMarker } from "./tools.js";
 
 export function editMarker() {
     if (customization) return;
