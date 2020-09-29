@@ -17,6 +17,14 @@ import { editRoute } from "./routes-editor.js";
 import { tip, moved } from "./general.js";
 import { findCell, rn } from "../utils.js";
 
+export function initialize() {
+    restoreDefaultEvents();
+
+    // apply sorting behaviour for lines on Editor header click
+    document.querySelectorAll(".sortable").forEach(function (e) {
+        e.addEventListener("click", function (e) { sortLines(this); });
+    });
+}
 
 // restore default viewbox events
 export function restoreDefaultEvents() {
@@ -91,11 +99,6 @@ export function removeCircle() {
 export function fitContent() {
     return !window.chrome ? "-moz-max-content" : "fit-content";
 }
-
-// apply sorting behaviour for lines on Editor header click
-document.querySelectorAll(".sortable").forEach(function (e) {
-    e.addEventListener("click", function (e) { sortLines(this); });
-});
 
 export function sortLines(header) {
     const type = header.classList.contains("alphabetically") ? "name" : "number";

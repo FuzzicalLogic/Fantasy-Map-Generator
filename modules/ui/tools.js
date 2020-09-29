@@ -27,59 +27,61 @@ import { restoreDefaultEvents } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, gauss, rn, isCtrlClick } from "../utils.js";
 
-toolsContent.addEventListener("click", function (event) {
-    if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }
-    if (event.target.tagName !== "BUTTON") return;
-    const button = event.target.id;
+export function initialize() {
+    toolsContent.addEventListener("click", function (event) {
+        if (customization) { tip("Please exit the customization mode first", false, "warning"); return; }
+        if (event.target.tagName !== "BUTTON") return;
+        const button = event.target.id;
 
-    // Click to open Editor buttons
-    if (button === "editHeightmapButton") editHeightmap(); else
-        if (button === "editBiomesButton") editBiomes(); else
-            if (button === "editStatesButton") editStates(); else
-                if (button === "editProvincesButton") editProvinces(); else
-                    if (button === "editDiplomacyButton") editDiplomacy(); else
-                        if (button === "editCulturesButton") editCultures(); else
-                            if (button === "editReligions") editReligions(); else
-                                if (button === "editNamesBaseButton") editNamesbase(); else
-                                    if (button === "editUnitsButton") editUnits(); else
-                                        if (button === "editNotesButton") editNotes(); else
-                                            if (button === "editZonesButton") editZones(); else
-                                                if (button === "overviewBurgsButton") overviewBurgs(); else
-                                                    if (button === "overviewRiversButton") overviewRivers(); else
-                                                        if (button === "overviewMilitaryButton") overviewMilitary(); else
-                                                            if (button === "overviewCellsButton") viewCellDetails();
+        // Click to open Editor buttons
+        if (button === "editHeightmapButton") editHeightmap(); else
+            if (button === "editBiomesButton") editBiomes(); else
+                if (button === "editStatesButton") editStates(); else
+                    if (button === "editProvincesButton") editProvinces(); else
+                        if (button === "editDiplomacyButton") editDiplomacy(); else
+                            if (button === "editCulturesButton") editCultures(); else
+                                if (button === "editReligions") editReligions(); else
+                                    if (button === "editNamesBaseButton") editNamesbase(); else
+                                        if (button === "editUnitsButton") editUnits(); else
+                                            if (button === "editNotesButton") editNotes(); else
+                                                if (button === "editZonesButton") editZones(); else
+                                                    if (button === "overviewBurgsButton") overviewBurgs(); else
+                                                        if (button === "overviewRiversButton") overviewRivers(); else
+                                                            if (button === "overviewMilitaryButton") overviewMilitary(); else
+                                                                if (button === "overviewCellsButton") viewCellDetails();
 
-    // Click to Regenerate buttons
-    if (event.target.parentNode.id === "regenerateFeature") {
-        if (sessionStorage.getItem("regenerateFeatureDontAsk")) { processFeatureRegeneration(event, button); return; }
+        // Click to Regenerate buttons
+        if (event.target.parentNode.id === "regenerateFeature") {
+            if (sessionStorage.getItem("regenerateFeatureDontAsk")) { processFeatureRegeneration(event, button); return; }
 
-        alertMessage.innerHTML = `Regeneration will remove all the custom changes for the element.<br><br>Are you sure you want to proceed?`
-        $("#alert").dialog({
-            resizable: false, title: "Regenerate element",
-            buttons: {
-                Proceed: function () { processFeatureRegeneration(event, button); $(this).dialog("close"); },
-                Cancel: function () { $(this).dialog("close"); }
-            },
-            open: function () {
-                const pane = $(this).dialog("widget").find(".ui-dialog-buttonpane");
-                $('<span><input id="dontAsk" class="checkbox" type="checkbox"><label for="dontAsk" class="checkbox-label dontAsk"><i>do not ask again</i></label><span>').prependTo(pane);
-            },
-            close: function () {
-                const box = $(this).dialog("widget").find(".checkbox")[0];
-                if (!box) return;
-                if (box.checked) sessionStorage.setItem("regenerateFeatureDontAsk", true);
-                $(this).dialog("destroy");
-            }
-        });
-    }
+            alertMessage.innerHTML = `Regeneration will remove all the custom changes for the element.<br><br>Are you sure you want to proceed?`
+            $("#alert").dialog({
+                resizable: false, title: "Regenerate element",
+                buttons: {
+                    Proceed: function () { processFeatureRegeneration(event, button); $(this).dialog("close"); },
+                    Cancel: function () { $(this).dialog("close"); }
+                },
+                open: function () {
+                    const pane = $(this).dialog("widget").find(".ui-dialog-buttonpane");
+                    $('<span><input id="dontAsk" class="checkbox" type="checkbox"><label for="dontAsk" class="checkbox-label dontAsk"><i>do not ask again</i></label><span>').prependTo(pane);
+                },
+                close: function () {
+                    const box = $(this).dialog("widget").find(".checkbox")[0];
+                    if (!box) return;
+                    if (box.checked) sessionStorage.setItem("regenerateFeatureDontAsk", true);
+                    $(this).dialog("destroy");
+                }
+            });
+        }
 
-    // Click to Add buttons
-    if (button === "addLabel") toggleAddLabel(); else
-        if (button === "addBurgTool") toggleAddBurg(); else
-            if (button === "addRiver") toggleAddRiver(); else
-                if (button === "addRoute") toggleAddRoute(); else
-                    if (button === "addMarker") toggleAddMarker();
-});
+        // Click to Add buttons
+        if (button === "addLabel") toggleAddLabel(); else
+            if (button === "addBurgTool") toggleAddBurg(); else
+                if (button === "addRiver") toggleAddRiver(); else
+                    if (button === "addRoute") toggleAddRoute(); else
+                        if (button === "addMarker") toggleAddMarker();
+    });
+}
 
 function processFeatureRegeneration(event, button) {
     if (button === "regenerateStateLabels") { BurgsAndStates.drawStateLabels(); if (!layerIsOn("toggleLabels")) toggleLabels(); } else
