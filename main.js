@@ -28,7 +28,7 @@ import * as Names from "./modules/names-generator.js";
 
 import { editWorld } from "./modules/ui/world-configurator.js";
 import { initialize as initStorage, uploadMap } from "./modules/save-and-load.js";
-import { restoreDefaultEvents, closeDialogs } from "./modules/ui/editors.js";
+import { initialize as initEditors, closeDialogs } from "./modules/ui/editors.js";
 import { addRuler, drawScaleBar } from "./modules/ui/measurers.js";
 
 import { initialize as initLayers } from "./modules/ui/layers.js";
@@ -37,13 +37,14 @@ import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip
 import { initialize as initUtilities, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate, debounce, link } from "./modules/utils.js";
 
 import { initialize as initOptions, applyStoredOptions } from "./modules/ui/options.js";
+import { initialize as initTools } from "./modules/ui/tools.js";
 
-// Necessary Load order
+// Necessary Load order -- Prior to main
 initUtilities();
 Religions.initialize();
 initLayers();
 initGeneral();
-initOption();
+initOptions();
 initStyle();
 initStorage();
 
@@ -254,7 +255,9 @@ void function addDragToUpload() {
     });
 }()
 
-restoreDefaultEvents();
+// Necessary Load Order -- After main
+initTools();
+initEditors();
 
 export function loadMapFromURL(maplink, random) {
     const URL = decodeURIComponent(maplink);
