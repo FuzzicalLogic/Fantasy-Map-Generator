@@ -1,4 +1,4 @@
-import { calculateVoronoi } from "../main.js";
+import { version, calculateVoronoi } from "../main.js";
 
 import * as Rivers from "./river-generator.js";
 import * as BurgsAndStates from "./burgs-and-states.js";
@@ -538,6 +538,8 @@ export function uploadMap(file, callback) {
         const data = dataLoaded.split("\r\n");
 
         const mapVersion = data[0].split("|")[0] || data[0];
+        console.log("Version: " + version);
+        console.log("Map: " + mapVersion);
         if (mapVersion === version) { parseLoadedData(data); return; }
 
         const archive = link("https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Changelog", "archived version");
