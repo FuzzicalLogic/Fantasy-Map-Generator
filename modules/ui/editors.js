@@ -18,12 +18,12 @@ import { tip, moved } from "./general.js";
 import { findCell, rn, parseTransform } from "../utils.js";
 
 export function initialize() {
-    restoreDefaultEvents();
-
     // apply sorting behaviour for lines on Editor header click
     document.querySelectorAll(".sortable").forEach(function (e) {
         e.addEventListener("click", function (e) { sortLines(this); });
     });
+
+    restoreDefaultEvents();
 }
 
 // restore default viewbox events
