@@ -1,4 +1,4 @@
-import { clicked } from "./editors.js";
+import { clicked, fitContent, sortLines, applySorting, getFileName, downloadFile } from "./editors.js";
 
 import * as Military from "../military-generator.js";
 import { editRegiment } from "./regiment-editor.js";

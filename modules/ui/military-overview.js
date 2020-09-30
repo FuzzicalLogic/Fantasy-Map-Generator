@@ -1,3 +1,5 @@
+import { fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
+
 import * as Military from "../military-generator.js";
 import { overviewRegiments } from "./regiments-overview.js";
 

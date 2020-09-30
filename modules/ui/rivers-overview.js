@@ -1,3 +1,5 @@
+import { fitContent, applySorting, getFileName, downloadFile, highlightElement } from "./editors.js";
+
 import * as Rivers from "../river-generator.js";
 import { editRiver } from "./rivers-editor.js";
 

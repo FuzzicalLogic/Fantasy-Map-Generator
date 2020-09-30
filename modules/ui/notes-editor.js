@@ -1,3 +1,5 @@
+import { getFileName, downloadFile, uploadFile, highlightElement } from "./editors.js";
+
 import { tip } from "./general.js";
 
 export function editNotes(id, name) {

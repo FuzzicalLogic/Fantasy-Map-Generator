@@ -1,5 +1,5 @@
 import { editNotes } from "./notes-editor.js";
-import { restoreDefaultEvents, unselect } from "./editors.js";
+import { restoreDefaultEvents, unselect, selectIcon } from "./editors.js";
 
 import { tip, clearMainTip } from "./general.js";
 import { toggleAddMarker } from "./tools.js";

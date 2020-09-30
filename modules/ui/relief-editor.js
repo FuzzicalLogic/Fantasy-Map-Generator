@@ -1,4 +1,4 @@
-import { restoreDefaultEvents, unselect, moveCircle } from "./editors.js";
+import { restoreDefaultEvents, unselect, moveCircle, removeCircle } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, rn } from "../utils.js";
 

@@ -1,4 +1,4 @@
-import { clicked } from "./editors.js";
+import { clicked, selectIcon } from "./editors.js";
 
 import * as Military from "../military-generator.js";
 import { Battle } from "./battle-screen.js";

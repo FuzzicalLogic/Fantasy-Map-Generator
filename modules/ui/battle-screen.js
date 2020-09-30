@@ -1,6 +1,7 @@
 import * as Names from "../names-generator.js";
 import * as Military from "../military-generator.js";
 
+import { fitContent, applySorting } from "./editors.js";
 import { tip } from "./general.js";
 import { findCell, P, Pint, rn } from "../utils.js";
 

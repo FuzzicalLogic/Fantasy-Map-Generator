@@ -28,7 +28,7 @@ import * as Names from "./modules/names-generator.js";
 
 import { editWorld } from "./modules/ui/world-configurator.js";
 import { initialize as initStorage, uploadMap } from "./modules/save-and-load.js";
-import { initialize as initEditors, closeDialogs } from "./modules/ui/editors.js";
+import { initialize as initEditors, closeDialogs, clearLegend, unfog } from "./modules/ui/editors.js";
 import { addRuler, drawScaleBar } from "./modules/ui/measurers.js";
 
 import { initialize as initLayers } from "./modules/ui/layers.js";

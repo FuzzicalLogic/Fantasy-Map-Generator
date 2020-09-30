@@ -1,7 +1,7 @@
 import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 
-import { restoreDefaultEvents, moveCircle } from "./editors.js";
+import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, addBurg, moveBurgToGroup, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
 import { tip, applyOption, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P, rn, isCtrlClick } from "../utils.js";
 

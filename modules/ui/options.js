@@ -8,6 +8,7 @@ import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_M
 
 import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
 import { P, gauss, rn, link } from "../utils.js";
+import { fitContent, fitLegendBox } from "./editors.js";
 
 export const optionsContent = document.getElementById("optionsContent");
 
@@ -174,7 +175,7 @@ export function changeMapSize() {
     oceanLayers.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
 
     fitScaleBar();
-    if (window.fitLegendBox) fitLegendBox();
+    fitLegendBox();
 }
 
 // just apply canvas size that was already set

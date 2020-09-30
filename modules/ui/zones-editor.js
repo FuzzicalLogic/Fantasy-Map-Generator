@@ -1,4 +1,4 @@
-import { restoreDefaultEvents, moveCircle } from "./editors.js";
+import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, rn } from "../utils.js";
 

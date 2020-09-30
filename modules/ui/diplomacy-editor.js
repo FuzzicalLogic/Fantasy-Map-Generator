@@ -1,6 +1,6 @@
 import * as BurgsAndStates from "../burgs-and-states.js";
 
-import { restoreDefaultEvents } from "./editors.js";
+import { restoreDefaultEvents, fitContent, applySorting, getFileName, downloadFile } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn } from "../utils.js";
 

@@ -295,7 +295,7 @@ export function redrawLegend() {
     drawLegend(name, data);
 }
 
-export function dragLegendBox() {
+function dragLegendBox() {
     const tr = parseTransform(this.getAttribute("transform"));
     const x = +tr[0] - d3.event.x, y = +tr[1] - d3.event.y;
     const bbox = legend.node().getBBox();
@@ -314,7 +314,7 @@ export function clearLegend() {
 }
 
 // draw color (fill) picker
-export function createPicker() {
+function createPicker() {
     const pos = () => tip("Drag to change the picker position");
     const cl = () => tip("Click to close the picker");
     const closePicker = () => contaiter.style("display", "none");
@@ -396,12 +396,12 @@ export function createPicker() {
     picker.attr("transform", `translate(${(svgWidth - width) / 2},${(svgHeight - height) / 2})`);
 }
 
-export function updateSelectedRect(fill) {
+function updateSelectedRect(fill) {
     document.getElementById("picker").querySelector("rect.selected").classList.remove("selected");
     document.getElementById("picker").querySelector("rect[fill='" + fill.toLowerCase() + "']").classList.add("selected");
 }
 
-export function updateSpaces() {
+function updateSpaces() {
     // hsl
     const h = getPickerControl(pickerH, 360);
     const s = getPickerControl(pickerS, 1);
@@ -420,7 +420,7 @@ export function updateSpaces() {
     pickerHEX.value = rgb.hex();
 }
 
-export function updatePickerColors() {
+function updatePickerColors() {
     const colors = d3.select("#picker > #pickerColors").selectAll("rect");
     const number = colors.size();
 
@@ -458,21 +458,21 @@ export function openPicker(fill, callback) {
     }
 }
 
-export function setPickerControl(control, value, max) {
+function setPickerControl(control, value, max) {
     const min = +control.previousSibling.getAttribute("x1");
     const delta = +control.previousSibling.getAttribute("x2") - min;
     const percent = value / max;
     control.setAttribute("cx", min + delta * percent);
 }
 
-export function getPickerControl(control, max) {
+function getPickerControl(control, max) {
     const min = +control.previousSibling.getAttribute("x1");
     const delta = +control.previousSibling.getAttribute("x2") - min;
     const current = +control.getAttribute("cx") - min;
     return current / delta * max;
 }
 
-export function dragPicker() {
+function dragPicker() {
     const tr = parseTransform(this.getAttribute("transform"));
     const x = +tr[0] - d3.event.x, y = +tr[1] - d3.event.y;
     const picker = d3.select("#picker");
@@ -486,7 +486,7 @@ export function dragPicker() {
     });
 }
 
-export function pickerFillClicked() {
+function pickerFillClicked() {
     const fill = this.getAttribute("fill");
     updateSelectedRect(fill);
     openPicker.updateFill();
@@ -497,7 +497,7 @@ export function pickerFillClicked() {
     updateSpaces();
 }
 
-export function clickPickerControl() {
+function clickPickerControl() {
     const min = this.getScreenCTM().e;
     this.nextSibling.setAttribute("cx", d3.event.x - min);
     updateSpaces();
@@ -505,7 +505,7 @@ export function clickPickerControl() {
     openPicker.updateFill();
 }
 
-export function dragPickerControl() {
+function dragPickerControl() {
     const min = +this.previousSibling.getAttribute("x1");
     const max = +this.previousSibling.getAttribute("x2");
 
@@ -518,7 +518,7 @@ export function dragPickerControl() {
     });
 }
 
-export function changePickerSpace() {
+function changePickerSpace() {
     const valid = this.checkValidity();
     if (!valid) { tip("You must provide a correct value", false, "error"); return; }
 

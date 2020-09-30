@@ -4,7 +4,7 @@ import { tip, showMainTip, clearMainTip } from "./general.js";
 import { recalculatePopulation } from "./tools.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, rn } from "../utils.js";
 
-import { restoreDefaultEvents, moveCircle } from "./editors.js";
+import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 
 export function editBiomes() {
     if (customization) return;

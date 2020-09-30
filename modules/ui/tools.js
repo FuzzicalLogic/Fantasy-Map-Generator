@@ -23,7 +23,7 @@ import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
 
-import { restoreDefaultEvents } from "./editors.js";
+import { restoreDefaultEvents, addBurg, moveBurgToGroup, unfog, refreshAllEditors } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, gauss, rn, isCtrlClick } from "../utils.js";
 

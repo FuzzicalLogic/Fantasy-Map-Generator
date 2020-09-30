@@ -1,3 +1,5 @@
+import { getFileName, downloadFile, uploadFile } from "./editors.js";
+
 import * as Names from "../names-generator.js";
 
 import { tip } from "./general.js";
