@@ -4,7 +4,7 @@ import * as Military from "../military-generator.js";
 import { editRegiment } from "./regiment-editor.js";
 
 import { tip, clearMainTip } from "./general.js";
-import { findCell, rn } from "../utils.js";
+import { findCell, rn, capitalize, si } from "../utils.js";
 
 export function overviewRegiments(state) {
     if (customization) return;

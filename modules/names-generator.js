@@ -1,5 +1,5 @@
 import { tip, unlock, locked } from "./ui/general.js";
-import { P } from "./utils.js";
+import { P, ra, vowel, capitalize } from "./utils.js";
 
 let chains = [];
 

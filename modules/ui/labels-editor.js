@@ -4,7 +4,7 @@ import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
 import { tip, showMainTip } from "./general.js";
-import { findCell } from "../utils.js";
+import { findCell, parseTransform } from "../utils.js";
 import { editStyle } from "./style.js";
 
 export function editLabel() {

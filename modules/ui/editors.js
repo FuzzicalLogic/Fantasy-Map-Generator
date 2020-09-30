@@ -15,7 +15,7 @@ import { editRiver } from "./rivers-editor.js";
 import { editRoute } from "./routes-editor.js";
 
 import { tip, moved } from "./general.js";
-import { findCell, rn } from "../utils.js";
+import { findCell, rn, parseTransform } from "../utils.js";
 
 export function initialize() {
     restoreDefaultEvents();

@@ -1,7 +1,7 @@
 import * as Names from "./names-generator.js";
 import * as Routes from "./routes-generator.js";
 
-import { findCell, getColors, getRandomColor, getMixedColor, P, gauss, rn } from "./utils.js";
+import { findCell, getColors, getRandomColor, getMixedColor, P, gauss, rn, rw, ra, splitInTwo, getAdjective, trimVowels, common } from "./utils.js";
 
 
 export function generate() {

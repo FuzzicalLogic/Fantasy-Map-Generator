@@ -4,7 +4,7 @@ import * as Military from "../military-generator.js";
 import { overviewRegiments } from "./regiments-overview.js";
 
 import { tip } from "./general.js";
-import { rn } from "../utils.js";
+import { rn, capitalize, si, wiki } from "../utils.js";
 
 export function overviewMilitary() {
     if (customization) return;

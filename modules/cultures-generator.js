@@ -1,6 +1,6 @@
 import * as Names from "./names-generator.js";
 
-import { getColors, P, rn } from "./utils.js";
+import { getColors, P, rn, biased } from "./utils.js";
 
 let cells;
 

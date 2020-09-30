@@ -2,7 +2,7 @@ import * as Rivers from "../river-generator.js";
 import * as ThreeD from "./3d.js";
 
 import { tip, lock } from "./general.js";
-import { rn } from "../utils.js";
+import { rn, parseTransform } from "../utils.js";
 
 export function editWorld() {
     if (customization) return;

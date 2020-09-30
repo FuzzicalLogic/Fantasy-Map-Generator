@@ -3,7 +3,7 @@ import { editBurg } from "./burg-editor.js";
 
 import { restoreDefaultEvents, fitContent, applySorting, addBurg, removeBurg, togglePort, toggleCapital, getFileName, downloadFile, uploadFile } from "./editors.js";
 import { tip, getHeight, clearMainTip } from "./general.js";
-import { findCell, rn } from "../utils.js";
+import { findCell, rn, getInteger, si } from "../utils.js";
 
 export function overviewBurgs() {
     if (customization) return;

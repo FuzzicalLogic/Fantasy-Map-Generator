@@ -1,4 +1,4 @@
-import { P, rn } from "./utils.js";
+import { P, rn, clipPoly } from "./utils.js";
 
 let cells, vertices, pointsN, used;
 

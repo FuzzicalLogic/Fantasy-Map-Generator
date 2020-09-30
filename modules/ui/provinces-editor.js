@@ -4,7 +4,7 @@ import { editStates } from "./states-editor.js";
 
 import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, moveBurgToGroup, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
 import { tip, applyOption, showMainTip, clearMainTip } from "./general.js";
-import { findCell, getPackPolygon, isLand, getRandomColor, rn, isCtrlClick } from "../utils.js";
+import { findCell, getPackPolygon, isLand, getRandomColor, rn, isCtrlClick, si, openURL } from "../utils.js";
 import { editStyle } from "./style.js";
 
 export function editProvinces() {

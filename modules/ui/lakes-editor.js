@@ -3,7 +3,7 @@ import { unselect } from "./editors.js";
 import { editNotes } from "./notes-editor.js";
 
 import { tip } from "./general.js";
-import { getPackPolygon, rn } from "../utils.js";
+import { getPackPolygon, rn, si } from "../utils.js";
 import { editStyle } from "./style.js";
 
 export function editLake() {

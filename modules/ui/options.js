@@ -7,7 +7,7 @@ import { fitScaleBar } from "./measurers.js";
 import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_Markers, uploadMap } from "../save-and-load.js";
 
 import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
-import { P, gauss, rn, link } from "../utils.js";
+import { P, gauss, rn, link, rw } from "../utils.js";
 import { fitContent, fitLegendBox } from "./editors.js";
 
 export const optionsContent = document.getElementById("optionsContent");

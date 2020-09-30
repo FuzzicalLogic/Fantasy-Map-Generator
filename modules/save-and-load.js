@@ -8,7 +8,7 @@ import * as Names from "./names-generator.js";
 
 import { tip, getCellPopulation, getFriendlyHeight, applyOption, clearMainTip } from "./ui/general.js";
 import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile } from "./ui/editors.js";
-import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError } from "./utils.js";
+import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 import { armiesStyle, addDefaulsStyles } from "./ui/style.js";

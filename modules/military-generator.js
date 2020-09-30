@@ -1,4 +1,4 @@
-import { gauss, rn } from "./utils.js";
+import { gauss, rn, ra, nth, si } from "./utils.js";
 
 let cells, p, states;
 

@@ -3,6 +3,7 @@ import { restoreDefaultEvents, unselect, selectIcon } from "./editors.js";
 
 import { tip, clearMainTip } from "./general.js";
 import { toggleAddMarker } from "./tools.js";
+import { parseTransform } from "../utils.js";
 
 export function editMarker() {
     if (customization) return;

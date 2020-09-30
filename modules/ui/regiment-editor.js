@@ -6,7 +6,7 @@ import { editNotes } from "./notes-editor.js";
 
 import { restoreDefaultEvents } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
-import { findCell, rn } from "../utils.js";
+import { findCell, rn, capitalize } from "../utils.js";
 
 export function editRegiment(selector) {
     if (customization) return;

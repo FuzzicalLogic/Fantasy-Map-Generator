@@ -1,6 +1,6 @@
 import * as Names from "./names-generator.js";
 
-import { getMixedColor, gauss, rn } from "./utils.js";
+import { getMixedColor, gauss, rn, rw, ra, getAdjective, trimVowels, biased } from "./utils.js";
 
   // name generation approach and relative chance to be selected
 const approach = {
