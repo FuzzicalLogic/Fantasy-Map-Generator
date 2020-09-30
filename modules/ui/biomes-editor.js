@@ -3,6 +3,7 @@ import { ReliefIcons } from "../relief-icons.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { recalculatePopulation } from "./tools.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, rn } from "../utils.js";
+import { editStyle } from "./style.js";
 
 import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 

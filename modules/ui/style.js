@@ -316,6 +316,12 @@ export function initialize() {
 
     // GLOBAL FILTERS
     mapFilters.addEventListener("click", applyMapFilter);
+
+    window.textureProvideURL = textureProvideURL;
+    document.getElementById('stylePreset').addEventListener('change', changeStylePreset);
+    document.getElementById('addStyleButton').addEventListener('click', addStylePreset);
+    document.getElementById('removeStyleButton').addEventListener('click', removeStylePreset);
+
 }
 
 // select element to be edited
@@ -335,7 +341,7 @@ export function editStyle(element, group) {
 }
 
 // Toggle style sections on element select
-export function selectStyleElement() {
+function selectStyleElement() {
   const sel = styleElementSelect.value;
   let el = d3.select("#"+sel);
 
@@ -563,7 +569,7 @@ export function selectStyleElement() {
 
 }
 
-export function getEl() {
+function getEl() {
   const el = styleElementSelect.value, g = styleGroupSelect.value;
   if (g === el) return svg.select("#"+el); else return svg.select("#"+el).select("#"+g);
 }
@@ -575,7 +581,7 @@ export function calculateFriendlyGridSize() {
   styleGridSizeFriendly.value = friendly;
 }
 
-export function shiftElement() {
+function shiftElement() {
   const x = styleShiftX.value || 0;
   const y = styleShiftY.value || 0;
   getEl().attr("transform", `translate(${x},${y})`);
@@ -586,14 +592,14 @@ export function shiftCompass() {
   d3.select("#rose").attr("transform", tr);
 }
 
-export function changeFont() {
+function changeFont() {
   const value = styleSelectFont.value;
   const font = fonts[value].split(':')[0].replace(/\+/g, " ");
   getEl().attr("font-family", font).attr("data-font", fonts[value]);
   if (styleElementSelect.value === "legend") redrawLegend();
 }
 
-export function changeFontSize(size) {
+function changeFontSize(size) {
   const legend = styleElementSelect.value === "legend";
   const coords = styleElementSelect.value === "coordinates";
 
@@ -603,7 +609,7 @@ export function changeFontSize(size) {
   if (legend) redrawLegend();
 }
 
-export function changeRadius(size, group) {
+function changeRadius(size, group) {
   const el = group ? burgIcons.select("#"+group) : getEl();
   const g = el.attr("id");
   el.attr("size", size)
@@ -613,7 +619,7 @@ export function changeRadius(size, group) {
   changeIconSize(size * 2, g); // change also anchor icons
 }
 
-export function changeIconSize(size, group) {
+function changeIconSize(size, group) {
   const el = group ? anchors.select("#"+group) : getEl();
   const oldSize = +el.attr("size");
   const shift = (size - oldSize) / 2;
@@ -630,7 +636,7 @@ export function changeIconSize(size, group) {
 }
 
 // request a URL to image to be used as a texture
-export function textureProvideURL() {
+function textureProvideURL() {
   alertMessage.innerHTML = `Provide an image URL to be used as a texture:
     <input id="textureURL" type="url" style="width: 100%" placeholder="http://www.example.com/image.jpg" oninput="fetchTextureURL(this.value)">
     <canvas id="texturePreview" width="256px" height="144px"></canvas>`;
@@ -667,7 +673,7 @@ export function setBase64Texture(url) {
   xhr.send();
 };
 
-export function fetchTextureURL(url) {
+function fetchTextureURLfetchTextureURL(url) {
   console.log("Provided URL is", url);
   const img = new Image();
   img.onload = function () {
@@ -727,7 +733,7 @@ export function addDefaulsStyles() {
 }
 
 // set default style
-export function applyDefaultStyle() {
+function applyDefaultStyle() {
   armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
   biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
@@ -813,7 +819,7 @@ export function applyDefaultStyle() {
 }
 
 // apply style settings in JSON
-export function applyStyle(style) {
+function applyStyle(style) {
   for (const selector in style) {
     const el = document.querySelector(selector);
     if (!el) continue;
@@ -826,7 +832,7 @@ export function applyStyle(style) {
 }
 
 // change current style preset to another saved one
-export function changeStylePreset(preset) {
+function changeStylePreset(preset) {
   if (customization) {tip("Please exit the customization mode first", false, "error"); return;}
   alertMessage.innerHTML = "Are you sure you want to change the style preset? All unsaved style changes will be lost";
   $("#alert").dialog({resizable: false, title: "Change style preset", width: "23em",
@@ -881,7 +887,7 @@ function updateElements() {
   invokeActiveZooming();
 }
 
-export function addStylePreset() {
+function addStylePreset() {
   $("#styleSaver").dialog({
     title: "Style Saver", width: "26em",
     position: {my: "center", at: "center", of: "svg"}
@@ -1023,7 +1029,7 @@ export function addStylePreset() {
   }
 }
 
-export function removeStylePreset() {
+function removeStylePreset() {
   if (stylePreset.selectedOptions[0].dataset.system) {tip("Cannot remove system preset", false, "error"); return;};
   localStorage.removeItem("presetStyle");
   localStorage.removeItem(stylePreset.value);
@@ -1031,7 +1037,7 @@ export function removeStylePreset() {
   removeStyleButton.style.display = "none";
 }
 
-export function applyMapFilter(event) {
+function applyMapFilter(event) {
   if (event.target.tagName !== "BUTTON") return;
   const button = event.target;
   svg.attr("data-filter", null).attr("filter", null);
@@ -1041,7 +1047,7 @@ export function applyMapFilter(event) {
   svg.attr("data-filter", button.id).attr("filter", "url(#filter-" + button.id + ")");
 }
 
-export function updateMapFilter() {
+function updateMapFilter() {
   const filter = svg.attr("data-filter");
   mapFilters.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
   if (!filter) return;
@@ -1050,7 +1056,7 @@ export function updateMapFilter() {
 
 // FONTS
 // fetch default fonts if not done before
-export function loadDefaultFonts() {
+function loadDefaultFonts() {
   if (!$('link[href="fonts.css"]').length) {
     $("head").append('<link rel="stylesheet" type="text/css" href="fonts.css">');
     const fontsToAdd = ["Amatic+SC:700", "IM+Fell+English", "Great+Vibes", "MedievalSharp", "Metamorphous",
@@ -1062,7 +1068,7 @@ export function loadDefaultFonts() {
   }
 }
 
-export function fetchFonts(url) {
+function fetchFonts(url) {
   return new Promise((resolve, reject) => {
     if (url === "") {
       tip("Use a direct link to any @font-face declaration or just font name to fetch from Google Fonts");

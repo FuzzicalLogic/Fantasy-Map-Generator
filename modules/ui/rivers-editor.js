@@ -7,6 +7,7 @@ import { showEPForRiver, showElevationProfile } from "./elevation-profile.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { rn } from "../utils.js";
+import { editStyle } from "./style.js";
 
 export function editRiver(id) {
     if (customization) return;

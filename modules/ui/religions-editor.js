@@ -3,6 +3,7 @@ import * as Religions from "../religions-generator.js";
 import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, rn, isCtrlClick } from "../utils.js";
+import { editStyle } from "./style.js";
 
 export function editReligions() {
     if (customization) return;

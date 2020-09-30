@@ -5,6 +5,7 @@ import { editNotes } from "./notes-editor.js";
 
 import { tip, showMainTip } from "./general.js";
 import { findCell } from "../utils.js";
+import { editStyle } from "./style.js";
 
 export function editLabel() {
     if (customization) return;

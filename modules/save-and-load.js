@@ -11,6 +11,7 @@ import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile } f
 import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
+import { armiesStyle, addDefaulsStyles } from "./ui/style.js";
 
 export function initialize() {
     saveReminder();

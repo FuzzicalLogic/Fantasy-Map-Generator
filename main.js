@@ -32,7 +32,7 @@ import { initialize as initEditors, closeDialogs, clearLegend, unfog } from "./m
 import { addRuler, drawScaleBar } from "./modules/ui/measurers.js";
 
 import { initialize as initLayers } from "./modules/ui/layers.js";
-import { initialize as initStyle } from "./modules/ui/style.js";
+import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js";
 import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import { initialize as initUtilities, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn, generateDate, debounce, link } from "./modules/utils.js";
 

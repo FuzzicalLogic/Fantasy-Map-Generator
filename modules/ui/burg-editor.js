@@ -4,6 +4,7 @@ import { editNotes } from "./notes-editor.js";
 import { clicked, unselect, moveBurgToGroup, removeBurg, togglePort, toggleCapital } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, isCtrlClick } from "../utils.js";
+import { editStyle } from "./style.js";
 
 export function editBurg(id) {
     if (customization) return;
