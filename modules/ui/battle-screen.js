@@ -3,7 +3,7 @@ import * as Military from "../military-generator.js";
 
 import { fitContent, applySorting } from "./editors.js";
 import { tip } from "./general.js";
-import { findCell, P, Pint, rn, list, getAdjective, capitalize, getNextId, wiki } from "../utils.js";
+import { findCell, P, Pint, rn, getAdjective, capitalize, getNextId, wiki } from "../utils.js";
 
 export class Battle {
 

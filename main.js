@@ -36,10 +36,10 @@ import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js
 import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {
     initialize as initUtilities, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn,
-    generateDate, debounce, link, rw, ra, getAdjective, clipPoly, biased, normalize, capitalize, getNextId, randomizeOptions, applyMapSize
+    generateDate, debounce, link, rw, ra, getAdjective, clipPoly, biased, normalize, capitalize, getNextId
 } from "./modules/utils.js";
 
-import { initialize as initOptions, applyStoredOptions } from "./modules/ui/options.js";
+import { initialize as initOptions, applyStoredOptions, applyMapSize, randomizeOptions } from "./modules/ui/options.js";
 import { initialize as initTools } from "./modules/ui/tools.js";
 
 // Necessary Load order -- Prior to main

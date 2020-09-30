@@ -2,7 +2,7 @@ import * as Names from "./names-generator.js";
 import * as Routes from "./routes-generator.js";
 
 import { findCell, getColors, getRandomColor, getMixedColor, P, gauss, rn, rw, ra, splitInTwo, getAdjective, trimVowels, common } from "./utils.js";
-import { toggleLabels, layerIsOn } from "./layers.js";
+import { toggleLabels, layerIsOn } from "./ui/layers.js";
 
 
 export function generate() {
