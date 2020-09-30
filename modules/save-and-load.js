@@ -28,7 +28,7 @@ import * as Military from "./military-generator.js";
 import * as Names from "./names-generator.js";
 
 import { tip, getCellPopulation, getFriendlyHeight, applyOption, clearMainTip } from "./ui/general.js";
-import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile } from "./ui/editors.js";
+import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile, closeDialogs } from "./ui/editors.js";
 import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
