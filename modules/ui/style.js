@@ -6,6 +6,7 @@ import * as Military from "../military-generator.js";
 
 import { tip, applyOption } from "./general.js";
 import { rn, getDefaultTexture, parseTransform } from "../utils.js";
+import { showOptions } from "./options.js";
 
 export function initialize() {
     styleElementSelect.addEventListener("change", selectStyleElement);

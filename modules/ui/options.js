@@ -117,6 +117,10 @@ export function initialize() {
 
     // View mode
     viewMode.addEventListener("click", changeViewMode);
+    window.restoreDefaultOptions = restoreDefaultOptions;
+    window.showSupporters = showSupporters;
+    window.hideOptions = hideOptions;
+    window.showOptions = showOptions;
 }
 
 // Show options pane on trigger click
@@ -148,14 +152,14 @@ export function toggleOptions(event) {
 }
 
 // show popup with a list of Patreon supportes (updated manually, to be replaced with API call)
-export function showSupporters() {
+function showSupporters() {
     const supporters = "Aaron Meyer, Ahmad Amerih, AstralJacks, aymeric, Billy Dean Goehring, Branndon Edwards, Chase Mayers, Curt Flood, cyninge, Dino Princip, E.M. White, es, Fondue, Fritjof Olsson, Gatsu, Johan Fröberg, Jonathan Moore, Joseph Miranda, Kate, KC138, Luke Nelson, Markus Finster, Massimo Vella, Mikey, Nathan Mitchell, Paavi1, Pat, Ryan Westcott, Sasquatch, Shawn Spencer, Sizz_TV, Timothée CALLET, UTG community, Vlad Tomash, Wil Sisney, William Merriott, Xariun, Gun Metal Games, Scott Marner, Spencer Sherman, Valerii Matskevych, Alloyed Clavicle, Stewart Walsh, Ruthlyn Mollett (Javan), Benjamin Mair-Pratt, Diagonath, Alexander Thomas, Ashley Wilson-Savoury, William Henry, Preston Brooks, JOSHUA QUALTIERI, Hilton Williams, Katharina Haase, Hisham Bedri, Ian arless, Karnat, Bird, Kevin, Jessica Thomas, Steve Hyatt, Logicspren, Alfred García, Jonathan Killstring, John Ackley, Invad3r233, Norbert Žigmund, Jennifer, PoliticsBuff, _gfx_, Maggie, Connor McMartin, Jared McDaris, BlastWind, Franc Casanova Ferrer, Dead & Devil, Michael Carmody, Valerie Elise, naikibens220, Jordon Phillips, William Pucs, The Dungeon Masters, Brady R Rathbun, J, Shadow, Matthew Tiffany, Huw Williams, Joseph Hamilton, FlippantFeline, Tamashi Toh, kms, Stephen Herron, MidnightMoon, Whakomatic x, Barished, Aaron bateson, Brice Moss, Diklyquill, PatronUser, Michael Greiner, Steven Bennett, Jacob Harrington, Miguel C., Reya C., Giant Monster Games, Noirbard, Brian Drennen, Ben Craigie, Alex Smolin, Endwords, Joshua E Goodwin, SirTobit , Allen S. Rout, Allen Bull Bear, Pippa Mitchell, R K, G0atfather, Ryan Lege, Caner Oleas Pekgönenç, Bradley Edwards, Tertiary , Austin Miller, Jesse Holmes, Jan Dvořák, Marten F, Erin D. Smale, Maxwell Hill, Drunken_Legends, rob bee, Jesse Holmes, YYako, Detocroix, Anoplexian, Hannah, Paul, Sandra Krohn, Lucid, Richard Keating, Allen Varney, Rick Falkvinge, Seth Fusion, Adam Butler, Gus, StroboWolf, Sadie Blackthorne, Zewen Senpai, Dell McKnight, Oneiris, Darinius Dragonclaw Studios, Christopher Whitney, Rhodes HvZ, Jeppe Skov Jensen, María Martín López, Martin Seeger, Annie Rishor, Aram Sabatés, MadNomadMedia";
     alertMessage.innerHTML = "<ul style='column-count: 3; column-gap: 2em'>" + supporters.split(", ").sort().map(n => `<li>${n}</li>`).join("") + "</ul>";
     $("#alert").dialog({ resizable: false, title: "Patreon Supporters", width: "30vw", position: { my: "center", at: "center", of: "svg" } });
 }
 
 // Option listeners
-export function mapSizeInputChange() {
+function mapSizeInputChange() {
     changeMapSize();
     localStorage.setItem("mapWidth", mapWidthInput.value);
     localStorage.setItem("mapHeight", mapHeightInput.value);
@@ -189,7 +193,7 @@ export function applyMapSize() {
     zoom.translateExtent([[0, 0], [graphWidth, graphHeight]]).scaleExtent([zoomMin, zoomMax]).scaleTo(svg, zoomMin);
 }
 
-export function toggleFullscreen() {
+function toggleFullscreen() {
     if (mapWidthInput.value != window.innerWidth || mapHeightInput.value != window.innerHeight) {
         mapWidthInput.value = window.innerWidth;
         mapHeightInput.value = window.innerHeight;
@@ -202,13 +206,13 @@ export function toggleFullscreen() {
     changeMapSize();
 }
 
-export function toggleTranslateExtent(el) {
+function toggleTranslateExtent(el) {
     const on = el.dataset.on = +!(+el.dataset.on);
     if (on) zoom.translateExtent([[-graphWidth / 2, -graphHeight / 2], [graphWidth * 1.5, graphHeight * 1.5]]);
     else zoom.translateExtent([[0, 0], [graphWidth, graphHeight]]);
 }
 
-export function generateMapWithSeed() {
+function generateMapWithSeed() {
     if (optionsSeed.value == seed) {
         tip("The current map already has this seed", false, "error");
         return;
@@ -216,7 +220,7 @@ export function generateMapWithSeed() {
     regeneratePrompt();
 }
 
-export function showSeedHistoryDialog() {
+function showSeedHistoryDialog() {
     const alert = mapHistory.map(function (h, i) {
         const created = new Date(h.created).toLocaleTimeString();
         const button = `<i data-tip"Click to generate a map with this seed" onclick="restoreSeed(${i})" class="icon-history optionsSeedRestore"></i>`;
@@ -230,7 +234,7 @@ export function showSeedHistoryDialog() {
 }
 
 // generate map with historycal seed
-export function restoreSeed(id) {
+function restoreSeed(id) {
     if (mapHistory[id].seed == seed) {
         tip("The current map is already generated with this seed", null, "error");
         return;
@@ -243,13 +247,13 @@ export function restoreSeed(id) {
     regeneratePrompt();
 }
 
-export function restoreDefaultZoomExtent() {
+function restoreDefaultZoomExtent() {
     zoomExtentMin.value = 1;
     zoomExtentMax.value = 20;
     zoom.scaleExtent([1, 20]).scaleTo(svg, 1);
 }
 
-export function copyMapURL() {
+function copyMapURL() {
     const locked = document.querySelectorAll("i.icon-lock").length; // check if some options are locked
     const search = `?seed=${optionsSeed.value}&width=${graphWidth}&height=${graphHeight}${locked ? '' : '&options=default'}`;
     navigator.clipboard.writeText(location.host + location.pathname + search)
@@ -260,45 +264,45 @@ export function copyMapURL() {
         .catch(err => tip("Could not copy URL: " + err, false, "error", 5000));
 }
 
-export function changeCellsDensity(value) {
+function changeCellsDensity(value) {
     densityOutput.value = value * 10 + "K";
     if (value > 5) densityOutput.style.color = "#b12117";
     else if (value > 1) densityOutput.style.color = "#dfdf12";
     else densityOutput.style.color = "#038603";
 }
 
-export function changeCultureSet() {
+function changeCultureSet() {
     const max = culturesSet.selectedOptions[0].dataset.max;
     culturesInput.max = culturesOutput.max = max
     if (+culturesOutput.value > +max) culturesInput.value = culturesOutput.value = max;
 }
 
-export function changeStatesNumber(value) {
+function changeStatesNumber(value) {
     regionsInput.value = regionsOutput.value = value;
     regionsOutput.style.color = +value ? null : "#b12117";
     burgLabels.select("#capitals").attr("data-size", Math.max(rn(6 - value / 20), 3));
     labels.select("#countries").attr("data-size", Math.max(rn(18 - value / 6), 4));
 }
 
-export function changeBurgsNumberSlider(value) {
+function changeBurgsNumberSlider(value) {
     manorsOutput.value = value == 1000 ? "auto" : value;
 }
 
-export function changeUIsize(value) {
+function changeUIsize(value) {
     if (isNaN(+value) || +value > 4 || +value < .5) return;
     uiSizeInput.value = uiSizeOutput.value = value;
     document.getElementsByTagName("body")[0].style.fontSize = value * 11 + "px";
     document.getElementById("options").style.width = value * 300 + "px";
 }
 
-export function changeTooltipSize(value) {
+function changeTooltipSize(value) {
     const tooltip = document.getElementById("tooltip");
     tooltipSizeInput.value = tooltipSizeOutput.value = value;
     tooltip.style.fontSize = `calc(${value}px + 0.5vw)`;
 }
 
 // change transparency for modal windows
-export function changeDialogsTransparency(value) {
+function changeDialogsTransparency(value) {
     transparencyInput.value = transparencyOutput.value = value;
     const alpha = (100 - +value) / 100;
     const optionsColor = "rgba(164, 139, 149, " + alpha + ")";
@@ -312,7 +316,7 @@ export function changeDialogsTransparency(value) {
     document.querySelectorAll("button.options").forEach(el => el.style.backgroundColor = optionLiColor);
 }
 
-export function changeZoomExtent(value) {
+function changeZoomExtent(value) {
     const min = Math.max(+zoomExtentMin.value, .01), max = Math.min(+zoomExtentMax.value, 200);
     zoom.scaleExtent([min, max]);
     const scale = Math.max(Math.min(+value, 200), .01);
@@ -395,7 +399,7 @@ export function randomizeOptions() {
 }
 
 // select heightmap template pseudo-randomly
-export function randomizeHeightmapTemplate() {
+function randomizeHeightmapTemplate() {
     const templates = {
         "Volcano": 3,
         "High Island": 22,
@@ -413,7 +417,7 @@ export function randomizeHeightmapTemplate() {
 }
 
 // select culture set pseudo-randomly
-export function randomizeCultureSet() {
+function randomizeCultureSet() {
     const sets = {
         "world": 25,
         "european": 20,
@@ -429,7 +433,7 @@ export function randomizeCultureSet() {
 }
 
 // generate current year and era name
-export function generateEra() {
+function generateEra() {
     if (!stored("year")) yearInput.value = rand(100, 2000); // current year
     if (!stored("era")) eraInput.value = Names.getBaseShort(P(.7) ? 1 : rand(nameBases.length)) + " Era";
     options.year = +yearInput.value;
@@ -437,26 +441,26 @@ export function generateEra() {
     options.eraShort = options.era.split(" ").map(w => w[0].toUpperCase()).join(""); // short name for era
 }
 
-export function regenerateEra() {
+function regenerateEra() {
     unlock("era");
     options.era = eraInput.value = Names.getBaseShort(P(.7) ? 1 : rand(nameBases.length)) + " Era";
     options.eraShort = options.era.split(" ").map(w => w[0].toUpperCase()).join("");
 }
 
-export function changeYear() {
+function changeYear() {
     if (!yearInput.value) return;
     if (isNaN(+yearInput.value)) { tip("Current year should be a number", false, "error"); return; }
     options.year = +yearInput.value;
 }
 
-export function changeEra() {
+function changeEra() {
     if (!eraInput.value) return;
     lock("era");
     options.era = eraInput.value;
 }
 
 // remove all saved data from LocalStorage and reload the page
-export function restoreDefaultOptions() {
+function restoreDefaultOptions() {
     localStorage.clear();
     location.reload();
 }
@@ -477,7 +481,7 @@ export function regeneratePrompt() {
     });
 }
 
-export function showSavePane() {
+function showSavePane() {
     $("#saveMapData").dialog({
         title: "Save map", resizable: false, width: "27em",
         position: { my: "center", at: "center", of: "svg" },
@@ -502,7 +506,7 @@ export function saveGeoJSON() {
     });
 }
 
-export function showLoadPane() {
+function showLoadPane() {
     $("#loadMapData").dialog({
         title: "Load map", resizable: false, width: "17em",
         position: { my: "center", at: "center", of: "svg" },
@@ -555,7 +559,7 @@ export function enterStandardView() {
     if (preview3d.offsetParent) $("#preview3d").dialog("close");
 }
 
-export async function enter3dView(type) {
+async function enter3dView(type) {
     const canvas = document.createElement("canvas");
     canvas.id = "canvas3d";
     canvas.dataset.type = type;
@@ -593,7 +597,7 @@ export async function enter3dView(type) {
     toggle3dOptions();
 }
 
-export function resize3d() {
+function resize3d() {
     const canvas = document.getElementById("canvas3d");
     canvas.width = parseFloat(preview3d.style.width);
     canvas.height = parseFloat(preview3d.style.height) - 2;

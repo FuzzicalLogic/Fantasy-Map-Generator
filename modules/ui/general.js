@@ -15,6 +15,7 @@ import { editNamesbase } from "./namesbase-editor.js";
 
 import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleAddRoute, toggleAddMarker } from "./tools.js";
 import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, capitalize, si } from "../utils.js";
+import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
 

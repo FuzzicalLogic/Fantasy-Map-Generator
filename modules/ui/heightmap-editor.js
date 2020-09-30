@@ -10,6 +10,7 @@ import * as Military from "../military-generator.js";
 import { restoreDefaultEvents, moveCircle, removeCircle, removeBurg, getFileName, downloadFile, uploadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon, rn, lim } from "../utils.js";
+import { enterStandardView, changeViewMode } from "./options.js";
 
 import { saveMap } from "../save-and-load.js";
 

@@ -12,6 +12,7 @@ import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError, rw, ra,
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 import { armiesStyle, addDefaulsStyles } from "./ui/style.js";
+import { changeMapSize } from "./ui/options.js";
 
 export function initialize() {
     saveReminder();
