@@ -1,4 +1,5 @@
 import {
+    modules,
     svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
     graphWidth, graphHeight,
     zoom, resetZoom,

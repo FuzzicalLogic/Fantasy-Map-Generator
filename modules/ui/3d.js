@@ -1,3 +1,8 @@
+import {
+    svgWidth, svgHeight,
+    graphWidth, graphHeight,
+    grid
+} from "../../main.js";
 import { getMapURL } from "../save-and-load.js";
 
 import { getFileName } from "./editors.js";
