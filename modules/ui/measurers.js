@@ -1,3 +1,7 @@
+import {
+    svgWidth, svgHeight,
+    scale, scaleBar
+} from "../../main.js";
 import { restoreDefaultEvents } from "./editors.js";
 
 import { clearMainTip } from "./general.js";

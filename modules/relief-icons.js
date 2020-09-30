@@ -1,3 +1,8 @@
+import {
+    pack, grid,
+    terrain, biomesData
+} from "../main.js";
+
 import { poissonDiscSampler, getPackPolygon, rn } from "./utils.js";
 
 export function ReliefIcons() {

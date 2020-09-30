@@ -1,5 +1,8 @@
 /** TODO: Complete dependency branch from P() below. */
-import { pack } from "../main.js"
+import {
+    graphWidth, graphHeight,
+    pack
+} from "../main.js"
 import { getColorScheme } from "./ui/layers.js";
 
 export function initialize() {
@@ -391,7 +394,7 @@ export function rn(v, d = 0) {
 }
 
 // round string to d decimals
-function round(s, d = 1) {
+export function round(s, d = 1) {
     return s.replace(/[\d\.-][\d\.e-]*/g, function (n) { return rn(n, d); })
 }
 

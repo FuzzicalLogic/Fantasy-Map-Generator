@@ -1,3 +1,10 @@
+import {
+    svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
+    graphWidth, graphHeight,
+    zoom, resetZoom,
+    landmass, oceanPattern, oceanLayers
+} from "../../main.js";
+
 import * as Names from "../names-generator.js";
 
 import * as ThreeD from "./3d.js";
@@ -167,8 +174,8 @@ function mapSizeInputChange() {
 
 // change svg size on manual size change or window resize, do not change graph size
 export function changeMapSize() {
-    svgWidth = Math.min(+mapWidthInput.value, window.innerWidth);
-    svgHeight = Math.min(+mapHeightInput.value, window.innerHeight);
+    setSvgWidth(Math.min(+mapWidthInput.value, window.innerWidth));
+    setSvgHeight(Math.min(+mapHeightInput.value, window.innerHeight));
     svg.attr("width", svgWidth).attr("height", svgHeight);
 
     const maxWidth = Math.max(+mapWidthInput.value, graphWidth);

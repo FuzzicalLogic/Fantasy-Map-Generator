@@ -1,3 +1,5 @@
+import { reGraph, resetZoom } from "../../main.js";
+
 import * as HeightmapGenerator from "../heightmap-generator.js";
 import { OceanLayers } from "../ocean-layers.js";
 import * as Rivers from "../river-generator.js";

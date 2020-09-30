@@ -1,4 +1,25 @@
-import { version, calculateVoronoi } from "../main.js";
+import {
+    version, seed, setSeed,
+    svg, svgWidth, svgHeight, redefineElements,
+    mapId, setMapId, graphWidth, graphHeight, setWidth, setHeight,
+    mapCoordinates, setCoordinates, notes, setNotes,
+    grid, setGrid,
+    options, setOptions,
+    biomesData, setBiomesData, applyDefaultBiomesSystem,
+    pack, setPack,
+    nameBases, 
+    defs, viewbox, scaleBar, legend, ocean, oceanLayers, oceanPattern,
+    lakes, landmass, texture, terrs, biomes, ice,
+    cells, gridOverlay, coordinates, compass,
+    rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
+    borders, stateBorders, provinceBorders,
+    routes, roads, trails, searoutes,
+    temperature, coastline, prec, population,
+    labels, icons, burgIcons, anchors,
+    armies, markers, ruler, fogging, debug, burgLabels,
+    calculateVoronoi, reGraph, reMarkFeatures,
+    focusOn, invokeActiveZooming, showStatistics
+} from "../main.js";
 
 import * as Rivers from "./river-generator.js";
 import * as BurgsAndStates from "./burgs-and-states.js";
@@ -538,8 +559,6 @@ export function uploadMap(file, callback) {
         const data = dataLoaded.split("\r\n");
 
         const mapVersion = data[0].split("|")[0] || data[0];
-        console.log("Version: " + version);
-        console.log("Map: " + mapVersion);
         if (mapVersion === version) { parseLoadedData(data); return; }
 
         const archive = link("https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Changelog", "archived version");
@@ -579,10 +598,13 @@ function parseLoadedData(data) {
 
         void function parseParameters() {
             const params = data[0].split("|");
-            if (params[3]) { seed = params[3]; optionsSeed.value = seed; }
-            if (params[4]) graphWidth = +params[4];
-            if (params[5]) graphHeight = +params[5];
-            mapId = params[6] ? +params[6] : Date.now();
+            if (params[3]) {
+                setSeed(params[3]);
+                optionsSeed.value = seed;
+            }
+            if (params[4]) setWidth(params[4]);
+            if (params[5]) setHeight(params[5]);
+            setMapId(params[6] ? +params[6] : Date.now());
         }()
 
         console.group("Loaded Map " + seed);
@@ -608,16 +630,16 @@ function parseLoadedData(data) {
             if (settings[16]) temperatureEquatorInput.value = temperatureEquatorOutput.value = settings[16];
             if (settings[17]) temperaturePoleInput.value = temperaturePoleOutput.value = settings[17];
             if (settings[18]) precInput.value = precOutput.value = settings[18];
-            if (settings[19]) options = JSON.parse(settings[19]);
+            if (settings[19]) setOptions(JSON.parse(settings[19]));
             if (settings[20]) mapName.value = settings[20];
         }()
 
         void function parseConfiguration() {
-            if (data[2]) mapCoordinates = JSON.parse(data[2]);
-            if (data[4]) notes = JSON.parse(data[4]);
+            if (data[2]) setCoordinates(JSON.parse(data[2]));
+            if (data[4]) setNotes(JSON.parse(data[4]));
 
             const biomes = data[3].split("|");
-            biomesData = applyDefaultBiomesSystem();
+            setBiomesData(applyDefaultBiomesSystem());
             biomesData.color = biomes[0].split(",");
             biomesData.habitability = biomes[1].split(",").map(h => +h);
             biomesData.name = biomes[2].split(",");
@@ -636,59 +658,10 @@ function parseLoadedData(data) {
             document.body.insertAdjacentHTML("afterbegin", data[5]);
         }()
 
-        void function redefineElements() {
-            svg = d3.select("#map");
-            defs = svg.select("#deftemp");
-            viewbox = svg.select("#viewbox");
-            scaleBar = svg.select("#scaleBar");
-            legend = svg.select("#legend");
-            ocean = viewbox.select("#ocean");
-            oceanLayers = ocean.select("#oceanLayers");
-            oceanPattern = ocean.select("#oceanPattern");
-            lakes = viewbox.select("#lakes");
-            landmass = viewbox.select("#landmass");
-            texture = viewbox.select("#texture");
-            terrs = viewbox.select("#terrs");
-            biomes = viewbox.select("#biomes");
-            ice = viewbox.select("#ice");
-            cells = viewbox.select("#cells");
-            gridOverlay = viewbox.select("#gridOverlay");
-            coordinates = viewbox.select("#coordinates");
-            compass = viewbox.select("#compass");
-            rivers = viewbox.select("#rivers");
-            terrain = viewbox.select("#terrain");
-            relig = viewbox.select("#relig");
-            cults = viewbox.select("#cults");
-            regions = viewbox.select("#regions");
-            statesBody = regions.select("#statesBody");
-            statesHalo = regions.select("#statesHalo");
-            provs = viewbox.select("#provs");
-            zones = viewbox.select("#zones");
-            borders = viewbox.select("#borders");
-            stateBorders = borders.select("#stateBorders");
-            provinceBorders = borders.select("#provinceBorders");
-            routes = viewbox.select("#routes");
-            roads = routes.select("#roads");
-            trails = routes.select("#trails");
-            searoutes = routes.select("#searoutes");
-            temperature = viewbox.select("#temperature");
-            coastline = viewbox.select("#coastline");
-            prec = viewbox.select("#prec");
-            population = viewbox.select("#population");
-            labels = viewbox.select("#labels");
-            icons = viewbox.select("#icons");
-            burgIcons = icons.select("#burgIcons");
-            anchors = icons.select("#anchors");
-            armies = viewbox.select("#armies");
-            markers = viewbox.select("#markers");
-            ruler = viewbox.select("#ruler");
-            fogging = viewbox.select("#fogging");
-            debug = viewbox.select("#debug");
-            burgLabels = labels.select("#burgLabels");
-        }()
+        redefineElements();
 
         void function parseGridData() {
-            grid = JSON.parse(data[6]);
+            setGrid(JSON.parse(data[6]));
             calculateVoronoi(grid, grid.points);
             grid.cells.h = Uint8Array.from(data[7].split(","));
             grid.cells.prec = Uint8Array.from(data[8].split(","));
@@ -698,7 +671,7 @@ function parseLoadedData(data) {
         }()
 
         void function parsePackData() {
-            pack = {};
+            setPack({});
             reGraph();
             reMarkFeatures();
             pack.features = JSON.parse(data[12]);

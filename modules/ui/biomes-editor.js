@@ -1,3 +1,4 @@
+import { biomesData, setBiomesData, applyDefaultBiomesSystem } from "../../main.js";
 import { ReliefIcons } from "../relief-icons.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
@@ -403,7 +404,7 @@ export function editBiomes() {
     }
 
     function restoreInitialBiomes() {
-        biomesData = applyDefaultBiomesSystem();
+        setBiomesData(applyDefaultBiomesSystem());
         defineBiomes();
         drawBiomes();
         recalculatePopulation();

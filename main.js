@@ -262,6 +262,71 @@ void function addDragToUpload() {
 initTools();
 initEditors();
 
+export function setSeed(v) { seed = v; }
+export function setWidth(v) { graphWidth = v; }
+export function setHeight(v) { graphHeight = v; }
+export function setMapId(v) { mapId = v; }
+export function setOptions(o) { options = o; }
+export function setCoordinates(v) { mapCoordinates = v; }
+export function setNotes(v) { notes = v; }
+export function setBiomesData(v) { biomesData = v; }
+export function setGrid(v) { grid = v; }
+export function setPack(v) { pack = v; }
+export function setNameBases(v) { nameBases = v; }
+export function setSvgWidth(v) { svgWidth = v; }
+export function setSvgHeight(v) { svgHeight = v; }
+
+export function redefineElements() {
+    svg = d3.select("#map");
+    defs = svg.select("#deftemp");
+    viewbox = svg.select("#viewbox");
+    scaleBar = svg.select("#scaleBar");
+    legend = svg.select("#legend");
+    ocean = viewbox.select("#ocean");
+    oceanLayers = ocean.select("#oceanLayers");
+    oceanPattern = ocean.select("#oceanPattern");
+    lakes = viewbox.select("#lakes");
+    landmass = viewbox.select("#landmass");
+    texture = viewbox.select("#texture");
+    terrs = viewbox.select("#terrs");
+    biomes = viewbox.select("#biomes");
+    ice = viewbox.select("#ice");
+    cells = viewbox.select("#cells");
+    gridOverlay = viewbox.select("#gridOverlay");
+    coordinates = viewbox.select("#coordinates");
+    compass = viewbox.select("#compass");
+    rivers = viewbox.select("#rivers");
+    terrain = viewbox.select("#terrain");
+    relig = viewbox.select("#relig");
+    cults = viewbox.select("#cults");
+    regions = viewbox.select("#regions");
+    statesBody = regions.select("#statesBody");
+    statesHalo = regions.select("#statesHalo");
+    provs = viewbox.select("#provs");
+    zones = viewbox.select("#zones");
+    borders = viewbox.select("#borders");
+    stateBorders = borders.select("#stateBorders");
+    provinceBorders = borders.select("#provinceBorders");
+    routes = viewbox.select("#routes");
+    roads = routes.select("#roads");
+    trails = routes.select("#trails");
+    searoutes = routes.select("#searoutes");
+    temperature = viewbox.select("#temperature");
+    coastline = viewbox.select("#coastline");
+    prec = viewbox.select("#prec");
+    population = viewbox.select("#population");
+    labels = viewbox.select("#labels");
+    icons = viewbox.select("#icons");
+    burgIcons = icons.select("#burgIcons");
+    anchors = icons.select("#anchors");
+    armies = viewbox.select("#armies");
+    markers = viewbox.select("#markers");
+    ruler = viewbox.select("#ruler");
+    fogging = viewbox.select("#fogging");
+    debug = viewbox.select("#debug");
+    burgLabels = labels.select("#burgLabels");
+}
+
 export function loadMapFromURL(maplink, random) {
     const URL = decodeURIComponent(maplink);
 
@@ -276,7 +341,7 @@ export function loadMapFromURL(maplink, random) {
         });
 }
 
-export function showUploadErrorMessage(error, URL, random) {
+function showUploadErrorMessage(error, URL, random) {
     console.error(error);
     alertMessage.innerHTML = `Cannot load map from the ${link(URL, "link provided")}.
     ${random ? `A new random map is generated. ` : ''}

@@ -1,9 +1,20 @@
+import {
+    svg, svgWidth, svgHeight, graphWidth, graphHeight,
+    pack, cells, defs,
+    grid, gridOverlay,
+    labels, prec, ice, temperature, biomes, biomesData, terrs, texture,
+    population, regions, statesBody, provs, cults, relig, terrain,
+    statesHalo,
+    compass, coordinates, scale,
+    lineGen, invokeActiveZooming, zoom
+} from "../../main.js";
+
 import { ReliefIcons } from "../relief-icons.js";
 import * as ThreeD from "./3d.js";
 import { editUnits } from "./units-editor.js";
 
 import { tip } from "./general.js";
-import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize } from "../utils.js";
+import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize, round } from "../utils.js";
 import { editStyle, calculateFriendlyGridSize, shiftCompass, setBase64Texture } from "./style.js";
 
 let presets = {}; // global object
