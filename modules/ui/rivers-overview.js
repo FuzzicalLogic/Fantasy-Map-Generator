@@ -6,6 +6,7 @@ import { editRiver } from "./rivers-editor.js";
 import { tip } from "./general.js";
 import { toggleAddRiver } from "./tools.js";
 import { findCell, getColors, rn, isCtrlClick } from "../utils.js";
+import { toggleRivers, layerIsOn } from "./layers.js";
 
 export function overviewRivers() {
     if (customization) return;

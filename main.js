@@ -31,7 +31,7 @@ import { initialize as initStorage, uploadMap } from "./modules/save-and-load.js
 import { initialize as initEditors, closeDialogs, clearLegend, unfog } from "./modules/ui/editors.js";
 import { addRuler, drawScaleBar } from "./modules/ui/measurers.js";
 
-import { initialize as initLayers } from "./modules/ui/layers.js";
+import { initialize as initLayers, restoreLayers, applyPreset, drawStates, drawBorders, drawCoordinates } from "./modules/ui/layers.js";
 import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js";
 import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {

@@ -4,6 +4,7 @@ import { restoreDefaultEvents, fitContent, applySorting, getFileName, downloadFi
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, getAdjective } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, toggleBorders, toggleProvinces, layerIsOn } from "./layers.js";
 
 export function editDiplomacy() {
     if (customization) return;

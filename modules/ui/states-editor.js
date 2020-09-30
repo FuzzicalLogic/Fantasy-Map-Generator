@@ -4,6 +4,10 @@ import * as BurgsAndStates from "../burgs-and-states.js";
 import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, addBurg, moveBurgToGroup, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
 import { tip, applyOption, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P, rn, isCtrlClick, rw, getAdjective, si, openURL } from "../utils.js";
+import {
+    toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces,
+    drawProvinces, toggleTexture, layerIsOn
+} from "./layers.js";
 
 export function editStates() {
     if (customization) return;

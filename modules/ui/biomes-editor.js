@@ -6,6 +6,7 @@ import { findCell, getPackPolygon, isLand, getRandomColor, rn, si, openURL} from
 import { editStyle } from "./style.js";
 
 import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
+import { toggleBiomes, drawBiomes, toggleCultures, toggleReligions, toggleStates, toggleProvinces, toggleRelief, layerIsOn } from "./layers.js";
 
 export function editBiomes() {
     if (customization) return;

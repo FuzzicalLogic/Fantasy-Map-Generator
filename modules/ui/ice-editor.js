@@ -2,6 +2,7 @@ import { clicked, unselect } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findGridCell, getGridPolygon, rn, ra, parseTransform } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleIce, layerIsOn } from "./layers.js";
 
 export function editIce() {
     if (customization) return;

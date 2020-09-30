@@ -5,6 +5,7 @@ import { showEPForRoute, showElevationProfile } from "./elevation-profile.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { rn, getNextId } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleRoutes, layerIsOn } from "./layers.js";
 
 export function editRoute(onClick) {
     if (customization) return;

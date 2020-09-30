@@ -11,6 +11,7 @@ import { restoreDefaultEvents, moveCircle, removeCircle, removeBurg, getFileName
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon, rn, lim } from "../utils.js";
 import { enterStandardView, changeViewMode } from "./options.js";
+import { turnButtonOn, turnButtonOff, getCurrentPreset, getColorScheme, getColor, drawStates, drawBorders, layerIsOn } from "./layers.js";
 
 import { saveMap } from "../save-and-load.js";
 

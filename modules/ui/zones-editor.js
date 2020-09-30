@@ -1,6 +1,7 @@
 import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, rn, si, getNextId } from "../utils.js";
+import { toggleZones, layerIsOn } from "./layers.js";
 
 export function editZones() {
     closeDialogs();

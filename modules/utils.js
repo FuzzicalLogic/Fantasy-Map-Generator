@@ -1,5 +1,6 @@
 /** TODO: Complete dependency branch from P() below. */
 import { pack } from "../main.js"
+import { getColorScheme } from "./ui/layers.js";
 
 export function initialize() {
     // findAll d3.quandtree search from https://bl.ocks.org/lwthatcher/b41479725e0ff2277c7ac90df2de2b5e

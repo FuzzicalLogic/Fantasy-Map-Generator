@@ -4,6 +4,7 @@ import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySortin
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, rn, isCtrlClick, si } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleBiomes, toggleCultures, toggleReligions, drawReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
 
 export function editReligions() {
     if (customization) return;

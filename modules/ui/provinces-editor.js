@@ -6,6 +6,9 @@ import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySortin
 import { tip, applyOption, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, rn, isCtrlClick, si, openURL } from "../utils.js";
 import { editStyle } from "./style.js";
+import {
+    turnButtonOff, toggleCultures, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces, drawProvinces, layerIsOn
+} from "./layers.js";
 
 export function editProvinces() {
     if (customization) return;

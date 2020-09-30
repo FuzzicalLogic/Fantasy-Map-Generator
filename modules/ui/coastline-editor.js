@@ -3,6 +3,7 @@ import { unselect } from "./editors.js";
 import { tip } from "./general.js";
 import { getPackPolygon, rn, clipPoly, si } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleCells, layerIsOn } from "./layers.js";
 
 export function editCoastline(node = d3.event.target) {
     if (customization) return;

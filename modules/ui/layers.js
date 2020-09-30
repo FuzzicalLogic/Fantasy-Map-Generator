@@ -13,6 +13,38 @@ export function initialize() {
     restoreCustomPresets(); // run on-load
 
     $("#mapLayers").sortable({ items: "li:not(.solid)", containment: "parent", cancel: ".solid", update: moveLayer });
+
+    window.changePreset = changePreset;
+    window.savePreset = savePreset;
+    window.removePreset = removePreset;
+    window.toggleHeight = toggleHeight;
+    window.drawHeightmap = drawHeightmap;
+    window.toggleTemp = toggleTemp;
+    window.toggleBiomes = toggleBiomes;
+    window.togglePrec = togglePrec;
+    window.togglePopulation = togglePopulation;
+    window.toggleCells = toggleCells;
+    window.toggleIce = toggleIce;
+    window.toggleCultures = toggleCultures;
+    window.toggleReligions = toggleReligions;
+    window.toggleStates = toggleStates;
+    window.toggleBorders = toggleBorders;
+    window.toggleProvinces = toggleProvinces;
+    window.toggleGrid = toggleGrid;
+    window.toggleCoordinates = toggleCoordinates;
+    window.toggleCompass = toggleCompass;
+    window.toggleRelief = toggleRelief;
+    window.toggleTexture = toggleTexture;
+    window.toggleRivers = toggleRivers;
+    window.toggleRoutes = toggleRoutes;
+    window.toggleMilitary = toggleMilitary;
+    window.toggleMarkers = toggleMarkers;
+    window.toggleLabels = toggleLabels;
+    window.toggleIcons = toggleIcons;
+    window.toggleRulers = toggleRulers;
+    window.toggleScaleBar = toggleScaleBar;
+    window.toggleZones = toggleZones;
+
 }
 
 // on map regeneration restore layers if they was turned on
@@ -37,7 +69,7 @@ export function restoreLayers() {
     if (!layerIsOn("toggleStates")) regions.style("display", "none").selectAll("path").remove();
 }
 
-export function getDefaultPresets() {
+function getDefaultPresets() {
     return {
         "political": ["toggleBorders", "toggleIcons", "toggleIce", "toggleLabels", "toggleRivers", "toggleRoutes", "toggleScaleBar", "toggleStates"],
         "cultural": ["toggleBorders", "toggleCultures", "toggleIcons", "toggleLabels", "toggleRivers", "toggleRoutes", "toggleScaleBar"],
@@ -52,7 +84,7 @@ export function getDefaultPresets() {
     }
 }
 
-export function restoreCustomPresets() {
+function restoreCustomPresets() {
     presets = getDefaultPresets();
     const storedPresets = JSON.parse(localStorage.getItem("presets"));
     if (!storedPresets) return;
@@ -71,7 +103,7 @@ export function applyPreset() {
 }
 
 // toggle layers on preset change
-export function changePreset(preset) {
+function changePreset(preset) {
     const layers = presets[preset]; // layers to be turned on
     document.getElementById("mapLayers").querySelectorAll("li").forEach(function (e) {
         if (layers.includes(e.id) && !layerIsOn(e.id)) e.click(); // turn on
@@ -86,7 +118,7 @@ export function changePreset(preset) {
     if (document.getElementById("canvas3d")) setTimeout(ThreeD.update(), 400);
 }
 
-export function savePreset() {
+function savePreset() {
     prompt("Please provide a preset name", { default: "" }, preset => {
         presets[preset] = Array.from(document.getElementById("mapLayers").querySelectorAll("li:not(.buttonoff)")).map(node => node.id).sort();
         layersPreset.add(new Option(preset, preset, false, true));
@@ -97,7 +129,7 @@ export function savePreset() {
     });
 }
 
-export function removePreset() {
+function removePreset() {
     const preset = layersPreset.value;
     delete presets[preset];
     const index = Array.from(layersPreset.options).findIndex(o => o.value === preset);
@@ -458,7 +490,7 @@ export function toggleCells(event) {
     }
 }
 
-export function drawCells() {
+function drawCells() {
     cells.selectAll("path").remove();
     const data = customization === 1 ? grid.cells.i : pack.cells.i;
     const polygon = customization === 1 ? getGridPolygon : getPackPolygon;
@@ -1060,7 +1092,7 @@ export function drawCoordinates() {
 }
 
 // conver svg point into viewBox point
-export function getViewPoint(x, y) {
+function getViewPoint(x, y) {
     const view = document.getElementById('viewbox');
     const svg = document.getElementById('map');
     const pt = svg.createSVGPoint();
@@ -1246,7 +1278,7 @@ export function turnButtonOn(el) {
 }
 
 // move layers on mapLayers dragging (jquery sortable)
-export function moveLayer(event, ui) {
+function moveLayer(event, ui) {
     const el = getLayer(ui.item.attr("id"));
     if (!el) return;
     const prev = getLayer(ui.item.prev().attr("id"));
@@ -1255,7 +1287,7 @@ export function moveLayer(event, ui) {
 }
 
 // define connection between option layer buttons and actual svg groups to move the element
-export function getLayer(id) {
+function getLayer(id) {
     if (id === "toggleHeight") return $("#terrs");
     if (id === "toggleBiomes") return $("#biomes");
     if (id === "toggleCells") return $("#cells");

@@ -26,6 +26,10 @@ import { editZones } from "./zones-editor.js";
 import { restoreDefaultEvents, addBurg, moveBurgToGroup, unfog, refreshAllEditors } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, gauss, rn, isCtrlClick, rw, getNextId } from "../utils.js";
+import {
+    toggleIce, drawIce, toggleCultures, drawCultures, toggleReligions, drawReligions, toggleStates, drawStates, drawBorders,
+    toggleBorders, drawProvinces, toggleRelief, toggleRivers, toggleRoutes, toggleMilitary, toggleMarkers, toggleLabels, toggleZones, layerIsOn
+} from "./layers.js";
 
 export function initialize() {
     toolsContent.addEventListener("click", function (event) {

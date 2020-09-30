@@ -5,6 +5,7 @@ import { clicked, unselect, moveBurgToGroup, removeBurg, togglePort, toggleCapit
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, isCtrlClick, normalize, parseTransform, openURL } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleCells, toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
 
 export function editBurg(id) {
     if (customization) return;

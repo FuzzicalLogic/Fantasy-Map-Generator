@@ -5,6 +5,7 @@ import { editNotes } from "./notes-editor.js";
 import { tip } from "./general.js";
 import { getPackPolygon, rn, si } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleCells, layerIsOn } from "./layers.js";
 
 export function editLake() {
     if (customization) return;

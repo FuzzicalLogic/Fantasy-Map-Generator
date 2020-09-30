@@ -4,6 +4,7 @@ import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } f
 import { tip, clearMainTip, lock, unlock } from "./general.js";
 import { rn } from "../utils.js";
 import { calculateFriendlyGridSize } from "./style.js";
+import { drawTemp, toggleRulers, layerIsOn } from "./layers.js";
 
 export function editUnits() {
     closeDialogs("#unitsEditor, .stable");

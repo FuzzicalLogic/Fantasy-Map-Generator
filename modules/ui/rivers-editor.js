@@ -8,6 +8,7 @@ import { showEPForRiver, showElevationProfile } from "./elevation-profile.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { rn, rw, parseTransform, getNextId } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleRivers, layerIsOn } from "./layers.js";
 
 export function editRiver(id) {
     if (customization) return;

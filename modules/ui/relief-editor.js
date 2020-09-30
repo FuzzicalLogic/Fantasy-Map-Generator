@@ -2,6 +2,7 @@ import { restoreDefaultEvents, unselect, moveCircle, removeCircle } from "./edit
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, rn } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleRelief, layerIsOn } from "./layers.js";
 
 export function editReliefIcon() {
     if (customization) return;

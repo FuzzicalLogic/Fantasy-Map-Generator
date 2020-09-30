@@ -7,6 +7,7 @@ import { editNotes } from "./notes-editor.js";
 import { restoreDefaultEvents } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, capitalize } from "../utils.js";
+import { toggleMilitary, layerIsOn } from "./layers.js";
 
 export function editRegiment(selector) {
     if (customization) return;

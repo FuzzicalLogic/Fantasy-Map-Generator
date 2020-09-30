@@ -5,6 +5,7 @@ import { overviewRegiments } from "./regiments-overview.js";
 
 import { tip } from "./general.js";
 import { rn, capitalize, si, wiki } from "../utils.js";
+import { toggleStates, toggleBorders, toggleMilitary, layerIsOn } from "./layers.js";
 
 export function overviewMilitary() {
     if (customization) return;

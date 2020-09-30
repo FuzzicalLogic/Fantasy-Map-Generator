@@ -3,6 +3,7 @@ import * as ThreeD from "./3d.js";
 
 import { tip, lock } from "./general.js";
 import { rn, parseTransform } from "../utils.js";
+import { applyPreset, drawTemp, toggleBiomes, drawBiomes, drawPrec, drawCoordinates, layerIsOn } from "./layers.js";
 
 export function editWorld() {
     if (customization) return;

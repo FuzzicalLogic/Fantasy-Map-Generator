@@ -5,6 +5,7 @@ import { editRegiment } from "./regiment-editor.js";
 
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, capitalize, si } from "../utils.js";
+import { toggleMilitary, layerIsOn } from "./layers.js";
 
 export function overviewRegiments(state) {
     if (customization) return;

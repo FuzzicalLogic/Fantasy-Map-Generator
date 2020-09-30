@@ -6,6 +6,7 @@ import { editNotes } from "./notes-editor.js";
 import { tip, showMainTip } from "./general.js";
 import { findCell, parseTransform } from "../utils.js";
 import { editStyle } from "./style.js";
+import { toggleLabels, layerIsOn } from "./layers.js";
 
 export function editLabel() {
     if (customization) return;
