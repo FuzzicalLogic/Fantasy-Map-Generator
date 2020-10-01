@@ -8,6 +8,14 @@ import { findCell, rn, getAdjective } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, toggleBorders, toggleProvinces, layerIsOn } from "./layers.js";
 
+const colors = ["#00b300", "#d4f8aa", "#edeee8", "#eeafaa", "#e64b40", "#a9a9a9", "#ad5a1f", "#87CEFA", "#00008B"];
+const statuses = ["Ally", "Friendly", "Neutral", "Suspicion", "Enemy", "Unknown", "Rival", "Vassal", "Suzerain"];
+const description = [" is an ally of ", " is friendly to ", " is neutral to ", " is suspicious of ",
+    " is at war with ", " does not know about ", " is a rival of ", " is a vassal of ", " is suzerain to "];
+
+const getBody = () => document.getElementById("diplomacyBodySection");
+const getSelected = () => getBody().querySelector("div.Self");
+
 export function editDiplomacy() {
     if (customization) return;
     if (pack.states.filter(s => s.i && !s.removed).length < 2) {
@@ -23,11 +31,8 @@ export function editDiplomacy() {
     if (layerIsOn("toggleBiomes")) toggleBiomes();
     if (layerIsOn("toggleReligions")) toggleReligions();
 
-    const body = document.getElementById("diplomacyBodySection");
-    const statuses = ["Ally", "Friendly", "Neutral", "Suspicion", "Enemy", "Unknown", "Rival", "Vassal", "Suzerain"];
-    const description = [" is an ally of ", " is friendly to ", " is neutral to ", " is suspicious of ",
-        " is at war with ", " does not know about ", " is a rival of ", " is a vassal of ", " is suzerain to "];
-    const colors = ["#00b300", "#d4f8aa", "#edeee8", "#eeafaa", "#e64b40", "#a9a9a9", "#ad5a1f", "#87CEFA", "#00008B"];
+    const body = getBody();
+
     refreshDiplomacyEditor();
 
     tip("Click on a state to see its diplomatic relations", false, "warning");
@@ -37,8 +42,16 @@ export function editDiplomacy() {
     modules.editDiplomacy = true;
 
     $("#diplomacyEditor").dialog({
-        title: "Diplomacy Editor", resizable: false, width: fitContent(), close: closeDiplomacyEditor,
-        position: { my: "right top", at: "right-10 top+10", of: "svg", collision: "fit" }
+        title: "Diplomacy Editor",
+        resizable: false,
+        width: fitContent(),
+        close: close,
+        position: {
+            my: "right top",
+            at: "right-10 top+10",
+            of: "svg",
+            collision: "fit"
+        }
     });
 
     // add listeners
@@ -47,7 +60,7 @@ export function editDiplomacy() {
     document.getElementById("diplomacyRegenerate").addEventListener("click", regenerateRelations);
     document.getElementById("diplomacyMatrix").addEventListener("click", showRelationsMatrix);
     document.getElementById("diplomacyHistory").addEventListener("click", showRelationsHistory);
-    document.getElementById("diplomacyExport").addEventListener("click", downloadDiplomacyData);
+    document.getElementById("diplomacyExport").addEventListener("click", save);
     document.getElementById("diplomacySelect").addEventListener("mouseup", diplomacyChangeRelations);
 
     function refreshDiplomacyEditor() {
@@ -103,8 +116,13 @@ export function editDiplomacy() {
         if (customization || !state) return;
         const d = regions.select("#state" + state).attr("d");
 
-        const path = debug.append("path").attr("class", "highlight").attr("d", d)
-            .attr("fill", "none").attr("stroke", "red").attr("stroke-width", 1).attr("opacity", 1)
+        const path = debug.append("path")
+            .attr("class", "highlight")
+            .attr("d", d)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 1)
+            .attr("opacity", 1)
             .attr("filter", "url(#blur1)");
 
         const l = path.node().getTotalLength(), dur = (l + 5000) / 2;
@@ -112,14 +130,9 @@ export function editDiplomacy() {
         path.transition().duration(dur).attrTween("stroke-dasharray", function () { return t => i(t) });
     }
 
-    function stateHighlightOff(event) {
-        debug.selectAll(".highlight").each(function () {
-            d3.select(this).transition().duration(1000).attr("opacity", 0).remove();
-        });
-    }
 
     function showStateRelations() {
-        const selectedLine = body.querySelector("div.Self");
+        const selectedLine = getSelected();
         const sel = selectedLine ? +selectedLine.dataset.id : pack.states.find(s => s.i && !s.removed).i;
         if (!sel) return;
         if (!layerIsOn("toggleStates")) toggleStates();
@@ -137,7 +150,7 @@ export function editDiplomacy() {
 
     function selectStateOnLineClick() {
         if (this.classList.contains("Self")) return;
-        body.querySelector("div.Self").classList.remove("Self");
+        getSelected().classList.remove("Self");
         this.classList.add("Self");
         refreshDiplomacyEditor();
     }
@@ -203,99 +216,110 @@ export function editDiplomacy() {
             return [`War termination`, treaty, changed[1]];
         }
 
-        if (oldRel === "Enemy") chronicle.push(peace()); else
-            if (rel === "Enemy") chronicle.push(war()); else
-                if (rel === "Vassal") chronicle.push(vassal()); else
-                    if (rel === "Suzerain") chronicle.push(suzerain()); else
-                        if (rel === "Ally") chronicle.push(ally()); else
-                            if (rel === "Unknown") chronicle.push(unknown()); else
-                                if (rel === "Rival") chronicle.push(rival()); else
-                                    chronicle.push(change());
+        if (oldRel === "Enemy") chronicle.push(peace());
+        else if (rel === "Enemy") chronicle.push(war());
+        else if (rel === "Vassal") chronicle.push(vassal());
+        else if (rel === "Suzerain") chronicle.push(suzerain());
+        else if (rel === "Ally") chronicle.push(ally());
+        else if (rel === "Unknown") chronicle.push(unknown());
+        else if (rel === "Rival") chronicle.push(rival());
+        else chronicle.push(change());
 
         refreshDiplomacyEditor();
     }
+
 
     function regenerateRelations() {
         BurgsAndStates.generateDiplomacy();
         refreshDiplomacyEditor();
     }
-
-    function showRelationsHistory() {
-        const chronicle = pack.states[0].diplomacy;
-        if (!chronicle.length) { tip("Relations history is blank", false, "error"); return; }
-
-        let message = `<div autocorrect="off" spellcheck="false">`;
-        chronicle.forEach((e, d) => {
-            message += `<div>`;
-            e.forEach((l, i) => message += `<div contenteditable="true" data-id="${d}-${i}"${i ? "" : " style='font-weight:bold'"}>${l}</div>`);
-            message += `&#8205;</div>`;
-        });
-        alertMessage.innerHTML = message + `</div><i id="info-line">Type to edit. Press Enter to add a new line, empty the element to remove it</i>`;
-        alertMessage.querySelectorAll("div[contenteditable='true']").forEach(el => el.addEventListener("input", changeReliationsHistory));
-
-        $("#alert").dialog({
-            title: "Relations history", position: { my: "center", at: "center", of: "svg" },
-            buttons: {
-                Save: function () {
-                    const data = this.querySelector("div").innerText.split("\n").join("\r\n");
-                    const name = getFileName("Relations history") + ".txt";
-                    downloadFile(data, name);
-                },
-                Clear: function () { pack.states[0].diplomacy = []; $(this).dialog("close"); },
-                Close: function () { $(this).dialog("close"); }
-            }
-        });
-    }
-
-    function changeReliationsHistory() {
-        const i = this.dataset.id.split("-");
-        const group = pack.states[0].diplomacy[i[0]];
-        if (this.innerHTML === "") {
-            group.splice(i[1], 1);
-            this.remove();
-        } else group[i[1]] = this.innerHTML;
-    }
-
-    function showRelationsMatrix() {
-        const states = pack.states.filter(s => s.i && !s.removed);
-        const valid = states.map(s => s.i);
-
-        let message = `<table class="matrix-table"><tr><th data-tip='&#8205;'></th>`;
-        message += states.map(s => `<th data-tip='See relations to ${s.fullName}'>${s.name}</th>`).join("") + `</tr>`; // headers
-        states.forEach(s => {
-            message += `<tr><th data-tip='See relations of ${s.fullName}'>${s.name}</th>` + s.diplomacy
-                .filter((v, i) => valid.includes(i)).map((r, i) => {
-                    const desc = description[statuses.indexOf(r)];
-                    const tip = desc ? s.fullName + desc + pack.states[valid[i]].fullName : '&#8205;';
-                    return `<td data-tip='${tip}' class='${r}'>${r}</td>`
-                }).join("") + "</tr>";
-        });
-        message += `</table>`;
-        alertMessage.innerHTML = message;
-
-        $("#alert").dialog({ title: "Relations matrix", width: fitContent(), position: { my: "center", at: "center", of: "svg" }, buttons: {} });
-    }
-
-    function downloadDiplomacyData() {
-        const states = pack.states.filter(s => s.i && !s.removed);
-        const valid = states.map(s => s.i);
-
-        let data = "," + states.map(s => s.name).join(",") + "\n"; // headers
-        states.forEach(s => {
-            const rels = s.diplomacy.filter((v, i) => valid.includes(i));
-            data += s.name + "," + rels.join(",") + "\n";
-        });
-
-        const name = getFileName("Relations") + ".csv";
-        downloadFile(data, name);
-    }
-
-    function closeDiplomacyEditor() {
-        restoreDefaultEvents();
-        clearMainTip();
-        const selected = body.querySelector("div.Self");
-        if (selected) selected.classList.remove("Self");
-        if (layerIsOn("toggleStates")) drawStates(); else toggleStates();
-        debug.selectAll(".highlight").remove();
-    }
 }
+
+function stateHighlightOff(event) {
+    debug.selectAll(".highlight").each(() => {
+        d3.select(this).transition().duration(1000).attr("opacity", 0).remove();
+    });
+}
+
+function showRelationsHistory() {
+    const chronicle = pack.states[0].diplomacy;
+    if (!chronicle.length) {
+        tip("Relations history is blank", false, "error");
+        return;
+    }
+
+    let message = `<div autocorrect="off" spellcheck="false">`;
+    chronicle.forEach((e, d) => {
+        message += `<div>`;
+        e.forEach((l, i) => message += `<div contenteditable="true" data-id="${d}-${i}"${i ? "" : " style='font-weight:bold'"}>${l}</div>`);
+        message += `&#8205;</div>`;
+    });
+    alertMessage.innerHTML = message + `</div><i id="info-line">Type to edit. Press Enter to add a new line, empty the element to remove it</i>`;
+    alertMessage.querySelectorAll("div[contenteditable='true']").forEach(el => el.addEventListener("input", changeReliationsHistory));
+
+    $("#alert").dialog({
+        title: "Relations history", position: { my: "center", at: "center", of: "svg" },
+        buttons: {
+            Save: function () {
+                const data = this.querySelector("div").innerText.split("\n").join("\r\n");
+                const name = getFileName("Relations history") + ".txt";
+                downloadFile(data, name);
+            },
+            Clear: function () { pack.states[0].diplomacy = []; $(this).dialog("close"); },
+            Close: function () { $(this).dialog("close"); }
+        }
+    });
+}
+
+function changeReliationsHistory() {
+    const i = this.dataset.id.split("-");
+    const group = pack.states[0].diplomacy[i[0]];
+    if (this.innerHTML === "") {
+        group.splice(i[1], 1);
+        this.remove();
+    } else group[i[1]] = this.innerHTML;
+}
+
+function save() {
+    const states = pack.states.filter(s => s.i && !s.removed);
+    const valid = states.map(s => s.i);
+
+    let data = "," + states.map(s => s.name).join(",") + "\n"; // headers
+    states.forEach(s => {
+        const rels = s.diplomacy.filter((v, i) => valid.includes(i));
+        data += s.name + "," + rels.join(",") + "\n";
+    });
+
+    const name = getFileName("Relations") + ".csv";
+    downloadFile(data, name);
+}
+
+function close() {
+    restoreDefaultEvents();
+    clearMainTip();
+    const selected = getSelected();
+    if (selected) selected.classList.remove("Self");
+    if (layerIsOn("toggleStates")) drawStates(); else toggleStates();
+    debug.selectAll(".highlight").remove();
+}
+
+function showRelationsMatrix() {
+    const states = pack.states.filter(s => s.i && !s.removed);
+    const valid = states.map(s => s.i);
+
+    let message = `<table class="matrix-table"><tr><th data-tip='&#8205;'></th>`;
+    message += states.map(s => `<th data-tip='See relations to ${s.fullName}'>${s.name}</th>`).join("") + `</tr>`; // headers
+    states.forEach(s => {
+        message += `<tr><th data-tip='See relations of ${s.fullName}'>${s.name}</th>` + s.diplomacy
+            .filter((v, i) => valid.includes(i)).map((r, i) => {
+                const desc = description[statuses.indexOf(r)];
+                const tip = desc ? s.fullName + desc + pack.states[valid[i]].fullName : '&#8205;';
+                return `<td data-tip='${tip}' class='${r}'>${r}</td>`
+            }).join("") + "</tr>";
+    });
+    message += `</table>`;
+    alertMessage.innerHTML = message;
+
+    $("#alert").dialog({ title: "Relations matrix", width: fitContent(), position: { my: "center", at: "center", of: "svg" }, buttons: {} });
+}
+
