@@ -1,6 +1,11 @@
+import {
+    graphWidth, graphHeight, 
+    seed, pack,
+    biomesData
+} from "../main.js"
 import * as Names from "./names-generator.js";
 
-import { getMixedColor, gauss, rn, rw, ra, getAdjective, trimVowels, biased } from "./utils.js";
+import { getMixedColor, gauss, rn, rw, ra, getAdjective, trimVowels, biased, rand } from "./utils.js";
 
   // name generation approach and relative chance to be selected
 const approach = {
