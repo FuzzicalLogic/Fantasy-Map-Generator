@@ -1,4 +1,9 @@
-import { svg, zoom, viewbox, legend } from "../../main.js";
+import {
+    svg, svgWidth, svgHeight,
+    defs, 
+    viewbox, legend, fogging,
+    zoom
+} from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
