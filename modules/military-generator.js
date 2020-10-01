@@ -1,4 +1,9 @@
-import { gauss, rn, ra, nth, si } from "./utils.js";
+import {
+    pack, notes,
+    armies
+} from "../main.js";
+
+import { gauss, rn, ra, nth, si, rand } from "./utils.js";
 
 let cells, p, states;
 
