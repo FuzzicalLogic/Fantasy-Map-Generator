@@ -1,5 +1,7 @@
+import { elSelected } from "../../main.js";
+
 import { editNotes } from "./notes-editor.js";
-import { restoreDefaultEvents, unselect, selectIcon } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, unselect, selectIcon } from "./editors.js";
 
 import { tip, clearMainTip } from "./general.js";
 import { toggleAddMarker } from "./tools.js";
