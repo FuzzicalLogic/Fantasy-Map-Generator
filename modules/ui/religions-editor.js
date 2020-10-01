@@ -1,6 +1,11 @@
+import {
+    modules,
+    pack, viewbox, relig, legend, debug
+} from "../../main.js";
+
 import * as Religions from "../religions-generator.js";
 
-import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, rn, isCtrlClick, si } from "../utils.js";
 import { editStyle } from "./style.js";
