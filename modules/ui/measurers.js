@@ -1,6 +1,6 @@
 import {
     svgWidth, svgHeight,
-    scale, scaleBar
+    scale, scaleBar, ruler, lineGen
 } from "../../main.js";
 import { restoreDefaultEvents } from "./editors.js";
 
