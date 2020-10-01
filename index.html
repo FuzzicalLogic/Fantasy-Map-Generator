@@ -1,43 +1,129 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Azgaar's Fantasy Map Generator</title>
-  <meta name="application-name" content="Azgaar's Fantasy Map Generator">
-  <meta name="author" content="Azgaar (Max Ganiev)">
-  <meta name="description" content="Azgaar's Fantasy Map Generator and Editor">
-  <meta property="og:url" content="https://azgaar.github.io/Fantasy-Map-Generator">
-  <meta property="og:title" content="Azgaar's Fantasy Map Generator">
-  <meta property="og:description" content="Web application generating interactive and customizable maps">
-  <meta property="og:image" content="images/preview.png">
-  <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
-  <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
-  <link rel="canonical" href="https://azgaar.github.io/Fantasy-Map-Generator/">
+    <meta http-equiv="Content-Security-Policy" content="script-src-elem 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline';">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azgaar's Fantasy Map Generator</title>
+    <meta name="application-name" content="Azgaar's Fantasy Map Generator">
+    <meta name="author" content="Azgaar (Max Ganiev)">
+    <meta name="description" content="Azgaar's Fantasy Map Generator and Editor">
+    <meta property="og:url" content="https://azgaar.github.io/Fantasy-Map-Generator">
+    <meta property="og:title" content="Azgaar's Fantasy Map Generator">
+    <meta property="og:description" content="Web application generating interactive and customizable maps">
+    <meta property="og:image" content="images/preview.png">
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+    <link rel="canonical" href="https://azgaar.github.io/Fantasy-Map-Generator/">
 
-  <style type="text/css">
-    body {margin: 0; font-size: 11px; overflow: hidden;}
-    #map {position: absolute;}
-    #initial {fill: none; stroke: black; pointer-events: none;}
-    #init-rose {animation: 20s infinite spin; opacity: .7; transform-origin: center;}
-    @keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(359deg);}}
-    #loading {opacity:1; font-size: 11px; color:#fff5da; text-align:center; text-shadow:0px 1px 4px #4c3a35; width:80%; max-width:600px; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); pointer-events:none;}
-    #loading-text {font-size: 1.8em; margin: 0.2em 0 0 1em;}
-    #titleName {text-align: left;font-size: 3em;margin-left: 5%;}
-    #title {font-size: 7em;margin: -12px 0 -6px 0;}
-    #version {text-align: right;font-size: 2em;margin-right: 3%;}
-    #loading-text > span {font-size: 1.3em; padding-left: 1px; line-height: 0px;}
-    #loading-text > span, #mapOverlay > span {animation: 3s infinite both blink;}
-    #loading-text span:nth-child(2), #mapOverlay > span:nth-child(2) {animation-delay: 1s;}
-    #loading-text span:nth-child(3), #mapOverlay > span:nth-child(3) {animation-delay: 2s;}
-    @keyframes blink {0% {opacity: 0;} 20% {opacity: 1;} 100% {opacity: .1;}}
-  </style>
-  <link rel="preload" href="index.css?version=1.4" as="style">
-  <link rel="preload" href="icons.css?version=1.4" as="style">
-  <link rel="preload" href="libs/jquery-ui.css" as="style">
-  <link rel="stylesheet" href="index.css?version=1.4">
-  <link rel="stylesheet" href="icons.css?version=1.4">
-  <link rel="stylesheet" href="libs/jquery-ui.css">
+    <style type="text/css">
+        body {
+            margin: 0;
+            font-size: 11px;
+            overflow: hidden;
+        }
+
+        #map {
+            position: absolute;
+        }
+
+        #initial {
+            fill: none;
+            stroke: black;
+            pointer-events: none;
+        }
+
+        #init-rose {
+            animation: 20s infinite spin;
+            opacity: .7;
+            transform-origin: center;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(359deg);
+            }
+        }
+
+        #loading {
+            opacity: 1;
+            font-size: 11px;
+            color: #fff5da;
+            text-align: center;
+            text-shadow: 0px 1px 4px #4c3a35;
+            width: 80%;
+            max-width: 600px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        #loading-text {
+            font-size: 1.8em;
+            margin: 0.2em 0 0 1em;
+        }
+
+        #titleName {
+            text-align: left;
+            font-size: 3em;
+            margin-left: 5%;
+        }
+
+        #title {
+            font-size: 7em;
+            margin: -12px 0 -6px 0;
+        }
+
+        #version {
+            text-align: right;
+            font-size: 2em;
+            margin-right: 3%;
+        }
+
+        #loading-text > span {
+            font-size: 1.3em;
+            padding-left: 1px;
+            line-height: 0px;
+        }
+
+        #loading-text > span, #mapOverlay > span {
+            animation: 3s infinite both blink;
+        }
+
+            #loading-text span:nth-child(2), #mapOverlay > span:nth-child(2) {
+                animation-delay: 1s;
+            }
+
+            #loading-text span:nth-child(3), #mapOverlay > span:nth-child(3) {
+                animation-delay: 2s;
+            }
+
+        @keyframes blink {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: .1;
+            }
+        }
+    </style>
+    <link rel="preload" href="index.css?version=1.4" as="style">
+    <link rel="preload" href="icons.css?version=1.4" as="style">
+    <link rel="preload" href="libs/jquery-ui.css" as="style">
+    <link rel="stylesheet" href="index.css?version=1.4">
+    <link rel="stylesheet" href="icons.css?version=1.4">
+    <link rel="stylesheet" href="libs/jquery-ui.css">
 
 </head>
 <body>
