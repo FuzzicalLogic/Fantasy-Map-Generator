@@ -1,6 +1,12 @@
+import {
+    seed, pack,
+    grid, graphWidth, graphHeight,
+    lineGen, rivers
+} from "../main.js";
+
 import * as Names from "./names-generator.js";
 
-import { P, rn, rw } from "./utils.js";
+import { P, rn, rw, round } from "./utils.js";
 
 export const generate = function (changeHeights = true) {
     console.time('generateRivers');
