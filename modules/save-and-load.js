@@ -17,6 +17,7 @@ import {
     temperature, coastline, prec, population,
     labels, icons, burgIcons, anchors,
     armies, markers, ruler, fogging, debug, burgLabels,
+    mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics
 } from "../main.js";
@@ -29,11 +30,11 @@ import * as Names from "./names-generator.js";
 
 import { tip, getCellPopulation, getFriendlyHeight, applyOption, clearMainTip } from "./ui/general.js";
 import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile, closeDialogs } from "./ui/editors.js";
-import { getDatabase, findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent } from "./utils.js";
+import { findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent, last } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 import { armiesStyle, addDefaulsStyles } from "./ui/style.js";
-import { changeMapSize } from "./ui/options.js";
+import { changeMapSize, saveGeoJSON } from "./ui/options.js";
 import { turnButtonOn, turnButtonOff, getCurrentPreset, getColorScheme, getColor, drawPopulation, drawIce, drawStates, drawBorders, layerIsOn } from "./ui/layers.js";
 
 export function initialize() {
