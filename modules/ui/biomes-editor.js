@@ -1,4 +1,8 @@
-import { biomesData, setBiomesData, applyDefaultBiomesSystem } from "../../main.js";
+import {
+    modules,
+    pack, biomes,
+    biomesData, setBiomesData, applyDefaultBiomesSystem
+} from "../../main.js";
 import { ReliefIcons } from "../relief-icons.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
@@ -6,7 +10,7 @@ import { recalculatePopulation } from "./tools.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, rn, si, openURL} from "../utils.js";
 import { editStyle } from "./style.js";
 
-import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 import { toggleBiomes, drawBiomes, toggleCultures, toggleReligions, toggleStates, toggleProvinces, toggleRelief, layerIsOn } from "./layers.js";
 
 export function editBiomes() {
