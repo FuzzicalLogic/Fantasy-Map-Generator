@@ -1,3 +1,5 @@
+import { pack, grid, viewbox, markers, routes, rivers, labels, scale, elSelected } from "../../main.js";
+
 import * as Rivers from "../river-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 import * as Cultures from "../cultures-generator.js";
@@ -23,7 +25,7 @@ import { editStates } from "./states-editor.js";
 import { editUnits } from "./units-editor.js";
 import { editZones } from "./zones-editor.js";
 
-import { restoreDefaultEvents, addBurg, moveBurgToGroup, unfog, refreshAllEditors } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, addBurg, moveBurgToGroup, unfog, refreshAllEditors } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, gauss, rn, isCtrlClick, rw, getNextId } from "../utils.js";
 import {
