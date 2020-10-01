@@ -39,11 +39,13 @@ import { turnButtonOn, turnButtonOff, getCurrentPreset, getColorScheme, getColor
 export function initialize() {
     saveReminder();
 
+    window.quickLoad = quickLoad;
     window.quickSave = quickSave;
     window.saveMap = saveMap;
     window.savePNG = savePNG;
     window.saveJPEG = saveJPEG;
     window.saveSVG = saveSVG;
+    window.saveGeoJSON = saveGeoJSON;
 }
 
 // download map as SVG
