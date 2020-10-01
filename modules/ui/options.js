@@ -131,6 +131,7 @@ export function initialize() {
     window.showSupporters = showSupporters;
     window.hideOptions = hideOptions;
     window.showOptions = showOptions;
+    window.regeneratePrompt = regeneratePrompt;
 }
 
 // Show options pane on trigger click
