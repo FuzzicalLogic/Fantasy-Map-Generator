@@ -194,7 +194,7 @@ void function checkLoadParameters() {
 
     // open latest map if option is active and map is stored
     if (onloadMap.value === "saved") {
-        getDatabase().get("lastMap", blob => {
+        window.ldb.get("lastMap", blob => {
             if (blob) {
                 console.warn("Load last saved map");
                 try {

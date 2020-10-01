@@ -127,29 +127,41 @@ export function initialize() {
     }();
 }
 
-export function getDatabase() {
-    var t = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+/** TODO: Find a way to remove the reliance on global storage. */
+(function getDatabase() {
+    let t = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
     if (!t) return void console.error("indexedDB not supported");
 
-    var n, o = { k: "", v: "" }, r = t.open("d2", 1);
-    r.onsuccess = function (e) { n = this.result };
+    let n, o = { k: "", v: "" }, r = t.open("d2", 1);
+    r.onsuccess = function (e) { n = e.target.result; console.log('Database is open'); console.log(n); };
     r.onerror = function (e) { console.error("indexedDB request error"), console.log(e) };
     r.onupgradeneeded = function (e) {
         n = null;
-        var t = e.target.result.createObjectStore("s", { keyPath: "k" });
+        let t = e.target.result.createObjectStore("s", { keyPath: "k" });
         t.transaction.oncomplete = function (e) { n = e.target.db }
     };
-    return {
-        get: e,
-        set: function (e, t) { o.k = e, o.v = t, n.transaction("s", "readwrite").objectStore("s").put(o) }
+    r.onblocked = function (e) {
+        console.log('Database has another open connection');
+    }
+    if (n) n.onclose = e => {
+        console.log('Database closed'); console.log(e);
     }
 
-    function e(t, o) {
-        return n
-            ? void (n.transaction("s").objectStore("s").get(t).onsuccess = function (e) { var t = e.target.result && e.target.result.v || null; o(t) })
-            : void setTimeout(function () { e(t, o) }, 100)
+    window.ldb = {
+        get: f,
+        set: function (e, t) {
+            o.k = e; o.v = t; n.transaction("s", "readwrite").objectStore("s").put(o)
+        }
     }
-};
+
+    function f(x, g) {
+        return n
+            ? void (n.transaction("s").objectStore("s").get(x).onsuccess = e => {
+                var y = e.target.result && e.target.result.v || null; g(y);
+            })
+            : void setTimeout(function () { f(x, g) }, 100)
+    }
+})();
 
 // add boundary points to pseudo-clip voronoi cells
 export function getBoundaryPoints(width, height, spacing) {
