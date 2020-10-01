@@ -1,7 +1,9 @@
+import { modules, pack, viewbox, burgLabels } from "../../main.js";
+
 import * as Names from "../names-generator.js";
 import { editBurg } from "./burg-editor.js";
 
-import { restoreDefaultEvents, fitContent, applySorting, addBurg, removeBurg, togglePort, toggleCapital, getFileName, downloadFile, uploadFile } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, fitContent, applySorting, addBurg, removeBurg, togglePort, toggleCapital, getFileName, downloadFile, uploadFile } from "./editors.js";
 import { tip, getHeight, clearMainTip } from "./general.js";
 import { findCell, rn, getInteger, si } from "../utils.js";
 import { toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
