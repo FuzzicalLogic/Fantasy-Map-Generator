@@ -1,7 +1,7 @@
 /** TODO: Complete dependency branch from P() below. */
 import {
     graphWidth, graphHeight,
-    pack
+    pack, grid
 } from "../main.js"
 import { getColorScheme } from "./ui/layers.js";
 
