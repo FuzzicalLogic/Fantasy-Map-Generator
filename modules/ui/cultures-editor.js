@@ -1,10 +1,12 @@
+import { modules, pack, viewbox, cults, debug, nameBases, legend } from "../../main.js";
+
 import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
 import { editNamesbase } from "./namesbase-editor.js";
 
-import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
-import { findCell, getPackPolygon, isLand, isCtrlClick, si } from "../utils.js";
+import { findCell, getPackPolygon, isLand, isCtrlClick, si, rn } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleBiomes, toggleCultures, drawCultures, toggleReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
 
