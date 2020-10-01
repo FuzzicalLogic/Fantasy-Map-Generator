@@ -1,4 +1,6 @@
-import { fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
+import { modules, options, pack, regions, armies, debug } from "../../main.js";
+
+import { closeDialogs, fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
 
 import * as Military from "../military-generator.js";
 import { overviewRegiments } from "./regiments-overview.js";

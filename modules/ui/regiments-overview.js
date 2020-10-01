@@ -1,4 +1,6 @@
-import { clicked, fitContent, sortLines, applySorting, getFileName, downloadFile } from "./editors.js";
+import { modules, options, pack, armies } from "../../main.js";
+
+import { closeDialogs, clicked, fitContent, sortLines, applySorting, getFileName, downloadFile } from "./editors.js";
 
 import * as Military from "../military-generator.js";
 import { editRegiment } from "./regiment-editor.js";

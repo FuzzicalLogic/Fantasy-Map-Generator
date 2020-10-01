@@ -9,6 +9,7 @@ import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, capitalize } from "../utils.js";
 import { toggleMilitary, layerIsOn } from "./layers.js";
 
+window.editRegiment = editRegiment;
 export function editRegiment(selector) {
     if (customization) return;
     closeDialogs(".stable");
