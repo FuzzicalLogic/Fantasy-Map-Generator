@@ -1,4 +1,6 @@
-import { getFileName, downloadFile, uploadFile } from "./editors.js";
+import { modules, nameBases } from "../../main.js";
+
+import { closeDialogs, getFileName, downloadFile, uploadFile } from "./editors.js";
 
 import * as Names from "../names-generator.js";
 
