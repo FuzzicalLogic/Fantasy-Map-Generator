@@ -125,6 +125,8 @@ export function initialize() {
         const cancel = prompt.querySelector("#promptCancel");
         cancel.addEventListener("click", () => prompt.style.display = "none");
     }();
+
+    window.link = link;
 }
 
 /** TODO: Find a way to remove the reliance on global storage. */
