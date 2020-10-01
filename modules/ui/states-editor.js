@@ -1,7 +1,16 @@
+import {
+    modules,
+    pack, defs, regions, debug
+} from "../../main.js";
+
 import * as Names from "../names-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";
 
-import { restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, addBurg, moveBurgToGroup, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
+import {
+    restoreDefaultEvents, closeDialogs,
+    moveCircle, removeCircle, fitContent, applySorting,
+    addBurg, moveBurgToGroup, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile
+} from "./editors.js";
 import { tip, applyOption, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P, rn, isCtrlClick, rw, getAdjective, si, openURL } from "../utils.js";
 import {

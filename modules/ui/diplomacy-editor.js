@@ -1,6 +1,8 @@
+import { modules, pack, statesBody, statesHalo, viewbox, regions, debug } from "../../main.js";
+
 import * as BurgsAndStates from "../burgs-and-states.js";
 
-import { restoreDefaultEvents, fitContent, applySorting, getFileName, downloadFile } from "./editors.js";
+import { closeDialogs, restoreDefaultEvents, fitContent, applySorting, getFileName, downloadFile } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, getAdjective } from "../utils.js";
 import { editStyle } from "./style.js";
