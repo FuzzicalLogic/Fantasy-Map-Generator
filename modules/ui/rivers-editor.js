@@ -1,3 +1,5 @@
+import { elSelected } from "../../main.js";
+
 import { clicked, unselect } from "./editors.js";
 
 import * as Rivers from "../river-generator.js";
