@@ -1,9 +1,10 @@
 import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight,
-    pack, cells, defs,
+    seed, pack, cells, defs,
     grid, gridOverlay,
     labels, prec, ice, temperature, biomes, biomesData, terrs, texture,
     population, regions, statesBody, provs, cults, relig, terrain,
+    borders, stateBorders, provinceBorders,
     statesHalo,
     compass, coordinates, scale,
     lineGen, invokeActiveZooming, zoom
@@ -14,7 +15,7 @@ import * as ThreeD from "./3d.js";
 import { editUnits } from "./units-editor.js";
 
 import { tip } from "./general.js";
-import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize, round } from "../utils.js";
+import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize, round, last, rand } from "../utils.js";
 import { editStyle, calculateFriendlyGridSize, shiftCompass, setBase64Texture } from "./style.js";
 
 let presets = {}; // global object
