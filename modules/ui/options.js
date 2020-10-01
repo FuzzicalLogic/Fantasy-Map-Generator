@@ -1,9 +1,11 @@
 import {
     modules,
+    seed, nameBases,
     svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
-    graphWidth, graphHeight,
+    graphWidth, setWidth, graphHeight, setHeight,
     zoom, resetZoom,
-    landmass, oceanPattern, oceanLayers
+    landmass, oceanPattern, oceanLayers,
+    mapHistory, regenerateMap
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -15,7 +17,7 @@ import { fitScaleBar } from "./measurers.js";
 import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_Markers, uploadMap } from "../save-and-load.js";
 
 import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
-import { P, gauss, rn, link, rw } from "../utils.js";
+import { P, gauss, rn, link, rw, last, rand } from "../utils.js";
 import { fitContent, fitLegendBox } from "./editors.js";
 
 export const optionsContent = document.getElementById("optionsContent");
