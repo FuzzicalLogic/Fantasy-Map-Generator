@@ -1,7 +1,18 @@
+import {
+    graphWidth, graphHeight, grid,
+    seed, pack, defs,
+    biomesData, burgIcons, icons, anchors, burgLabels, labels,
+    lineGen
+} from "../main.js";
+
 import * as Names from "./names-generator.js";
 import * as Routes from "./routes-generator.js";
 
-import { findCell, getColors, getRandomColor, getMixedColor, P, gauss, rn, rw, ra, splitInTwo, getAdjective, trimVowels, common } from "./utils.js";
+import {
+    findCell, getColors, getRandomColor, getMixedColor,
+    P, gauss, rn, rw, ra, splitInTwo, getAdjective, trimVowels, common,
+    rand, round
+} from "./utils.js";
 import { toggleLabels, layerIsOn } from "./ui/layers.js";
 
 
