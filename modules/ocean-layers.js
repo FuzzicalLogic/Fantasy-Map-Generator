@@ -1,4 +1,9 @@
-import { P, rn, clipPoly } from "./utils.js";
+import {
+    grid,
+    oceanLayers, lineGen
+} from "../main.js";
+
+import { P, rn, clipPoly, round } from "./utils.js";
 
 let cells, vertices, pointsN, used;
 
