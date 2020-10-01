@@ -35,8 +35,9 @@ import { initialize as initLayers, restoreLayers, applyPreset, drawStates, drawB
 import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js";
 import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {
-    initialize as initUtilities, getDatabase, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn,
-    generateDate, debounce, link, rw, ra, getAdjective, clipPoly, biased, normalize, capitalize, getNextId
+    initialize as initUtilities, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn,
+    generateDate, debounce, link, rw, ra, getAdjective, clipPoly, biased, normalize, capitalize, getNextId,
+    rand, round
 } from "./modules/utils.js";
 
 import { initialize as initOptions, applyStoredOptions, applyMapSize, randomizeOptions } from "./modules/ui/options.js";
