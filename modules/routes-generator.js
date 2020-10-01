@@ -1,3 +1,10 @@
+import {
+    grid, lineGen,
+    pack,
+    biomesData, roads, trails, searoutes
+} from "../main.js";
+
+import { round } from "./utils.js";
 export function getRoads() {
     console.time("generateMainRoads");
     const cells = pack.cells, burgs = pack.burgs.filter(b => b.i && !b.removed);
