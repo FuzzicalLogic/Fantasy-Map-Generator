@@ -1,3 +1,5 @@
+import { modules, notes } from "../../main.js";
+
 import { getFileName, downloadFile, uploadFile, highlightElement } from "./editors.js";
 
 import { tip } from "./general.js";
