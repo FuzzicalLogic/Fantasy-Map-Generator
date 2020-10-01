@@ -1,4 +1,8 @@
-import { findGridCell, P, getNumberInRange, lim } from "./utils.js";
+import {
+    graphWidth, setWidth, graphHeight,setHeight, grid
+} from "../main.js";
+
+import { findGridCell, P, getNumberInRange, lim, rand } from "./utils.js";
 
 let cells, p;
 
