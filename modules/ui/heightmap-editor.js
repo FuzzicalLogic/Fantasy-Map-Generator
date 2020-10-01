@@ -1,4 +1,7 @@
-import { reGraph, resetZoom } from "../../main.js";
+import {
+    grid,
+    reGraph, resetZoom
+} from "../../main.js";
 
 import * as HeightmapGenerator from "../heightmap-generator.js";
 import { OceanLayers } from "../ocean-layers.js";
