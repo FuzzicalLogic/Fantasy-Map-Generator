@@ -1,6 +1,11 @@
+import {
+    graphWidth, graphHeight, grid, 
+    pack, nameBases,
+    biomesData
+} from "../main.js"
 import * as Names from "./names-generator.js";
 
-import { getColors, P, rn, biased } from "./utils.js";
+import { getColors, P, rn, biased, rand } from "./utils.js";
 
 let cells;
 
