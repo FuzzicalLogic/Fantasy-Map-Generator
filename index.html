@@ -2045,7 +2045,7 @@
 
     <div id="dialogs" style="background-color: #ffffff">
 
-        <div id="worldConfigurator" class="dialog stable" style="display: none">
+        <dialog id="worldConfigurator" class="dialog stable" style="display: none">
 
             <div id="worldControls">
                 <div>
@@ -2157,9 +2157,9 @@
                 <path id="globeGraticule"></path>
                 <path id="globeArea"></path>
             </svg>
-        </div>
+        </dialog>
 
-        <div id="labelEditor" class="dialog" style="display: none">
+        <dialog id="labelEditor" class="dialog" style="display: none">
             <button id="labelGroupShow" data-tip="Show the group selection" class="icon-tags"></button>
             <div id="labelGroupSection" style="display: none">
                 <button id="labelGroupHide" data-tip="Hide the group selection" class="icon-tags"></button>
@@ -2189,9 +2189,9 @@
             <button id="labelAlign" data-tip="Turn text path into a straight line" class="icon-resize-horizontal"></button>
             <button id="labelLegend" data-tip="Edit free text notes (legend) for this label" class="icon-edit"></button>
             <button id="labelRemoveSingle" data-tip="Remove the label. Shortcut: Delete" class="icon-trash fastDelete"></button>
-        </div>
+        </dialog>
 
-        <div id="riverEditor" class="dialog" style="display: none">
+        <dialog id="riverEditor" class="dialog" style="display: none">
             <button id="riverNameShow" data-tip="Show river name section" class="icon-font"></button>
             <div id="riverNameSection" style="display: none">
                 <button id="riverNameHide" data-tip="Hide the river name section" class="icon-font"></button>
@@ -2216,9 +2216,9 @@
             <button id="riverNew" data-tip="Create new river clicking on map" class="icon-map-pin"></button>
             <button id="riverLegend" data-tip="Edit free text notes (legend) for the river" class="icon-edit"></button>
             <button id="riverRemove" data-tip="Remove river. Shortcut: Delete" class="icon-trash fastDelete"></button>
-        </div>
+        </dialog>
 
-        <div id="elevationProfile" class="dialog" style="display: none">
+        <dialog id="elevationProfile" class="dialog" style="display: none">
             <div id="elevationGraph" data-tip="Elevation profile"></div>
             <div style="text-align: center">
                 <div id="epControls">
@@ -2237,9 +2237,9 @@
                     <span><button id="epSave" data-tip="Download the chart data as a CSV file" class="icon-download"></button></span>
                 </div>
             </div>
-        </div>
+        </dialog>
 
-        <div id="routeEditor" class="dialog" style="display: none">
+        <dialog id="routeEditor" class="dialog" style="display: none">
             <button id="routeGroupsShow" data-tip="Show the group selection" class="icon-tags"></button>
             <div id="routeGroupsSelection" style="display: none">
                 <button id="routeGroupsHide" data-tip="Hide the group section" class="icon-tags"></button>
@@ -2256,9 +2256,9 @@
             <button id="routeLegend" data-tip="Edit free text notes (legend) for the route" class="icon-edit"></button>
             <button id="routeNew" data-tip="Create new route clicking on map" class="icon-map-pin"></button>
             <button id="routeRemove" data-tip="Remove route. Shortcut: Delete" class="icon-trash fastDelete"></button>
-        </div>
+        </dialog>
 
-        <div id="lakeEditor" class="dialog" style="display: none">
+        <dialog id="lakeEditor" class="dialog" style="display: none">
             <button id="lakeGroupsShow" data-tip="Show the group selection" class="icon-tags"></button>
             <div id="lakeGroupsSelection" style="display: none">
                 <button id="lakeGroupsHide" data-tip="Hide the group section" class="icon-tags"></button>
@@ -2271,17 +2271,17 @@
             <button id="lakeEditStyle" data-tip="Edit lake group style in Style Editor" class="icon-brush"></button>
             <button id="lakeArea" data-tip="Lake area in selected units">0</button>
             <button id="lakeLegend" data-tip="Edit free text notes (legend) for the lake" class="icon-edit"></button>
-        </div>
+        </dialog>
 
-        <div id="iceEditor" class="dialog" style="display: none">
+        <dialog id="iceEditor" class="dialog" style="display: none">
             <button id="iceEditStyle" data-tip="Edit style in Style Editor" class="icon-brush"></button>
             <button id="iceRandomize" data-tip="Randomize Iceberd shape" class="icon-shuffle"></button>
             <input id="iceSize" data-tip="Change Iceberg size" type="range" min=".05" max="1" step=".01">
             <button id="iceNew" data-tip="Add an Iceberg (click on map)" class="icon-plus"></button>
             <button id="iceRemove" data-tip="Remove the element. Shortcut: Delete" class="icon-trash fastDelete"></button>
-        </div>
+        </dialog>
 
-        <div id="coastlineEditor" class="dialog" style="display: none">
+        <dialog id="coastlineEditor" class="dialog" style="display: none">
             <button id="coastlineGroupsShow" data-tip="Show the group selection" class="icon-tags"></button>
             <div id="coastlineGroupsSelection" style="display: none">
                 <button id="coastlineGroupsHide" data-tip="Hide the group section" class="icon-tags"></button>
@@ -2293,9 +2293,9 @@
 
             <button id="coastlineEditStyle" data-tip="Edit coastline group style in Style Editor" class="icon-brush"></button>
             <button id="coastlineArea" data-tip="Landmass area in selected units">0</button>
-        </div>
+        </dialog>
 
-        <div id="reliefEditor" class="dialog" style="display: none">
+        <dialog id="reliefEditor" class="dialog" style="display: none">
 
             <div id="reliefTools" data-tip="Select mode of operation">
                 <div class="reliefEditorLabel">Mode:</div>
@@ -2426,9 +2426,9 @@
                 <button id="reliefMoveBack" data-tip="Move selected relief icon back" class="icon-level-down"></button>
                 <button id="reliefRemove" data-tip="Remove selected relief icon. Shortcut: Delete" class="icon-trash fastDelete"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="burgEditor" class="dialog" style="display: none">
+        <dialog id="burgEditor" class="dialog" style="display: none">
 
             <div id="burgBody" style="padding-bottom: .3em">
                 <div style="padding: .1em">
@@ -2479,9 +2479,9 @@
                 <button id="burglLegend" data-tip="Edit free text notes (legend) for this burg" class="icon-edit"></button>
                 <button id="burgRemove" data-tip="Remove non-capital burg. Shortcut: Delete" class="icon-trash fastDelete"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="markerEditor" class="dialog" style="display: none">
+        <dialog id="markerEditor" class="dialog" style="display: none">
 
             <button id="markerGroup" data-tip="Change marker type" class="icon-tags"></button>
             <div id="markerGroupSection" style="display: none">
@@ -2519,9 +2519,9 @@
             <button id="markerLegendButton" data-tip="Edit place legend (free text notes)" class="icon-edit"></button>
             <button id="markerAdd" data-tip="Add additional marker of that type" class="icon-plus"></button>
             <button id="markerRemove" data-tip="Remove the marker. Shortcut: Delete" class="icon-trash fastDelete"></button>
-        </div>
+        </dialog>
 
-        <div id="regimentEditor" class="dialog" style="display: none">
+        <dialog id="regimentEditor" class="dialog" style="display: none">
 
             <div id="regimentBody">
                 <div>
@@ -2548,9 +2548,9 @@
                 <button id="regimentLegend" data-tip="Edit free text notes (legend) for this regiment" class="icon-edit"></button>
                 <button id="regimentRemove" data-tip="Remove regiment. Shortcut: Delete" class="icon-trash fastDelete"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="battleScreen" class="dialog stable" style="display: none">
+        <dialog id="battleScreen" class="dialog stable" style="display: none">
             <div id="battleBody" class="overflow">
                 <template id="battlePhases_field">
                     <button data-tip="Skirmish phase. Ranged units excel" data-phase="skirmish" class="icon-button-skirmish"></button>
@@ -2675,9 +2675,9 @@
                 <button id="battleCancel" data-tip="Cancel battle: roll back results and close the screen" class="icon-cancel"></button>
                 <button id="battleWiki" data-tip="Open Battle Simulation Tutorial" class="icon-info"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="regimentSelectorScreen" class="dialog" style="display: none">
+        <dialog id="regimentSelectorScreen" class="dialog" style="display: none">
             <div id="regimentSelectorHeader" class="header">
                 <div style="left: 1.2em;" data-tip="Click to sort by state name" class="sortable alphabetically" data-sortby="state">State&nbsp;</div>
                 <div style="left: 9.2em;" data-tip="Click to sort by regiment name" class="sortable alphabetically" data-sortby="regiment">Regiment&nbsp;</div>
@@ -2685,9 +2685,9 @@
                 <div style="left: 28em;" data-tip="Click to sort by distance to the battlefield" class="sortable icon-sort-number-up" data-sortby="distance">Distance&nbsp;</div>
             </div>
             <div id="regimentSelectorBody"></div>
-        </div>
+        </dialog>
 
-        <div id="brushesPanel" class="dialog stable" style="display: none">
+        <dialog id="brushesPanel" class="dialog stable" style="display: none">
             <div id="brushesButtons" style="display: inline-block">
                 <button id="brushRaise" data-tip="Raise brush: increase height of cells in radius by Power value">
                     <svg viewBox="15 15 70 70" height="1em" width="1.6em">
@@ -2784,9 +2784,9 @@
                 <button id="rescaleExecute" data-tip="Click to perform an operation" class="icon-play-circled2"></button>
             </div>
 
-        </div>
+        </dialog>
 
-        <div id="templateEditor" class="dialog stable" style="display: none">
+        <dialog id="templateEditor" class="dialog stable" style="display: none">
             <div id="templateTop">
                 <i>Select template: </i><select id="templateSelect" style="width:16em" data-prev="templateCustom" data-tip="Select base template">
                     <option value="templateCustom" selected>Custom</option>
@@ -2834,9 +2834,9 @@
                 <button id="templateCA" data-tip="Find or share custom template on Cartography Assets portal" class="icon-drafting-compass" onclick="openURL('https://www.cartographyassets.com/assets/categories/templates.89')"></button>
                 <button id="templateTutorial" data-tip="Open Template Editor Tutorial" class="icon-info" onclick="wiki('Heightmap-template-editor')"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="imageConverter" class="dialog stable" style="display: none">
+        <dialog id="imageConverter" class="dialog stable" style="display: none">
 
             <div id="convertImageButtons">
                 <button id="convertImageLoad" data-tip="Load image to convert" class="icon-upload"></button>
@@ -2870,9 +2870,9 @@
                 <i>Unassigned colors (<span id="colorsUnassignedNumber"></span>):</i><br>
             </div>
 
-        </div>
+        </dialog>
 
-        <div id="biomesEditor" class="dialog stable" style="display: none">
+        <dialog id="biomesEditor" class="dialog stable" style="display: none">
             <div id="biomesHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by biome name" class="sortable alphabetically" data-sortby="name">Biome&nbsp;</div>
                 <div style="left:12em" data-tip="Click to sort by biome habitability" class="sortable hide" data-sortby="habitability">Habitability&nbsp;</div>
@@ -2911,9 +2911,9 @@
                 <button id="biomesExport" data-tip="Save biomes-related data as a text file (.csv)" class="icon-download"></button>
             </div>
 
-        </div>
+        </dialog>
 
-        <div id="statesEditor" class="dialog stable" style="display: none">
+        <dialog id="statesEditor" class="dialog stable" style="display: none">
             <div id="statesHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by state name" class="sortable alphabetically" data-sortby="name">State&nbsp;</div>
                 <div style="left:9em" data-tip="Click to sort by state form name" class="sortable alphabetically" data-sortby="form">Form&nbsp;</div>
@@ -2978,9 +2978,9 @@
                 <button id="statesAdd" data-tip="Add a new state. Hold Shift to add multiple" class="icon-plus"></button>
                 <button id="statesExport" data-tip="Save state-related data as a text file (.csv)" class="icon-download"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="stateNameEditor" class="dialog" data-state="0" style="display: none">
+        <dialog id="stateNameEditor" class="dialog" data-state="0" style="display: none">
             <div style="padding: .1em">
                 <div data-tip="State short name" class="label">Short name:</div>
                 <input id="stateNameEditorShort" data-tip="Type to change the short name" autocomplete="off" spellcheck="false" style="width: 11em">
@@ -3053,9 +3053,9 @@
                 <input id="stateNameEditorUpdateLabel" class="checkbox" type="checkbox" checked>
                 <label for="stateNameEditorUpdateLabel" class="checkbox-label"><i>Update label</i></label>
             </div>
-        </div>
+        </dialog>
 
-        <div id="provincesEditor" class="dialog stable" style="display: none">
+        <dialog id="provincesEditor" class="dialog stable" style="display: none">
             <div id="provincesHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by province name" class="sortable alphabetically" data-sortby="name">Province&nbsp;</div>
                 <div style="left:8.5em" data-tip="Click to sort by province form name" class="sortable alphabetically hide" data-sortby="form">Form&nbsp;</div>
@@ -3099,9 +3099,9 @@
                 <span>State: </span>
                 <select id="provincesFilterState"></select>
             </div>
-        </div>
+        </dialog>
 
-        <div id="diplomacyEditor" class="dialog stable" style="display: none">
+        <dialog id="diplomacyEditor" class="dialog stable" style="display: none">
             <div id="diplomacyHeader" class="header">
                 <div style="left:.2em" data-tip="Click to sort by state name" class="sortable alphabetically" data-sortby="name">State&nbsp;</div>
                 <div style="left:13.4em" data-tip="Click to sort by diplomatical relations" class="sortable alphabetically" data-sortby="relations">Relations&nbsp;</div>
@@ -3129,9 +3129,9 @@
                 <button id="diplomacyMatrix" data-tip="Show relations matrix" class="icon-list-bullet"></button>
                 <button id="diplomacyExport" data-tip="Save state relations matrix as a text file (.csv)" class="icon-download"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="provinceNameEditor" class="dialog" data-province="0" style="display: none">
+        <dialog id="provinceNameEditor" class="dialog" data-province="0" style="display: none">
             <div style="padding: .1em">
                 <div data-tip="Province short name" class="label">Short name:</div>
                 <input id="provinceNameEditorShort" data-tip="Type to change the short name" autocomplete="off" spellcheck="false" style="width: 11em">
@@ -3174,9 +3174,9 @@
                 <input id="provinceNameEditorFull" data-tip="Type to change the full name" autocomplete="off" spellcheck="false" style="width: 11em">
                 <span id="provinceNameEditorFullRegenerate" data-tip="Click to re-generate full name" class="icon-arrows-cw pointer"></span>
             </div>
-        </div>
+        </dialog>
 
-        <div id="culturesEditor" class="dialog stable" style="display: none">
+        <dialog id="culturesEditor" class="dialog stable" style="display: none">
             <div id="culturesHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by culture name" class="sortable alphabetically" data-sortby="name">Culture&nbsp;</div>
                 <div style="left:6.7em" data-tip="Click to sort by culture cells count" class="sortable hide" data-sortby="cells">Cells&nbsp;</div>
@@ -3220,9 +3220,9 @@
                     <label for="culturesAutoChange" class="checkbox-label"><i>auto-apply changes</i></label>
                 </span>
             </div>
-        </div>
+        </dialog>
 
-        <div id="namesbaseEditor" class="dialog stable textual" style="display: none">
+        <dialog id="namesbaseEditor" class="dialog stable textual" style="display: none">
             <div id="namesbaseBasesTop">
                 <span>Select base: </span>
                 <select id="namesbaseSelect" data-tip="Select base to edit" style="width: 12em"></select>
@@ -3256,9 +3256,9 @@
                 <button id="namesbaseUpload" data-tip="Upload a namesbase from PC" class="icon-upload"></button>
                 <button id="namesbaseCA" data-tip="Find or share custom namesbase on Cartography Assets portal" class="icon-drafting-compass" onclick="openURL('https://www.cartographyassets.com/assets/categories/azgaar-generator.87')"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="zonesEditor" class="dialog stable" style="display: none">
+        <dialog id="zonesEditor" class="dialog stable" style="display: none">
             <div id="customHeader" class="header">
                 <div style="left:1.8em" data-tip="Zone description">Description&nbsp;</div>
                 <div style="left:13em" data-tip="Zone cells count" class="hide">Cells&nbsp;</div>
@@ -3296,9 +3296,9 @@
                 <button id="zonesAdd" data-tip="Add a new zone layer" class="icon-plus"></button>
                 <button id="zonesExport" data-tip="Download zones-related data" class="icon-download"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="notesEditor" class="dialog stable textual" style="display: none">
+        <dialog id="notesEditor" class="dialog stable textual" style="display: none">
             <div>
                 <span>Select object: </span>
                 <select id="notesSelect" data-tip="Select object" style="width: 12em"></select>
@@ -3313,9 +3313,9 @@
                 <button id="notesUpload" data-tip="Upload notes from PC" class="icon-upload"></button>
                 <button id="notesRemove" data-tip="Remove this note" class="icon-trash fastDelete"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="religionsEditor" class="dialog stable" style="display: none">
+        <dialog id="religionsEditor" class="dialog stable" style="display: none">
             <div id="religionsHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by religion name" class="sortable alphabetically" data-sortby="name">Religion&nbsp;</div>
                 <div style="left:12.6em" data-tip="Click to sort by religion type" class="sortable alphabetically icon-sort-name-down" data-sortby="type">Type&nbsp;</div>
@@ -3356,9 +3356,9 @@
                 <button id="religionsAdd" data-tip="Add a new religion. Hold Shift to add multiple" class="icon-plus"></button>
                 <button id="religionsExport" data-tip="Download religions-related data" class="icon-download"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="unitsEditor" class="dialog stable" style="display: none">
+        <dialog id="unitsEditor" class="dialog stable" style="display: none">
             <div id="unitsBody" style="margin-left:1.1em">
                 <div class="unitsHeader" style="margin-top:.4em">
                     <span class="icon-map-signs"></span>
@@ -3481,9 +3481,9 @@
                 <button id="removeRulers" data-tip="Remove all rulers from the map. Click on ruler label to remove a ruler separately" class="icon-trash"></button>
                 <button id="unitsRestore" data-tip="Restore default units settings" class="icon-ccw"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="burgsOverview" class="dialog stable" style="display: none">
+        <dialog id="burgsOverview" class="dialog stable" style="display: none">
             <div id="burgsHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by burg name" class="sortable alphabetically icon-sort-name-up" data-sortby="name">Burg&nbsp;</div>
                 <div style="left:7.6em" data-tip="Click to sort by province name" class="sortable alphabetically" data-sortby="province">Province&nbsp;</div>
@@ -3516,9 +3516,9 @@
                 <button id="burgNamesImport" data-tip="Rename burgs in bulk" class="icon-upload"></button>
                 <button id="burgsRemoveAll" data-tip="Remove all burgs except for capitals. To remove a capital remove its state first" class="icon-trash"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="riversOverview" class="dialog stable" style="display: none">
+        <dialog id="riversOverview" class="dialog stable" style="display: none">
             <div id="riversHeader" class="header">
                 <div style="left:1.8em" data-tip="Click to sort by river name" class="sortable alphabetically" data-sortby="name">River&nbsp;</div>
                 <div style="left:7.7em" data-tip="Click to sort by river type name" class="sortable alphabetically" data-sortby="type">Type&nbsp;</div>
@@ -3540,9 +3540,9 @@
                 <button id="riversExport" data-tip="Save rivers-related data as a text file (.csv)" class="icon-download"></button>
                 <button id="riversRemoveAll" data-tip="Remove all rivers" class="icon-trash"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="militaryOverview" class="dialog stable" style="display: none">
+        <dialog id="militaryOverview" class="dialog stable" style="display: none">
             <div class="overflow">
                 <div id="militaryHeader" class="header">
                     <div data-tip="State name. Click to sort" style="margin-left: 1.8em; width: 5.6em" class="sortable alphabetically" data-sortby="state">State&nbsp;</div>
@@ -3572,9 +3572,9 @@
                 <button id="militaryExport" data-tip="Save military-related data as a text file (.csv)" class="icon-download"></button>
                 <button id="militaryWiki" data-tip="Open Military Forces Tutorial" class="icon-info"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="regimentsOverview" class="dialog stable" style="display: none">
+        <dialog id="regimentsOverview" class="dialog stable" style="display: none">
             <div class="overflow">
                 <div id="regimentsHeader" class="header">
                     <div data-tip="State name. Click to sort" style="left:1.8em; width: 9em" class="sortable alphabetically" data-sortby="state">State&nbsp;</div>
@@ -3592,9 +3592,9 @@
                 <div data-tip="Select state" style="display:inline-block"><span>State: </span><select id="regimentsFilter"></select></div>
                 <button id="regimentsExport" data-tip="Save military-related data as a text file (.csv)" class="icon-download"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="militaryOptions" class="dialog stable" style="display: none">
+        <dialog id="militaryOptions" class="dialog stable" style="display: none">
             <div class="table">
                 <table id="militaryOptionsTable">
                     <thead>
@@ -3613,9 +3613,9 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </dialog>
 
-        <div id="styleSaver" class="dialog stable textual" style="display: none">
+        <dialog id="styleSaver" class="dialog stable textual" style="display: none">
             <div id="styleSaverHeader" style="padding:2px 0">
                 <span>Preset name:</span>
                 <input id="styleSaverName" data-tip="Enter style preset name" placeholder="Preset name" style="width:12em" required>
@@ -3633,9 +3633,9 @@
                 <button id="styleSaverLoad" data-tip="Open previously downloaded style file" class="icon-upload"></button>
                 <button id="styleSaverCA" data-tip="Find or share custom style preset on Cartography Assets portal" class="icon-drafting-compass" onclick="openURL('https://www.cartographyassets.com/assets/categories/azgaar-generator.87')"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="cellInfo" style="display: none" class="dialog stable">
+        <dialog id="cellInfo" style="display: none" class="dialog stable">
             <p><b>Cell:</b> <span id="infoCell"></span> <b>X:</b> <span id="infoX"></span> <b>Y:</b> <span id="infoY"></span></p>
             <p><b>Latitude:</b> <span id="infoLat"></span></p>
             <p><b>Longitude:</b> <span id="infoLon"></span></p>
@@ -3653,18 +3653,18 @@
             <p><b>Culture:</b> <span id="infoCulture">n/a</span></p>
             <p><b>Religion:</b> <span id="infoReligion">n/a</span></p>
             <p><b>Burg:</b> <span id="infoBurg">n/a</span></p>
-        </div>
+        </dialog>
 
-        <div id="iconSelector" style="display: none" class="dialog">
+        <dialog id="iconSelector" style="display: none" class="dialog">
             <table id="iconTable" class="table pointer" style="font-size: 2em; text-align: center"></table>
             <div style="font-style: italic; font-size: 1.2em; margin: .4em 0 0 .4em">
                 <span>Select from the list or paste a Unicode character here: </span>
                 <input id="iconInput" style="width: 2em">
                 <span>. See <a href="https://emojipedia.org" target="_blank">Emojipedia</a> for reference</span>
             </div>
-        </div>
+        </dialog>
 
-        <div id="options3d" class="dialog stable" style="display: none">
+        <dialog id="options3d" class="dialog stable" style="display: none">
 
             <div id="options3dMesh" style="display: none">
                 <div data-tip="Set map rotation speed. Set to 0 is you want to toggle off the rotation">
@@ -3728,11 +3728,11 @@
                 <button data-tip="Configure world and map size and climate settings" onclick="editWorld()" class="icon-globe"></button>
                 <button id="options3dSave" data-tip="Save screenshot of the 3d scene" class="icon-download"></button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="preview3d" class="dialog stable" style="display: none; padding: 0px"></div>
+        <dialog id="preview3d" class="dialog stable" style="display: none; padding: 0px"></dialog>
 
-        <div id="saveMapData" style="display: none" class="dialog">
+        <dialog id="saveMapData" style="display: none" class="dialog">
             <div style="margin-bottom: .3em; font-weight: bold">Please select saving variant:</div>
             <div>
                 <button onclick="saveMap()" data-tip="Download the map as fully-functional .map file to your machine">.map</button>
@@ -3748,29 +3748,29 @@
                 <input id="pngResolutionInput" data-stored="pngResolution" type="range" min=1 max=8 value=1 style="width: 10.8em" oninput="pngResolutionOutput.value = this.value">
                 <input id="pngResolutionOutput" data-stored="pngResolution" type="number" min=1 max=8 value=1 oninput="pngResolutionInput.value = this.value">
             </div>
-        </div>
+        </dialog>
 
-        <div id="loadMapData" style="display: none" class="dialog">
+        <dialog id="loadMapData" style="display: none" class="dialog">
             <div style="margin-bottom: .3em">Load map from:</div>
             <div>
                 <button onclick="mapToLoad.click()" data-tip="Load .map file from local disk">local disk</button>
                 <button onclick="loadURL()" data-tip="Load .map file from URL (server should allow CORS)">URL</button>
                 <button onclick="quickLoad()" data-tip="Load map from browser storage (if saved before)">storage</button>
             </div>
-        </div>
+        </dialog>
 
-        <div id="alert" style="display: none" class="dialog">
+        <dialog id="alert" style="display: none" class="dialog">
             <p id="alertMessage">Warning!</p>
-        </div>
+        </dialog>
 
-        <div id="prompt" style="display: none" class="dialog">
+        <dialog id="prompt" style="display: none" class="dialog">
             <form id="promptForm">
                 <div id="promptText"></div>
                 <input id="promptInput" type="number" step=.01 placeholder="type value" autocomplete="off" required>
                 <button type="submit">Confirm</button>
                 <button type="button" id="promptCancel" formnovalidate="">Cancel</button>
             </form>
-        </div>
+        </dialog>
 
     </div>
 
