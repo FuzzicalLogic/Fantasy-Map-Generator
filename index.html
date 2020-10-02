@@ -3283,11 +3283,11 @@
 
                 <button id="zonesManually" data-tip="Re-assign zones" class="icon-brush"></button>
                 <div id="zonesManuallyButtons" style="display: none">
-                    <label data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
+                    <div data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
                         Brush:
                         <input id="zonesBrush" oninput="tip('Brush size: '+this.value); zonesBrushNumber.value = this.value" type="range" min=5 max=25 value=7 style="width:7em">
                         <input id="zonesBrushNumber" oninput="tip('Brush size: '+this.value); zonesBrush.value = this.value" type="number" min=5 max=25 value=7>
-                    </label><br>
+                    </div><br>
                     <button id="zonesManuallyApply" data-tip="Apply assignment" class="icon-check"></button>
                     <button id="zonesManuallyCancel" data-tip="Cancel assignment" class="icon-cancel"></button>
                     <button id="zonesRemove" data-tip="Click to toggle the removal mode on brush dragging. Shortcut: ctrl" class="icon-eraser"></button>
