@@ -248,7 +248,7 @@ function showRelationsHistory() {
         return;
     }
 
-    let message = `<div autocorrect="off" spellcheck="false">`;
+    let message = `<div autocomplete="off" spellcheck="false">`;
     chronicle.forEach((e, d) => {
         message += `<div>`;
         e.forEach((l, i) => message += `<div contenteditable="true" data-id="${d}-${i}"${i ? "" : " style='font-weight:bold'"}>${l}</div>`);

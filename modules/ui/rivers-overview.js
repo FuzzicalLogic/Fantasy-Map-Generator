@@ -45,7 +45,7 @@ export function overviewRivers() {
 
             lines += `<div class="states" data-id=${r.i} data-name="${r.name}" data-type="${r.type}" data-length="${r.length}" data-basin="${basin}">
         <span data-tip="Click to focus on river" class="icon-dot-circled pointer"></span>
-        <input data-tip="River proper name. Click to change. Ctrl + click to regenerate" class="riverName" value="${r.name}" autocorrect="off" spellcheck="false">
+        <input data-tip="River proper name. Click to change. Ctrl + click to regenerate" class="riverName" value="${r.name}" autocomplete="off" spellcheck="false">
         <input data-tip="River type name. Click to change" class="riverType" value="${r.type}">
         <div data-tip="River length" class="biomeArea">${length}</div>
         <input data-tip="River basin (name of the main stem)" class="stateName" value="${basin}" disabled>

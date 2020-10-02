@@ -69,7 +69,7 @@ export function editZones() {
 
             lines += `<div class="states" data-id="${this.id}" data-fill="${fill}" data-description="${description}" data-cells=${c.length} data-area=${area} data-population=${population}>
         <svg data-tip="Zone fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${fill}" class="fillRect pointer"></svg>
-        <input data-tip="Zone description. Click and type to change" class="religionName" value="${description}" autocorrect="off" spellcheck="false">
+        <input data-tip="Zone description. Click and type to change" class="religionName" value="${description}" autocomplete="off" spellcheck="false">
         <span data-tip="Cells count" class="icon-check-empty hide"></span>
         <div data-tip="Cells count" class="stateCells hide">${c.length}</div>
         <span data-tip="Zone area" style="padding-right:4px" class="icon-map-o hide"></span>
@@ -314,7 +314,7 @@ export function editZones() {
 
         const line = `<div class="states" data-id="${id}" data-fill="${fill}" data-description="${description}" data-cells=0 data-area=0 data-population=0>
       <svg data-tip="Zone fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${fill}" class="fillRect pointer"></svg>
-      <input data-tip="Zone description. Click and type to change" class="religionName" value="${description}" autocorrect="off" spellcheck="false">
+      <input data-tip="Zone description. Click and type to change" class="religionName" value="${description}" autocomplete="off" spellcheck="false">
       <span data-tip="Cells count" class="icon-check-empty hide"></span>
       <div data-tip="Cells count" class="stateCells hide">0</div>
       <span data-tip="Zone area" style="padding-right:4px" class="icon-map-o hide"></span>

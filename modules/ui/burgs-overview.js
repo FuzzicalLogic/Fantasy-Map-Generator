@@ -84,7 +84,7 @@ export function overviewBurgs() {
 
             lines += `<div class="states" data-id=${b.i} data-name="${b.name}" data-state="${state}" data-province="${province}" data-culture="${culture}" data-population=${population} data-type="${type}">
         <span data-tip="Click to zoom into view" class="icon-dot-circled pointer"></span>
-        <input data-tip="Burg name. Click and type to change" class="burgName" value="${b.name}" autocorrect="off" spellcheck="false">
+        <input data-tip="Burg name. Click and type to change" class="burgName" value="${b.name}" autocomplete="off" spellcheck="false">
         <input data-tip="Burg province" class="burgState" value="${province}" disabled>
         <input data-tip="Burg state" class="burgState" value="${state}" disabled>
         <select data-tip="Dominant culture. Click to change burg culture (to change cell cultrure use Cultures Editor)" class="stateCulture">${getCultureOptions(b.culture)}</select>

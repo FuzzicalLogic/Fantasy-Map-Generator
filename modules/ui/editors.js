@@ -365,7 +365,7 @@ function createPicker() {
     <input type="number" id="pickerRGB_G" data-space="rgb" min=0 max=255 value="142">, 
     <input type="number" id="pickerRGB_B" data-space="rgb" min=0 max=255 value="232">
   </label>
-  <label>HEX: <input type="text" id="pickerHEX" data-space="hex" style="width:42px" autocorrect="off" spellcheck="false" value="#7d8ee8"></label>`;
+  <label>HEX: <input type="text" id="pickerHEX" data-space="hex" style="width:42px" autocomplete="off" spellcheck="false" value="#7d8ee8"></label>`;
     spaces.node().insertAdjacentHTML('beforeend', html);
     spaces.selectAll("input").on("change", changePickerSpace);
 

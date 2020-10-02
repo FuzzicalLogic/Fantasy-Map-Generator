@@ -136,7 +136,7 @@ export function editStates() {
         <span data-tip="Click to open state COA in the Iron Arachne Heraldry Generator. Ctrl + click to change the seed" class="icon-coa pointer hide"></span>
         <input data-tip="State form name. Click to change" class="stateForm name pointer" value="${s.formName}" readonly>
         <span data-tip="State capital. Click to zoom into view" class="icon-star-empty pointer hide"></span>
-        <input data-tip="Capital name. Click and type to rename" class="stateCapital hide" value="${capital}" autocorrect="off" spellcheck="false"/>
+        <input data-tip="Capital name. Click and type to rename" class="stateCapital hide" value="${capital}" autocomplete="off" spellcheck="false"/>
         <select data-tip="Dominant culture. Click to change" class="stateCulture hide">${getCultureOptions(s.culture)}</select>
         <span data-tip="Burgs count" style="padding-right: 1px" class="icon-dot-circled hide"></span>
         <div data-tip="Burgs count" class="stateBurgs hide">${s.burgs}</div>

@@ -86,11 +86,11 @@ export function editReligions() {
                 lines += `<div class="states religions" data-id=${r.i} data-name="${r.name}" data-color="${r.color}" data-area=${area} 
           data-population=${population} data-type=${r.type} data-form=${r.form} data-deity="${r.deity ? r.deity : ''}" data-expansionism=${r.expansionism}>
           <svg data-tip="Religion fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${r.color}" class="fillRect pointer"></svg>
-          <input data-tip="Religion name. Click and type to change" class="religionName" value="${r.name}" autocorrect="off" spellcheck="false">
+          <input data-tip="Religion name. Click and type to change" class="religionName" value="${r.name}" autocomplete="off" spellcheck="false">
           <select data-tip="Religion type" class="religionType">${getTypeOptions(r.type)}</select>
-          <input data-tip="Religion form" class="religionForm hide" value="${r.form}" autocorrect="off" spellcheck="false">
+          <input data-tip="Religion form" class="religionForm hide" value="${r.form}" autocomplete="off" spellcheck="false">
           <span data-tip="Click to re-generate supreme deity" class="icon-arrows-cw hide"></span>
-          <input data-tip="Religion supreme deity" class="religionDeity hide" value="${r.deity ? r.deity : ''}" autocorrect="off" spellcheck="false">
+          <input data-tip="Religion supreme deity" class="religionDeity hide" value="${r.deity ? r.deity : ''}" autocomplete="off" spellcheck="false">
           <span data-tip="Religion area" style="padding-right: 4px" class="icon-map-o hide"></span>
           <div data-tip="Religion area" class="biomeArea hide">${si(area) + unit}</div>
           <span data-tip="${populationTip}" class="icon-male hide"></span>
@@ -101,11 +101,11 @@ export function editReligions() {
                 // No religion (neutral) line
                 lines += `<div class="states" data-id=${r.i} data-name="${r.name}" data-color="" data-area=${area} data-population=${population} data-type="" data-form="" data-deity="" data-expansionism="">
           <svg width="9" height="9" class="placeholder"></svg>
-          <input data-tip="Religion name. Click and type to change" class="religionName italic" value="${r.name}" autocorrect="off" spellcheck="false">
+          <input data-tip="Religion name. Click and type to change" class="religionName italic" value="${r.name}" autocomplete="off" spellcheck="false">
           <select data-tip="Religion type" class="religionType placeholder">${getTypeOptions(r.type)}</select>
-          <input data-tip="Religion form" class="religionForm placeholder hide" value="" autocorrect="off" spellcheck="false">
+          <input data-tip="Religion form" class="religionForm placeholder hide" value="" autocomplete="off" spellcheck="false">
           <span data-tip="Click to re-generate supreme deity" class="icon-arrows-cw placeholder hide"></span>
-          <input data-tip="Religion supreme deity" class="religionDeity placeholder hide" value="" autocorrect="off" spellcheck="false">
+          <input data-tip="Religion supreme deity" class="religionDeity placeholder hide" value="" autocomplete="off" spellcheck="false">
           <span data-tip="Religion area" style="padding-right: 4px" class="icon-map-o hide"></span>
           <div data-tip="Religion area" class="biomeArea hide">${si(area) + unit}</div>
           <span data-tip="${populationTip}" class="icon-male hide"></span>

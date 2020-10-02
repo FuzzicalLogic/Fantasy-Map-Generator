@@ -102,7 +102,7 @@ export function editBiomes() {
             lines += `<div class="states biomes" data-id="${i}" data-name="${b.name[i]}" data-habitability="${b.habitability[i]}"
       data-cells=${b.cells[i]} data-area=${area} data-population=${population} data-color=${b.color[i]}>
         <svg data-tip="Biomes fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${b.color[i]}" class="fillRect pointer"></svg>
-        <input data-tip="Biome name. Click and type to change" class="biomeName" value="${b.name[i]}" autocorrect="off" spellcheck="false">
+        <input data-tip="Biome name. Click and type to change" class="biomeName" value="${b.name[i]}" autocomplete="off" spellcheck="false">
         <span data-tip="Biome habitability percent" class="hide">%</span>
         <input data-tip="Biome habitability percent. Click and set new value to change" type="number" min=0 max=9999 class="biomeHabitability hide" value=${b.habitability[i]}>
         <span data-tip="Cells count" class="icon-check-empty hide"></span>
@@ -247,7 +247,7 @@ export function editBiomes() {
         const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
         const line = `<div class="states biomes" data-id="${i}" data-name="${b.name[i]}" data-habitability=${b.habitability[i]} data-cells=0 data-area=0 data-population=0 data-color=${b.color[i]}>
       <svg data-tip="Biomes fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${b.color[i]}" class="fillRect pointer"></svg>
-      <input data-tip="Biome name. Click and type to change" class="biomeName" value="${b.name[i]}" autocorrect="off" spellcheck="false">
+      <input data-tip="Biome name. Click and type to change" class="biomeName" value="${b.name[i]}" autocomplete="off" spellcheck="false">
       <span data-tip="Biome habitability percent" class="hide">%</span>
       <input data-tip="Biome habitability percent. Click and set new value to change" type="number" min=0 max=9999 step=1 class="biomeHabitability hide" value=${b.habitability[i]}>
       <span data-tip="Cells count" class="icon-check-empty hide"></span>
