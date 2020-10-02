@@ -1685,7 +1685,7 @@
                         <td>Year and era</td>
                         <td>
                             <input id="yearInput" data-stored="year" type="number" step=1 class="paired" style="width: 24%; float: left; font-size: smaller">
-                            <input id="eraInput" data-stored="era" autocorrect="off" spellcheck="false" type="text" style="width: 75%; float: right" class="long">
+                            <input id="eraInput" data-stored="era" autocomplete="off" spellcheck="false" type="text" style="width: 75%; float: right" class="long">
                         </td>
                         <td>
                             <i id="optionsEraRegenerate" data-tip="Regenerate era" class="icon-arrows-cw"></i>
@@ -2433,7 +2433,7 @@
             <div id="burgBody" style="padding-bottom: .3em">
                 <div style="padding: .1em">
                     <div class="label">Name:</div>
-                    <input id="burgName" data-tip="Type to rename the burg" autocorrect="off" spellcheck="false" style="width: 7em">
+                    <input id="burgName" data-tip="Type to rename the burg" autocomplete="off" spellcheck="false" style="width: 7em">
                     <span id="burgNameReCulture" data-tip="Generate culture-specific name for the burg" class="icon-book pointer"></span>
                     <span id="burgNameReRandom" data-tip="Generate random name for the burg" class="icon-globe pointer"></span>
                 </div>
@@ -2526,7 +2526,7 @@
             <div id="regimentBody">
                 <div>
                     <button id="regimentType" data-tip="Regiment type (land or naval). Click to change"></button>
-                    <input id="regimentName" data-tip="Type to rename the regiment" autocorrect="off" spellcheck="false" style="width: 13em">
+                    <input id="regimentName" data-tip="Type to rename the regiment" autocomplete="off" spellcheck="false" style="width: 13em">
                     <i id="regimentNameRestore" data-tip="Click to restore regiment's default name" class="icon-ccw pointer"></i>
                 </div>
 
@@ -2983,7 +2983,7 @@
         <div id="stateNameEditor" class="dialog" data-state="0" style="display: none">
             <div style="padding: .1em">
                 <div data-tip="State short name" class="label">Short name:</div>
-                <input id="stateNameEditorShort" data-tip="Type to change the short name" autocorrect="off" spellcheck="false" style="width: 11em">
+                <input id="stateNameEditorShort" data-tip="Type to change the short name" autocomplete="off" spellcheck="false" style="width: 11em">
                 <span id="stateNameEditorShortCulture" data-tip="Generate culture-specific name" class="icon-book pointer"></span>
                 <span id="stateNameEditorShortRandom" data-tip="Generate random name" class="icon-globe pointer"></span>
             </div>
@@ -3045,7 +3045,7 @@
 
             <div style="padding: .1em">
                 <div data-tip="State full name" class="label">Full name:</div>
-                <input id="stateNameEditorFull" data-tip="Type to change the full name" autocorrect="off" spellcheck="false" style="width: 11em">
+                <input id="stateNameEditorFull" data-tip="Type to change the full name" autocomplete="off" spellcheck="false" style="width: 11em">
                 <span id="stateNameEditorFullRegenerate" data-tip="Click to re-generate full name" data-tick="0" class="icon-arrows-cw pointer"></span>
             </div>
 
@@ -3134,7 +3134,7 @@
         <div id="provinceNameEditor" class="dialog" data-province="0" style="display: none">
             <div style="padding: .1em">
                 <div data-tip="Province short name" class="label">Short name:</div>
-                <input id="provinceNameEditorShort" data-tip="Type to change the short name" autocorrect="off" spellcheck="false" style="width: 11em">
+                <input id="provinceNameEditorShort" data-tip="Type to change the short name" autocomplete="off" spellcheck="false" style="width: 11em">
                 <span id="provinceNameEditorShortCulture" data-tip="Generate culture-specific name" class="icon-book pointer"></span>
                 <span id="provinceNameEditorShortRandom" data-tip="Generate random name" class="icon-globe pointer"></span>
             </div>
@@ -3171,7 +3171,7 @@
 
             <div style="padding: .1em">
                 <div data-tip="Province full name" class="label">Full name:</div>
-                <input id="provinceNameEditorFull" data-tip="Type to change the full name" autocorrect="off" spellcheck="false" style="width: 11em">
+                <input id="provinceNameEditorFull" data-tip="Type to change the full name" autocomplete="off" spellcheck="false" style="width: 11em">
                 <span id="provinceNameEditorFullRegenerate" data-tip="Click to re-generate full name" class="icon-arrows-cw pointer"></span>
             </div>
         </div>
@@ -3230,16 +3230,16 @@
 
             <div id="namesbaseBody">
                 <span>Names data:</span><br>
-                <textarea id="namesbaseTextarea" data-base="0" rows=12 data-tip="Names data: a comma separated list of source names used for names generation" placeholder="Provide a names data: a comma separated list of source names" autocorrect="off" spellcheck="false"></textarea>
+                <textarea id="namesbaseTextarea" data-base="0" rows=12 data-tip="Names data: a comma separated list of source names used for names generation" placeholder="Provide a names data: a comma separated list of source names" autocomplete="off" spellcheck="false"></textarea>
                 <br>
                 <div>
                     <span>Name: </span>
-                    <input id="namesbaseName" data-tip="Type to change a base name" placeholder="Base name" autocorrect="off" spellcheck="false" style="width:12em" />
+                    <input id="namesbaseName" data-tip="Type to change a base name" placeholder="Base name" autocomplete="off" spellcheck="false" style="width:12em" />
                     <span>Length: </span>
                     <input id="namesbaseMin" data-tip="Recommended minimum name length" type="number" min=2 max=100>
                     <input id="namesbaseMax" data-tip="Recommended maximum name length" type="number" min=2 value=10>
                     <span>Double: </span>
-                    <input id="namesbaseDouble" data-tip="Populate with letters that can used twice in a row (geminates)" autocorrect="off" spellcheck="false" style="width:10em">
+                    <input id="namesbaseDouble" data-tip="Populate with letters that can used twice in a row (geminates)" autocomplete="off" spellcheck="false" style="width:10em">
                 </div>
                 <fieldset>
                     <legend>Generated examples: </legend>
@@ -3303,7 +3303,7 @@
                 <span>Select object: </span>
                 <select id="notesSelect" data-tip="Select object" style="width: 12em"></select>
                 <span>Object name: </span>
-                <input id="notesName" data-tip="Type to change object name" autocorrect="off" spellcheck="false" style="width: 16em">
+                <input id="notesName" data-tip="Type to change object name" autocomplete="off" spellcheck="false" style="width: 16em">
             </div>
             <div id="notesText" data-tip="Type and style object description" style="padding: .4em 0"></div>
             <div>
@@ -3624,7 +3624,7 @@
 
             <div id="styleSaverBody" style="padding:2px 0">
                 <span>Style JSON:</span>
-                <textarea id="styleSaverJSON" rows="18" data-tip="Style JSON is getting formed based the current settings, but can be entered manually" placeholder="Paste any valid style data in JSON format" autocorrect="off" spellcheck="false"></textarea>
+                <textarea id="styleSaverJSON" rows="18" data-tip="Style JSON is getting formed based the current settings, but can be entered manually" placeholder="Paste any valid style data in JSON format" autocomplete="off" spellcheck="false"></textarea>
             </div>
 
             <div id="styleSaverBottom">
