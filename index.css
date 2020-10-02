@@ -1178,14 +1178,14 @@ div.slider .ui-slider-handle {
 	width: 9em;
 }
 
-#loadDropdown>div,
-#saveDropdown>div {
+#loadDropdown > div,
+#saveDropdown > div {
 	padding: 2px 4px;
 	cursor: pointer;
 }
 
-#loadDropdown>div:hover,
-#saveDropdown>div:hover {
+#loadDropdown > div:hover,
+#saveDropdown > div:hover {
 	color: white;
 }
 
