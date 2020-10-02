@@ -2050,46 +2050,46 @@
             <div id="worldControls">
                 <div>
                     <i data-locked=0 id="lock_temperatureEquator" class="icon-lock-open"></i>
-                    <label data-tip="Set temperature at equator">
+                    <div data-tip="Set temperature at equator">
                         <i>Equator:</i>
                         <input id="temperatureEquatorInput" data-stored="temperatureEquator" type="number" min="-30" max="30">°C =
                         <span id="temperatureEquatorF"></span>°F
                         <input id="temperatureEquatorOutput" data-stored="temperatureEquator" type="range" min="-30" max="30" />
-                    </label>
+                    </div>
                 </div>
                 <div>
                     <i data-locked=0 id="lock_temperaturePole" class="icon-lock-open"></i>
-                    <label data-tip="Set temperature near poles">
+                    <div data-tip="Set temperature near poles">
                         <i>Poles:</i>
                         <input id="temperaturePoleInput" data-stored="temperaturePole" type="number" min="-30" max="30">°C =
                         <span id="temperaturePoleF"></span>°F
                         <input id="temperaturePoleOutput" data-stored="temperaturePole" type="range" min="-30" max="30" />
-                    </label>
+                    </div>
                 </div>
                 <div>
                     <i data-locked=0 id="lock_mapSize" class="icon-lock-open"></i>
-                    <label data-tip="Set map size relative to the world size">
+                    <div data-tip="Set map size relative to the world size">
                         <i>Map size:</i>
                         <input id="mapSizeInput" data-stored="mapSize" type="number" min="1" max="100">%
                         <input id="mapSizeOutput" data-stored="mapSize" type="range" min="1" max="100">
-                    </label>
+                    </div>
                 </div>
                 <div>
                     <i data-locked=0 id="lock_latitude" class="icon-lock-open"></i>
-                    <label data-tip="Set a North-South map shift">
+                    <div data-tip="Set a North-South map shift">
                         <i>Latitudes:</i>
                         <input id="latitudeInput" data-stored="latitude" type="number" min="0" max="100" step=1>
                         <br><i>N</i><input id="latitudeOutput" data-stored="latitude" type="range" min="0" max="100" step=1 style="width: 10.3em"><i>S</i>
-                    </label>
+                    </div>
                 </div>
 
                 <div>
-                    <label data-tip="Set precipitation - water amount clouds can bring. Defines rivers and biomes generation">
+                    <div data-tip="Set precipitation - water amount clouds can bring. Defines rivers and biomes generation">
                         <i data-locked=0 id="lock_prec" class="icon-lock-open"></i>
                         <i>Precipitation:</i>
                         <input id="precInput" data-stored="prec" type="number">%
                         <input id="precOutput" data-stored="prec" type="range" min="0" max="500" value="50">
-                    </label>
+                    </div>
                 </div>
                 <div data-tip="Canvas size. Can be changed in general options on new map generation">
                     <i>Canvas size:</i><br>
@@ -2897,11 +2897,11 @@
                 <button id="biomesPercentage" data-tip="Toggle percentage / absolute values views" class="icon-percent"></button>
                 <button id="biomesManually" data-tip="Manually re-assign biomes to not follow the default moisture/temperature pattern" class="icon-brush"></button>
                 <div id="biomesManuallyButtons" style="display: none">
-                    <label data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
+                    <div data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
                         Brush radius:
                         <input id="biomesManuallyBrush" oninput="tip('Brush radius: '+this.value); biomesManuallyBrushNumber.value = this.value" type="range" min="5" max="99" value="15" style="width:4em">
                         <input id="biomesManuallyBrushNumber" oninput="tip('Brush radius: '+this.value); biomesManuallyBrush.value = this.value" type="number" min="5" max="99" value="15">
-                    </label><br>
+                    </div><br>
                     <button id="biomesManuallyApply" data-tip="Apply current assignment" class="icon-check"></button>
                     <button id="biomesManuallyCancel" data-tip="Cancel assignment" class="icon-cancel"></button>
                 </div>
@@ -2966,11 +2966,11 @@
 
                 <button id="statesManually" data-tip="Manually re-assign states" class="icon-brush"></button>
                 <div id="statesManuallyButtons" style="display: none">
-                    <label data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
+                    <div data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
                         Brush size:
                         <input id="statesManuallyBrush" oninput="tip('Brush size: '+this.value); statesManuallyBrushNumber.value = this.value" type="range" min=5 max=99 value=15 style="width:5em">
                         <input id="statesManuallyBrushNumber" oninput="tip('Brush size: '+this.value); statesManuallyBrush.value = this.value" type="number" min=5 max=99 value=15>
-                    </label><br>
+                    </div><br>
                     <button id="statesManuallyApply" data-tip="Apply assignment" class="icon-check"></button>
                     <button id="statesManuallyCancel" data-tip="Cancel assignment" class="icon-cancel"></button>
                 </div>
@@ -3084,11 +3084,11 @@
 
                 <button id="provincesManually" data-tip="Manually re-assign provinces" class="icon-brush"></button>
                 <div id="provincesManuallyButtons" style="display: none">
-                    <label data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
+                    <div data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
                         Brush size:
                         <input id="provincesManuallyBrush" oninput="tip('Brush size: '+this.value); provincesManuallyBrushNumber.value = this.value" type="range" min=5 max=99 value=8 style="width:5em">
                         <input id="provincesManuallyBrushNumber" oninput="tip('Brush size: '+this.value); provincesManuallyBrush.value = this.value" type="number" min=5 max=99 value=8>
-                    </label><br>
+                    </div><br>
                     <button id="provincesManuallyApply" data-tip="Apply assignment" class="icon-check"></button>
                     <button id="provincesManuallyCancel" data-tip="Cancel assignment" class="icon-cancel"></button>
                 </div>
@@ -3203,11 +3203,11 @@
                 <button id="culturesHeirarchy" data-tip="Show cultures hierarchy tree" class="icon-sitemap"></button>
                 <button id="culturesManually" data-tip="Manually re-assign cultures" class="icon-brush"></button>
                 <div id="culturesManuallyButtons" style="display: none">
-                    <label data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
+                    <div data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
                         Brush size:
                         <input id="culturesManuallyBrush" oninput="tip('Brush size: '+this.value); culturesManuallyBrushNumber.value = this.value" type="range" min=5 max=99 value=15 style="width:7em">
                         <input id="culturesManuallyBrushNumber" oninput="tip('Brush size: '+this.value); culturesManuallyBrush.value = this.value" type="number" min=5 max=99 value=15>
-                    </label><br>
+                    </div><br>
                     <button id="culturesManuallyApply" data-tip="Apply assignment" class="icon-check"></button>
                     <button id="culturesManuallyCancel" data-tip="Cancel assignment" class="icon-cancel"></button>
                 </div>
@@ -3345,11 +3345,11 @@
 
                 <button id="religionsManually" data-tip="Manually re-assign religions" class="icon-brush"></button>
                 <div id="religionsManuallyButtons" style="display: none">
-                    <label data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
+                    <div data-tip="Change brush size. Shortcut: + (increase), – (decrease)" class="italic">
                         Brush size:
                         <input id="religionsManuallyBrush" oninput="tip('Brush size: '+this.value); religionsManuallyBrushNumber.value = this.value" type="range" min=5 max=99 value=15 style="width:7em">
                         <input id="religionsManuallyBrushNumber" oninput="tip('Brush size: '+this.value); religionsManuallyBrush.value = this.value" type="number" min=5 max=99 value=15>
-                    </label><br>
+                    </div><br>
                     <button id="religionsManuallyApply" data-tip="Apply assignment" class="icon-check"></button>
                     <button id="religionsManuallyCancel" data-tip="Cancel assignment" class="icon-cancel"></button>
                 </div>
