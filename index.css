@@ -14,10 +14,6 @@ body {
 	height: 100%;
 }
 
-t {
-	pointer-events: none;
-}
-
 input, select, button {
 	font-size: 1em;
 }
@@ -312,7 +308,7 @@ text.drag {
 	z-index: 2;
 }
 
-div.tab > button#optionsHide {
+.tab > button#optionsHide {
 	width: 7%;
 	height: 100%;
 	font-family: Times New Roman, Arial;
@@ -339,6 +335,10 @@ div.tab > button#optionsHide {
 	border-bottom: 1px solid #5d4651;
 	height: 2.2em;
 }
+
+    .tab span {
+        pointer-events: none;
+    }
 
 #options p {
 	font-style: italic;

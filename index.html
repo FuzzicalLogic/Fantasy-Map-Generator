@@ -994,19 +994,19 @@
             <button id="regenerate" data-t="tipRegenerate" data-tip="Click to generate a new map. Shortcut: F2" onclick="regeneratePrompt()" class="options" style="display:none; padding:.6em 1em"><t data-t="newMap">New Map!</t></button>
         </div>
 
-        <div id="options" style="display:none">
+        <section id="options" style="display:none">
             <div class="drag-trigger" data-t="optionsDragTrigger" data-tip="Drag to move options pane"></div>
 
-            <div class="tab">
+            <header class="tab">
                 <button id="optionsHide" data-t="optionsHide" data-tip="Click to hide options pane. Shortcut: Tab to close this or Esc to close all dialogs" class="options" onclick="hideOptions(event)">◄</button>
                 <button id="layersTab" data-t="layersTab" data-tip="Click to change map layers" class="options active"><span data-t="layers">Layers</span></button>
                 <button id="styleTab" data-t="styleTab" data-tip="Click to open style editor" class="options"><span data-t="style">Style</span></button>
                 <button id="optionsTab" data-t="optionsTab" data-tip="Click to change generation and UI options" class="options"><span data-t="options">Options</span></button>
                 <button id="toolsTab" data-t="toolsTab" data-tip="Click to open tools menu" class="options"><span data-t="tools">Tools</span></button>
                 <button id="aboutTab" data-t="aboutTab" data-tip="Click to see Generator info" class="options"><span data-t="about">About</span></button>
-            </div>
+            </header>
 
-            <div id="layersContent" class="tabcontent" style="display: block">
+            <section id="layersContent" class="tabcontent" style="display: block">
                 <p data-tip="Select a map layers preset" style="display: inline-block;">Layers preset:</p>
                 <select data-tip="Select a map layers preset" id="layersPreset" onchange="changePreset(this.value)" style="width:45%">
                     <option value="political" selected>Political map</option>
@@ -1060,9 +1060,9 @@
                     <button data-tip="Map presentation in 3D scene. Works best for heightmap. Cannot be used for editing" id="viewMesh">3D scene</button>
                     <button data-tip="Project map on globe. Cannot be used for editing" id="viewGlobe">Globe</button>
                 </div>
-            </div>
+            </section>
 
-            <div id="styleContent" class="tabcontent">
+            <section id="styleContent" class="tabcontent">
                 <p data-tip="Select a style preset" style="display: inline-block">Style preset:</p>
                 <select data-tip="Select a style preset" id="stylePreset" onchange="changeStylePreset(this.value)" style="width:45%">
                     <option value="styleDefault" data-system=1 selected>Default</option>
@@ -1620,9 +1620,9 @@
                     <button id="tint" class="radio">Tint</button>
                 </div>
 
-            </div>
+            </section>
 
-            <div id="optionsContent" class="tabcontent">
+            <section id="optionsContent" class="tabcontent">
                 <p data-tip="Map generation settings. Generate a new map to apply the settings">Map settings (new map to apply):</p>
                 <table>
 
@@ -1905,9 +1905,9 @@
                 <button id="configureWorld" data-tip="Click to open world configurator to setup map position on Globe and World climate" onclick="editWorld()">Configure World</button>
                 <button id="optionsReset" data-tip="Click to restore default options (page will be reloaded)" onclick="restoreDefaultOptions()">Reset to defaults</button>
 
-            </div>
+            </section>
 
-            <div id="toolsContent" class="tabcontent">
+            <nav id="toolsContent" class="tabcontent">
                 <div>
                     <p>Click to configure:</p>
                     <button id="editHeightmapButton" data-tip="Click to open Heightmap customization menu. Shortcut: Shift + H">Heightmap</button>
@@ -1960,9 +1960,9 @@
                     <button id="addRoute" data-tip="Click on map to place a route. Shortcut: Shift + 4">Route</button>
                     <button id="addMarker" data-tip="Click on map to place a marker. Hold Shift to add multiple. Shortcut: Shift + 5">Marker</button>
                 </div>
-            </div>
+            </nav>
 
-            <div id="customizationMenu" class="tabcontent">
+            <section id="customizationMenu" class="tabcontent">
                 <p>Heightmap customization tools:</p>
                 <div id="customizeTools">
                     <button data-tip="Display brushes panel" id="paintBrushes">Paint Brushes</button>
@@ -1997,9 +1997,9 @@
                     <span>Cell: </span><span id="heightmapInfoCell"></span><br>
                     <span>Height: </span><span id="heightmapInfoHeight"></span>
                 </div>
-            </div>
+            </section>
 
-            <div id="aboutContent" class="tabcontent">
+            <aside id="aboutContent" class="tabcontent">
                 <p><a href="https://github.com/Azgaar/Fantasy-Map-Generator" target="_blank">Fantasy Map Generator</a> is a free <a href="https://github.com/Azgaar/Fantasy-Map-Generator/blob/master/LICENSE" target="_blank">open source</a> tool which procedurally generates fantasy maps. You may use auto-generated maps as they are, edit them or even create a new map from scratch. Check out the <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Quick-Start-Tutorial" target="_blank">quick start tutorial</a>, <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Q&A" target="_blank">Q&A</a> and <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Hotkeys" target="_blank">hotkeys</a> for guidance.</p>
                 <p>Join our <a href='https://discordapp.com/invite/X7E84HU' target='_blank'>Discord server</a> and <a href="https://www.reddit.com/r/FantasyMapGenerator/" target="_blank">Reddit community</a> to ask questions, get help and share maps.</p>
                 <p>The project is under active development. Creator and main maintainer: Azgaar. To track the development progress see the <a href="https://trello.com/b/7x832DG4/fantasy-map-generator" target="_blank">devboard</a>. For older versions see the <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Changelog" target="_blank">changelog</a>. Please report bugs <a href="https://github.com/Azgaar/Fantasy-Map-Generator/issues" target="_blank">here</a>. You can also contact me directly via <a href="mailto:azgaar.fmg@yandex.by" target="_blank">email</a>.</p>
@@ -2024,16 +2024,16 @@
                     <li><a href="http://pinterest.com/pin/create/button/?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Pin it"><img alt="Pin it" src="images/Pinterest.png" /></a></li>
                     <li><a href="http://www.reddit.com/submit?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Submit to Reddit"><img alt="Submit to Reddit" src="images/Reddit.png" /></a></li>
                 </ul>
-            </div>
+            </aside>
 
-            <div id="sticked">
+            <footer id="sticked">
                 <button id="newMapButton" data-tip="Generate a new map based on options. Shortcut: F2">New Map</button>
                 <button id="saveButton" data-tip="Select format to save map">Save</button>
                 <button id="loadButton" data-tip="Load fully functional map in a .map format">Load</button>
                 <button id="zoomReset" data-tip="Reset map zoom. Shortcut: 0">Reset Zoom</button>
-            </div>
+            </footer>
 
-        </div>
+        </section>
 
     </div>
 

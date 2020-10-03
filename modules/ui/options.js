@@ -44,7 +44,7 @@ export function initialize() {
     });
 
     // Activate options tab on click
-    document.getElementById("options").querySelector("div.tab").addEventListener("click", function (event) {
+    document.getElementById("options").querySelector(".tab").addEventListener("click", function (event) {
         if (event.target.tagName !== "BUTTON") return;
         const id = event.target.id;
         const active = document.getElementById("options").querySelector(".tab > button.active");
