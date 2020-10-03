@@ -1,5 +1,6 @@
 import {
     pack, grid, notes,
+    biomesData,
     resetZoom
 } from "../../main.js";
 
