@@ -1,3 +1,5 @@
+import { burgLabels, elSelected } from "../../main.js";
+
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
@@ -89,44 +91,9 @@ export function editBurg(id) {
         });
     }
 
-    function dragBurgLabel() {
-        const tr = parseTransform(this.getAttribute("transform"));
-        const dx = +tr[0] - d3.event.x, dy = +tr[1] - d3.event.y;
-
-        d3.event.on("drag", function () {
-            const x = d3.event.x, y = d3.event.y;
-            this.setAttribute("transform", `translate(${(dx + x)},${(dy + y)})`);
-            tip('Use dragging for fine-tuning only, to actually move burg use "Relocate" button', false, "warning");
-        });
-    }
-
-    function showGroupSection() {
-        document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "none");
-        document.getElementById("burgGroupSection").style.display = "inline-block";
-    }
-
-    function hideGroupSection() {
-        document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "inline-block");
-        document.getElementById("burgGroupSection").style.display = "none";
-        document.getElementById("burgInputGroup").style.display = "none";
-        document.getElementById("burgInputGroup").value = "";
-        document.getElementById("burgSelectGroup").style.display = "inline-block";
-    }
-
     function changeGroup() {
         const id = +elSelected.attr("data-id");
         moveBurgToGroup(id, this.value);
-    }
-
-    function toggleNewGroupInput() {
-        if (burgInputGroup.style.display === "none") {
-            burgInputGroup.style.display = "inline-block";
-            burgInputGroup.focus();
-            burgSelectGroup.style.display = "none";
-        } else {
-            burgInputGroup.style.display = "none";
-            burgSelectGroup.style.display = "inline-block";
-        }
     }
 
     function createNewGroup() {
@@ -242,11 +209,6 @@ export function editBurg(id) {
         changeName();
     }
 
-    function changePopulation() {
-        const id = +elSelected.attr("data-id");
-        pack.burgs[id].population = rn(burgPopulation.value / populationRate.value / urbanization.value, 4);
-    }
-
     function toggleFeature() {
         const id = +elSelected.attr("data-id");
         const b = pack.burgs[id];
@@ -262,30 +224,6 @@ export function editBurg(id) {
         else document.getElementById("burgEditAnchorStyle").style.display = "none";
     }
 
-    function showStyleSection() {
-        document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "none");
-        document.getElementById("burgStyleSection").style.display = "inline-block";
-    }
-
-    function hideStyleSection() {
-        document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "inline-block");
-        document.getElementById("burgStyleSection").style.display = "none";
-    }
-
-    function editGroupLabelStyle() {
-        const g = elSelected.node().parentNode.id;
-        editStyle("labels", g);
-    }
-
-    function editGroupIconStyle() {
-        const g = elSelected.node().parentNode.id;
-        editStyle("burgIcons", g);
-    }
-
-    function editGroupAnchorStyle() {
-        const g = elSelected.node().parentNode.id;
-        editStyle("anchors", g);
-    }
 
     function openInMFCG(event) {
         const id = elSelected.attr("data-id");
@@ -411,11 +349,6 @@ export function editBurg(id) {
         if (d3.event.shiftKey === false) toggleRelocateBurg();
     }
 
-    function editBurgLegend() {
-        const id = elSelected.attr("data-id");
-        const name = elSelected.text();
-        editNotes("burg" + id, name);
-    }
 
     function removeSelectedBurg() {
         const id = +elSelected.attr("data-id");
@@ -441,11 +374,84 @@ export function editBurg(id) {
             });
         }
     }
+}
 
-    function closeBurgEditor() {
-        document.getElementById("burgRelocate").classList.remove("pressed");
-        burgLabels.selectAll("text").call(d3.drag().on("drag", null)).classed("draggable", false);
-        unselect();
+function dragBurgLabel() {
+    const tr = parseTransform(this.getAttribute("transform"));
+    const dx = +tr[0] - d3.event.x, dy = +tr[1] - d3.event.y;
+
+    d3.event.on("drag", function () {
+        const x = d3.event.x, y = d3.event.y;
+        this.setAttribute("transform", `translate(${(dx + x)},${(dy + y)})`);
+        tip('Use dragging for fine-tuning only, to actually move burg use "Relocate" button', false, "warning");
+    });
+}
+
+function changePopulation() {
+    const id = +elSelected.attr("data-id");
+    pack.burgs[id].population = rn(burgPopulation.value / populationRate.value / urbanization.value, 4);
+}
+
+function toggleNewGroupInput() {
+    let burgInputGroup = document.getElementById("burgInputGroup"),
+        burgInputGroup = document.getElementById("burgSelectGroup");
+
+    if (burgInputGroup.style.display === "none") {
+        burgInputGroup.style.display = "inline-block";
+        burgInputGroup.focus();
+        burgSelectGroup.style.display = "none";
+    } else {
+        burgInputGroup.style.display = "none";
+        burgSelectGroup.style.display = "inline-block";
     }
+}
 
+function showStyleSection() {
+    document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "none");
+    document.getElementById("burgStyleSection").style.display = "inline-block";
+}
+
+function hideStyleSection() {
+    document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "inline-block");
+    document.getElementById("burgStyleSection").style.display = "none";
+}
+
+function editGroupLabelStyle() {
+    const g = elSelected.node().parentNode.id;
+    editStyle("labels", g);
+}
+
+function editGroupIconStyle() {
+    const g = elSelected.node().parentNode.id;
+    editStyle("burgIcons", g);
+}
+
+function editGroupAnchorStyle() {
+    const g = elSelected.node().parentNode.id;
+    editStyle("anchors", g);
+}
+
+function editBurgLegend() {
+    const id = elSelected.attr("data-id");
+    const name = elSelected.text();
+    editNotes("burg" + id, name);
+}
+
+function showGroupSection() {
+    document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "none");
+    document.getElementById("burgGroupSection").style.display = "inline-block";
+}
+
+function hideGroupSection() {
+    document.querySelectorAll("#burgBottom > button").forEach(el => el.style.display = "inline-block");
+    document.getElementById("burgGroupSection").style.display = "none";
+    document.getElementById("burgInputGroup").style.display = "none";
+    document.getElementById("burgInputGroup").value = "";
+    document.getElementById("burgSelectGroup").style.display = "inline-block";
+}
+
+function closeBurgEditor() {
+    document.getElementById("burgRelocate").classList.remove("pressed");
+    burgLabels.selectAll("text").call(d3.drag().on("drag", null)).classed("draggable", false);
+    unselect();
 }
