@@ -328,10 +328,22 @@ export function redefineElements() {
     burgLabels = labels.select("#burgLabels");
 }
 
-export function loadMapFromURL(maplink, random) {
+export async function loadMapFromURL(maplink, random) {
     const URL = decodeURIComponent(maplink);
 
-    fetch(URL, { method: 'GET', mode: 'cors' })
+    try {
+        let response = await fetch(URL, { method: 'GET', mode: 'cors' });
+        if (!response.ok)
+            throw new Error("Cannot load map from URL");
+        uploadMap(response.blob());
+    }
+    catch (err) {
+        showUploadErrorMessage(error.message, URL, random);
+        if (random)
+            generateMapOnLoad();
+    }
+
+    /*fetch(URL, { method: 'GET', mode: 'cors' })
         .then(response => {
             if (response.ok) return response.blob();
             throw new Error("Cannot load map from URL");
@@ -339,7 +351,7 @@ export function loadMapFromURL(maplink, random) {
         .catch(error => {
             showUploadErrorMessage(error.message, URL, random);
             if (random) generateMapOnLoad();
-        });
+        });*/
 }
 
 function showUploadErrorMessage(error, URL, random) {
