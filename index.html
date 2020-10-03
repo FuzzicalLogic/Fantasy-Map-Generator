@@ -987,14 +987,14 @@
         <p id="loading-text"><span data-t="loading">LOADING</span><span>.</span><span>.</span><span>.</span></p>
     </div>
 
-    <div id="optionsContainer" style="opacity:0">
+    <section id="optionsContainer" style="opacity:0">
 
         <div id="collapsible">
             <button id="optionsTrigger" data-t="tipOptionsTrigger" data-tip="Click to show options pane. Shortcut: Tab" class="options glow" onclick="showOptions(event)" style="padding:.6em .45em">►</button>
             <button id="regenerate" data-t="tipRegenerate" data-tip="Click to generate a new map. Shortcut: F2" onclick="regeneratePrompt()" class="options" style="display:none; padding:.6em 1em"><t data-t="newMap">New Map!</t></button>
         </div>
 
-        <section id="options" style="display:none">
+        <div id="options" style="display:none">
             <div class="drag-trigger" data-t="optionsDragTrigger" data-tip="Drag to move options pane"></div>
 
             <header class="tab">
@@ -2033,9 +2033,9 @@
                 <button id="zoomReset" data-tip="Reset map zoom. Shortcut: 0">Reset Zoom</button>
             </footer>
 
-        </section>
+        </div>
 
-    </div>
+    </section>
 
     <div id="exitCustomization">
         <div data-tip="Drag to move the pane">
