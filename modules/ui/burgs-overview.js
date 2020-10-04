@@ -123,6 +123,7 @@ function burgsOverviewAddLines() {
         <span data-tip="Remove burg" class="icon-trash-empty"></span>
       </div>`;
     }
+    body.insertAdjacentHTML("beforeend", lines);
 
     // update footer
     burgsFooterBurgs.innerHTML = filtered.length;
