@@ -1,4 +1,7 @@
-import { modules, pack, viewbox, burgLabels } from "../../main.js";
+import {
+    modules, pack, viewbox, burgLabels,
+    zoomTo
+} from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import { editBurg } from "./burg-editor.js";
