@@ -62,26 +62,46 @@ export function editStates() {
 
     const body = getBody();
     body.addEventListener("click", function (ev) {
-        const el = ev.target, cl = el.classList, line = el.parentNode, state = +line.dataset.id;
-        if (cl.contains("fillRect")) stateChangeFill(el); else
-            if (cl.contains("name")) editStateName(state); else
-                if (cl.contains("icon-coa")) stateOpenCOA(ev, state); else
-                    if (cl.contains("icon-star-empty")) stateCapitalZoomIn(state); else
-                        if (cl.contains("culturePopulation")) changePopulation(state); else
-                            if (cl.contains("icon-pin")) toggleFog(state, cl); else
-                                if (cl.contains("icon-trash-empty")) stateRemovePrompt(state);
+        const el = ev.target,
+            { classList: cl, parentNode: line } = el,
+            state = +line.dataset.id;
+
+        if (cl.contains("fillRect"))
+            stateChangeFill(el);
+        else if (cl.contains("name"))
+            editStateName(state);
+        else if (cl.contains("icon-coa"))
+            stateOpenCOA(ev, state);
+        else if (cl.contains("icon-star-empty"))
+            stateCapitalZoomIn(state);
+        else if (cl.contains("culturePopulation"))
+            changePopulation(state);
+        else if (cl.contains("icon-pin"))
+            toggleFog(state, cl);
+        else if (cl.contains("icon-trash-empty"))
+            stateRemovePrompt(state);
     });
 
     body.addEventListener("input", function (ev) {
-        const el = ev.target, cl = el.classList, line = el.parentNode, state = +line.dataset.id;
-        if (cl.contains("stateCapital")) stateChangeCapitalName(state, line, el.value); else
-            if (cl.contains("cultureType")) stateChangeType(state, line, el.value); else
-                if (cl.contains("statePower")) stateChangeExpansionism(state, line, el.value);
+        const el = ev.target,
+            { classList: cl, parentNode: line } = el,
+            state = +line.dataset.id;
+
+        if (cl.contains("stateCapital"))
+            stateChangeCapitalName(state, line, el.value);
+        else if (cl.contains("cultureType"))
+            stateChangeType(state, line, el.value);
+        else if (cl.contains("statePower"))
+            stateChangeExpansionism(state, line, el.value);
     });
 
     body.addEventListener("change", function (ev) {
-        const el = ev.target, cl = el.classList, line = el.parentNode, state = +line.dataset.id;
-        if (cl.contains("stateCulture")) stateChangeCulture(state, line, el.value);
+        const el = ev.target,
+            { classList: cl, parentNode: line } = el,
+            state = +line.dataset.id;
+
+        if (cl.contains("stateCulture"))
+            stateChangeCulture(state, line, el.value);
     });
 }
 
