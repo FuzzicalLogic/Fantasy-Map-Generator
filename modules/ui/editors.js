@@ -4,7 +4,7 @@ import {
     defs, 
     viewbox, legend, fogging,
     zoom,
-    anchors,
+    burgIcons, anchors, burgLabels,
     elSelected
 } from "../../main.js";
 

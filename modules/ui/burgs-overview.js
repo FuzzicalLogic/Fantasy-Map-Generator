@@ -1,6 +1,6 @@
 import {
     modules, pack,
-    viewbox, mapCoordinates,
+    viewbox, mapCoordinates, graphWidth, graphHeight,
     burgLabels,
     zoomTo
 } from "../../main.js";
