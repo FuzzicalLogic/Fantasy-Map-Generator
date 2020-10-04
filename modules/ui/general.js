@@ -1,4 +1,5 @@
 import {
+    graphWidth, graphHeight,
     pack, grid, notes,
     biomesData,
     resetZoom
