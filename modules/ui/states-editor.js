@@ -18,6 +18,9 @@ import {
     drawProvinces, toggleTexture, layerIsOn
 } from "./layers.js";
 
+const getById = id => document.getElementById(id);
+const getBody = () => getById("statesBodySection");
+
 export function editStates() {
     if (customization) return;
     closeDialogs("#statesEditor, .stable");
@@ -28,7 +31,7 @@ export function editStates() {
     if (layerIsOn("toggleReligions")) toggleReligions();
     if (layerIsOn("toggleTexture")) toggleTexture();
 
-    const body = document.getElementById("statesBodySection");
+    
     refreshStatesEditor();
 
     if (modules.editStates) return;
@@ -40,23 +43,24 @@ export function editStates() {
     });
 
     // add listeners
-    document.getElementById("statesEditorRefresh").addEventListener("click", refreshStatesEditor);
-    document.getElementById("statesEditStyle").addEventListener("click", () => editStyle("regions"));
-    document.getElementById("statesLegend").addEventListener("click", toggleLegend);
-    document.getElementById("statesPercentage").addEventListener("click", togglePercentageMode);
-    document.getElementById("statesChart").addEventListener("click", showStatesChart);
-    document.getElementById("statesRegenerate").addEventListener("click", openRegenerationMenu);
-    document.getElementById("statesRegenerateBack").addEventListener("click", exitRegenerationMenu);
-    document.getElementById("statesRecalculate").addEventListener("click", () => recalculateStates(true));
-    document.getElementById("statesRandomize").addEventListener("click", randomizeStatesExpansion);
-    document.getElementById("statesNeutral").addEventListener("input", () => recalculateStates(false));
-    document.getElementById("statesNeutralNumber").addEventListener("change", () => recalculateStates(false));
-    document.getElementById("statesManually").addEventListener("click", enterStatesManualAssignent);
-    document.getElementById("statesManuallyApply").addEventListener("click", applyStatesManualAssignent);
-    document.getElementById("statesManuallyCancel").addEventListener("click", () => exitStatesManualAssignment());
-    document.getElementById("statesAdd").addEventListener("click", enterAddStateMode);
-    document.getElementById("statesExport").addEventListener("click", downloadStatesData);
+    getById("statesEditorRefresh").addEventListener("click", refreshStatesEditor);
+    getById("statesEditStyle").addEventListener("click", () => editStyle("regions"));
+    getById("statesLegend").addEventListener("click", toggleLegend);
+    getById("statesPercentage").addEventListener("click", togglePercentageMode);
+    getById("statesChart").addEventListener("click", showStatesChart);
+    getById("statesRegenerate").addEventListener("click", openRegenerationMenu);
+    getById("statesRegenerateBack").addEventListener("click", exitRegenerationMenu);
+    getById("statesRecalculate").addEventListener("click", () => recalculateStates(true));
+    getById("statesRandomize").addEventListener("click", randomizeStatesExpansion);
+    getById("statesNeutral").addEventListener("input", () => recalculateStates(false));
+    getById("statesNeutralNumber").addEventListener("change", () => recalculateStates(false));
+    getById("statesManually").addEventListener("click", enterStatesManualAssignent);
+    getById("statesManuallyApply").addEventListener("click", applyStatesManualAssignent);
+    getById("statesManuallyCancel").addEventListener("click", () => exitStatesManualAssignment());
+    getById("statesAdd").addEventListener("click", enterAddStateMode);
+    getById("statesExport").addEventListener("click", downloadStatesData);
 
+    const body = getBody();
     body.addEventListener("click", function (ev) {
         const el = ev.target, cl = el.classList, line = el.parentNode, state = +line.dataset.id;
         if (cl.contains("fillRect")) stateChangeFill(el); else
@@ -155,6 +159,8 @@ function statesEditorAddLines() {
         <span data-tip="Remove the state" class="icon-trash-empty hide"></span>
       </div>`;
     }
+
+    let body = getBody();
     body.innerHTML = lines;
 
     // update footer
@@ -218,10 +224,11 @@ function stateChangeFill(el) {
     const state = +el.parentNode.parentNode.dataset.id;
 
     const callback = function (fill) {
+        const body = getBody();
         el.setAttribute("fill", fill);
         pack.states[state].color = fill;
-        statesBody.select("#state" + state).attr("fill", fill);
-        statesBody.select("#state-gap" + state).attr("stroke", fill);
+        body.select("#state" + state).attr("fill", fill);
+        body.select("#state-gap" + state).attr("stroke", fill);
         const halo = d3.color(fill) ? d3.color(fill).darker().hex() : "#666666";
         statesHalo.select("#state-border" + state).attr("stroke", halo);
 
@@ -245,10 +252,10 @@ function editStateName(state) {
     }
 
     const s = pack.states[state];
-    document.getElementById("stateNameEditor").dataset.state = state;
-    document.getElementById("stateNameEditorShort").value = s.name || "";
+    getById("stateNameEditor").dataset.state = state;
+    getById("stateNameEditorShort").value = s.name || "";
     applyOption(stateNameEditorSelectForm, s.formName);
-    document.getElementById("stateNameEditorFull").value = s.fullName || "";
+    getById("stateNameEditorFull").value = s.fullName || "";
 
     $("#stateNameEditor").dialog({
         resizable: false, title: "Change state name", width: "22em", buttons: {
@@ -261,23 +268,23 @@ function editStateName(state) {
     modules.editStateName = true;
 
     // add listeners
-    document.getElementById("stateNameEditorShortCulture").addEventListener("click", regenerateShortNameCuture);
-    document.getElementById("stateNameEditorShortRandom").addEventListener("click", regenerateShortNameRandom);
-    document.getElementById("stateNameEditorAddForm").addEventListener("click", addCustomForm);
-    document.getElementById("stateNameEditorCustomForm").addEventListener("change", addCustomForm);
-    document.getElementById("stateNameEditorFullRegenerate").addEventListener("click", regenerateFullName);
+    getById("stateNameEditorShortCulture").addEventListener("click", regenerateShortNameCuture);
+    getById("stateNameEditorShortRandom").addEventListener("click", regenerateShortNameRandom);
+    getById("stateNameEditorAddForm").addEventListener("click", addCustomForm);
+    getById("stateNameEditorCustomForm").addEventListener("change", addCustomForm);
+    getById("stateNameEditorFullRegenerate").addEventListener("click", regenerateFullName);
 
     function regenerateShortNameCuture() {
         const state = +stateNameEditor.dataset.state;
         const culture = pack.states[state].culture;
         const name = Names.getState(Names.getCultureShort(culture), culture);
-        document.getElementById("stateNameEditorShort").value = name;
+        getById("stateNameEditorShort").value = name;
     }
 
     function regenerateShortNameRandom() {
         const base = rand(nameBases.length - 1);
         const name = Names.getState(Names.getBase(base), undefined, base);
-        document.getElementById("stateNameEditorShort").value = name;
+        getById("stateNameEditorShort").value = name;
     }
 
     function addCustomForm() {
@@ -290,9 +297,9 @@ function editStateName(state) {
     }
 
     function regenerateFullName() {
-        const short = document.getElementById("stateNameEditorShort").value;
-        const form = document.getElementById("stateNameEditorSelectForm").value;
-        document.getElementById("stateNameEditorFull").value = getFullName();
+        const short = getById("stateNameEditorShort").value;
+        const form = getById("stateNameEditorSelectForm").value;
+        getById("stateNameEditorFull").value = getFullName();
 
         function getFullName() {
             if (!form) return short;
@@ -304,9 +311,9 @@ function editStateName(state) {
     }
 
     function applyNameChange(s) {
-        const nameInput = document.getElementById("stateNameEditorShort");
-        const formSelect = document.getElementById("stateNameEditorSelectForm");
-        const fullNameInput = document.getElementById("stateNameEditorFull");
+        const nameInput = getById("stateNameEditorShort");
+        const formSelect = getById("stateNameEditorSelectForm");
+        const fullNameInput = getById("stateNameEditorFull");
 
         const nameChanged = nameInput.value !== s.name;
         const formChanged = formSelect.value !== s.formName;
@@ -321,7 +328,8 @@ function editStateName(state) {
         s.name = nameInput.value;
         s.formName = formSelect.value;
         s.fullName = fullNameInput.value;
-        if (changed && stateNameEditorUpdateLabel.checked) BurgsAndStates.drawStateLabels([s.i]);
+        if (changed && stateNameEditorUpdateLabel.checked)
+            BurgsAndStates.drawStateLabels([s.i]);
         refreshStatesEditor();
     }
 }
@@ -452,8 +460,9 @@ function stateRemovePrompt(state) {
 }
 
 function stateRemove(state) {
-    statesBody.select("#state" + state).remove();
-    statesBody.select("#state-gap" + state).remove();
+    const body = getBody();
+    body.select("#state" + state).remove();
+    body.select("#state-gap" + state).remove();
     statesHalo.select("#state-border" + state).remove();
     unfog("focusState" + state);
     const label = document.querySelector("#stateLabel" + state);
@@ -542,7 +551,7 @@ function showStatesChart() {
         .attr("width", width).attr("height", height).style("font-family", "Almendra SC")
         .attr("text-anchor", "middle").attr("dominant-baseline", "central");
     const graph = svg.append("g").attr("transform", `translate(-50, 0)`);
-    document.getElementById("statesTreeType").addEventListener("change", updateChart);
+    getById("statesTreeType").addEventListener("change", updateChart);
 
     treeLayout(root);
 
@@ -585,7 +594,7 @@ function showStatesChart() {
 
     function hideInfo(ev) {
         stateHighlightOff(ev);
-        if (!document.getElementById("statesInfo")) return;
+        if (!getById("statesInfo")) return;
         statesInfo.innerHTML = "&#8205;";
         d3.select(ev.target).select("circle").classed("selected", 0);
     }
@@ -818,8 +827,8 @@ function exitStatesManualAssignment(close) {
     statesBody.select("#temp").remove();
     removeCircle();
     document.querySelectorAll("#statesBottom > button").forEach(el => el.style.display = "inline-block");
-    document.getElementById("statesManuallyButtons").style.display = "none";
-    document.getElementById("statesHalo").style.display = "block";
+    getById("statesManuallyButtons").style.display = "none";
+    getById("statesHalo").style.display = "block";
 
     statesEditor.querySelectorAll(".hide:not(.show)").forEach(el => el.classList.remove("hidden"));
     statesFooter.style.display = "block";
@@ -838,7 +847,7 @@ function enterAddStateMode() {
     this.classList.add("pressed");
     tip("Click on the map to create a new capital or promote an existing burg", true);
     viewbox.style("cursor", "crosshair").on("click", addState);
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 
 function addState() {
