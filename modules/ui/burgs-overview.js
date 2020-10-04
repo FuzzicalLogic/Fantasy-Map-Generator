@@ -18,9 +18,11 @@ import { findCell, rn, getInteger, si } from "../utils.js";
 import { toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
 
 const getById = id => document.getElementById(id);
+
+const alertMessage = () => getById("alertMessage");
+
 const getBody = () => getById("burgsBody");
 const getFooter = () => getById("burgsFooter");
-
 
 const btnRefresh = () => getById("burgsOverviewRefresh");
 const btnViewChart = () => getById("burgsChart");
@@ -154,7 +156,7 @@ function triggerBurgRemove() {
     const burg = +this.parentNode.dataset.id;
     if (pack.burgs[burg].capital) { tip("You cannot remove the capital. Please change the capital first", false, "error"); return; }
 
-    alertMessage.innerHTML = "Are you sure you want to remove the burg?";
+    alertMessage().innerHTML = "Are you sure you want to remove the burg?";
     $("#alert").dialog({
         resizable: false, title: "Remove burg",
         buttons: {
@@ -171,7 +173,7 @@ function triggerBurgRemove() {
 function renameBurgsInBulk() {
     const message = `Download burgs list as a text file, make changes and re-upload the file.
     If you do not want to change the name, just leave it as is`;
-    alertMessage.innerHTML = message;
+    alertMessage().innerHTML = message;
 
     $("#alert").dialog({
         title: "Burgs bulk renaming", width: "22em",
@@ -204,7 +206,7 @@ function importBurgNames(dataLoaded) {
     }
     message += `</tr></table>`;
     if (!change.length) message = "No changes found in the file. Please change some names to get a result"
-    alertMessage.innerHTML = message;
+    alertMessage().innerHTML = message;
 
     $("#alert").dialog({
         title: "Burgs bulk renaming", width: "22em",
@@ -352,12 +354,12 @@ function showBurgsChart() {
     const treeLayout = d3.pack().size([w, h]).padding(3);
 
     // prepare svg
-    alertMessage.innerHTML = `<select id="burgsTreeType" style="display:block; margin-left:13px; font-size:11px">
+    alertMessage().innerHTML = `<select id="burgsTreeType" style="display:block; margin-left:13px; font-size:11px">
       <option value="states" selected>Group by state</option>
       <option value="cultures">Group by culture</option>
       <option value="parent">Group by province and state</option>
       <option value="provinces">Group by province</option></select>`;
-    alertMessage.innerHTML += `<div id='burgsInfo' class='chartInfo'>&#8205;</div>`;
+    alertMessage().innerHTML += `<div id='burgsInfo' class='chartInfo'>&#8205;</div>`;
     const svg = d3.select("#alertMessage").insert("svg", "#burgsInfo").attr("id", "burgsTree")
         .attr("width", width).attr("height", height - 10).attr("stroke-width", 2);
     const graph = svg.append("g").attr("transform", `translate(-50, -10)`);
@@ -447,7 +449,7 @@ function showBurgsChart() {
     $("#alert").dialog({
         title: "Burgs bubble chart", width: fitContent(),
         position: { my: "left bottom", at: "left+10 bottom-10", of: "svg" }, buttons: {},
-        close: () => { alertMessage.innerHTML = ""; }
+        close: () => { alertMessage().innerHTML = ""; }
     });
 
 }
@@ -486,7 +488,7 @@ function downloadBurgsData() {
 }
 
 function triggerAllBurgsRemove() {
-    alertMessage.innerHTML = `Are you sure you want to remove all burgs except of capitals?
+    alertMessage().innerHTML = `Are you sure you want to remove all burgs except of capitals?
       <br>To remove a capital you have to remove its state first`;
     $("#alert").dialog({
         resizable: false, title: "Remove all burgs",
