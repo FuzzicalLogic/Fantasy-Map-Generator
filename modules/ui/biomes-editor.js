@@ -14,6 +14,9 @@ import { editStyle } from "./style.js";
 import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 import { toggleBiomes, drawBiomes, toggleCultures, toggleReligions, toggleStates, toggleProvinces, toggleRelief, layerIsOn } from "./layers.js";
 
+const getById = id => document.getElementById(id);
+const getBody = () => getById("biomesBody");
+
 export function editBiomes() {
     if (customization) return;
     closeDialogs("#biomesEditor, .stable");
@@ -23,8 +26,7 @@ export function editBiomes() {
     if (layerIsOn("toggleReligions")) toggleReligions();
     if (layerIsOn("toggleProvinces")) toggleProvinces();
 
-    const body = document.getElementById("biomesBody");
-    const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
+    const body = getBody();
     refreshBiomesEditor();
 
     if (modules.editBiomes) return;
@@ -91,6 +93,8 @@ function biomesEditorAddLines() {
     const b = biomesData;
     let lines = "", totalArea = 0, totalPopulation = 0;;
 
+    const body = getBody();
+
     for (const i of b.i) {
         if (!i || biomesData.name[i] === "removed") continue; // ignore water and removed biomes
         const area = b.area[i] * distanceScaleInput.value ** 2;
@@ -139,6 +143,7 @@ function biomesEditorAddLines() {
 function biomeHighlightOn(event) {
     if (customization === 6) return;
     const biome = +event.target.dataset.id;
+    const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
     biomes.select("#biome" + biome).raise().transition(animate).attr("stroke-width", 2).attr("stroke", "#cd4c11");
 }
 
@@ -212,6 +217,8 @@ function toggleLegend() {
 }
 
 function togglePercentageMode() {
+    const body = getBody();
+
     if (body.dataset.type === "absolute") {
         body.dataset.type = "percentage";
         const totalCells = +biomesFooterCells.innerHTML;
@@ -261,6 +268,7 @@ function addCustomBiome() {
       <span data-tip="Remove the custom biome" class="icon-trash-empty hide"></span>
     </div>`;
 
+    const body = getBody();
     body.insertAdjacentHTML("beforeend", line);
     biomesFooterBiomes.innerHTML = body.querySelectorAll(":scope > div").length;
     $("#biomesEditor").dialog({ width: fitContent() });
@@ -282,7 +290,7 @@ function downloadBiomesData() {
     const unit = areaUnit.value === "square" ? distanceUnitInput.value + "2" : areaUnit.value;
     let data = "Id,Biome,Color,Habitability,Cells,Area " + unit + ",Population\n"; // headers
 
-    body.querySelectorAll(":scope > div").forEach(function (el) {
+    getBody().querySelectorAll(":scope > div").forEach(function (el) {
         data += el.dataset.id + ",";
         data += el.dataset.name + ",";
         data += el.dataset.color + ",";
@@ -301,6 +309,7 @@ function enterBiomesCustomizationMode() {
     customization = 6;
     biomes.append("g").attr("id", "temp");
 
+    const body = getBody();
     document.querySelectorAll("#biomesBottom > button").forEach(el => el.style.display = "none");
     document.querySelectorAll("#biomesBottom > div").forEach(el => el.style.display = "block");
     body.querySelector("div.biomes").classList.add("selected");
@@ -318,7 +327,7 @@ function enterBiomesCustomizationMode() {
 }
 
 function selectBiomeOnLineClick(line) {
-    const selected = body.querySelector("div.selected");
+    const selected = getBody().querySelector("div.selected");
     if (selected) selected.classList.remove("selected");
     line.classList.add("selected");
 }
@@ -331,6 +340,7 @@ function selectBiomeOnMapClick() {
     const assigned = biomes.select("#temp").select("polygon[data-cell='" + i + "']");
     const biome = assigned.size() ? +assigned.attr("data-biome") : pack.cells.biome[i];
 
+    const body = getBody();
     body.querySelector("div.selected").classList.remove("selected");
     body.querySelector("div[data-id='" + biome + "']").classList.add("selected");
 }
@@ -351,6 +361,7 @@ function dragBiomeBrush() {
 
 // change region within selection
 function changeBiomeForSelection(selection) {
+    const body = getBody();
     const temp = biomes.select("#temp");
     const selected = body.querySelector("div.selected");
 
@@ -398,7 +409,7 @@ function exitBiomesCustomizationMode(close) {
     document.querySelectorAll("#biomesBottom > button").forEach(el => el.style.display = "inline-block");
     document.querySelectorAll("#biomesBottom > div").forEach(el => el.style.display = "none");
 
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     biomesEditor.querySelectorAll(".hide").forEach(el => el.classList.remove("hidden"));
     biomesFooter.style.display = "block";
     if (!close) $("#biomesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
