@@ -14,6 +14,10 @@ import { editStyle } from "./style.js";
 import { toggleCells, toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
 
 export function editBurg(id) {
+const getById = id => document.getElementById(id);
+const getBurgId = () => getById('burgEditor').dataset.id;
+const getBurgLabel = () => burgLabels.select(`[data-id="${getBurgId()}"]`);
+
 let editor = {
     get burgGroupShow() { return getById("burgGroupShow"); },
     get burgGroupHide() { return getById("burgGroupHide"); },
