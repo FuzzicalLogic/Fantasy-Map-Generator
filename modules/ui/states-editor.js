@@ -462,7 +462,8 @@ function stateChangeExpansionism(state, line, value) {
 
 function toggleFog(state, cl) {
     if (customization) return;
-    const path = statesBody.select("#state" + state).attr("d"), id = "focusState" + state;
+    const path = statesBody.select("#state" + state).attr("d"),
+        id = "focusState" + state;
     cl.contains("inactive") ? fog(id, path) : unfog(id);
     cl.toggle("inactive");
 }
@@ -530,6 +531,7 @@ function toggleLegend() {
 }
 
 function togglePercentageMode() {
+    const body = getBody();
     if (body.dataset.type === "absolute") {
         body.dataset.type = "percentage";
         const totalCells = +statesFooterCells.innerHTML;
@@ -670,7 +672,7 @@ function randomizeStatesExpansion() {
         if (!s.i || s.removed) return;
         const expansionism = rn(Math.random() * 4 + 1, 1);
         s.expansionism = expansionism;
-        body.querySelector("div.states[data-id='" + s.i + "'] > input.statePower").value = expansionism;
+        getBody().querySelector("div.states[data-id='" + s.i + "'] > input.statePower").value = expansionism;
     });
     recalculateStates(true, true);
 }
@@ -687,12 +689,12 @@ function enterStatesManualAssignent() {
     customization = 2;
     statesBody.append("g").attr("id", "temp");
     document.querySelectorAll("#statesBottom > button").forEach(el => el.style.display = "none");
-    document.getElementById("statesManuallyButtons").style.display = "inline-block";
-    document.getElementById("statesHalo").style.display = "none";
+    getById("statesManuallyButtons").style.display = "inline-block";
+    getById("statesHalo").style.display = "none";
 
     statesEditor.querySelectorAll(".hide").forEach(el => el.classList.add("hidden"));
     statesFooter.style.display = "none";
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
     $("#statesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg", collision: "fit" } });
 
     tip("Click on state to select, drag the circle to change state", true);
@@ -701,13 +703,13 @@ function enterStatesManualAssignent() {
         .call(d3.drag().on("start", dragStateBrush))
         .on("touchmove mousemove", moveStateBrush);
 
-    body.querySelector("div").classList.add("selected");
+    getBody().querySelector("div").classList.add("selected");
 }
 
 function selectStateOnLineClick() {
     if (customization !== 2) return;
     if (this.parentNode.id !== "statesBodySection") return;
-    body.querySelector("div.selected").classList.remove("selected");
+    getBody().querySelector("div.selected").classList.remove("selected");
     this.classList.add("selected");
 }
 
@@ -719,8 +721,8 @@ function selectStateOnMapClick() {
     const assigned = statesBody.select("#temp").select("polygon[data-cell='" + i + "']");
     const state = assigned.size() ? +assigned.attr("data-state") : pack.cells.state[i];
 
-    body.querySelector("div.selected").classList.remove("selected");
-    body.querySelector("div[data-id='" + state + "']").classList.add("selected");
+    getBody().querySelector("div.selected").classList.remove("selected");
+    getBody().querySelector("div[data-id='" + state + "']").classList.add("selected");
 }
 
 function dragStateBrush() {
@@ -855,12 +857,12 @@ function exitStatesManualAssignment(close) {
 
     statesEditor.querySelectorAll(".hide:not(.show)").forEach(el => el.classList.remove("hidden"));
     statesFooter.style.display = "block";
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     if (!close) $("#statesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg", collision: "fit" } });
 
     restoreDefaultEvents();
     clearMainTip();
-    const selected = body.querySelector("div.selected");
+    const selected = getBody().querySelector("div.selected");
     if (selected) selected.classList.remove("selected");
 }
 
@@ -948,7 +950,7 @@ function exitAddStateMode() {
     customization = 0;
     restoreDefaultEvents();
     clearMainTip();
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     if (statesAdd.classList.contains("pressed")) statesAdd.classList.remove("pressed");
 }
 
@@ -956,7 +958,7 @@ function downloadStatesData() {
     const unit = areaUnit.value === "square" ? distanceUnitInput.value + "2" : areaUnit.value;
     let data = "Id,State,Form,Color,Capital,Culture,Type,Expansionism,Cells,Burgs,Area " + unit + ",Total Population,Rural Population,Urban Population\n"; // headers
 
-    body.querySelectorAll(":scope > div").forEach(function (el) {
+    getBody().querySelectorAll(":scope > div").forEach(function (el) {
         const key = parseInt(el.dataset.id);
         data += el.dataset.id + ",";
         data += el.dataset.name + ",";
@@ -982,5 +984,5 @@ function closeStatesEditor() {
     if (customization === 2) exitStatesManualAssignment("close");
     if (customization === 3) exitAddStateMode();
     debug.selectAll(".highlight").remove();
-    body.innerHTML = "";
+    getBody().innerHTML = "";
 }
