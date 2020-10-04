@@ -13,7 +13,6 @@ import { findCell, rn, isCtrlClick, normalize, parseTransform, openURL, rand } f
 import { editStyle } from "./style.js";
 import { toggleCells, toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
 
-export function editBurg(id) {
 const getById = id => document.getElementById(id);
 const getBurgId = () => getById('burgEditor').dataset.id;
 const getBurgLabel = () => burgLabels.select(`[data-id="${getBurgId()}"]`);
@@ -44,12 +43,12 @@ let editor = {
     get burgRemove() { return getById("burgRemove"); }
 };
 
+export function editBurg(id = d3.event.target.dataset.id) {
     if (customization) return;
     closeDialogs(".stable");
     if (!layerIsOn("toggleIcons")) toggleIcons();
     if (!layerIsOn("toggleLabels")) toggleLabels();
 
-    const burg = id || d3.event.target.dataset.id;
     elSelected = burgLabels.select("[data-id='" + burg + "']");
     burgLabels.selectAll("text").call(d3.drag().on("start", dragBurgLabel)).classed("draggable", true);
     updateBurgValues();
