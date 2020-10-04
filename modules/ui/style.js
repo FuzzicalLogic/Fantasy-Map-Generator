@@ -1,3 +1,5 @@
+import { svg, fonts } from "../../main.js";
+
 import { redrawLegend, downloadFile, uploadFile } from "./editors.js";
 
 import { OceanLayers } from "../ocean-layers.js";

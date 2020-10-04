@@ -1,8 +1,11 @@
 import {
+    pack,
     svg, svgWidth, svgHeight,
     defs, 
     viewbox, legend, fogging,
-    zoom
+    zoom,
+    anchors,
+    elSelected
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";

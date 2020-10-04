@@ -1,11 +1,15 @@
-import { burgLabels, elSelected } from "../../main.js";
+import {
+    modules, pack, seed,
+    viewbox,
+    burgIcons, burgLabels, anchors
+} from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
-import { clicked, unselect, moveBurgToGroup, removeBurg, togglePort, toggleCapital } from "./editors.js";
+import { closeDialogs, clicked, unselect, moveBurgToGroup, removeBurg, togglePort, toggleCapital } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
-import { findCell, rn, isCtrlClick, normalize, parseTransform, openURL } from "../utils.js";
+import { findCell, rn, isCtrlClick, normalize, parseTransform, openURL, rand } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleCells, toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
 
