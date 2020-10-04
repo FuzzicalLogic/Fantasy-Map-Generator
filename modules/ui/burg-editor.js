@@ -14,6 +14,32 @@ import { editStyle } from "./style.js";
 import { toggleCells, toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
 
 export function editBurg(id) {
+let editor = {
+    get burgGroupShow() { return getById("burgGroupShow"); },
+    get burgGroupHide() { return getById("burgGroupHide"); },
+    get burgSelectGroup() { return getById("burgSelectGroup"); },
+    get burgInputGroup() { return getById("burgInputGroup") },
+    get burgAddGroup() { return getById("burgAddGroup") },
+    get burgRemoveGroup() { return getById("burgRemoveGroup") },
+
+    get burgName() { return getById("burgName") },
+    get burgNameReCulture() { return getById("burgNameReCulture") },
+    get burgNameReRandom() { return getById("burgNameReRandom") },
+    get burgPopulation() { return getById("burgPopulation") },
+
+    get burgStyleShow() { return getById("burgStyleShow"); },
+    get burgStyleHide() { return getById("burgStyleHide"); },
+    get burgEditLabelStyle() { return getById("burgEditLabelStyle"); },
+    get burgEditIconStyle() { return getById("burgEditIconStyle"); },
+    get burgEditAnchorStyle() { return getById("burgEditAnchorStyle"); },
+
+    get burgSeeInMFCG() { return getById("burgSeeInMFCG"); },
+    get burgOpenCOA() { return getById("burgOpenCOA"); },
+    get burgRelocate() { return getById("burgRelocate"); },
+    get burglLegend() { return getById("burglLegend"); },
+    get burgRemove() { return getById("burgRemove"); }
+};
+
     if (customization) return;
     closeDialogs(".stable");
     if (!layerIsOn("toggleIcons")) toggleIcons();
@@ -37,30 +63,19 @@ export function editBurg(id) {
     modules.editBurg = true;
 
     // add listeners
-    document.getElementById("burgGroupShow").addEventListener("click", showGroupSection);
-    document.getElementById("burgGroupHide").addEventListener("click", hideGroupSection);
-    document.getElementById("burgSelectGroup").addEventListener("change", changeGroup);
-    document.getElementById("burgInputGroup").addEventListener("change", createNewGroup);
-    document.getElementById("burgAddGroup").addEventListener("click", toggleNewGroupInput);
-    document.getElementById("burgRemoveGroup").addEventListener("click", removeBurgsGroup);
+    editor.burgGroupShow.addEventListener("click", showGroupSection);
+    editor.burgGroupHide.addEventListener("click", hideGroupSection);
+    editor.burgSelectGroup.addEventListener("change", changeGroup);
+    editor.burgInputGroup.addEventListener("change", createNewGroup);
+    editor.burgAddGroup.addEventListener("click", toggleNewGroupInput);
+    editor.burgRemoveGroup.addEventListener("click", removeBurgsGroup);
 
-    document.getElementById("burgName").addEventListener("input", changeName);
-    document.getElementById("burgNameReCulture").addEventListener("click", generateNameCulture);
-    document.getElementById("burgNameReRandom").addEventListener("click", generateNameRandom);
-    document.getElementById("burgPopulation").addEventListener("change", changePopulation);
+    editor.burgName.addEventListener("input", changeName);
+    editor.burgNameReCulture.addEventListener("click", generateNameCulture);
+    editor.burgNameReRandom.addEventListener("click", generateNameRandom);
+    editor.burgPopulation.addEventListener("change", changePopulation);
     burgBody.querySelectorAll(".burgFeature").forEach(el => el.addEventListener("click", toggleFeature));
 
-    document.getElementById("burgStyleShow").addEventListener("click", showStyleSection);
-    document.getElementById("burgStyleHide").addEventListener("click", hideStyleSection);
-    document.getElementById("burgEditLabelStyle").addEventListener("click", editGroupLabelStyle);
-    document.getElementById("burgEditIconStyle").addEventListener("click", editGroupIconStyle);
-    document.getElementById("burgEditAnchorStyle").addEventListener("click", editGroupAnchorStyle);
-
-    document.getElementById("burgSeeInMFCG").addEventListener("click", openInMFCG);
-    document.getElementById("burgOpenCOA").addEventListener("click", openInIAHG);
-    document.getElementById("burgRelocate").addEventListener("click", toggleRelocateBurg);
-    document.getElementById("burglLegend").addEventListener("click", editBurgLegend);
-    document.getElementById("burgRemove").addEventListener("click", removeSelectedBurg);
 
     function updateBurgValues() {
         const id = +elSelected.attr("data-id");
@@ -270,6 +285,11 @@ export function editBurg(id) {
                 const norm = rn(normalize(deg, 0, 360) * 2, 2); // 0 = south, 0.5 = west, 1 = north, 1.5 = east
                 return "&sea=" + norm;
             }
+    editor.burgStyleShow.addEventListener("click", showStyleSection);
+    editor.burgStyleHide.addEventListener("click", hideStyleSection);
+    editor.burgEditLabelStyle.addEventListener("click", editGroupLabelStyle);
+    editor.burgEditIconStyle.addEventListener("click", editGroupIconStyle);
+    editor.burgEditAnchorStyle.addEventListener("click", editGroupAnchorStyle);
 
             const site = "http://fantasycities.watabou.ru/?random=0&continuous=0";
             const url = `${site}&name=${name}&size=${size}&seed=${s}&hub=${hub}&river=${river}&coast=${coast}&citadel=${citadel}&plaza=${plaza}&temple=${temple}&walls=${walls}&shantytown=${shanty}${sea}`;
