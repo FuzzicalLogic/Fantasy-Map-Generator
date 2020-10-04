@@ -49,13 +49,13 @@ export function editBurg(id = d3.event.target.dataset.id) {
     if (!layerIsOn("toggleIcons")) toggleIcons();
     if (!layerIsOn("toggleLabels")) toggleLabels();
 
-    elSelected = burgLabels.select("[data-id='" + burg + "']");
     burgLabels.selectAll("text").call(d3.drag().on("start", dragBurgLabel)).classed("draggable", true);
     updateBurgValues();
 
     const my = id || d3.event.target.tagName === "text" ? "center bottom-20" : "center top+20";
     const at = id ? "center" : d3.event.target.tagName === "text" ? "top" : "bottom";
     const of = id ? "svg" : d3.event.target;
+    getById('burgEditor').setAttribute('data-id', id);
 
     $("#burgEditor").dialog({
         title: "Edit Burg", resizable: false, close: closeBurgEditor,
@@ -244,23 +244,23 @@ function hideStyleSection() {
 }
 
 function editGroupLabelStyle() {
-    const g = elSelected.node().parentNode.id;
+    const g = getBurgLabel().node().parentNode.id;
     editStyle("labels", g);
 }
 
 function editGroupIconStyle() {
-    const g = elSelected.node().parentNode.id;
+    const g = getBurgLabel().node().parentNode.id;
     editStyle("burgIcons", g);
 }
 
 function editGroupAnchorStyle() {
-    const g = elSelected.node().parentNode.id;
+    const g = getBurgLabel().node().parentNode.id;
     editStyle("anchors", g);
 }
 
 function editBurgLegend() {
-    const id = elSelected.attr("data-id");
-    const name = elSelected.text();
+    const id = getBurgLabel().attr("data-id");
+    const name = getBurgLabel().text();
     editNotes("burg" + id, name);
 }
 
