@@ -1,4 +1,7 @@
-import { svg, fonts } from "../../main.js";
+import {
+    svg, fonts,
+    statesHalo
+} from "../../main.js";
 
 import { redrawLegend, downloadFile, uploadFile } from "./editors.js";
 
