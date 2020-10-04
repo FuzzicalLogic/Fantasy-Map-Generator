@@ -484,9 +484,8 @@ function stateRemovePrompt(state) {
 }
 
 function stateRemove(state) {
-    const body = getBody();
-    body.select("#state" + state).remove();
-    body.select("#state-gap" + state).remove();
+    statesBody.select("#state" + state).remove();
+    statesBody.select("#state-gap" + state).remove();
     statesHalo.select("#state-border" + state).remove();
     unfog("focusState" + state);
     const label = document.querySelector("#stateLabel" + state);
