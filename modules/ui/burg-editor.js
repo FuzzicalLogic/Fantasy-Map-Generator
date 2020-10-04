@@ -49,13 +49,13 @@ export function editBurg(id = d3.event.target.dataset.id) {
     if (!layerIsOn("toggleIcons")) toggleIcons();
     if (!layerIsOn("toggleLabels")) toggleLabels();
 
-    burgLabels.selectAll("text").call(d3.drag().on("start", dragBurgLabel)).classed("draggable", true);
-    updateBurgValues();
-
     const my = id || d3.event.target.tagName === "text" ? "center bottom-20" : "center top+20";
     const at = id ? "center" : d3.event.target.tagName === "text" ? "top" : "bottom";
     const of = id ? "svg" : d3.event.target;
     getById('burgEditor').setAttribute('data-id', id);
+    burgLabels.selectAll("text").call(d3.drag().on("start", dragBurgLabel)).classed("draggable", true);
+    updateBurgValues(id);
+
 
     $("#burgEditor").dialog({
         title: "Edit Burg", resizable: false, close: closeBurgEditor,
