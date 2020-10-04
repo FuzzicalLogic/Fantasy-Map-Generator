@@ -22,6 +22,11 @@ import { fitContent, fitLegendBox } from "./editors.js";
 
 export const optionsContent = document.getElementById("optionsContent");
 
+export const elements = {
+    get seed() {
+        return document.getElementById('optionsSeed').value
+    }
+}
 export function initialize() {
     $("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
     $("#exitCustomization").draggable({ handle: "div" });
