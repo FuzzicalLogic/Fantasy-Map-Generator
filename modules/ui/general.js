@@ -32,6 +32,8 @@ import {
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
 
 export function initialize() {
+    window.tip = tip;
+
     // fit full-screen map if window is resized
     $(window).resize(function (e) {
         if (localStorage.getItem("mapWidth") && localStorage.getItem("mapHeight")) return;
