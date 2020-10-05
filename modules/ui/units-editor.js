@@ -1,4 +1,9 @@
-import { modules, viewbox } from "../../main.js";
+import {
+    modules,
+    graphWidth, graphHeight,
+    viewbox, scaleBar,
+    calculateTemperatures, ruler
+} from "../../main.js";
 
 import { closeDialogs, restoreDefaultEvents } from "./editors.js";
 import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } from "./measurers.js";

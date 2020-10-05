@@ -5,7 +5,7 @@ import { closeDialogs, getFileName, downloadFile, uploadFile } from "./editors.j
 import * as Names from "../names-generator.js";
 
 import { tip } from "./general.js";
-import { rn } from "../utils.js";
+import { rn, openURL } from "../utils.js";
 
 export function editNamesbase() {
     if (customization) return;
