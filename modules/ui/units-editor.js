@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    viewbox, scaleBar,
+    viewbox, scale, scaleBar,
     calculateTemperatures, ruler
 } from "../../main.js";
 
