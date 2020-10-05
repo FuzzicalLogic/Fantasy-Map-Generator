@@ -16,6 +16,9 @@ import {
     turnButtonOff, toggleCultures, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces, drawProvinces, layerIsOn
 } from "./layers.js";
 
+const getById = id => document.getElementById(id);
+const getBody = () => getById('provincesBodySection');
+
 export function editProvinces() {
     if (customization) return;
     closeDialogs("#provincesEditor, .stable");
@@ -24,7 +27,7 @@ export function editProvinces() {
     if (layerIsOn("toggleStates")) toggleStates();
     if (layerIsOn("toggleCultures")) toggleCultures();
 
-    const body = document.getElementById("provincesBodySection");
+    const body = getBody();
     refreshProvincesEditor();
 
     if (modules.editProvinces) return;
@@ -122,10 +125,12 @@ function updateFilter() {
 
 // add line for each state
 function provincesEditorAddLines() {
+    const body = getBody();
     const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
     const selectedState = +document.getElementById("provincesFilterState").value;
     let filtered = pack.provinces.filter(p => p.i && !p.removed); // all valid burgs
-    if (selectedState != -1) filtered = filtered.filter(p => p.state === selectedState); // filtered by state
+    if (selectedState != -1)
+        filtered = filtered.filter(p => p.state === selectedState); // filtered by state
     body.innerHTML = "";
     let lines = "", totalArea = 0, totalPopulation = 0;
 
@@ -190,7 +195,7 @@ function getCapitalOptions(burgs, capital) {
 
 function provinceHighlightOn(event) {
     const province = +event.target.dataset.id;
-    const el = body.querySelector(`div[data-id='${province}']`);
+    const el = getBody().querySelector(`div[data-id='${province}']`);
     if (el) el.classList.add("active");
 
     if (!layerIsOn("toggleProvinces")) return;
@@ -201,7 +206,7 @@ function provinceHighlightOn(event) {
 
 function provinceHighlightOff(event) {
     const province = +event.target.dataset.id;
-    const el = body.querySelector(`div[data-id='${province}']`);
+    const el = getBody().querySelector(`div[data-id='${province}']`);
     if (el) el.classList.remove("active");
 
     if (!layerIsOn("toggleProvinces")) return;
@@ -512,6 +517,7 @@ function changeCapital(p, line, value) {
 }
 
 function togglePercentageMode() {
+    let body = getBody();
     if (body.dataset.type === "absolute") {
         body.dataset.type = "percentage";
         const totalArea = +provincesFooterArea.dataset.area;
@@ -662,6 +668,8 @@ function toggleLabels() {
 }
 
 function enterProvincesManualAssignent() {
+    const body = getBody();
+
     if (!layerIsOn("toggleProvinces"))
         toggleProvinces();
     if (!layerIsOn("toggleBorders"))
@@ -698,12 +706,13 @@ function enterProvincesManualAssignent() {
 function selectProvinceOnLineClick() {
     if (customization !== 11) return;
     if (this.parentNode.id !== "provincesBodySection") return;
-    body.querySelector("div.selected").classList.remove("selected");
+    getBody().querySelector("div.selected").classList.remove("selected");
     this.classList.add("selected");
     selectProvince(+this.dataset.id);
 }
 
 function selectProvinceOnMapClick() {
+    const body = getBody();
     const point = d3.mouse(this);
     const i = findCell(point[0], point[1]);
     if (pack.cells.h[i] < 20 || !pack.cells.state[i]) return;
@@ -745,7 +754,7 @@ function dragBrush() {
 // change province within selection
 function changeForSelection(selection) {
     const temp = provs.select("#temp"), centers = provs.select("#centers");
-    const selected = body.querySelector("div.selected");
+    const selected = getBody().querySelector("div.selected");
 
     const provinceNew = +selected.dataset.id;
     const state = pack.provinces[provinceNew].state;
@@ -801,6 +810,8 @@ function applyProvincesManualAssignent() {
 }
 
 function exitProvincesManualAssignment(close) {
+    const body = getBody();
+
     customization = 0;
     provs.select("#temp").remove();
     provs.select("#centers").remove();
@@ -837,7 +848,7 @@ function enterAddProvinceMode() {
     this.classList.add("pressed");
     tip("Click on the map to place a new province center", true);
     viewbox.style("cursor", "crosshair").on("click", addProvince);
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 
 function addProvince() {
@@ -895,7 +906,7 @@ function exitAddProvinceMode() {
     customization = 0;
     restoreDefaultEvents();
     clearMainTip();
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     if (provincesAdd.classList.contains("pressed"))
         provincesAdd.classList.remove("pressed");
 }
@@ -920,7 +931,7 @@ function downloadProvincesData() {
     const unit = areaUnit.value === "square" ? distanceUnitInput.value + "2" : areaUnit.value;
     let data = "Id,Province,Form,State,Color,Capital,Area " + unit + ",Total Population,Rural Population,Urban Population\n"; // headers
 
-    body.querySelectorAll(":scope > div").forEach(function (el) {
+    getBody().querySelectorAll(":scope > div").forEach(function (el) {
         let key = parseInt(el.dataset.id)
         data += el.dataset.id + ",";
         data += el.dataset.name + ",";
