@@ -60,79 +60,78 @@ export function editNotes(id, name) {
     document.getElementById("notesUpload").addEventListener("click", () => legendsToLoad.click());
     document.getElementById("legendsToLoad").addEventListener("change", function () { uploadFile(this, uploadLegends) });
     document.getElementById("notesRemove").addEventListener("click", triggerNotesRemove);
+}
 
-    function showNote(note) {
-        document.getElementById("notes").style.display = "block";
-        document.getElementById("notesHeader").innerHTML = note.name;
-        document.getElementById("notesBody").innerHTML = note.legend;
-    }
+function showNote(note) {
+    document.getElementById("notes").style.display = "block";
+    document.getElementById("notesHeader").innerHTML = note.name;
+    document.getElementById("notesBody").innerHTML = note.legend;
+}
 
-    function changeObject() {
-        const note = notes.find(note => note.id === this.value);
-        if (!note) return;
-        notesName.value = note.name;
-        editor.content.innerHTML = note.legend;
-    }
+function changeObject() {
+    const note = notes.find(note => note.id === this.value);
+    if (!note) return;
+    notesName.value = note.name;
+    editor.content.innerHTML = note.legend;
+}
 
-    function changeName() {
-        const id = document.getElementById("notesSelect").value;
-        const note = notes.find(note => note.id === id);
-        if (!note) return;
-        note.name = this.value;
-        showNote(note);
-    }
+function changeName() {
+    const id = document.getElementById("notesSelect").value;
+    const note = notes.find(note => note.id === id);
+    if (!note) return;
+    note.name = this.value;
+    showNote(note);
+}
 
-    function validateHighlightElement() {
-        const select = document.getElementById("notesSelect");
-        const element = document.getElementById(select.value);
+function validateHighlightElement() {
+    const select = document.getElementById("notesSelect");
+    const element = document.getElementById(select.value);
 
-        // if element is not found
-        if (element === null) {
-            alertMessage.innerHTML = "Related element is not found. Would you like to remove the note?";
-            $("#alert").dialog({
-                resizable: false, title: "Element not found",
-                buttons: {
-                    Remove: function () { $(this).dialog("close"); removeLegend(); },
-                    Keep: function () { $(this).dialog("close"); }
-                }
-            });
-            return;
-        }
-
-        highlightElement(element); // if element is found
-    }
-
-    function downloadLegends() {
-        const data = JSON.stringify(notes);
-        const name = getFileName("Notes") + ".txt";
-        downloadFile(data, name);
-    }
-
-    function uploadLegends(dataLoaded) {
-        if (!dataLoaded) { tip("Cannot load the file. Please check the data format", false, "error"); return; }
-        notes = JSON.parse(dataLoaded);
-        document.getElementById("notesSelect").options.length = 0;
-        editNotes(notes[0].id, notes[0].name);
-    }
-
-    function triggerNotesRemove() {
-        alertMessage.innerHTML = "Are you sure you want to remove the selected note?";
+    // if element is not found
+    if (element === null) {
+        alertMessage.innerHTML = "Related element is not found. Would you like to remove the note?";
         $("#alert").dialog({
-            resizable: false, title: "Remove note",
+            resizable: false, title: "Element not found",
             buttons: {
                 Remove: function () { $(this).dialog("close"); removeLegend(); },
                 Keep: function () { $(this).dialog("close"); }
             }
         });
+        return;
     }
 
-    function removeLegend() {
-        const select = document.getElementById("notesSelect");
-        const index = notes.findIndex(n => n.id === select.value);
-        notes.splice(index, 1);
-        select.options.length = 0;
-        if (!notes.length) { $("#notesEditor").dialog("close"); return; }
-        editNotes(notes[0].id, notes[0].name);
-    }
+    highlightElement(element); // if element is found
+}
 
+function downloadLegends() {
+    const data = JSON.stringify(notes);
+    const name = getFileName("Notes") + ".txt";
+    downloadFile(data, name);
+}
+
+function uploadLegends(dataLoaded) {
+    if (!dataLoaded) { tip("Cannot load the file. Please check the data format", false, "error"); return; }
+    notes = JSON.parse(dataLoaded);
+    document.getElementById("notesSelect").options.length = 0;
+    editNotes(notes[0].id, notes[0].name);
+}
+
+function triggerNotesRemove() {
+    alertMessage.innerHTML = "Are you sure you want to remove the selected note?";
+    $("#alert").dialog({
+        resizable: false, title: "Remove note",
+        buttons: {
+            Remove: function () { $(this).dialog("close"); removeLegend(); },
+            Keep: function () { $(this).dialog("close"); }
+        }
+    });
+}
+
+function removeLegend() {
+    const select = document.getElementById("notesSelect");
+    const index = notes.findIndex(n => n.id === select.value);
+    notes.splice(index, 1);
+    select.options.length = 0;
+    if (!notes.length) { $("#notesEditor").dialog("close"); return; }
+    editNotes(notes[0].id, notes[0].name);
 }
