@@ -6,6 +6,8 @@ import {
 import { getColorScheme } from "./ui/layers.js";
 
 export function initialize() {
+    window.openURL = openURL;
+
     // findAll d3.quandtree search from https://bl.ocks.org/lwthatcher/b41479725e0ff2277c7ac90df2de2b5e
     void function addFindAll() {
         const Quad = function (node, x0, y0, x1, y1) {
