@@ -63,6 +63,13 @@ export function editNotes(id, name) {
     document.getElementById("notesUpload").addEventListener("click", () => legendsToLoad.click());
     document.getElementById("legendsToLoad").addEventListener("change", function () { uploadFile(this, uploadLegends) });
     document.getElementById("notesRemove").addEventListener("click", triggerNotesRemove);
+
+    function changeObject() {
+        const note = notes.find(note => note.id === this.value);
+        if (!note) return;
+        notesName.value = note.name;
+        editor.content.innerHTML = note.legend;
+    }
 }
 
 function showNote(note) {
@@ -71,12 +78,6 @@ function showNote(note) {
     document.getElementById("notesBody").innerHTML = note.legend;
 }
 
-function changeObject() {
-    const note = notes.find(note => note.id === this.value);
-    if (!note) return;
-    notesName.value = note.name;
-    editor.content.innerHTML = note.legend;
-}
 
 function changeName() {
     const id = document.getElementById("notesSelect").value;
