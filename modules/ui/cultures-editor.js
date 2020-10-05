@@ -6,7 +6,7 @@ import { editNamesbase } from "./namesbase-editor.js";
 
 import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
-import { findCell, getPackPolygon, isLand, isCtrlClick, si, rn } from "../utils.js";
+import { findCell, getPackPolygon, isLand, isCtrlClick, si, rn, findAll } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleBiomes, toggleCultures, drawCultures, toggleReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
 
