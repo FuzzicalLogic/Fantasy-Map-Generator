@@ -11,6 +11,11 @@ import { findCell, getPackPolygon, isLand, rn, isCtrlClick, si } from "../utils.
 import { editStyle } from "./style.js";
 import { toggleBiomes, toggleCultures, toggleReligions, drawReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
 
+const getById = id => document.getElementById(id);
+const getBody = () => getById('religionsBody');
+
+const animate = d3.transition().duration(1500).ease(d3.easeSinIn);
+
 export function editReligions() {
     if (customization) return;
     closeDialogs("#religionsEditor, .stable");
@@ -20,8 +25,6 @@ export function editReligions() {
     if (layerIsOn("toggleBiomes")) toggleBiomes();
     if (layerIsOn("toggleProvinces")) toggleProvinces();
 
-    const body = document.getElementById("religionsBody");
-    const animate = d3.transition().duration(1500).ease(d3.easeSinIn);
     refreshReligionsEditor();
     drawReligionCenters();
 
@@ -69,6 +72,7 @@ function religionsCollectStatistics() {
 
 // add line for each religion
 function religionsEditorAddLines() {
+    const body = getBody();
     const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
     let lines = "", totalArea = 0, totalPopulation = 0;
 
@@ -170,7 +174,7 @@ function religionHighlightOn(event) {
         tip("Drag to change parent, drag to itself to move to the top level. Hold CTRL and click to change abbreviation");
     }
 
-    const el = body.querySelector(`div[data-id='${religion}']`);
+    const el = getBody().querySelector(`div[data-id='${religion}']`);
     if (el) el.classList.add("active");
 
     if (!layerIsOn("toggleReligions")) return;
@@ -188,7 +192,7 @@ function religionHighlightOff(event) {
         tip("");
     }
 
-    const el = body.querySelector(`div[data-id='${religion}']`)
+    const el = getBody().querySelector(`div[data-id='${religion}']`)
     if (el) el.classList.remove("active");
 
     relig.select("#religion" + religion).transition().attr("stroke-width", null).attr("stroke", null);
@@ -367,6 +371,7 @@ function toggleLegend() {
 }
 
 function togglePercentageMode() {
+    const body = getBody();
     if (body.dataset.type === "absolute") {
         body.dataset.type = "percentage";
         const totalArea = +religionsFooterArea.dataset.area;
@@ -475,7 +480,7 @@ function showHierarchy() {
 }
 
 function toggleExtinct() {
-    body.dataset.extinct = body.dataset.extinct !== "show" ? "show" : "hide";
+    getBody().dataset.extinct = getBody().dataset.extinct !== "show" ? "show" : "hide";
     religionsEditorAddLines();
 }
 
@@ -489,7 +494,7 @@ function enterReligionsManualAssignent() {
 
     religionsEditor.querySelectorAll(".hide").forEach(el => el.classList.add("hidden"));
     religionsFooter.style.display = "none";
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
     $("#religionsEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
 
     tip("Click on religion to select, drag the circle to change religion", true);
@@ -498,12 +503,12 @@ function enterReligionsManualAssignent() {
         .call(d3.drag().on("start", dragReligionBrush))
         .on("touchmove mousemove", moveReligionBrush);
 
-    body.querySelector("div").classList.add("selected");
+    getBody().querySelector("div").classList.add("selected");
 }
 
 function selectReligionOnLineClick(i) {
     if (customization !== 7) return;
-    body.querySelector("div.selected").classList.remove("selected");
+    getBody().querySelector("div.selected").classList.remove("selected");
     this.classList.add("selected");
 }
 
@@ -515,6 +520,7 @@ function selectReligionOnMapClick() {
     const assigned = relig.select("#temp").select("polygon[data-cell='" + i + "']");
     const religion = assigned.size() ? +assigned.attr("data-religion") : pack.cells.religion[i];
 
+    const body = getBody();
     body.querySelector("div.selected").classList.remove("selected");
     body.querySelector("div[data-id='" + religion + "']").classList.add("selected");
 }
@@ -536,7 +542,7 @@ function dragReligionBrush() {
 // change religion within selection
 function changeReligionForSelection(selection) {
     const temp = relig.select("#temp");
-    const selected = body.querySelector("div.selected");
+    const selected = getBody().querySelector("div.selected");
     const r = +selected.dataset.id; // religionNew
     const color = pack.religions[r].color || "#ffffff";
 
@@ -575,6 +581,7 @@ function applyReligionsManualAssignent() {
 }
 
 function exitReligionsManualAssignment(close) {
+    const body = getBody();
     customization = 0;
     relig.select("#temp").remove();
     removeCircle();
@@ -599,14 +606,14 @@ function enterAddReligionMode() {
     this.classList.add("pressed");
     tip("Click on the map to add a new religion", true);
     viewbox.style("cursor", "crosshair").on("click", addReligion);
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 
 function exitAddReligionMode() {
     customization = 0;
     restoreDefaultEvents();
     clearMainTip();
-    body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
+    getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     if (religionsAdd.classList.contains("pressed")) religionsAdd.classList.remove("pressed");
 }
 
@@ -629,7 +636,7 @@ function downloadReligionsData() {
     const unit = areaUnit.value === "square" ? distanceUnitInput.value + "2" : areaUnit.value;
     let data = "Id,Religion,Color,Type,Form,Deity,Area " + unit + ",Believers\n"; // headers
 
-    body.querySelectorAll(":scope > div").forEach(function (el) {
+    getBody().querySelectorAll(":scope > div").forEach(function (el) {
         data += el.dataset.id + ",";
         data += el.dataset.name + ",";
         data += el.dataset.color + ",";
