@@ -10,6 +10,9 @@ import { findCell, getPackPolygon, isLand, isCtrlClick, si, rn, findAll } from "
 import { editStyle } from "./style.js";
 import { toggleBiomes, toggleCultures, drawCultures, toggleReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
 
+const getById = id => document.getElementById(id);
+const getBody = () => getById('culturesBody');
+
 export function editCultures() {
     if (customization) return;
     closeDialogs("#culturesEditor, .stable");
