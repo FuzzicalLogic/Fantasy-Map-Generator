@@ -1,6 +1,7 @@
 import {
     svg, fonts,
-    statesHalo
+    statesHalo,
+    oceanLayers
 } from "../../main.js";
 
 import { redrawLegend, downloadFile, uploadFile } from "./editors.js";

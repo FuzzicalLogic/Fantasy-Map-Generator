@@ -622,7 +622,7 @@ export function invokeActiveZooming() {
         ruler.selectAll("line, path").attr("stroke-width", size);
     }
 }
-
+import * as MapData from "./modules/MapData.js";
 export function generate() {
     try {
         const timeStart = performance.now();

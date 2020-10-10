@@ -1,7 +1,7 @@
 import {
     svgWidth, svgHeight,
     graphWidth, graphHeight,
-    grid
+    grid, mapCoordinates
 } from "../../main.js";
 import { getMapURL } from "../save-and-load.js";
 

@@ -18,7 +18,7 @@ import { saveGeoJSON_Cells, saveGeoJSON_Roads, saveGeoJSON_Rivers, saveGeoJSON_M
 
 import { tip, stored, applyOption, clearMainTip, lock, unlock, locked } from "./general.js";
 import { P, gauss, rn, link, rw, last, rand } from "../utils.js";
-import { fitContent, fitLegendBox } from "./editors.js";
+import { closeDialogs, fitContent, fitLegendBox } from "./editors.js";
 
 export const optionsContent = document.getElementById("optionsContent");
 
@@ -207,7 +207,9 @@ export function applyMapSize() {
     setSvgWidth(Math.min(graphWidth, window.innerWidth));
     setSvgHeight(Math.min(graphHeight, window.innerHeight));
     svg.attr("width", svgWidth).attr("height", svgHeight);
-    zoom.translateExtent([[0, 0], [graphWidth, graphHeight]]).scaleExtent([zoomMin, zoomMax]).scaleTo(svg, zoomMin);
+    zoom.translateExtent([[0, 0], [graphWidth, graphHeight]])
+        .scaleExtent([zoomMin, zoomMax])
+        .scaleTo(svg, zoomMin);
 }
 
 function toggleFullscreen() {
