@@ -55,22 +55,8 @@ const Steps = {
 
 export function generate(map) {
     console.time('generateHeightmap');
-    cells = grid.cells, p = grid.points;
-    cells.h = new Uint8Array(grid.points.length);
-
-    switch (document.getElementById("templateInput").value) {
-        case "Volcano": templateVolcano(); break;
-        case "High Island": templateHighIsland(); break;
-        case "Low Island": templateLowIsland(); break;
-        case "Continents": templateContinents(); break;
-        case "Archipelago": templateArchipelago(); break;
-        case "Atoll": templateAtoll(); break;
-        case "Mediterranean": templateMediterranean(); break;
-        case "Peninsula": templatePeninsula(); break;
-        case "Pangea": templatePangea(); break;
-        case "Isthmus": templateIsthmus(); break;
-        case "Shattered": templateShattered(); break;
-    }
+    cells = map.cells, p = map.points;
+    cells.h = new Uint8Array(map.points.length);
 
     Templates[document.getElementById("templateInput").value]()
 
@@ -257,6 +243,7 @@ export function addHill(count, height, rangeX, rangeY) {
 }
 
 export function addPit(count, height, rangeX, rangeY) {
+    const power = BLOB_POWER[densityInput.value];
     count = getNumberInRange(count);
     while (count > 0) { addOnePit(); count--; }
 
