@@ -249,20 +249,20 @@ export function addPit(count, height, rangeX, rangeY) {
 
     function addOnePit() {
         const used = new Uint8Array(cells.h.length);
-        let limit = 0, start;
+        let retries = 0, start;
         let h = lim(getNumberInRange(height));
 
         do {
             const x = getPointInRange(rangeX, graphWidth);
             const y = getPointInRange(rangeY, graphHeight);
             start = findGridCell(x, y);
-            limit++;
-        } while (cells.h[start] < 20 && limit < 50)
+            retries++;
+        } while (cells.h[start] < 20 && retries < 50)
 
         const queue = [start];
         while (queue.length) {
             const q = queue.shift();
-            h = h ** getBlobPower() * (Math.random() * .2 + .9);
+            h = h ** power * (Math.random() * .2 + .9);
             if (h < 1) return;
 
             cells.c[q].forEach(function (c, i) {
