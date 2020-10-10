@@ -5,6 +5,30 @@ import {
 import { findGridCell, P, getNumberInRange, lim, rand } from "./utils.js";
 
 let cells, p;
+const BLOB_POWER = {
+    1: .98,
+    2: .985,
+    3: .987,
+    4: .9892,
+    5: .9911,
+    6: .9921,
+    7: .9934,
+    8: .9942,
+    9: .9946,
+    10: .995
+}
+const LINE_POWER = {
+  1: .81,
+  2: .82,
+  3: .83,
+  4: .84,
+  5: .855,
+  6: .87,
+  7: .885,
+  8: .91,
+  9: .92,
+ 10: .93
+}
 const Templates = {
     "Volcano": templateVolcano,
     "High Island": templateHighIsland,
@@ -200,7 +224,7 @@ function templateShattered() {
 
 export function addHill(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
-    const power = getBlobPower();
+    const power = BLOB_POWER[densityInput.value];
     while (count > 0) { addOneHill(); count--; }
 
     function addOneHill() {
