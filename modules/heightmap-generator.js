@@ -480,14 +480,25 @@ export function addStrait(width, direction = "vertical") {
 }
 
 export function modify(range, add, mult, power) {
-    const min = range === "land" ? 20 : range === "all" ? 0 : +range.split("-")[0];
-    const max = range === "land" || range === "all" ? 100 : +range.split("-")[1];
-    grid.cells.h = grid.cells.h.map(h => h >= min && h <= max ? mod(h) : h);
+    const min = range === "land"
+        ? 20 : range === "all"
+            ? 0 : +range.split("-")[0];
+    const max = range === "land" || range === "all"
+        ? 100 : +range.split("-")[1];
+    grid.cells.h = grid.cells.h.map(
+        h => h >= min && h <= max ? mod(h) : h
+    );
 
     function mod(v) {
-        if (add) v = min === 20 ? Math.max(v + add, 20) : v + add;
-        if (mult !== 1) v = min === 20 ? (v - 20) * mult + 20 : v * mult;
-        if (power) v = min === 20 ? (v - 20) ** power + 20 : v ** power;
+        if (add)
+            v = min === 20
+                ? Math.max(v + add, 20) : v + add;
+        if (mult !== 1)
+            v = min === 20
+                ? (v - 20) * mult + 20 : v * mult;
+        if (power)
+            v = min === 20
+                ? (v - 20) ** power + 20 : v ** power;
         return lim(v);
     }
 }
@@ -501,7 +512,10 @@ export function smooth(fr = 2, add = 0) {
 }
 
 function getPointInRange(range, length) {
-    if (typeof range !== "string") { console.error("Range should be a string"); return; }
+    if (typeof range !== "string") {
+        console.error("Range should be a string");
+        return;
+    }
     const min = range.split("-")[0] / 100 || 0;
     const max = range.split("-")[1] / 100 || 100;
     return rand(min * length, max * length);
