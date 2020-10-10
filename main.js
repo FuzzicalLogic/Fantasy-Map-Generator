@@ -631,10 +631,12 @@ export function generate() {
         console.group("Generated Map " + seed);
         applyMapSize();
         randomizeOptions();
-        placePoints();
+        grid = placePoints(graphWidth, graphHeight);
         calculateVoronoi(grid, grid.points);
+        console.log(grid);
+        console.log(MapData.generate(seed, graphWidth, graphHeight))
         drawScaleBar();
-        HeightmapGenerator.generate();
+        HeightmapGenerator.generate(grid);
         markFeatures();
         openNearSeaLakes();
         OceanLayers();
@@ -706,14 +708,17 @@ export function generateSeed() {
 }
 
 // Place points to calculate Voronoi diagram
-export function placePoints() {
+function placePoints(w, h) {
     console.time("placePoints");
-    const cellsDesired = 10000 * densityInput.value; // generate 10k points for each densityInput point
-    const spacing = grid.spacing = rn(Math.sqrt(graphWidth * graphHeight / cellsDesired), 2); // spacing between points before jirrering
-    grid.boundary = getBoundaryPoints(graphWidth, graphHeight, spacing);
-    grid.points = getJitteredGrid(graphWidth, graphHeight, spacing); // jittered square grid
-    grid.cellsX = Math.floor((graphWidth + 0.5 * spacing) / spacing);
-    grid.cellsY = Math.floor((graphHeight + 0.5 * spacing) / spacing);
+    const nCells = 10000 * densityInput.value; // generate 10k points for each densityInput point
+    const spacing = rn(Math.sqrt(w * h / nCells), 2); // spacing between points before jirrering
+    return {
+        spacing: spacing,
+        boundary: getBoundaryPoints(w, h, spacing),
+        points: getJitteredGrid(w, h, spacing),
+        cellsX: Math.floor((w + 0.5 * spacing) / spacing),
+        cellsY: Math.floor((h + 0.5 * spacing) / spacing)
+    }
     console.timeEnd("placePoints");
 }
 
