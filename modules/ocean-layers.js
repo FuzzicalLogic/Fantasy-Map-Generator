@@ -14,8 +14,10 @@ export function OceanLayers() {
 
     lineGen.curve(d3.curveBasisClosed);
     cells = grid.cells, pointsN = grid.cells.i.length, vertices = grid.vertices;
-    const limits = outline === "random" ? randomizeOutline() : outline.split(",").map(s => +s);
-    markupOcean(limits);
+    const limits = outline === "random"
+        ? randomizeOutline()
+        : outline.split(",").map(s => +s);
+    markupOcean(cells, limits);
 
     const chains = [];
     const opacity = rn(0.4 / limits.length, 2);
@@ -43,7 +45,8 @@ export function OceanLayers() {
         const layer = chains.filter(c => c[0] === t);
         let path = layer.map(c => round(lineGen(c[1]))).join("");
         //if (layer.every(c => !c[2])) path = bbox + path; // add outer ring if all segments are outside (works not for all cases)
-        if (path) oceanLayers.append("path").attr("d", path).attr("fill", "#ecf2f9").style("opacity", opacity);
+        if (path)
+            oceanLayers.append("path").attr("d", path).attr("fill", "#ecf2f9").style("opacity", opacity);
     }
 
     // find eligible cell vertex to start path detection
@@ -66,11 +69,16 @@ function randomizeOutline() {
 }
 
   // Define grid ocean cells type based on distance form land
-function markupOcean(limits) {
-    for (let t = -2; t >= limits[0] - 1; t--) {
-        for (let i = 0; i < pointsN; i++) {
-            if (cells.t[i] !== t + 1) continue;
-            cells.c[i].forEach(function (e) { if (!cells.t[e]) cells.t[e] = t; });
+function markupOcean(cells, limits) {
+    let { c, t } = cells,
+        nCells = cells.i.length;
+    for (let j = -2; j >= limits[0] - 1; j--) {
+        for (let i = 0; i < nCells; i++) {
+            if (t[i] !== j + 1)
+                continue;
+            c[i].forEach(e => {
+                if (!t[e]) t[e] = j;
+            });
         }
     }
 }
@@ -81,16 +89,25 @@ function connectVertices(start, t) {
     for (let i = 0, current = start; i === 0 || current !== start && i < 10000; i++) {
         const prev = chain[chain.length - 1]; // previous vertex in chain
         chain.push(current); // add current vertex to sequence
+
         const c = vertices.c[current]; // cells adjacent to vertex
         c.filter(c => cells.t[c] === t).forEach(c => used[c] = 1);
+
         const v = vertices.v[current]; // neighboring vertices
         const c0 = !cells.t[c[0]] || cells.t[c[0]] === t - 1;
         const c1 = !cells.t[c[1]] || cells.t[c[1]] === t - 1;
         const c2 = !cells.t[c[2]] || cells.t[c[2]] === t - 1;
-        if (v[0] !== undefined && v[0] !== prev && c0 !== c1) current = v[0];
-        else if (v[1] !== undefined && v[1] !== prev && c1 !== c2) current = v[1];
-        else if (v[2] !== undefined && v[2] !== prev && c0 !== c2) current = v[2];
-        if (current === chain[chain.length - 1]) { console.error("Next vertex is not found"); break; }
+
+        if (v[0] !== undefined && v[0] !== prev && c0 !== c1)
+            current = v[0];
+        else if (v[1] !== undefined && v[1] !== prev && c1 !== c2)
+            current = v[1];
+        else if (v[2] !== undefined && v[2] !== prev && c0 !== c2)
+            current = v[2];
+
+        if (current === chain[chain.length - 1]) {
+            console.error("Next vertex is not found"); break;
+        }
     }
     chain.push(chain[0]); // push first vertex as the last one
     return chain;
