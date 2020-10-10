@@ -1,9 +1,13 @@
+import { graphWidth, graphHeight, calculateMapCoordinates } from "../../main.js";
+
 import * as Rivers from "../river-generator.js";
 import * as ThreeD from "./3d.js";
 
 import { tip, lock } from "./general.js";
 import { rn, parseTransform } from "../utils.js";
 import { applyPreset, drawTemp, toggleBiomes, drawBiomes, drawPrec, drawCoordinates, layerIsOn } from "./layers.js";
+
+window.editWorld = editWorld;
 
 export function editWorld() {
     if (customization) return;
