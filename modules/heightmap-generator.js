@@ -5,8 +5,31 @@ import {
 import { findGridCell, P, getNumberInRange, lim, rand } from "./utils.js";
 
 let cells, p;
+const Templates = {
+    "Volcano": templateVolcano,
+    "High Island": templateHighIsland,
+    "Low Island": templateLowIsland,
+    "Continents": templateContinents,
+    "Archipelago": templateArchipelago,
+    "Atoll": templateAtoll,
+    "Mediterranean": templateMediterranean,
+    "Peninsula": templatePeninsula,
+    "Pangea": templatePangea,
+    "Isthmus": templateIsthmus,
+    "Shattered": templateShattered
+}
+const Steps = {
+    Hill: addHill,
+    Pit: addPit,
+    Range: addRange,
+    Trough: addTrough,
+    Strait: addStrait,
+    Add: modify,
+    Multiply: modify,
+    Smooth: smooth
+}
 
-export function generate() {
+export function generate(map) {
     console.time('generateHeightmap');
     cells = grid.cells, p = grid.points;
     cells.h = new Uint8Array(grid.points.length);
@@ -25,194 +48,154 @@ export function generate() {
         case "Shattered": templateShattered(); break;
     }
 
-    console.timeEnd('generateHeightmap');
-}
+    Templates[document.getElementById("templateInput").value]()
 
-// parse template step
-function addStep(a1, a2, a3, a4, a5) {
-    if (a1 === "Hill") addHill(a2, a3, a4, a5); else
-        if (a1 === "Pit") addPit(a2, a3, a4, a5); else
-            if (a1 === "Range") addRange(a2, a3, a4, a5); else
-                if (a1 === "Trough") addTrough(a2, a3, a4, a5); else
-                    if (a1 === "Strait") addStrait(a2, a3); else
-                        if (a1 === "Add") modify(a3, a2, 1); else
-                            if (a1 === "Multiply") modify(a3, 0, a2); else
-                                if (a1 === "Smooth") smooth(a2);
+    console.timeEnd('generateHeightmap');
 }
 
 // Heighmap Template: Volcano
 function templateVolcano() {
-    addStep("Hill", "1", "90-100", "44-56", "40-60");
-    addStep("Multiply", .8, "50-100");
-    addStep("Range", "1.5", "30-55", "45-55", "40-60");
-    addStep("Smooth", 2);
-    addStep("Hill", "1.5", "25-35", "25-30", "20-75");
-    addStep("Hill", "1", "25-35", "75-80", "25-75");
-    addStep("Hill", "0.5", "20-25", "10-15", "20-25");
+    Steps.Hill("1", "90-100", "44-56", "40-60");
+    Steps.Multiply("50-100", 0, 0.8);
+    Steps.Range("1.5", "30-55", "45-55", "40-60");
+    Steps.Smooth(2);
+    Steps.Hill("1.5", "25-35", "25-30", "20-75");
+    Steps.Hill("1", "25-35", "75-80", "25-75");
+    Steps.Hill("0.5", "20-25", "10-15", "20-25");
 }
 
 // Heighmap Template: High Island
 function templateHighIsland() {
-    addStep("Hill", "1", "90-100", "65-75", "47-53");
-    addStep("Add", 5, "all");
-    addStep("Hill", "6", "20-23", "25-55", "45-55");
-    addStep("Range", "1", "40-50", "45-55", "45-55");
-    addStep("Smooth", 2);
-    addStep("Trough", "2-3", "20-30", "20-30", "20-30");
-    addStep("Trough", "2-3", "20-30", "60-80", "70-80");
-    addStep("Hill", "1", "10-15", "60-60", "50-50");
-    addStep("Hill", "1.5", "13-16", "15-20", "20-75");
-    addStep("Multiply", .8, "20-100");
-    addStep("Range", "1.5", "30-40", "15-85", "30-40");
-    addStep("Range", "1.5", "30-40", "15-85", "60-70");
-    addStep("Pit", "2-3", "10-15", "15-85", "20-80");
+    Steps.Hill("1", "90-100", "65-75", "47-53");
+    Steps.Add("all", 5, 1);
+    Steps.Hill("6", "20-23", "25-55", "45-55");
+    Steps.Range("1", "40-50", "45-55", "45-55");
+    Steps.Smooth(2);
+    Steps.Trough("2-3", "20-30", "20-30", "20-30");
+    Steps.Trough("2-3", "20-30", "60-80", "70-80");
+    Steps.Hill("1", "10-15", "60-60", "50-50");
+    Steps.Hill("1.5", "13-16", "15-20", "20-75");
+    Steps.Multiply("20-100", 0, 0.8);
+    Steps.Range("1.5", "30-40", "15-85", "30-40");
+    Steps.Range("1.5", "30-40", "15-85", "60-70");
+    Steps.Pit("2-3", "10-15", "15-85", "20-80");
 }
 
 // Heighmap Template: Low Island
 function templateLowIsland() {
-    addStep("Hill", "1", "90-99", "60-80", "45-55");
-    addStep("Hill", "4-5", "25-35", "20-65", "40-60");
-    addStep("Range", "1", "40-50", "45-55", "45-55");
-    addStep("Smooth", 3);
-    addStep("Trough", "1.5", "20-30", "15-85", "20-30");
-    addStep("Trough", "1.5", "20-30", "15-85", "70-80");
-    addStep("Hill", "1.5", "10-15", "5-15", "20-80");
-    addStep("Hill", "1", "10-15", "85-95", "70-80");
-    addStep("Pit", "3-5", "10-15", "15-85", "20-80");
-    addStep("Multiply", .4, "20-100");
+    Steps.Hill("1", "90-99", "60-80", "45-55");
+    Steps.Hill("4-5", "25-35", "20-65", "40-60");
+    Steps.Range("1", "40-50", "45-55", "45-55");
+    Steps.Smooth(3);
+    Steps.Trough("1.5", "20-30", "15-85", "20-30");
+    Steps.Trough("1.5", "20-30", "15-85", "70-80");
+    Steps.Hill("1.5", "10-15", "5-15", "20-80");
+    Steps.Hill("1", "10-15", "85-95", "70-80");
+    Steps.Pit("3-5", "10-15", "15-85", "20-80");
+    Steps.Multiply("20-100", 0, 0.4);
 }
 
 // Heighmap Template: Continents
 function templateContinents() {
-    addStep("Hill", "1", "80-85", "75-80", "40-60");
-    addStep("Hill", "1", "80-85", "20-25", "40-60");
-    addStep("Multiply", .22, "20-100");
-    addStep("Hill", "5-6", "15-20", "25-75", "20-82");
-    addStep("Range", ".8", "30-60", "5-15", "20-45");
-    addStep("Range", ".8", "30-60", "5-15", "55-80");
-    addStep("Range", "0-3", "30-60", "80-90", "20-80");
-    addStep("Trough", "3-4", "15-20", "15-85", "20-80");
-    addStep("Strait", "2", "vertical");
-    addStep("Smooth", 2);
-    addStep("Trough", "1-2", "5-10", "45-55", "45-55");
-    addStep("Pit", "3-4", "10-15", "15-85", "20-80");
-    addStep("Hill", "1", "5-10", "40-60", "40-60");
+    Steps.Hill("1", "80-85", "75-80", "40-60");
+    Steps.Hill("1", "80-85", "20-25", "40-60");
+    Steps.Multiply("20-100", 0, .22);
+    Steps.Hill("5-6", "15-20", "25-75", "20-82");
+    Steps.Range(".8", "30-60", "5-15", "20-45");
+    Steps.Range(".8", "30-60", "5-15", "55-80");
+    Steps.Range("0-3", "30-60", "80-90", "20-80");
+    Steps.Trough("3-4", "15-20", "15-85", "20-80");
+    Steps.Strait("2", "vertical");
+    Steps.Smooth(2);
+    Steps.Trough("1-2", "5-10", "45-55", "45-55");
+    Steps.Pit("3-4", "10-15", "15-85", "20-80");
+    Steps.Hill("1", "5-10", "40-60", "40-60");
 }
 
 // Heighmap Template: Archipelago
 function templateArchipelago() {
-    addStep("Add", 11, "all");
-    addStep("Range", "2-3", "40-60", "20-80", "20-80");
-    addStep("Hill", "5", "15-20", "10-90", "30-70");
-    addStep("Hill", "2", "10-15", "10-30", "20-80");
-    addStep("Hill", "2", "10-15", "60-90", "20-80");
-    addStep("Smooth", 3);
-    addStep("Trough", "10", "20-30", "5-95", "5-95");
-    addStep("Strait", "2", "vertical");
-    addStep("Strait", "2", "horizontal");
+    Steps.Add("all", 11, 1);
+    Steps.Range("2-3", "40-60", "20-80", "20-80");
+    Steps.Hill("5", "15-20", "10-90", "30-70");
+    Steps.Hill("2", "10-15", "10-30", "20-80");
+    Steps.Hill("2", "10-15", "60-90", "20-80");
+    Steps.Smooth(3);
+    Steps.Trough("10", "20-30", "5-95", "5-95");
+    Steps.Strait("2", "vertical");
+    Steps.Strait("2", "horizontal");
 }
 
 // Heighmap Template: Atoll
 function templateAtoll() {
-    addStep("Hill", "1", "75-80", "50-60", "45-55");
-    addStep("Hill", "1.5", "30-50", "25-75", "30-70");
-    addStep("Hill", ".5", "30-50", "25-35", "30-70");
-    addStep("Smooth", 1);
-    addStep("Multiply", .2, "25-100");
-    addStep("Hill", ".5", "10-20", "50-55", "48-52");
+    Steps.Hill("1", "75-80", "50-60", "45-55");
+    Steps.Hill("1.5", "30-50", "25-75", "30-70");
+    Steps.Hill(".5", "30-50", "25-35", "30-70");
+    Steps.Smooth(1);
+    Steps.Multiply("25-100", 0, 0.2);
+    Steps.Hill(".5", "10-20", "50-55", "48-52");
 }
 
 // Heighmap Template: Mediterranean
 function templateMediterranean() {
-    addStep("Range", "3-4", "30-50", "0-100", "0-10");
-    addStep("Range", "3-4", "30-50", "0-100", "90-100");
-    addStep("Hill", "5-6", "30-70", "0-100", "0-5");
-    addStep("Hill", "5-6", "30-70", "0-100", "95-100");
-    addStep("Smooth", 1);
-    addStep("Hill", "2-3", "30-70", "0-5", "20-80");
-    addStep("Hill", "2-3", "30-70", "95-100", "20-80");
-    addStep("Multiply", .8, "land");
-    addStep("Trough", "3-5", "40-50", "0-100", "0-10");
-    addStep("Trough", "3-5", "40-50", "0-100", "90-100");
+    Steps.Range("3-4", "30-50", "0-100", "0-10");
+    Steps.Range("3-4", "30-50", "0-100", "90-100");
+    Steps.Hill("5-6", "30-70", "0-100", "0-5");
+    Steps.Hill("5-6", "30-70", "0-100", "95-100");
+    Steps.Smooth(1);
+    Steps.Hill("2-3", "30-70", "0-5", "20-80");
+    Steps.Hill("2-3", "30-70", "95-100", "20-80");
+    Steps.Multiply("land", 0, 0.8);
+    Steps.Trough("3-5", "40-50", "0-100", "0-10");
+    Steps.Trough("3-5", "40-50", "0-100", "90-100");
 }
 
 // Heighmap Template: Peninsula
 function templatePeninsula() {
-    addStep("Range", "2-3", "20-35", "40-50", "0-15");
-    addStep("Add", 5, "all");
-    addStep("Hill", "1", "90-100", "10-90", "0-5");
-    addStep("Add", 13, "all");
-    addStep("Hill", "3-4", "3-5", "5-95", "80-100");
-    addStep("Hill", "1-2", "3-5", "5-95", "40-60");
-    addStep("Trough", "5-6", "10-25", "5-95", "5-95");
-    addStep("Smooth", 3);
+    Steps.Range("2-3", "20-35", "40-50", "0-15");
+    Steps.Add("all", 5, 1);
+    Steps.Hill("1", "90-100", "10-90", "0-5");
+    Steps.Add("all", 13, 1);
+    Steps.Hill("3-4", "3-5", "5-95", "80-100");
+    Steps.Hill("1-2", "3-5", "5-95", "40-60");
+    Steps.Trough("5-6", "10-25", "5-95", "5-95");
+    Steps.Smooth(3);
 }
 
 // Heighmap Template: Pangea
 function templatePangea() {
-    addStep("Hill", "1-2", "25-40", "15-50", "0-10");
-    addStep("Hill", "1-2", "5-40", "50-85", "0-10");
-    addStep("Hill", "1-2", "25-40", "50-85", "90-100");
-    addStep("Hill", "1-2", "5-40", "15-50", "90-100");
-    addStep("Hill", "8-12", "20-40", "20-80", "48-52");
-    addStep("Smooth", 2);
-    addStep("Multiply", .7, "land");
-    addStep("Trough", "3-4", "25-35", "5-95", "10-20");
-    addStep("Trough", "3-4", "25-35", "5-95", "80-90");
-    addStep("Range", "5-6", "30-40", "10-90", "35-65");
+    Steps.Hill("1-2", "25-40", "15-50", "0-10");
+    Steps.Hill("1-2", "5-40", "50-85", "0-10");
+    Steps.Hill("1-2", "25-40", "50-85", "90-100");
+    Steps.Hill("1-2", "5-40", "15-50", "90-100");
+    Steps.Hill("8-12", "20-40", "20-80", "48-52");
+    Steps.Smooth(2);
+    Steps.Multiply("land", 0, 0.7);
+    Steps.Trough("3-4", "25-35", "5-95", "10-20");
+    Steps.Trough("3-4", "25-35", "5-95", "80-90");
+    Steps.Range("5-6", "30-40", "10-90", "35-65");
 }
 
 // Heighmap Template: Isthmus
 function templateIsthmus() {
-    addStep("Hill", "5-10", "15-30", "0-30", "0-20");
-    addStep("Hill", "5-10", "15-30", "10-50", "20-40");
-    addStep("Hill", "5-10", "15-30", "30-70", "40-60");
-    addStep("Hill", "5-10", "15-30", "50-90", "60-80");
-    addStep("Hill", "5-10", "15-30", "70-100", "80-100");
-    addStep("Smooth", 2);
-    addStep("Trough", "4-8", "15-30", "0-30", "0-20");
-    addStep("Trough", "4-8", "15-30", "10-50", "20-40");
-    addStep("Trough", "4-8", "15-30", "30-70", "40-60");
-    addStep("Trough", "4-8", "15-30", "50-90", "60-80");
-    addStep("Trough", "4-8", "15-30", "70-100", "80-100");
+    Steps.Hill("5-10", "15-30", "0-30", "0-20");
+    Steps.Hill("5-10", "15-30", "10-50", "20-40");
+    Steps.Hill("5-10", "15-30", "30-70", "40-60");
+    Steps.Hill("5-10", "15-30", "50-90", "60-80");
+    Steps.Hill("5-10", "15-30", "70-100", "80-100");
+    Steps.Smooth(2);
+    Steps.Trough("4-8", "15-30", "0-30", "0-20");
+    Steps.Trough("4-8", "15-30", "10-50", "20-40");
+    Steps.Trough("4-8", "15-30", "30-70", "40-60");
+    Steps.Trough("4-8", "15-30", "50-90", "60-80");
+    Steps.Trough("4-8", "15-30", "70-100", "80-100");
 }
 
 // Heighmap Template: Shattered
 function templateShattered() {
-    addStep("Hill", "8", "35-40", "15-85", "30-70");
-    addStep("Trough", "10-20", "40-50", "5-95", "5-95");
-    addStep("Range", "5-7", "30-40", "10-90", "20-80");
-    addStep("Pit", "12-20", "30-40", "15-85", "20-80");
-}
-
-function getBlobPower() {
-    switch (+densityInput.value) {
-        case 1: return .98;
-        case 2: return .985;
-        case 3: return .987;
-        case 4: return .9892;
-        case 5: return .9911;
-        case 6: return .9921;
-        case 7: return .9934;
-        case 8: return .9942;
-        case 9: return .9946;
-        case 10: return .995;
-    }
-}
-
-function getLinePower() {
-    switch (+densityInput.value) {
-        case 1: return .81;
-        case 2: return .82;
-        case 3: return .83;
-        case 4: return .84;
-        case 5: return .855;
-        case 6: return .87;
-        case 7: return .885;
-        case 8: return .91;
-        case 9: return .92;
-        case 10: return .93;
-    }
+    Steps.Hill("8", "35-40", "15-85", "30-70");
+    Steps.Trough("10-20", "40-50", "5-95", "5-95");
+    Steps.Range("5-7", "30-40", "10-90", "20-80");
+    Steps.Pit("12-20", "30-40", "15-85", "20-80");
 }
 
 export function addHill(count, height, rangeX, rangeY) {
@@ -283,7 +266,7 @@ export function addPit(count, height, rangeX, rangeY) {
 
 export function addRange(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
-    const power = getLinePower();
+    const power = LINE_POWER[densityInput.value];
     while (count > 0) { addOneRange(); count--; }
 
     function addOneRange() {
@@ -358,7 +341,7 @@ export function addRange(count, height, rangeX, rangeY) {
 
 export function addTrough(count, height, rangeX, rangeY) {
     count = getNumberInRange(count);
-    const power = getLinePower();
+    const power = LINE_POWER[densityInput.value];
     while (count > 0) { addOneTrough(); count--; }
 
     function addOneTrough() {
