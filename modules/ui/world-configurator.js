@@ -82,7 +82,8 @@ export function editWorld() {
 
         calculateMapCoordinates();
         const mc = mapCoordinates; // shortcut
-        const scale = +distanceScaleInput.value, unit = distanceUnitInput.value;
+        const scale = +document.getElementById('distanceScaleInput').value,
+            unit = document.getElementById('distanceUnitInput').value;
         const meridian = toKilometer(eqD * 2 * scale);
         document.getElementById("mapSize").innerHTML = `${graphWidth}x${graphHeight}`;
         document.getElementById("mapSizeFriendly").innerHTML = `${rn(graphWidth * scale)}x${rn(graphHeight * scale)} ${unit}`;
