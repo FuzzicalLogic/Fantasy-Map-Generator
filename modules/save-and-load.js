@@ -1068,7 +1068,7 @@ function parseLoadedData(data) {
         yearInput.value = options.year;
         eraInput.value = options.era;
 
-        if (window.restoreDefaultEvents) restoreDefaultEvents();
+        restoreDefaultEvents();
         focusOn(); // based on searchParams focus on point, cell or burg
         invokeActiveZooming();
 
