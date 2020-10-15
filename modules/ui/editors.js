@@ -32,6 +32,7 @@ export function initialize() {
     });
 
     restoreDefaultEvents();
+    window.restoreDefaultEvents = restoreDefaultEvents;
 }
 
 // restore default viewbox events
