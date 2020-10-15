@@ -9,6 +9,7 @@ export function generate(seed, w, h, view) {
     data.grid = placePoints(w, h);
     data.grid = calculateVoronoi(data.grid, data.grid.points);
     markFeatures(data.grid, seed);
+    openNearSeaLakes(data.grid);
 
     return data;
 }
@@ -130,3 +131,48 @@ export function markFeatures(grid, seed) {
     console.timeEnd("markFeatures");
 }
 
+// How to handle lakes generated near seas? They can be both open or closed.
+// As these lakes are usually get a lot of water inflow, most of them should have brake the treshold and flow to sea via river or strait (see Ancylus Lake).
+// So I will help this process and open these kind of lakes setting a treshold cell heigh below the sea level (=19).
+export function openNearSeaLakes(grid) {
+    if (templateInput.value === "Atoll") return; // no need for Atolls
+    const cells = grid.cells, features = grid.features;
+    if (!features.find(f => f.type === "lake")) return; // no lakes
+    console.time("openLakes");
+    const limit = 50; // max height that can be breached by water
+
+    for (let t = 0, removed = true; t < 5 && removed; t++) {
+        removed = false;
+
+        for (const i of cells.i) {
+            const lake = cells.f[i];
+            if (features[lake].type !== "lake") continue; // not a lake cell
+
+            check_neighbours:
+            for (const c of cells.c[i]) {
+                if (cells.t[c] !== 1 || cells.h[c] > limit) continue; // water cannot brake this
+
+                for (const n of cells.c[c]) {
+                    const ocean = cells.f[n];
+                    if (features[ocean].type !== "ocean") continue; // not an ocean
+                    removed = removeLake(c, lake, ocean);
+                    break check_neighbours;
+                }
+            }
+        }
+
+    }
+
+    function removeLake(treshold, lake, ocean) {
+        cells.h[treshold] = 19;
+        cells.t[treshold] = -1;
+        cells.f[treshold] = ocean;
+        cells.c[treshold].forEach(function (c) {
+            if (cells.h[c] >= 20) cells.t[c] = 1; // mark as coastline
+        });
+        features[lake].type = "ocean"; // mark former lake as ocean
+        return true;
+    }
+
+    console.timeEnd("openLakes");
+}
