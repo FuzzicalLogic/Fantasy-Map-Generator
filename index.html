@@ -1008,7 +1008,7 @@
 
             <section id="layersContent" class="tabcontent" style="display: block">
                 <p data-tip="Select a map layers preset" style="display: inline-block;">Layers preset:</p>
-                <select data-tip="Select a map layers preset" id="layersPreset" onchange="changePreset(this.value)" style="width:45%">
+                <select id="layersPreset" data-tip="Select a map layers preset" onchange="changePreset(this.value)" style="width:45%">
                     <option value="political" selected>Political map</option>
                     <option value="cultural">Cultural map</option>
                     <option value="religions">Religions map</option>
@@ -1056,15 +1056,15 @@
 
                 <div id="viewMode" data-tip="Set view node">
                     <p>View mode:</p>
-                    <button data-tip="Standard view mode that allows to edit the map" id="viewStandard" class="pressed">Standard</button>
-                    <button data-tip="Map presentation in 3D scene. Works best for heightmap. Cannot be used for editing" id="viewMesh">3D scene</button>
-                    <button data-tip="Project map on globe. Cannot be used for editing" id="viewGlobe">Globe</button>
+                    <button id="viewStandard" data-tip="Standard view mode that allows to edit the map" disabled>Standard</button>
+                    <button id="viewMesh" data-tip="Map presentation in 3D scene. Works best for heightmap. Cannot be used for editing">3D scene</button>
+                    <button id="viewGlobe" data-tip="Project map on globe. Cannot be used for editing">Globe</button>
                 </div>
             </section>
 
             <section id="styleContent" class="tabcontent">
                 <p data-tip="Select a style preset" style="display: inline-block">Style preset:</p>
-                <select data-tip="Select a style preset" id="stylePreset" onchange="changeStylePreset(this.value)" style="width:45%">
+                <select id="stylePreset" data-tip="Select a style preset" onchange="changeStylePreset(this.value)" style="width:45%">
                     <option value="styleDefault" data-system=1 selected>Default</option>
                     <option value="styleAncient" data-system=1>Ancient</option>
                     <option value="styleGloom" data-system=1>Gloom</option>
@@ -1075,7 +1075,7 @@
                 <button id="removeStyleButton" data-tip="Click to remove current custom style preset" class="icon-minus styleButton" style="display: none" onclick="removeStylePreset()"></button>
 
                 <p data-tip="Select an element to edit its style" style="display: inline-block;">Select element:</p>
-                <select data-tip="Select an element to edit its style (list is ordered alphabetically)" id="styleElementSelect" style="width:42%">
+                <select id="styleElementSelect" data-tip="Select an element to edit its style (list is ordered alphabetically)" style="width:42%">
                     <option value="anchors">Anchor Icons</option>
                     <option value="biomes">Biomes</option>
                     <option value="borders">Borders</option>
@@ -1636,21 +1636,21 @@
                             <span>px</span>
                         </td>
                         <td>
-                            <i data-tip="Toggle between screen size and initial canvas size" id="toggleFullscreen" class="icon-resize-full-alt"></i>
+                            <i id="toggleFullscreen" data-tip="Toggle between screen size and initial canvas size" class="icon-resize-full-alt"></i>
                         </td>
                     </tr>
 
                     <tr data-tip="Map seed number. Seed produces the same map only if canvas size and options are the same">
                         <td>
-                            <i data-tip="Click to generate a map for this seed" id="optionsSeedGenerate"></i>
+                            <i id="optionsSeedGenerate" data-tip="Click to generate a map for this seed"></i>
                         </td>
                         <td>Map seed</td>
                         <td>
                             <input id="optionsSeed" class="long" type="number" min=1 max=999999999 step=1>
                         </td>
                         <td>
-                            <i data-tip="Show seed history to apply a previous seed" id="optionsMapHistory" class="icon-history"></i>
-                            <i data-tip="Copy map seed as URL. It will produce the same map only if options are default or the same" id="optionsCopySeed" class="icon-docs"></i>
+                            <i id="optionsMapHistory" class="icon-history" data-tip="Show seed history to apply a previous seed"></i>
+                            <i id="optionsCopySeed" class="icon-docs" data-tip="Copy map seed as URL. It will produce the same map only if options are default or the same"></i>
                         </td>
                     </tr>
 
@@ -1667,20 +1667,20 @@
 
                     <tr data-tip="Define map name (will be used to name downloaded files)">
                         <td>
-                            <i data-locked=0 id="lock_mapName" class="icon-lock-open"></i>
+                            <i id="lock_mapName" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Map name</td>
                         <td>
                             <input id="mapName" data-stored="mapName" class="long" autocomplete="off" spellcheck="false" type="text">
                         </td>
                         <td>
-                            <i data-tip="Regenerate map name" onclick="Names.getMapName(true)" class="icon-arrows-cw"></i>
+                            <i class="icon-arrows-cw" data-tip="Regenerate map name" onclick="Names.getMapName(true)"></i>
                         </td>
                     </tr>
 
                     <tr data-tip="Define current year and era name">
                         <td>
-                            <i data-locked=0 id="lock_era" class="icon-lock-open"></i>
+                            <i id="lock_era" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Year and era</td>
                         <td>
@@ -1694,7 +1694,7 @@
 
                     <tr data-tip="Select template to be used for a Heightmap generation">
                         <td>
-                            <i data-locked=0 id="lock_template" class="icon-lock-open"></i>
+                            <i id="lock_template" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Map template</td>
                         <td>
@@ -1717,7 +1717,7 @@
 
                     <tr data-tip="Define how many Cultures should be generated">
                         <td>
-                            <i data-locked=0 id="lock_cultures" class="icon-lock-open"></i>
+                            <i id="lock_cultures" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Cultures number</td>
                         <td>
@@ -1730,7 +1730,7 @@
 
                     <tr data-tip="Select a set of cultures to be used for names and cultures generation">
                         <td>
-                            <i data-locked=0 id="lock_culturesSet" class="icon-lock-open"></i>
+                            <i id="lock_culturesSet" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Cultures set</td>
                         <td>
@@ -1750,7 +1750,7 @@
 
                     <tr data-tip="Define how many states and capitals should be generated">
                         <td>
-                            <i data-locked=0 id="lock_regions" class="icon-lock-open"></i>
+                            <i id="lock_regions" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>States number</td>
                         <td>
@@ -1763,7 +1763,7 @@
 
                     <tr data-tip="Define burgs percentage to form a separate province">
                         <td>
-                            <i data-locked=0 id="lock_provinces" class="icon-lock-open"></i>
+                            <i id="lock_provinces" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Provinces ratio</td>
                         <td>
@@ -1776,7 +1776,7 @@
 
                     <tr data-tip="Define how much states and cultures can vary in size. Defines expansionism value">
                         <td>
-                            <i data-locked=0 id="lock_power" class="icon-lock-open"></i>
+                            <i id="lock_power" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Size variety</td>
                         <td>
@@ -1789,7 +1789,7 @@
 
                     <tr data-tip="Set state and cultures growth rate. Defines how many lands will stay neutral">
                         <td>
-                            <i data-locked=0 id="lock_neutral" class="icon-lock-open"></i>
+                            <i id="lock_neutral" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Growth rate</td>
                         <td>
@@ -1802,7 +1802,7 @@
 
                     <tr data-tip="Define a number of towns to be placed (if enough suitable land exists)">
                         <td>
-                            <i data-locked=0 id="lock_manors" class="icon-lock-open"></i>
+                            <i id="lock_manors" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Towns number</td>
                         <td>
@@ -1815,7 +1815,7 @@
 
                     <tr data-tip="Define how many organized religions and cults should be generated. Cultures will have their own folk religions in any case">
                         <td>
-                            <i data-locked=0 id="lock_religions" class="icon-lock-open"></i>
+                            <i id="lock_religions" class="icon-lock-open" data-locked=0></i>
                         </td>
                         <td>Religions number</td>
                         <td>
@@ -1879,13 +1879,13 @@
                         <td>Zoom extent</td>
                         <td>
                             <span data-tip="Mimimal possible zoom level (should be > 0)">min</span>
-                            <input data-tip="Mimimal possible zoom level (should be > 0)" id="zoomExtentMin" class="paired" type="number" min=.2 step=.1 max=20 value=1>
+                            <input id="zoomExtentMin" class="paired" type="number" min=.2 step=.1 max=20 value=1 data-tip="Mimimal possible zoom level (should be > 0)">
                             <span data-tip="Maximal possible zoom level (should be > 1)">max</span>
-                            <input data-tip="Maximal possible zoom level (should be > 1)" id="zoomExtentMax" class="paired" type="number" min=1 max=50 value=20>
+                            <input id="zoomExtentMax" class="paired" type="number" min=1 max=50 value=20 data-tip="Maximal possible zoom level (should be > 1)">
                         </td>
                         <td>
-                            <i data-tip="Restore default zoom extent (1, 20)" id="zoomExtentDefault" class="icon-ccw"></i>
-                            <i data-tip="Allow to drag map beyond canvas borders" id="translateExtent" data-on=0 class="icon-hand-paper-o"></i>
+                            <i id="zoomExtentDefault" class="icon-ccw" data-tip="Restore default zoom extent (1, 20)"></i>
+                            <i id="translateExtent" data-on=0 class="icon-hand-paper-o" data-tip="Allow to drag map beyond canvas borders"></i>
                         </td>
                     </tr>
 
@@ -1965,11 +1965,11 @@
             <section id="customizationMenu" class="tabcontent">
                 <p>Heightmap customization tools:</p>
                 <div id="customizeTools">
-                    <button data-tip="Display brushes panel" id="paintBrushes">Paint Brushes</button>
-                    <button data-tip="Open template editor" id="applyTemplate" style="display: none">Template Editor</button>
-                    <button data-tip="Open Image Converter" id="convertImage" style="display: none">Image Converter</button>
-                    <button data-tip="Render heightmap data as a small monochrome image" id="heightmapPreview">Preview</button>
-                    <button data-tip="Preview heightmap in 3D scene" id="heightmap3DView">3D scene</button>
+                    <button id="paintBrushes" data-tip="Display brushes panel">Paint Brushes</button>
+                    <button id="applyTemplate" data-tip="Open template editor" style="display: none">Template Editor</button>
+                    <button id="convertImage" data-tip="Open Image Converter" style="display: none">Image Converter</button>
+                    <button id="heightmapPreview" data-tip="Render heightmap data as a small monochrome image">Preview</button>
+                    <button id="heightmap3DView" data-tip="Preview heightmap in 3D scene">3D scene</button>
                 </div>
 
                 <div id="customizeOptions">
@@ -2017,7 +2017,7 @@
                 </div>
                 <p>Special thanks to <a data-tip="Click to see list of supporters" onclick="showSupporters()">all supporters</a> on Patreon!</p>
 
-                <ul class="share-buttons">
+                <ul id="share-buttons">
                     <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator%2F&quote=" data-tip="Share on Facebook" target="_blank"><img alt="Share on Facebook" src="images/Facebook.png" /></a></li>
                     <li><a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator&text=%23FantasyMapGenerator%0A%0Ahttps%3A//azgaar.github.io/Fantasy-Map-Generator" target="_blank" data-tip="Tweet"><img alt="Tweet" src="images/Twitter.png" /></a></li>
                     <li><a href="http://www.tumblr.com/share?v=3&u=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Post to Tumblr"><img alt="Post to Tumblr" src="images/Tumblr.png" /></a></li>
