@@ -631,7 +631,7 @@ export function generate() {
         console.group("Generated Map " + seed);
         applyMapSize();
         randomizeOptions();
-        grid = placePoints(graphWidth, graphHeight);
+        grid = MapData.placePoints(graphWidth, graphHeight);
         calculateVoronoi(grid, grid.points);
         console.log(grid);
         console.log(MapData.generate(seed, graphWidth, graphHeight))
@@ -705,21 +705,6 @@ export function generateSeed() {
     else seed = Math.floor(Math.random() * 1e9).toString();
     optionsSeed.value = seed;
     Math.seedrandom(seed);
-}
-
-// Place points to calculate Voronoi diagram
-function placePoints(w, h) {
-    console.time("placePoints");
-    const nCells = 10000 * densityInput.value; // generate 10k points for each densityInput point
-    const spacing = rn(Math.sqrt(w * h / nCells), 2); // spacing between points before jirrering
-    return {
-        spacing: spacing,
-        boundary: getBoundaryPoints(w, h, spacing),
-        points: getJitteredGrid(w, h, spacing),
-        cellsX: Math.floor((w + 0.5 * spacing) / spacing),
-        cellsY: Math.floor((h + 0.5 * spacing) / spacing)
-    }
-    console.timeEnd("placePoints");
 }
 
 // calculate Delaunay and then Voronoi diagram

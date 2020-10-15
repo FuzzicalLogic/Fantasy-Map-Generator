@@ -29,7 +29,7 @@ function MapData(seed, w, h) {
     }
 }
 
-function placePoints(w, h) {
+export function placePoints(w, h) {
     const nCells = 10000 * densityInput.value; // generate 10k points for each densityInput point
     const spacing = rn(Math.sqrt(w * h / nCells), 2); // spacing between points before jirrering
     return {
@@ -76,6 +76,7 @@ function getJitteredGrid(width, height, spacing) {
     }
     return points;
 }
+
 export function calculateVoronoi(graph, points) {
     const n = points.length;
     const allPoints = points.concat(graph.boundary);
