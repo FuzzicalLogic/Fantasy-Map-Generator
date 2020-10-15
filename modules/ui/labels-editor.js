@@ -1,13 +1,19 @@
-import { unselect, fitContent } from "./editors.js";
+import {
+    modules, defs,
+    labels,
+    viewbox, lineGen, debug
+} from "../../main.js";
+import { closeDialogs, unselect, fitContent } from "./editors.js";
 
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
 
 import { tip, showMainTip } from "./general.js";
-import { findCell, parseTransform } from "../utils.js";
+import { round, findCell, parseTransform } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleLabels, layerIsOn } from "./layers.js";
 
+let elSelected;
 export function editLabel() {
     if (customization) return;
     closeDialogs();
