@@ -49,7 +49,9 @@ export function restoreDefaultEvents() {
 export function clicked() {
     const el = d3.event.target;
     if (!el || !el.parentElement || !el.parentElement.parentElement) return;
-    const parent = el.parentElement, grand = parent.parentElement, great = grand.parentElement;
+    const parent = el.parentElement,
+        grand = parent.parentElement,
+        great = grand.parentElement;
     const p = d3.mouse(this);
     const i = findCell(p[0], p[1]);
 
