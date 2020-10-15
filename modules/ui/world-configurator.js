@@ -10,7 +10,7 @@ import * as ThreeD from "./3d.js";
 
 import { tip, lock } from "./general.js";
 import { rn, parseTransform, round } from "../utils.js";
-import { applyPreset, drawTemp, toggleBiomes, drawBiomes, drawPrec, drawCoordinates, layerIsOn } from "./layers.js";
+import { drawTemp, toggleBiomes, drawBiomes, drawPrec, drawCoordinates, layerIsOn } from "./layers.js";
 
 window.editWorld = editWorld;
 
