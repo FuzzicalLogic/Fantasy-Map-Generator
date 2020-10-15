@@ -553,7 +553,7 @@ export function rw(object) {
             array.push(key);
         }
     };
-    return array[Math.floor(Math.random() * array.length)];
+    return ra(array);
 }
 
 // return value in range [0, 100] (height range)
