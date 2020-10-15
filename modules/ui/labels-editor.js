@@ -71,23 +71,6 @@ export function editLabel() {
             }
     }
 
-    function selectLabelGroup(text) {
-        const group = text.parentNode.id;
-        const select = document.getElementById("labelGroupSelect");
-        select.options.length = 0; // remove all options
-
-        labels.selectAll(":scope > g").each(function () {
-            if (this.id === "burgLabels") return;
-            select.options.add(new Option(this.id, this.id, false, this.id === group));
-        });
-    }
-
-    function updateValues(textPath) {
-        document.getElementById("labelText").value = [...textPath.querySelectorAll("tspan")].map(tspan => tspan.textContent).join("|");
-        document.getElementById("labelStartOffset").value = parseFloat(textPath.getAttribute("startOffset"));
-        document.getElementById("labelRelativeSize").value = parseFloat(textPath.getAttribute("font-size"));
-    }
-
     function drawControlPointsAndLine() {
         debug.select("#controlPoints").remove();
         debug.append("g").attr("id", "controlPoints").attr("transform", elSelected.attr("transform"));
@@ -358,9 +341,26 @@ export function editLabel() {
             }
         });
     }
+}
 
-    function closeLabelEditor() {
-        debug.select("#controlPoints").remove();
-        unselect();
-    }
+function selectLabelGroup(text) {
+    const group = text.parentNode.id;
+    const select = document.getElementById("labelGroupSelect");
+    select.options.length = 0; // remove all options
+
+    labels.selectAll(":scope > g").each(function () {
+        if (this.id === "burgLabels") return;
+        select.options.add(new Option(this.id, this.id, false, this.id === group));
+    });
+}
+
+function updateValues(textPath) {
+    document.getElementById("labelText").value = [...textPath.querySelectorAll("tspan")].map(tspan => tspan.textContent).join("|");
+    document.getElementById("labelStartOffset").value = parseFloat(textPath.getAttribute("startOffset"));
+    document.getElementById("labelRelativeSize").value = parseFloat(textPath.getAttribute("font-size"));
+}
+
+function closeLabelEditor() {
+    debug.select("#controlPoints").remove();
+    unselect();
 }
