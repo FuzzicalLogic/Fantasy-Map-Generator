@@ -8,6 +8,7 @@ export function generate(seed, w, h, view) {
     data.options = randomizeOptions();
     data.grid = placePoints(w, h);
     data.grid = calculateVoronoi(data.grid, data.grid.points);
+    generateHeight(data.grid);
     markFeatures(data.grid, seed);
     openNearSeaLakes(data.grid);
 
