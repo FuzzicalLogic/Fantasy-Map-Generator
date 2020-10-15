@@ -637,8 +637,8 @@ export function generate() {
         console.log(MapData.generate(seed, graphWidth, graphHeight))
         drawScaleBar();
         HeightmapGenerator.generate(grid);
-        markFeatures();
         openNearSeaLakes();
+        MapData.markFeatures(grid, seed);
         OceanLayers();
         defineMapSize();
         calculateMapCoordinates();
@@ -722,45 +722,6 @@ export function calculateVoronoi(graph, points) {
     graph.cells.i = n < 65535 ? Uint16Array.from(d3.range(n)) : Uint32Array.from(d3.range(n)); // array of indexes
     graph.vertices = voronoi.vertices;
     console.timeEnd("calculateVoronoi");
-}
-
-// Mark features (ocean, lakes, islands)
-export function markFeatures() {
-    console.time("markFeatures");
-    Math.seedrandom(seed); // restart Math.random() to get the same result on heightmap edit in Erase mode
-    const cells = grid.cells, heights = grid.cells.h;
-    cells.f = new Uint16Array(cells.i.length); // cell feature number
-    cells.t = new Int8Array(cells.i.length); // cell type: 1 = land coast; -1 = water near coast;
-    grid.features = [0];
-
-    for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
-        cells.f[queue[0]] = i; // feature number
-        const land = heights[queue[0]] >= 20;
-        let border = false; // true if feature touches map border
-
-        while (queue.length) {
-            const q = queue.pop();
-            if (cells.b[q]) border = true;
-            cells.c[q].forEach(function (e) {
-                const eLand = heights[e] >= 20;
-                //if (eLand) cells.t[e] = 2;
-                if (land === eLand && cells.f[e] === 0) {
-                    cells.f[e] = i;
-                    queue.push(e);
-                }
-                if (land && !eLand) {
-                    cells.t[q] = 1;
-                    cells.t[e] = -1;
-                }
-            });
-        }
-        const type = land ? "island" : border ? "ocean" : "lake";
-        grid.features.push({ i, land, border, type });
-
-        queue[0] = cells.f.findIndex(f => !f); // find unmarked cell
-    }
-
-    console.timeEnd("markFeatures");
 }
 
 // How to handle lakes generated near seas? They can be both open or closed.
