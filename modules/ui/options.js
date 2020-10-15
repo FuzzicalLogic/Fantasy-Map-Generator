@@ -1,5 +1,5 @@
 import {
-    modules,
+    modules, options,
     seed, nameBases,
     svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
     graphWidth, setWidth, graphHeight, setHeight,

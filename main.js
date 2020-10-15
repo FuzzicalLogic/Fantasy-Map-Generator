@@ -727,6 +727,11 @@ export function calculateVoronoi(graph, points) {
 // define map size and position based on template and random factor
 export function defineMapSize() {
     const [size, latitude] = getSizeAndLatitude();
+    let mapSizeOutput = document.getElementById('mapSizeOutput'),
+        latitudeOutput = document.getElementById('latitudeOutput'),
+        mapSizeInput = document.getElementById('mapSizeInput'),
+        latitudeInput = document.getElementById('latitudeInput');
+
     const randomize = new URL(window.location.href).searchParams.get("options") === "default"; // ignore stored options
     if (randomize || !locked("mapSize")) mapSizeOutput.value = mapSizeInput.value = size;
     if (randomize || !locked("latitude")) latitudeOutput.value = latitudeInput.value = latitude;
