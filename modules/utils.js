@@ -479,7 +479,9 @@ export function vowel(c) {
 
 // remove vowels from the end of the string
 export function trimVowels(string) {
-    while (string.length > 3 && vowel(last(string))) { string = string.slice(0, -1); }
+    while (string.length > 3 && vowel(last(string))) {
+        string = string.slice(0, -1);
+    }
     return string;
 }
 
