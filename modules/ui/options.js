@@ -394,15 +394,8 @@ function changeTooltipSize(value) {
 function changeDialogsTransparency(value) {
     transparencyInput.value = transparencyOutput.value = value;
     const alpha = (100 - +value) / 100;
-    const optionsColor = "rgba(164, 139, 149, " + alpha + ")";
-    const dialogsColor = "rgba(255, 255, 255, " + alpha + ")";
-    const optionButtonsColor = "rgba(145, 110, 127, " + Math.min(alpha + .3, 1) + ")";
     const optionLiColor = "rgba(153, 123, 137, " + Math.min(alpha + .3, 1) + ")";
-    getById("options").style.backgroundColor = optionsColor;
-    getById("dialogs").style.backgroundColor = dialogsColor;
-    document.querySelectorAll(".tabcontent button").forEach(el => el.style.backgroundColor = optionButtonsColor);
     document.querySelectorAll(".tabcontent li").forEach(el => el.style.backgroundColor = optionLiColor);
-    document.querySelectorAll("button.options").forEach(el => el.style.backgroundColor = optionLiColor);
 }
 
 function changeZoomExtent(value) {
