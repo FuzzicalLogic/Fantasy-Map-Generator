@@ -19,7 +19,8 @@ import {
     armies, markers, ruler, fogging, debug, burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
-    focusOn, invokeActiveZooming, showStatistics
+    focusOn, invokeActiveZooming, showStatistics,
+    customization
 } from "../main.js";
 
 import * as Rivers from "./river-generator.js";
