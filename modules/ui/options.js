@@ -90,19 +90,19 @@ export function initialize() {
             active.classList.remove("active");
         getById(id).classList.add("active");
         getById("options").querySelectorAll(".tabcontent")
-            .forEach(e => e.style.display = "none");
+            .forEach(e => e.setAttribute('hidden',''));
 
         if (id === "layersTab")
-            layersContent.style.display = "block";
+            layersContent.removeAttribute('hidden');
         else if (id === "styleTab")
-            styleContent.style.display = "block";
+            styleContent.removeAttribute('hidden');
         else if (id === "optionsTab")
-            optionsContent.style.display = "block";
+            optionsContent.removeAttribute('hidden');
         else if (id === "toolsTab") customization === 1
-            ? customizationMenu.style.display = "block"
-            : toolsContent.style.display = "block";
+            ? customizationMenu.removeAttribute('hidden')
+            : toolsContent.removeAttribute('hidden');
         else if (id === "aboutTab")
-            aboutContent.style.display = "block";
+            aboutContent.removeAttribute('hidden');
     });
 
     optionsContent.addEventListener("input", function (event) {
