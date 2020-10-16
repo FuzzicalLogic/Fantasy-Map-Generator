@@ -634,7 +634,7 @@ export function generate() {
         grid = MapData.placePoints(graphWidth, graphHeight);
         calculateVoronoi(grid, grid.points);
         console.log(grid);
-        console.log(MapData.generate(seed, graphWidth, graphHeight))
+        //console.log(MapData.generate(seed, graphWidth, graphHeight))
         drawScaleBar();
         HeightmapGenerator.generate(grid);
         MapData.markFeatures(grid, seed);
