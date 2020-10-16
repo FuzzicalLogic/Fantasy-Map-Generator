@@ -989,20 +989,39 @@
 
     <section id="optionsContainer" style="opacity:0">
 
-        <aside id="collapsible">
-            <button id="optionsTrigger" data-t="tipOptionsTrigger" data-tip="Click to show options pane. Shortcut: Tab" class="options glow" onclick="showOptions(event)" style="padding:.6em .45em">►</button>
-        </aside>
+        <nav id="collapsible">
+            <button id="optionsTrigger" class="Icon options glow" data-t="tipOptionsTrigger" data-tip="Click to show options pane. Shortcut: Tab" onclick="toggleOptions(event)"><i></i></button>
+            <div class="Spacer"></div>
+            <div id="viewMode" data-tip="Set view node">
+                <button id="viewStandard" class="Icon" data-tip="Standard view mode that allows to edit the map" disabled><span>F</span></button>
+                <button id="viewMesh" class="Icon" data-tip="Map presentation in 3D scene. Works best for heightmap. Cannot be used for editing"><span>3D</span></button>
+                <button id="viewGlobe" class="Icon" data-tip="Project map on globe. Cannot be used for editing"><span>G</span></button>
+            </div>
+            <div class="Spacer"></div>
+            <div id="sticked">
+                <button id="newMapButton" class="Icon" data-t="tipRegenerate" data-tip="Click to generate a new map. Shortcut: F2" class="options"><span>N</span></button>
+                <button id="loadButton" class="Icon" data-tip="Load fully functional map in a .map format"><span>L<span></button>
+                <button id="saveButton" class="Icon" data-tip="Select format to save map"><span>S<span></button>
+                <button id="zoomReset" class="Icon" data-tip="Reset map zoom. Shortcut: 0"><span>O<span></button>
+            </div>
+            <div class="Clamp"></div>
+            <a class="Button Icon" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator%2F&quote=" data-tip="Share on Facebook" target="_blank"><img alt="Share on Facebook" src="images/Facebook.png" /></a>
+            <a class="Button Icon" href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator&text=%23FantasyMapGenerator%0A%0Ahttps%3A//azgaar.github.io/Fantasy-Map-Generator" target="_blank" data-tip="Tweet"><img alt="Tweet" src="images/Twitter.png" /></a>
+            <a class="Button Icon" href="http://www.tumblr.com/share?v=3&u=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Post to Tumblr"><img alt="Post to Tumblr" src="images/Tumblr.png" /></a>
+            <a class="Button Icon" href="http://pinterest.com/pin/create/button/?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Pin it"><img alt="Pin it" src="images/Pinterest.png" /></a>
+            <a class="Button Icon" href="http://www.reddit.com/submit?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Submit to Reddit"><img alt="Submit to Reddit" src="images/Reddit.png" /></a>
+            <div class="Spacer"></div>
+            <button id="aboutTab" class="Icon" data-t="aboutTab" data-tip="Click to see Generator info"><i></i></button>
+        </nav>
 
         <div id="options" style="display:none">
             <div class="drag-trigger" data-t="optionsDragTrigger" data-tip="Drag to move options pane"></div>
 
             <header class="tab">
-                <button id="optionsHide" data-t="optionsHide" data-tip="Click to hide options pane. Shortcut: Tab to close this or Esc to close all dialogs" class="options" onclick="hideOptions(event)">◄</button>
                 <button id="layersTab" data-t="layersTab" data-tip="Click to change map layers" class="options active"><span data-t="layers">Layers</span></button>
                 <button id="styleTab" data-t="styleTab" data-tip="Click to open style editor" class="options"><span data-t="style">Style</span></button>
                 <button id="optionsTab" data-t="optionsTab" data-tip="Click to change generation and UI options" class="options"><span data-t="options">Options</span></button>
                 <button id="toolsTab" data-t="toolsTab" data-tip="Click to open tools menu" class="options"><span data-t="tools">Tools</span></button>
-                <button id="aboutTab" data-t="aboutTab" data-tip="Click to see Generator info" class="options"><span data-t="about">About</span></button>
             </header>
 
             <section id="layersContent" class="tabcontent" style="display: block">
@@ -2024,14 +2043,6 @@
                     <li><a href="http://www.reddit.com/submit?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Submit to Reddit"><img alt="Submit to Reddit" src="images/Reddit.png" /></a></li>
                 </ul>
             </aside>
-
-            <footer id="sticked">
-                <button id="newMapButton" data-tip="Generate a new map based on options. Shortcut: F2">New Map</button>
-                <button id="saveButton" data-tip="Select format to save map">Save</button>
-                <button id="loadButton" data-tip="Load fully functional map in a .map format">Load</button>
-                <button id="zoomReset" data-tip="Reset map zoom. Shortcut: 0">Reset Zoom</button>
-            </footer>
-
         </div>
 
     </section>
