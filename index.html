@@ -1085,6 +1085,14 @@
                 <button id="addStyleButton" data-tip="Click to save current style as a new preset" class="icon-plus styleButton" style="display: inline-block" onclick="addStylePreset()"></button>
                 <button id="removeStyleButton" data-tip="Click to remove current custom style preset" class="icon-minus styleButton" style="display: none" onclick="removeStylePreset()"></button>
 
+                <div id="mapFilters" data-tip="Set a filter to be applied to the map in general">
+                    <h1>Filters:</h1>
+                    <button id="grayscale" class="radio">Grayscale</button>
+                    <button id="sepia" class="radio">Sepia</button>
+                    <button id="dingy" class="radio">Dingy</button>
+                    <button id="tint" class="radio">Tint</button>
+                </div>
+
                 <p data-tip="Select an element to edit its style" style="display: inline-block;">Select element:</p>
                 <select id="styleElementSelect" data-tip="Select an element to edit its style (list is ordered alphabetically)" style="width:42%">
                     <option value="anchors">Anchor Icons</option>
@@ -1623,13 +1631,6 @@
                     </tbody>
                 </table>
 
-                <div id="mapFilters" data-tip="Set a filter to be applied to the map in general">
-                    <p>Toggle global filters:</p>
-                    <button id="grayscale" class="radio">Grayscale</button>
-                    <button id="sepia" class="radio">Sepia</button>
-                    <button id="dingy" class="radio">Dingy</button>
-                    <button id="tint" class="radio">Tint</button>
-                </div>
 
             </section>
 
