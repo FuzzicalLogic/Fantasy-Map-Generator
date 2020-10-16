@@ -668,7 +668,7 @@ export function loadURL() {
 export function changeViewMode(ev) {
     const button = ev.target;
     if (button.tagName !== "BUTTON") return;
-    const isPressed = button.classList.contains("pressed");
+    const isPressed = button.hasAttribute('disabled');
     enterStandardView();
 
     if (!isPressed && button.id !== "viewStandard") {
