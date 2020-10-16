@@ -1025,7 +1025,7 @@
             </header>
 
             <section id="layersContent" class="tabcontent">
-                <p data-tip="Select a map layers preset" style="display: inline-block;">Layers preset:</p>
+                <p data-tip="Select a map layers preset" style="display: inline-block;">Display:</p>
                 <select id="layersPreset" data-tip="Select a map layers preset" onchange="changePreset(this.value)" style="width:45%">
                     <option value="political" selected>Political map</option>
                     <option value="cultural">Cultural map</option>
@@ -1042,7 +1042,7 @@
                 <button id="savePresetButton" data-tip="Click to save displayed layers as a new preset" class="icon-plus presetButton" style="display:none" onclick="savePreset()"></button>
                 <button id="removePresetButton" data-tip="Click to remove current custom preset" class="icon-minus presetButton" style="display:none" onclick="removePreset()"></button>
 
-                <p data-tip="Click to toggle a layer, drag to raise or lower a layer. Ctrl + click to edit layer style">Displayed layers and layers order:</p>
+                <h1 data-tip="Click to toggle a layer, drag to raise or lower a layer. Ctrl + click to edit layer style">Layers:</h1>
                 <ol data-tip="Click to toggle a layer, drag to raise or lower a layer. Ctrl + click to edit layer style" id="mapLayers">
                     <li id="toggleTexture" data-tip="Texture overlay: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: X" class="buttonoff" onclick="toggleTexture(event)">Te<u>x</u>ture</li>
                     <li id="toggleHeight" data-tip="Heightmap: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: H" class="buttonoff" onclick="toggleHeight(event)"><u>H</u>eightmap</li>
@@ -1074,7 +1074,7 @@
             </section>
 
             <section id="styleContent" class="tabcontent" hidden>
-                <p data-tip="Select a style preset" style="display: inline-block">Style preset:</p>
+                <p data-tip="Select a theme" style="display: inline-block">Theme:</p>
                 <select id="stylePreset" data-tip="Select a style preset" onchange="changeStylePreset(this.value)" style="width:45%">
                     <option value="styleDefault" data-system=1 selected>Default</option>
                     <option value="styleAncient" data-system=1>Ancient</option>
