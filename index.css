@@ -19,6 +19,24 @@ html {
     min-height: 100vh; height: 100vh; max-height: 100vh;
     display: flex; flex-flow: row nowrap; align-items: stretch;
     font-size: 0.75em;
+
+    --primary: #111111; /*#263238;*/
+    --primary-dark: #000000;
+    --primary-light: #373737;
+    --on-primary: #FFFFFF;
+    --on-primary-light: #FFFFFF;
+    --on-primary-dark: #FFFFFF;
+    --on-primary-highlight: #5BA0FE;
+    --secondary: #0072CA;
+    --secondary-dark: #004899;
+    --secondary-light: #5BA0FE;
+    --on-secondary: #FFFFFF;
+    --on-secondary-light: #000000;
+    --on-secondary-dark: #FFFFFF;
+}
+
+html[data-theme="dark"] {
+
 }
 
 body {
