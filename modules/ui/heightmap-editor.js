@@ -160,7 +160,6 @@ export function editHeightmap() {
 
         customization = 0;
         customizationMenu.style.display = "none";
-        if (document.getElementById("options").querySelector(".tab > button.active").id === "toolsTab") toolsContent.style.display = "block";
         layersPreset.disabled = false;
         exitCustomization.style.display = "none"; // hide finalize button
         restoreDefaultEvents();
