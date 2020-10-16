@@ -395,7 +395,7 @@ function changeDialogsTransparency(value) {
     transparencyInput.value = transparencyOutput.value = value;
     const alpha = (100 - +value) / 100;
     const optionLiColor = "rgba(153, 123, 137, " + Math.min(alpha + .3, 1) + ")";
-    document.querySelectorAll(".tabcontent li").forEach(el => el.style.backgroundColor = optionLiColor);
+    //document.querySelectorAll(".tabcontent li").forEach(el => el.style.backgroundColor = optionLiColor);
 }
 
 function changeZoomExtent(value) {
