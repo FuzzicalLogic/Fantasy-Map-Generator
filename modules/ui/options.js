@@ -672,18 +672,18 @@ export function changeViewMode(ev) {
     enterStandardView();
 
     if (!isPressed && button.id !== "viewStandard") {
-        viewStandard.classList.remove("pressed");
-        button.classList.add("pressed");
+        viewStandard.removeAttribute('disabled');
+        button.setAttribute('disabled','');
         enter3dView(button.id);
     }
 }
 
 export function enterStandardView() {
-    viewMode.querySelectorAll(".pressed").forEach(
-        button => button.classList.remove("pressed")
+    viewMode.querySelectorAll(':disabled').forEach(
+        button => button.removeAttribute('disabled')
     );
     heightmap3DView.classList.remove("pressed");
-    viewStandard.classList.add("pressed");
+    viewStandard.setAttribute('disabled','');
 
     if (getById("canvas3d")) {
         ThreeD.stop();
