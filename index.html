@@ -2018,6 +2018,46 @@
             </section>
 
             <aside id="aboutContent" class="tabcontent">
+        <div id="MODALS">
+            <dialog id="saveMapData" class="dialog">
+                <div style="margin-bottom: .3em; font-weight: bold">Please select saving variant:</div>
+                <div>
+                    <button onclick="saveMap()" data-tip="Download the map as fully-functional .map file to your machine">.map</button>
+                    <button onclick="saveSVG()" data-tip="Download the map as vector image (open in browser or Inkscape)">.svg</button>
+                    <button onclick="savePNG()" data-tip="Download visible part of the map as .png (lossless compressed)">.png</button>
+                    <button onclick="saveJPEG()" data-tip="Download visible part of the map as .jpeg (lossy compressed) image">.jpeg</button>
+                    <button onclick="saveGeoJSON()" data-tip="Download map data in GeoJSON format">.json</button>
+                    <button onclick="quickSave()" data-tip="Save fully-functional map to browser storage. Shortcut: F6">storage</button>
+                </div>
+                <p style="font-style: italic">Generator uses pop-up window to download files. Please ensure your browser does not block popups</p>
+                <div data-tip="Define scale of a saved png/jpeg image (e.g. 5x). Saving big images is slow and may cause a browser crash!" style="margin-bottom: .3em">
+                    PNG / JPEG scale:
+                    <input id="pngResolutionInput" data-stored="pngResolution" type="range" min=1 max=8 value=1 style="width: 10.8em" oninput="pngResolutionOutput.value = this.value">
+                    <input id="pngResolutionOutput" data-stored="pngResolution" type="number" min=1 max=8 value=1 oninput="pngResolutionInput.value = this.value">
+                </div>
+            </dialog>
+
+            <dialog id="loadMapData" class="dialog">
+                <div style="margin-bottom: .3em">Load map from:</div>
+                <div>
+                    <button onclick="mapToLoad.click()" data-tip="Load .map file from local disk">local disk</button>
+                    <button onclick="loadURL()" data-tip="Load .map file from URL (server should allow CORS)">URL</button>
+                    <button onclick="quickLoad()" data-tip="Load map from browser storage (if saved before)">storage</button>
+                </div>
+            </dialog>
+
+            <dialog id="alert" class="dialog">
+                <p id="alertMessage">Warning!</p>
+            </dialog>
+
+            <dialog id="prompt" class="dialog">
+                <form id="promptForm">
+                    <div id="promptText"></div>
+                    <input id="promptInput" type="number" step=.01 placeholder="type value" autocomplete="off" required>
+                    <button type="submit">Confirm</button>
+                    <button type="button" id="promptCancel" formnovalidate="">Cancel</button>
+                </form>
+            </dialog>
                 <p><a href="https://github.com/Azgaar/Fantasy-Map-Generator" target="_blank">Fantasy Map Generator</a> is a free <a href="https://github.com/Azgaar/Fantasy-Map-Generator/blob/master/LICENSE" target="_blank">open source</a> tool which procedurally generates fantasy maps. You may use auto-generated maps as they are, edit them or even create a new map from scratch. Check out the <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Quick-Start-Tutorial" target="_blank">quick start tutorial</a>, <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Q&A" target="_blank">Q&A</a> and <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Hotkeys" target="_blank">hotkeys</a> for guidance.</p>
                 <p>Join our <a href='https://discordapp.com/invite/X7E84HU' target='_blank'>Discord server</a> and <a href="https://www.reddit.com/r/FantasyMapGenerator/" target="_blank">Reddit community</a> to ask questions, get help and share maps.</p>
                 <p>The project is under active development. Creator and main maintainer: Azgaar. To track the development progress see the <a href="https://trello.com/b/7x832DG4/fantasy-map-generator" target="_blank">devboard</a>. For older versions see the <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Changelog" target="_blank">changelog</a>. Please report bugs <a href="https://github.com/Azgaar/Fantasy-Map-Generator/issues" target="_blank">here</a>. You can also contact me directly via <a href="mailto:azgaar.fmg@yandex.by" target="_blank">email</a>.</p>
@@ -3742,45 +3782,6 @@
 
         <dialog id="preview3d" class="dialog stable" style="display: none; padding: 0px"></dialog>
 
-        <dialog id="saveMapData" class="dialog">
-            <div style="margin-bottom: .3em; font-weight: bold">Please select saving variant:</div>
-            <div>
-                <button onclick="saveMap()" data-tip="Download the map as fully-functional .map file to your machine">.map</button>
-                <button onclick="saveSVG()" data-tip="Download the map as vector image (open in browser or Inkscape)">.svg</button>
-                <button onclick="savePNG()" data-tip="Download visible part of the map as .png (lossless compressed)">.png</button>
-                <button onclick="saveJPEG()" data-tip="Download visible part of the map as .jpeg (lossy compressed) image">.jpeg</button>
-                <button onclick="saveGeoJSON()" data-tip="Download map data in GeoJSON format">.json</button>
-                <button onclick="quickSave()" data-tip="Save fully-functional map to browser storage. Shortcut: F6">storage</button>
-            </div>
-            <p style="font-style: italic">Generator uses pop-up window to download files. Please ensure your browser does not block popups</p>
-            <div data-tip="Define scale of a saved png/jpeg image (e.g. 5x). Saving big images is slow and may cause a browser crash!" style="margin-bottom: .3em">
-                PNG / JPEG scale:
-                <input id="pngResolutionInput" data-stored="pngResolution" type="range" min=1 max=8 value=1 style="width: 10.8em" oninput="pngResolutionOutput.value = this.value">
-                <input id="pngResolutionOutput" data-stored="pngResolution" type="number" min=1 max=8 value=1 oninput="pngResolutionInput.value = this.value">
-            </div>
-        </dialog>
-
-        <dialog id="loadMapData" class="dialog">
-            <div style="margin-bottom: .3em">Load map from:</div>
-            <div>
-                <button onclick="mapToLoad.click()" data-tip="Load .map file from local disk">local disk</button>
-                <button onclick="loadURL()" data-tip="Load .map file from URL (server should allow CORS)">URL</button>
-                <button onclick="quickLoad()" data-tip="Load map from browser storage (if saved before)">storage</button>
-            </div>
-        </dialog>
-
-        <dialog id="alert" class="dialog">
-            <p id="alertMessage">Warning!</p>
-        </dialog>
-
-        <dialog id="prompt" class="dialog">
-            <form id="promptForm">
-                <div id="promptText"></div>
-                <input id="promptInput" type="number" step=.01 placeholder="type value" autocomplete="off" required>
-                <button type="submit">Confirm</button>
-                <button type="button" id="promptCancel" formnovalidate="">Cancel</button>
-            </form>
-        </dialog>
 
     </div>
 
