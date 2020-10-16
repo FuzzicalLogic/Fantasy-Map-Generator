@@ -223,23 +223,22 @@ export function showOptions(event) {
         optionsTrigger.classList.remove("glow");
     }
 
-    regenerate.style.display = "none";
-    getById("options").style.display = "block";
-    optionsTrigger.style.display = "none";
+    optionsTrigger.classList.add('Pressed');
+    getById("options").style.display = '';
 
     if (event) event.stopPropagation();
 }
 
 // Hide options pane on trigger click
 export function hideOptions(event) {
+    optionsTrigger.classList.remove('Pressed');
     getById("options").style.display = "none";
-    optionsTrigger.style.display = "block";
     if (event) event.stopPropagation();
 }
 
 // To toggle options on hotkey press
 export function toggleOptions(event) {
-    if (getById("options").style.display === "none")
+    if (!getById("optionsTrigger").classList.contains('Pressed'))
         showOptions(event);
     else hideOptions(event);
 }
