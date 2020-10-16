@@ -58,7 +58,7 @@ export const doc = {
 export const optionsContent = getById("optionsContent");
 
 export function initialize() {
-    $("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
+    //$("#optionsContainer").draggable({ handle: ".drag-trigger", snap: "svg", snapMode: "both" });
     $("#exitCustomization").draggable({ handle: "div" });
     $("#mapLayers").disableSelection();
 
