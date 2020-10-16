@@ -1,5 +1,5 @@
 import {
-    modules, pack,
+    modules, pack, customization,
     viewbox, mapCoordinates, graphWidth, graphHeight,
     burgLabels,
     zoomTo

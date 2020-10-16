@@ -5,7 +5,8 @@ import {
     graphWidth, setWidth, graphHeight, setHeight,
     zoom, resetZoom,
     landmass, oceanPattern, oceanLayers,
-    mapHistory, regenerateMap
+    mapHistory, regenerateMap,
+    customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";

@@ -1,7 +1,7 @@
 import {
     pack, grid, graphWidth, graphHeight, viewbox,
     markers, routes, rivers, labels, scale, elSelected,
-    elevateLakes, ice, notes, zones,
+    elevateLakes, ice, notes, zones, customization
 } from "../../main.js";
 
 import * as Rivers from "../river-generator.js";

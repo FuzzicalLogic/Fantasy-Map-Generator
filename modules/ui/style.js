@@ -1,7 +1,13 @@
 import {
-    svg, fonts,
-    statesHalo,
-    oceanLayers
+    svg, fonts, pack,
+    oceanLayers, armies, biomes, ice, stateBorders,
+    provinceBorders, cells, gridOverlay, coordinates,
+    compass, relig, cults, landmass, markers, prec,
+    population, lakes, coastline, terrain, rivers,
+    ruler, roads, trails, searoutes, regions, statesHalo,
+    provs, temperature, texture, zones, ocean, oceanPattern,
+    terrs, legend, burgLabels, burgIcons, anchors, labels, fogging,
+    invokeActiveZooming
 } from "../../main.js";
 
 import { redrawLegend, downloadFile, uploadFile } from "./editors.js";
