@@ -332,6 +332,7 @@ export function initialize() {
     mapFilters.addEventListener("click", applyMapFilter);
 
     window.textureProvideURL = textureProvideURL;
+    window.changeStylePreset = changeStylePreset;
     document.getElementById('stylePreset').addEventListener('change', changeStylePreset);
     document.getElementById('addStyleButton').addEventListener('click', addStylePreset);
     document.getElementById('removeStyleButton').addEventListener('click', removeStylePreset);
