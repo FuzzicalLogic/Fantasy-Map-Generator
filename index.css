@@ -6,6 +6,7 @@
 }
 
 :root {
+    font-family: Helvetica, Arial, sans-serif;
 }
 
     :root * {
@@ -14,11 +15,9 @@
 
 html {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: stretch;
+    min-width: 100vw; width: 100vw; max-width: 100vw;
+    min-height: 100vh; height: 100vh; max-height: 100vh;
+    display: flex; flex-flow: row nowrap; align-items: stretch;
     font-size: 0.75em;
 }
 
@@ -354,7 +353,7 @@ dialog, .ui-dialog {
 }
 
 dialog, .ui-dialog-content {
-    background-color: #333 !important;
+    background-color: var(--primary-light) !important;
     color: #eee !important;
 }
 
@@ -363,9 +362,8 @@ dialog, .ui-dialog-content {
     flex-flow: column nowrap;
     align-items: stretch;
     justify-content: start;
-    width: 3em;
-    padding: 0.25rem;
-    background-color: #111;
+    width: 2.5em;
+    background-color: var(--primary-dark);
     border-right: 1px solid #333;
     z-index: 2;
 }
@@ -387,7 +385,7 @@ dialog, .ui-dialog-content {
         padding: 0;
         border: 1px solid transparent;
         background-color: transparent;
-        color: #eee;
+        color: var(--on-primary-dark);
     }
 
         #collapsible button.Icon > *,
@@ -402,8 +400,8 @@ dialog, .ui-dialog-content {
 
         #collapsible button.Icon:hover,
         #collapsible .Button.Icon:hover {
-            background-color: rgba(255, 255, 255, 0.33);
-            border: 1px solid #000;
+            background-color: var(--secondary-dark);
+            border: 1px solid var(--primary-light);
         }
 
         #collapsible button.Icon::after,
@@ -421,14 +419,13 @@ dialog, .ui-dialog-content {
 }
 
 #options {
-    font-family: Consolas, monospace;
     position: relative;
     width: 15em;
-    background-color: #222;
+    background-color: var(--primary);
     background-position: center;
     background-size: cover;
     background-blend-mode: color-dodge;
-    color: #eee;
+    color: var(--on-primary);
 }
 
     #options input, #options select, #options button {
@@ -441,6 +438,7 @@ dialog, .ui-dialog-content {
     align-items: stretch;
     overflow: hidden;
     border-bottom: 1px solid #5d4651;
+    background-color: var(--secondary);
 }
 
     .tab button {
@@ -474,8 +472,7 @@ dialog, .ui-dialog-content {
             }
 
     .tab .active {
-        background-color: #eee;
-        color: #111;
+        color: var(--on-primary-highlight);
     }
 
 #layersTab .Icon {
@@ -501,8 +498,7 @@ button.Icon {
 }
 
     #optionsTrigger.Pressed {
-        background-image: url("./images/menu-light.png");
-        background-color: #eee !important;
+        background-image: url("./images/menu-dark.png");
     }
 
 #options p {
@@ -759,10 +755,11 @@ input[type="color"] {
 }
 
 .tab > button.options {
-    //width: 18.6%;
-    //height: 100%;
     padding: 0;
 }
+    .tab > button.options:hover {
+        background-color: var(--secondary);
+    }
 
 button.options {
     font-weight: bold;
@@ -773,7 +770,7 @@ button.options {
 }
 
     button.options:hover {
-        background-color: #806070 !important;
+        background-color: #806070;
         color: white !important;
     }
 
@@ -804,9 +801,25 @@ button.options {
     list-style-type: none;
 }
 
-    #mapLayers > li {
+    #mapLayers li:not(.buttonoff) {
         min-width: 8em;
+        background-color: var(--secondary, #FFF);
+        color: var(--on-secondary, #000);
     }
+
+        #mapLayers li:not(.buttonoff):hover {
+            background-color: var(--primary-light);
+        }
+
+    #mapLayers li.buttonoff {
+        min-width: 8em;
+        background-color: transparent;
+        color: var(--on-secondary, #FFF);
+    }
+
+        #mapLayers li.buttonoff:hover {
+            background-color: var(--secondary-dark);
+        }
 
 #mapFilters > button {
     width: 23%;
@@ -845,7 +858,7 @@ fieldset {
 }
 
 #options .buttonoff {
-    background-color: #b6b4b440 !important;
+    background-color: #b6b4b440;
     color: grey;
 }
 
