@@ -1,7 +1,7 @@
 import {
     grid, lineGen,
     pack,
-    biomesData, roads, trails, searoutes
+    biomesData, roads, trails, searoutes, routes
 } from "../main.js";
 
 import { round } from "./utils.js";

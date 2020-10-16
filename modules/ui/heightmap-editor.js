@@ -1,5 +1,7 @@
 import {
+    modules,
     grid,
+    viewbox,
     reGraph, resetZoom
 } from "../../main.js";
 

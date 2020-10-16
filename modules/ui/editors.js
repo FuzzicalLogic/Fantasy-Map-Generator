@@ -1,8 +1,8 @@
 import {
     pack,
     svg, svgWidth, svgHeight,
-    defs, 
-    viewbox, legend, fogging,
+    defs, debug,
+    viewbox, legend, fogging, scale,
     zoom,
     burgIcons, anchors, burgLabels,
     elSelected

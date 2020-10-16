@@ -1,4 +1,8 @@
-import { pack, grid, viewbox, markers, routes, rivers, labels, scale, elSelected } from "../../main.js";
+import {
+    pack, grid, graphWidth, graphHeight, viewbox,
+    markers, routes, rivers, labels, scale, elSelected,
+    elevateLakes, ice, notes, zones,
+} from "../../main.js";
 
 import * as Rivers from "../river-generator.js";
 import * as BurgsAndStates from "../burgs-and-states.js";

@@ -1,6 +1,6 @@
-import { elSelected } from "../../main.js";
+import { modules, pack, viewbox, debug } from "../../main.js";
 
-import { clicked, unselect } from "./editors.js";
+import { closeDialogs, clicked, unselect } from "./editors.js";
 
 import * as Rivers from "../river-generator.js";
 import * as Names from "../names-generator.js";
@@ -12,6 +12,7 @@ import { rn, rw, parseTransform, getNextId } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleRivers, layerIsOn } from "./layers.js";
 
+let elSelected;
 export function editRiver(id) {
     if (customization) return;
     if (elSelected && d3.event && d3.event.target.id === elSelected.attr("id")) return;
