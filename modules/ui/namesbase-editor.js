@@ -1,4 +1,4 @@
-import { modules, nameBases } from "../../main.js";
+import { modules, nameBases, customization } from "../../main.js";
 
 import { closeDialogs, getFileName, downloadFile, uploadFile } from "./editors.js";
 

@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    pack, defs, viewbox, zones, legend
+    pack, defs, viewbox, zones, legend, customization
 } from "../../main.js";
 
 import { editStyle } from "./style.js";

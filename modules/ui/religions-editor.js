@@ -1,6 +1,6 @@
 import {
     modules,
-    pack, viewbox, relig, legend, debug
+    pack, viewbox, relig, legend, debug, customization
 } from "../../main.js";
 
 import * as Religions from "../religions-generator.js";

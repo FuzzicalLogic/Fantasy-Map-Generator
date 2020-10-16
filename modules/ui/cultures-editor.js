@@ -1,4 +1,4 @@
-import { modules, pack, viewbox, cults, debug, nameBases, legend } from "../../main.js";
+import { modules, pack, viewbox, cults, debug, nameBases, legend, customization } from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";

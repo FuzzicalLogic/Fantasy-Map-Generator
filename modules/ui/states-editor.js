@@ -3,7 +3,7 @@ import {
     seed, pack, defs, regions, debug,
     statesBody, statesHalo,
     notes, armies, burgLabels,
-    viewbox, zoomTo, legend
+    viewbox, zoomTo, legend, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";

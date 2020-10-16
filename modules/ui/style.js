@@ -7,7 +7,7 @@ import {
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, texture, zones, ocean, oceanPattern,
     terrs, legend, burgLabels, burgIcons, anchors, labels, fogging,
-    invokeActiveZooming
+    invokeActiveZooming, customization
 } from "../../main.js";
 
 import { redrawLegend, downloadFile, uploadFile } from "./editors.js";

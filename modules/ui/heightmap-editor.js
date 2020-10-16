@@ -2,7 +2,7 @@ import {
     modules,
     grid,
     viewbox,
-    reGraph, resetZoom
+    reGraph, resetZoom, rankCells
 } from "../../main.js";
 
 import * as HeightmapGenerator from "../heightmap-generator.js";

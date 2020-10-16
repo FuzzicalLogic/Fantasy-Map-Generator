@@ -2,7 +2,7 @@ import {
     modules, legend,
     viewbox,
     pack, biomes, biomesData,
-    defineBiomes, setBiomesData, applyDefaultBiomesSystem
+    defineBiomes, setBiomesData, applyDefaultBiomesSystem, customization
 } from "../../main.js";
 import { ReliefIcons } from "../relief-icons.js";
 

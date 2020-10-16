@@ -8,7 +8,8 @@ import {
     borders, stateBorders, provinceBorders,
     statesHalo,
     compass, coordinates, scale,
-    lineGen, invokeActiveZooming, zoom
+    lineGen, invokeActiveZooming, zoom,
+    mapCoordinates, customization
 } from "../../main.js";
 
 import { ReliefIcons } from "../relief-icons.js";

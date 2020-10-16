@@ -1,4 +1,4 @@
-import { modules, pack, statesBody, statesHalo, viewbox, regions, debug } from "../../main.js";
+import { modules, pack, statesBody, statesHalo, viewbox, regions, debug, customization } from "../../main.js";
 
 import * as BurgsAndStates from "../burgs-and-states.js";
 

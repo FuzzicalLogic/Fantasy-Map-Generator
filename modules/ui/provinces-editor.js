@@ -1,7 +1,7 @@
 import {
     modules, pack, defs,
     provs, provinceBorders, stateBorders, debug,
-    viewbox, zoomTo
+    viewbox, zoomTo, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";

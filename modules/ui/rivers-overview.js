@@ -1,4 +1,4 @@
-import { modules, pack, rivers } from "../../main.js";
+import { modules, pack, rivers, customization } from "../../main.js";
 
 import { closeDialogs, fitContent, applySorting, getFileName, downloadFile, highlightElement } from "./editors.js";
 
