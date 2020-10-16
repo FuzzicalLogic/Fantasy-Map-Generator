@@ -30,7 +30,7 @@ import * as Military from "./military-generator.js";
 import * as Names from "./names-generator.js";
 
 import { tip, getCellPopulation, getFriendlyHeight, applyOption, clearMainTip } from "./ui/general.js";
-import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile, closeDialogs } from "./ui/editors.js";
+import { closeDialogs, restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile, closeDialogs } from "./ui/editors.js";
 import { findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent, last } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
@@ -603,7 +603,7 @@ export function uploadMap(file, callback) {
 function parseLoadedData(data) {
     try {
         // exit customization
-        if (window.closeDialogs) closeDialogs();
+        closeDialogs();
         window.customization = 0;
         if (customizationMenu.offsetParent) styleTab.click();
 

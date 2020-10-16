@@ -4,6 +4,7 @@ import {
     biomesData,
     resetZoom
 } from "../../main.js";
+import { closeDialogs } from "./editors.js";
 
 import { editBiomes } from "./biomes-editor.js";
 import { overviewBurgs } from "./burgs-overview.js";
@@ -72,7 +73,6 @@ export function initialize() {
 
     // Hotkeys, see github.com/Azgaar/Fantasy-Map-Generator/wiki/Hotkeys
     document.addEventListener("keyup", event => {
-        if (!window.closeDialogs) return; // not all modules are loaded
         const canvas3d = document.getElementById("canvas3d"); // check if 3d mode is active
         const active = document.activeElement.tagName;
         if (active === "INPUT" || active === "SELECT" || active === "TEXTAREA") return; // don't trigger if user inputs a text
