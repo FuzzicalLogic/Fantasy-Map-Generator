@@ -380,8 +380,7 @@ function changeBurgsNumberSlider(value) {
 function changeUIsize(value) {
     if (isNaN(+value) || +value > 4 || +value < .5) return;
     uiSizeInput.value = uiSizeOutput.value = value;
-    document.getElementsByTagName("body")[0].style.fontSize = value * 11 + "px";
-    getById("options").style.width = value * 300 + "px";
+    document.getElementsByTagName("body")[0].style.fontSize = `${1 + (value - 1) * 0.1}rem`;
 }
 
 function changeTooltipSize(value) {
