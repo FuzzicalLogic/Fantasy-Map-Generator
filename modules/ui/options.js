@@ -68,17 +68,6 @@ export function initialize() {
         optionsTrigger.classList.remove("glow");
     }
 
-    // Toggle "New Map!" pane on hover
-    optionsTrigger.addEventListener("mouseenter", function () {
-        if (optionsTrigger.classList.contains("glow")) return;
-        if (getById("options").style.display === "none")
-            regenerate.style.display = "block";
-    });
-
-    collapsible.addEventListener("mouseleave", function () {
-        regenerate.style.display = "none";
-    });
-
     // Activate options tab on click
     getById("options").querySelector(".tab").addEventListener("click", function (event) {
         if (event.target.tagName !== "BUTTON") return;
