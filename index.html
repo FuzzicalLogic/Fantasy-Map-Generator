@@ -2010,7 +2010,21 @@
                 </div>
             </section>
 
-            <aside id="aboutContent" class="tabcontent">
+        </div>
+
+        <div id="OVERLAY">
+            <div class="Clamp"></div>
+            <div id="tooltip" style="opacity:0" data-main="Сlick the arrow button for options. Zoom in to see the map in details">Сlick the arrow button for options. Zoom in to see the map in details</div>
+        </div>
+    </section>
+
+    <div id="exitCustomization">
+        <div data-tip="Drag to move the pane">
+            <button data-tip="Finalize the heightmap and exit the edit mode" id="finalizeHeightmap">Exit Customization</button>
+        </div>
+    </div>
+
+    <div id="dialogs">
         <div id="MODALS">
             <dialog id="saveMapData" class="dialog">
                 <div style="margin-bottom: .3em; font-weight: bold">Please select saving variant:</div>
@@ -2051,6 +2065,8 @@
                     <button type="button" id="promptCancel" formnovalidate="">Cancel</button>
                 </form>
             </dialog>
+
+            <dialog id="aboutContent">
                 <p><a href="https://github.com/Azgaar/Fantasy-Map-Generator" target="_blank">Fantasy Map Generator</a> is a free <a href="https://github.com/Azgaar/Fantasy-Map-Generator/blob/master/LICENSE" target="_blank">open source</a> tool which procedurally generates fantasy maps. You may use auto-generated maps as they are, edit them or even create a new map from scratch. Check out the <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Quick-Start-Tutorial" target="_blank">quick start tutorial</a>, <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Q&A" target="_blank">Q&A</a> and <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Hotkeys" target="_blank">hotkeys</a> for guidance.</p>
                 <p>Join our <a href='https://discordapp.com/invite/X7E84HU' target='_blank'>Discord server</a> and <a href="https://www.reddit.com/r/FantasyMapGenerator/" target="_blank">Reddit community</a> to ask questions, get help and share maps.</p>
                 <p>The project is under active development. Creator and main maintainer: Azgaar. To track the development progress see the <a href="https://trello.com/b/7x832DG4/fantasy-map-generator" target="_blank">devboard</a>. For older versions see the <a href="https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Changelog" target="_blank">changelog</a>. Please report bugs <a href="https://github.com/Azgaar/Fantasy-Map-Generator/issues" target="_blank">here</a>. You can also contact me directly via <a href="mailto:azgaar.fmg@yandex.by" target="_blank">email</a>.</p>
@@ -2075,19 +2091,9 @@
                     <li><a href="http://pinterest.com/pin/create/button/?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Pin it"><img alt="Pin it" src="images/Pinterest.png" /></a></li>
                     <li><a href="http://www.reddit.com/submit?url=https%3A%2F%2Fazgaar.github.io%2FFantasy-Map-Generator" target="_blank" data-tip="Submit to Reddit"><img alt="Submit to Reddit" src="images/Reddit.png" /></a></li>
                 </ul>
-            </aside>
+            </dialog>
         </div>
-
-    </section>
-
-    <div id="exitCustomization">
-        <div data-tip="Drag to move the pane">
-            <button data-tip="Finalize the heightmap and exit the edit mode" id="finalizeHeightmap">Exit Customization</button>
-        </div>
-    </div>
-
-    <div id="dialogs">
-
+        
         <dialog id="worldConfigurator" class="dialog stable">
 
             <div id="worldControls">
