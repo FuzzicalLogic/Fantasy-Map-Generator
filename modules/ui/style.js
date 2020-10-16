@@ -852,11 +852,12 @@ function changeStylePreset(preset) {
   alertMessage.innerHTML = "Are you sure you want to change the style preset? All unsaved style changes will be lost";
   $("#alert").dialog({resizable: false, title: "Change style preset", width: "23em",
     buttons: {
-      Change: function() {
-        const stored = localStorage.getItem(preset);
+        Change: function () {
+            const stored = localStorage.getItem(stylePreset.value);
         const style = JSON.isValid(stored) ? JSON.parse(stored) : null;
         if (preset === "styleDefault" || !style) applyDefaultStyle(); else applyStyle(style);
-        if (preset !== "styleDefault" && !style) tip("Cannot parse stored style JSON. Default style is applied", false, "error", 5000);
+            if (preset !== "styleDefault" && !style)
+                tip("Cannot parse stored style JSON. Default style is applied", false, "error", 5000);
         removeStyleButton.style.display = stylePreset.selectedOptions[0].dataset.system ? "none" : "inline-block";
         updateElements(); // change elements
         selectStyleElement(); // re-select element to trigger values update
