@@ -211,6 +211,7 @@ export function initialize() {
     window.showSupporters = showSupporters;
     window.hideOptions = hideOptions;
     window.showOptions = showOptions;
+    window.toggleOptions = toggleOptions;
     window.regeneratePrompt = regeneratePrompt;
     window.loadURL = loadURL;
 }
