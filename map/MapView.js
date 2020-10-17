@@ -28,6 +28,7 @@ export const MapView = el => {
         get coastline() { return this.box.select('#coastline') },
         get ice() { return this.box.select('#ice') },
         get prec() { return this.box.select('#prec') },
+        get population() { return this.box.select('#population') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -62,4 +63,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "coastline");
     box.append("g").attr("id", "ice").style("display", "none");
     box.append("g").attr("id", "prec").style("display", "none");
+    box.append("g").attr("id", "population");
 }

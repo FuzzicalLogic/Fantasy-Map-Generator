@@ -14,7 +14,6 @@ import {
     statesBody, statesHalo,
     stateBorders, provinceBorders,
     roads, trails, searoutes,
-    population,
     labels, icons, burgIcons, anchors,
     armies, markers, ruler, fogging, burgLabels,
     mapHistory,
@@ -753,7 +752,7 @@ function parseLoadedData(data) {
             if (view.scaleBar.style("display") !== "none") turnButtonOn("toggleScaleBar"); else turnButtonOff("toggleScaleBar");
 
             // special case for population bars
-            const populationIsOn = population.selectAll("line").size();
+            const populationIsOn = view.population.selectAll("line").size();
             if (populationIsOn) drawPopulation();
             if (populationIsOn) turnButtonOn("togglePopulation"); else turnButtonOff("togglePopulation");
 

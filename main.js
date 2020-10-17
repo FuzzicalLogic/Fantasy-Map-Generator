@@ -52,7 +52,7 @@ MapView.initialize(view);
 
 // append svg layers (in default order)
 let {
-    ocean, lakes, regions, borders, routes, coastline
+    ocean, lakes, regions, borders, routes, coastline, population
 } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
@@ -64,7 +64,6 @@ export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
 
-export let population = view.box.append("g").attr("id", "population");
 export let labels = view.box.append("g").attr("id", "labels");
 export let icons = view.box.append("g").attr("id", "icons");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
@@ -275,7 +274,6 @@ export function redefineElements(mapview) {
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");
-    population = view.box.select("#population");
     labels = view.box.select("#labels");
     icons = view.box.select("#icons");
     burgIcons = icons.select("#burgIcons");

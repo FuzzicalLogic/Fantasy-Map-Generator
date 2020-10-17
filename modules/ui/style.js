@@ -3,7 +3,6 @@ import {
     oceanLayers, armies, stateBorders,
     provinceBorders,
     markers,
-    population,
     ruler, roads, trails, searoutes, statesHalo,
     oceanPattern,
     burgLabels, burgIcons, anchors, labels, fogging,
@@ -187,7 +186,7 @@ export function initialize() {
         if (!layerIsOn("toggleRelief")) toggleRelief();
     });
 
-    let { temperature } = view;
+    let { temperature, population } = view;
     styleTemperatureFillOpacityInput.addEventListener("input", function () {
         temperature.attr("fill-opacity", this.value);
         styleTemperatureFillOpacityOutput.value = this.value;
@@ -462,6 +461,7 @@ function selectStyleElement() {
         styleReliefSet.value = terrain.attr("set");
     }
 
+    let { population } = view;
     if (sel === "population") {
         stylePopulation.style.display = "block";
         stylePopulationRuralStrokeInput.value = stylePopulationRuralStrokeOutput.value = population.select("#rural").attr("stroke");
@@ -773,6 +773,7 @@ function applyDefaultStyle() {
     markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
 
     view.prec.attr("opacity", null).attr("stroke", "#000000").attr("stroke-width", .1).attr("fill", "#003dff").attr("filter", null);
+    let { population } = view;
     population.attr("opacity", null).attr("stroke-width", 1.6).attr("stroke-dasharray", null).attr("stroke-linecap", "butt").attr("filter", null);
     population.select("#rural").attr("stroke", "#0000ff");
     population.select("#urban").attr("stroke", "#ff0000");

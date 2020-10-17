@@ -4,7 +4,7 @@ import {
     seed, pack,
     grid,
     labels, biomesData,
-    population, statesBody,
+    statesBody,
     stateBorders, provinceBorders,
     statesHalo,
     scale,
@@ -459,6 +459,7 @@ export function drawPrec() {
 }
 
 export function drawPopulation(event) {
+    let { population } = view;
     population.selectAll("line").remove();
     const cells = pack.cells, p = cells.p, burgs = pack.burgs;
     const show = d3.transition().duration(2000).ease(d3.easeSinIn);
@@ -1274,6 +1275,7 @@ export function togglePrec(event) {
 }
 
 export function togglePopulation(event) {
+    let { population } = view;
     if (!population.selectAll("line").size()) {
         turnButtonOn("togglePopulation");
         drawPopulation();
