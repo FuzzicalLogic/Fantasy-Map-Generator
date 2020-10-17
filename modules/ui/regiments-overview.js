@@ -1,4 +1,4 @@
-import { modules, options, pack, armies } from "../../main.js";
+import { modules, options, pack, armies, view } from "../../main.js";
 
 import { closeDialogs, clicked, fitContent, sortLines, applySorting, getFileName, downloadFile } from "./editors.js";
 
@@ -142,12 +142,12 @@ export function overviewRegiments(state) {
     function toggleAdd() {
         document.getElementById("regimentsAddNew").classList.toggle("pressed");
         if (document.getElementById("regimentsAddNew").classList.contains("pressed")) {
-            viewbox.style("cursor", "crosshair").on("click", addRegimentOnClick);
+            view.box.style("cursor", "crosshair").on("click", addRegimentOnClick);
             tip("Click on map to create new regiment or fleet", true);
             if (regimentAdd.offsetParent) regimentAdd.classList.add("pressed");
         } else {
             clearMainTip();
-            viewbox.on("click", clicked).style("cursor", "default");
+            view.box.on("click", clicked).style("cursor", "default");
             addLines();
             if (regimentAdd.offsetParent) regimentAdd.classList.remove("pressed");
         }

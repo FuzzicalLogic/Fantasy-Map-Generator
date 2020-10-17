@@ -1,6 +1,6 @@
 import {
     modules, pack, seed,
-    viewbox,
+    view,
     burgIcons, burgLabels, anchors
 } from "../../main.js";
 
@@ -341,7 +341,7 @@ function toggleRelocateBurg() {
     const toggler = getById("toggleCells");
     editor.burgRelocate.classList.toggle("pressed");
     if (editor.burgRelocate.classList.contains("pressed")) {
-        viewbox.style("cursor", "crosshair").on("click", relocateBurgOnClick);
+        view.box.style("cursor", "crosshair").on("click", relocateBurgOnClick);
         tip("Click on map to relocate burg. Hold Shift for continuous move", true);
         if (!layerIsOn("toggleCells")) {
             toggleCells();
@@ -349,7 +349,7 @@ function toggleRelocateBurg() {
         }
     } else {
         clearMainTip();
-        viewbox.on("click", clicked).style("cursor", "default");
+        view.box.on("click", clicked).style("cursor", "default");
         if (layerIsOn("toggleCells") && toggler.dataset.forced) {
             toggleCells();
             toggler.dataset.forced = false;

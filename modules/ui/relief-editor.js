@@ -1,3 +1,4 @@
+import { view } from "../../main.js";
 import { restoreDefaultEvents, unselect, moveCircle, removeCircle } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, rn } from "../utils.js";
@@ -103,7 +104,7 @@ export function editReliefIcon() {
             reliefIconsDiv.querySelector("svg").classList.add("pressed");
         }
 
-        viewbox.style("cursor", "crosshair").call(d3.drag().on("start", dragToAdd)).on("touchmove mousemove", moveBrush);
+        view.box.style("cursor", "crosshair").call(d3.drag().on("start", dragToAdd)).on("touchmove mousemove", moveBrush);
         tip("Drag to place relief icons within radius", true);
     }
 
@@ -173,7 +174,7 @@ export function editReliefIcon() {
         reliefSpacingDiv.style.display = "none";
         reliefIconsSeletionAny.style.display = "inline-block";
 
-        viewbox.style("cursor", "crosshair").call(d3.drag().on("start", dragToRemove)).on("touchmove mousemove", moveBrush);;
+        view.box.style("cursor", "crosshair").call(d3.drag().on("start", dragToRemove)).on("touchmove mousemove", moveBrush);;
         tip("Drag to remove relief icons in radius", true);
     }
 

@@ -1,7 +1,7 @@
 import {
     modules, defs,
     labels,
-    viewbox, lineGen, debug
+    view, lineGen, debug
 } from "../../main.js";
 import { closeDialogs, unselect, fitContent } from "./editors.js";
 
@@ -23,7 +23,7 @@ export function editLabel() {
     const textPath = tspan.parentNode;
     const text = textPath.parentNode;
     elSelected = d3.select(text).call(d3.drag().on("start", dragLabel)).classed("draggable", true);
-    viewbox.on("touchmove mousemove", showEditorTips);
+    view.box.on("touchmove mousemove", showEditorTips);
 
     $("#labelEditor").dialog({
         title: "Edit Label", resizable: false, width: fitContent(),

@@ -1,5 +1,5 @@
 import {
-    pack, grid, graphWidth, graphHeight, viewbox,
+    pack, grid, graphWidth, graphHeight, view,
     markers, routes, rivers, labels, scale, elSelected,
     elevateLakes, ice, notes, zones, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
@@ -346,7 +346,7 @@ export function toggleAddLabel() {
     addFeature.querySelectorAll("button.pressed").forEach(b => b.classList.remove("pressed"));
     addLabel.classList.add('pressed');
     closeDialogs(".stable");
-    viewbox.style("cursor", "crosshair").on("click", addLabelOnClick);
+    view.box.style("cursor", "crosshair").on("click", addLabelOnClick);
     tip("Click on map to place label. Hold Shift to add multiple", true);
     if (!layerIsOn("toggleLabels")) toggleLabels();
 }
@@ -402,7 +402,7 @@ export function toggleAddRiver() {
     addRiver.classList.add('pressed');
     document.getElementById("addNewRiver").classList.add("pressed");
     closeDialogs(".stable");
-    viewbox.style("cursor", "crosshair").on("click", addRiverOnClick);
+    view.box.style("cursor", "crosshair").on("click", addRiverOnClick);
     tip("Click on map to place new river or extend an existing one. Hold Shift to place multiple rivers", true, "warn");
     if (!layerIsOn("toggleRivers")) toggleRivers();
 }
@@ -503,7 +503,7 @@ export function toggleAddRoute() {
     addFeature.querySelectorAll("button.pressed").forEach(b => b.classList.remove("pressed"));
     addRoute.classList.add('pressed');
     closeDialogs(".stable");
-    viewbox.style("cursor", "crosshair").on("click", addRouteOnClick);
+    view.box.style("cursor", "crosshair").on("click", addRouteOnClick);
     tip("Click on map to add a first control point", true);
     if (!layerIsOn("toggleRoutes")) toggleRoutes();
 }
@@ -523,7 +523,7 @@ export function toggleAddMarker() {
     addFeature.querySelectorAll("button.pressed").forEach(b => b.classList.remove("pressed"));
     addMarker.classList.add('pressed');
     closeDialogs(".stable");
-    viewbox.style("cursor", "crosshair").on("click", addMarkerOnClick);
+    view.box.style("cursor", "crosshair").on("click", addMarkerOnClick);
     tip("Click on map to add a marker. Hold Shift to add multiple", true);
     if (!layerIsOn("toggleMarkers")) toggleMarkers();
 }

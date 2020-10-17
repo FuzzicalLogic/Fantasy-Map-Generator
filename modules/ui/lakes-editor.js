@@ -1,3 +1,4 @@
+import { view } from "../../main.js";
 import { unselect } from "./editors.js";
 
 import { editNotes } from "./notes-editor.js";
@@ -23,7 +24,7 @@ export function editLake() {
     elSelected = d3.select(node);
     selectLakeGroup(node);
     drawLakeVertices();
-    viewbox.on("touchmove mousemove", null);
+    view.box.on("touchmove mousemove", null);
 
     if (modules.editLake) return;
     modules.editLake = true;

@@ -1,4 +1,4 @@
-import { modules, pack, viewbox, cults, debug, nameBases, legend, customization } from "../../main.js";
+import { modules, pack, view, cults, debug, nameBases, legend, customization } from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
@@ -521,7 +521,7 @@ function enterCultureManualAssignent() {
     $("#culturesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
 
     tip("Click on culture to select, drag the circle to change culture", true);
-    viewbox.style("cursor", "crosshair")
+    view.box.style("cursor", "crosshair")
         .on("click", selectCultureOnMapClick)
         .call(d3.drag().on("start", dragCultureBrush))
         .on("touchmove mousemove", moveCultureBrush);
@@ -629,7 +629,7 @@ function enterAddCulturesMode() {
     customization = 9;
     this.classList.add("pressed");
     tip("Click on the map to add a new culture", true);
-    viewbox.style("cursor", "crosshair").on("click", addCulture);
+    view.box.style("cursor", "crosshair").on("click", addCulture);
     getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 

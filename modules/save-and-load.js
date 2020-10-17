@@ -1,5 +1,7 @@
+"use strict";
+
 import {
-    version, seed, setSeed,
+    version, seed, setSeed, view, 
     svg, svgWidth, svgHeight, redefineElements,
     mapId, setMapId, graphWidth, graphHeight, setWidth, setHeight,
     mapCoordinates, setCoordinates, notes, setNotes,
@@ -8,7 +10,7 @@ import {
     biomesData, setBiomesData, applyDefaultBiomesSystem,
     pack, setPack,
     nameBases, 
-    defs, viewbox, scaleBar, legend, ocean, oceanLayers, oceanPattern,
+    defs, scaleBar, legend, ocean, oceanLayers, oceanPattern,
     lakes, landmass, texture, terrs, biomes, ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
@@ -20,9 +22,10 @@ import {
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics,
-    customization
+    customization, drawCoastline
 } from "../main.js";
 
+import { MapView } from "../map/MapView.js";
 import * as Rivers from "./river-generator.js";
 import * as BurgsAndStates from "./burgs-and-states.js";
 import * as Religions from "./religions-generator.js";
@@ -30,7 +33,7 @@ import * as Military from "./military-generator.js";
 import * as Names from "./names-generator.js";
 
 import { tip, getCellPopulation, getFriendlyHeight, applyOption, clearMainTip } from "./ui/general.js";
-import { closeDialogs, restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile, closeDialogs } from "./ui/editors.js";
+import { restoreDefaultEvents, clearLegend, unfog, getFileName, downloadFile, closeDialogs } from "./ui/editors.js";
 import { findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent, last } from "./utils.js";
 
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
@@ -670,9 +673,9 @@ function parseLoadedData(data) {
         void function replaceSVG() {
             svg.remove();
             document.body.insertAdjacentHTML("afterbegin", data[5]);
+            redefineElements(MapView(document.getElementById('map')));
         }()
 
-        redefineElements();
 
         void function parseGridData() {
             setGrid(JSON.parse(data[6]));
@@ -778,7 +781,7 @@ function parseLoadedData(data) {
 
             if (version < 1) {
                 // 1.0 adds a new religions layer
-                relig = viewbox.insert("g", "#terrain").attr("id", "relig");
+                relig = view.box.insert("g", "#terrain").attr("id", "relig");
                 Religions.generate();
 
                 // 1.0 adds a legend box
@@ -795,7 +798,7 @@ function parseLoadedData(data) {
                 provinceBorders.attr("opacity", .8).attr("stroke", "#56566d").attr("stroke-width", .5).attr("stroke-dasharray", "1").attr("stroke-linecap", "butt");
 
                 // 1.0 adds state relations, provinces, forms and full names
-                provs = viewbox.insert("g", "#borders").attr("id", "provs").attr("opacity", .6);
+                provs = view.box.insert("g", "#borders").attr("id", "provs").attr("opacity", .6);
                 BurgsAndStates.collectStatistics();
                 BurgsAndStates.generateCampaigns();
                 BurgsAndStates.generateDiplomacy();
@@ -810,13 +813,13 @@ function parseLoadedData(data) {
                 document.getElementsByTagName("defs")[0].appendChild(hatching);
 
                 // 1.0 adds zones layer
-                zones = viewbox.insert("g", "#borders").attr("id", "zones").attr("display", "none");
+                zones = view.box.insert("g", "#borders").attr("id", "zones").attr("display", "none");
                 zones.attr("opacity", .6).attr("stroke", null).attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt");
                 addZones();
                 if (!markers.selectAll("*").size()) { addMarkers(); turnButtonOn("toggleMarkers"); }
 
                 // 1.0 add fogging layer (state focus)
-                fogging = viewbox.insert("g", "#ruler").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
+                fogging = view.box.insert("g", "#ruler").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
                 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
                 defs.append("mask").attr("id", "fog").append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "white");
 
@@ -841,7 +844,7 @@ function parseLoadedData(data) {
 
             if (version < 1.1) {
                 // v 1.0 initial code had a bug with religion layer id
-                if (!relig.size()) relig = viewbox.insert("g", "#terrain").attr("id", "relig");
+                if (!relig.size()) relig = view.box.insert("g", "#terrain").attr("id", "relig");
 
                 // v 1.0 initially has Sympathy status then relaced with Friendly
                 for (const s of pack.states) {
@@ -919,7 +922,7 @@ function parseLoadedData(data) {
 
             if (version < 1.21) {
                 // v 1.11 replaced "display" attribute by "display" style
-                viewbox.selectAll("g").each(function () {
+                view.box.selectAll("g").each(function () {
                     if (this.hasAttribute("display")) {
                         this.removeAttribute("display");
                         this.style.display = "none";
@@ -966,7 +969,7 @@ function parseLoadedData(data) {
 
                 // v 1.3 added militry layer
                 svg.select("defs").append("style").text(armiesStyle()); // add armies style
-                armies = viewbox.insert("g", "#icons").attr("id", "armies");
+                armies = view.box.insert("g", "#icons").attr("id", "armies");
                 armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
                 turnButtonOn("toggleMilitary");
                 Military.generate();
@@ -980,7 +983,7 @@ function parseLoadedData(data) {
                 }
 
                 // v 1.4 added ice layer
-                ice = viewbox.insert("g", "#coastline").attr("id", "ice").style("display", "none");
+                ice = view.box.insert("g", "#coastline").attr("id", "ice").style("display", "none");
                 ice.attr("opacity", null).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");
                 drawIce();
 

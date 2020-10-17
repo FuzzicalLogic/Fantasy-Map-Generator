@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    viewbox, scale, scaleBar,
+    view, scale, scaleBar,
     calculateTemperatures, ruler
 } from "../../main.js";
 
@@ -220,7 +220,7 @@ function addAdditionalRuler() {
     const x = graphWidth / 2, y = graphHeight / 2;
     const pt = document.getElementById('map').createSVGPoint();
     pt.x = x, pt.y = y;
-    const p = pt.matrixTransform(viewbox.node().getScreenCTM().inverse());
+    const p = pt.matrixTransform(view.box.node().getScreenCTM().inverse());
     const dx = rn(graphWidth / 4 / scale), dy = rand(dx / 2, dx * 2) - rand(dx / 2, dx * 2);
     addRuler(p.x - dx, p.y + dy, p.x + dx, p.y + dy);
 }
@@ -235,7 +235,7 @@ function toggleOpisometerMode() {
         tip("Draw a curve to measure its length", true);
         unitsBottom.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
         this.classList.add("pressed");
-        viewbox.style("cursor", "crosshair").call(d3.drag().on("start", drawOpisometer));
+        view.box.style("cursor", "crosshair").call(d3.drag().on("start", drawOpisometer));
     }
 }
 
@@ -249,7 +249,7 @@ function togglePlanimeterMode() {
         tip("Draw a line to measure its inner area", true);
         unitsBottom.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
         this.classList.add("pressed");
-        viewbox.style("cursor", "crosshair").call(d3.drag().on("start", drawPlanimeter));
+        view.box.style("cursor", "crosshair").call(d3.drag().on("start", drawPlanimeter));
     }
 }
 

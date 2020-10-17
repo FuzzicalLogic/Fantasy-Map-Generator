@@ -3,7 +3,7 @@ import {
     seed, pack, defs, regions, debug,
     statesBody, statesHalo,
     notes, armies, burgLabels,
-    viewbox, zoomTo, legend, customization
+    view, zoomTo, legend, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -698,7 +698,7 @@ function enterStatesManualAssignent() {
     $("#statesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg", collision: "fit" } });
 
     tip("Click on state to select, drag the circle to change state", true);
-    viewbox.style("cursor", "crosshair")
+    view.box.style("cursor", "crosshair")
         .on("click", selectStateOnMapClick)
         .call(d3.drag().on("start", dragStateBrush))
         .on("touchmove mousemove", moveStateBrush);
@@ -871,7 +871,7 @@ function enterAddStateMode() {
     customization = 3;
     this.classList.add("pressed");
     tip("Click on the map to create a new capital or promote an existing burg", true);
-    viewbox.style("cursor", "crosshair").on("click", addState);
+    view.box.style("cursor", "crosshair").on("click", addState);
     getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 

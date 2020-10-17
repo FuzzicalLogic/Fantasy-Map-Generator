@@ -1,4 +1,4 @@
-import { modules, pack, statesBody, statesHalo, viewbox, regions, debug, customization } from "../../main.js";
+import { modules, pack, statesBody, statesHalo, view, regions, debug, customization } from "../../main.js";
 
 import * as BurgsAndStates from "../burgs-and-states.js";
 
@@ -34,7 +34,7 @@ export function editDiplomacy() {
     refreshDiplomacyEditor();
 
     tip("Click on a state to see its diplomatic relations", false, "warning");
-    viewbox.style("cursor", "crosshair").on("click", selectStateOnMapClick);
+    view.box.style("cursor", "crosshair").on("click", selectStateOnMapClick);
 
     if (modules.editDiplomacy) return;
     modules.editDiplomacy = true;

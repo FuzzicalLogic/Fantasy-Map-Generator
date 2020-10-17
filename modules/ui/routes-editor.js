@@ -1,3 +1,4 @@
+import { view } from "../../main.js";
 import { clicked, unselect } from "./editors.js";
 import { editNotes } from "./notes-editor.js";
 import { showEPForRoute, showElevationProfile } from "./elevation-profile.js";
@@ -25,7 +26,7 @@ export function editRoute(onClick) {
     drawControlPoints(node);
     selectRouteGroup(node);
 
-    viewbox.on("touchmove mousemove", showEditorTips);
+    view.box.on("touchmove mousemove", showEditorTips);
     if (onClick) toggleRouteCreationMode();
 
     if (modules.editRoute) return;
@@ -257,11 +258,11 @@ export function editRoute(onClick) {
         document.getElementById("routeNew").classList.toggle("pressed");
         if (document.getElementById("routeNew").classList.contains("pressed")) {
             tip("Click on map to add control points", true);
-            viewbox.on("click", addPointOnClick).style("cursor", "crosshair");
+            view.box.on("click", addPointOnClick).style("cursor", "crosshair");
             elSelected.on("click", null);
         } else {
             clearMainTip();
-            viewbox.on("click", clicked).style("cursor", "default");
+            view.box.on("click", clicked).style("cursor", "default");
             elSelected.on("click", addInterimControlPoint).attr("data-new", null);
         }
     }

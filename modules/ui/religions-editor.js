@@ -1,6 +1,6 @@
 import {
     modules,
-    pack, viewbox, relig, legend, debug, customization
+    pack, view, relig, legend, debug, customization
 } from "../../main.js";
 
 import * as Religions from "../religions-generator.js";
@@ -498,7 +498,7 @@ function enterReligionsManualAssignent() {
     $("#religionsEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
 
     tip("Click on religion to select, drag the circle to change religion", true);
-    viewbox.style("cursor", "crosshair")
+    view.box.style("cursor", "crosshair")
         .on("click", selectReligionOnMapClick)
         .call(d3.drag().on("start", dragReligionBrush))
         .on("touchmove mousemove", moveReligionBrush);
@@ -605,7 +605,7 @@ function enterAddReligionMode() {
     customization = 8;
     this.classList.add("pressed");
     tip("Click on the map to add a new religion", true);
-    viewbox.style("cursor", "crosshair").on("click", addReligion);
+    view.box.style("cursor", "crosshair").on("click", addReligion);
     getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 

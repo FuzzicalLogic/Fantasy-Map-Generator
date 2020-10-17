@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    pack, defs, viewbox, zones, legend, customization
+    pack, defs, view, zones, legend, customization
 } from "../../main.js";
 
 import { editStyle } from "./style.js";
@@ -142,7 +142,7 @@ function enterZonesManualAssignent() {
     $("#zonesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg", collision: "fit" } });
 
     tip("Click to select a zone, drag to paint a zone", true);
-    viewbox.style("cursor", "crosshair")
+    view.box.style("cursor", "crosshair")
         .on("click", selectZoneOnMapClick)
         .call(d3.drag().on("start", dragZoneBrush))
         .on("touchmove mousemove", moveZoneBrush);

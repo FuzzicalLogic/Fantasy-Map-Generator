@@ -1,7 +1,7 @@
 import {
     modules,
-    grid,
-    viewbox,
+    grid, defs,
+    view,
     reGraph, resetZoom, rankCells
 } from "../../main.js";
 
@@ -44,7 +44,7 @@ export function editHeightmap() {
     }()
 
     restartHistory();
-    viewbox.insert("g", "#terrs").attr("id", "heights");
+    view.box.insert("g", "#terrs").attr("id", "heights");
 
     if (modules.editHeightmap) return;
     modules.editHeightmap = true;
@@ -75,11 +75,11 @@ export function editHeightmap() {
             undraw();
             changeOnlyLand.checked = false;
         } else if (type === "keep") {
-            viewbox.selectAll("#landmass, #lakes").style("display", "none");
+            view.box.selectAll("#landmass, #lakes").style("display", "none");
             changeOnlyLand.checked = true;
         } else if (type === "risk") {
             defs.selectAll("#land, #water").selectAll("path").remove();
-            viewbox.selectAll("#coastline path, #lakes path, #oceanLayers path").remove();
+            view.box.selectAll("#coastline path, #lakes path, #oceanLayers path").remove();
             changeOnlyLand.checked = false;
         }
 
@@ -109,7 +109,7 @@ export function editHeightmap() {
         layersPreset.value = "heightmap";
         layersPreset.disabled = true;
         mockHeightmap();
-        viewbox.on("touchmove mousemove", moveCursor);
+        view.box.on("touchmove mousemove", moveCursor);
     }
 
     function moveCursor() {
@@ -144,7 +144,7 @@ export function editHeightmap() {
 
     // Exit customization mode
     function finalizeHeightmap() {
-        if (viewbox.select("#heights").selectAll("*").size() < 200) {
+        if (view.box.select("#heights").selectAll("*").size() < 200) {
             tip("Insufficient land area! There should be at least 200 land cells to finalize the heightmap", null, "error");
             return;
         }
@@ -232,7 +232,7 @@ export function editHeightmap() {
     }
 
     function restoreKeptData() {
-        viewbox.selectAll("#landmass, #lakes").style("display", null);
+        view.box.selectAll("#landmass, #lakes").style("display", null);
         for (const i of pack.cells.i) {
             pack.cells.h[i] = grid.cells.h[pack.cells.g[i]];
         }
@@ -450,7 +450,7 @@ export function editHeightmap() {
     function mockHeightmap() {
         const data = renderOcean.checked ? grid.cells.i : grid.cells.i.filter(i => grid.cells.h[i] >= 20);
         const scheme = getColorScheme();
-        viewbox.select("#heights").selectAll("polygon").data(data).join("polygon")
+        view.box.select("#heights").selectAll("polygon").data(data).join("polygon")
             .attr("points", d => getGridPolygon(d)).attr("id", d => "cell" + d)
             .attr("fill", d => getColor(grid.cells.h[d], scheme));
     }
@@ -461,9 +461,9 @@ export function editHeightmap() {
         const scheme = getColorScheme();
 
         selection.forEach(function (i) {
-            let cell = viewbox.select("#heights").select("#cell" + i);
+            let cell = view.box.select("#heights").select("#cell" + i);
             if (!ocean && grid.cells.h[i] < 20) { cell.remove(); return; }
-            if (!cell.size()) cell = viewbox.select("#heights").append("polygon").attr("points", getGridPolygon(i)).attr("id", "cell" + i);
+            if (!cell.size()) cell = view.box.select("#heights").append("polygon").attr("points", getGridPolygon(i)).attr("id", "cell" + i);
             cell.attr("fill", getColor(grid.cells.h[i], scheme));
         });
     }
@@ -554,7 +554,7 @@ export function editHeightmap() {
             if (!pressed) return;
             pressed.classList.remove("pressed");
 
-            viewbox.style("cursor", "default").on(".drag", null);
+            view.box.style("cursor", "default").on(".drag", null);
             removeCircle();
             document.getElementById("brushesSliders").style.display = "none";
         }
@@ -564,7 +564,7 @@ export function editHeightmap() {
             exitBrushMode();
             document.getElementById("brushesSliders").style.display = "block";
             e.target.classList.add("pressed");
-            viewbox.style("cursor", "crosshair").call(d3.drag().on("start", dragBrush));
+            view.box.style("cursor", "crosshair").call(d3.drag().on("start", dragBrush));
         }
 
         function dragBrush() {
@@ -649,7 +649,7 @@ export function editHeightmap() {
             const someHeights = grid.cells.h.some(h => h);
             if (!someHeights) { tip("Heightmap is already cleared, please do not click twice if not required", false, "error"); return; }
             grid.cells.h = new Uint8Array(grid.cells.i.length);
-            viewbox.select("#heights").selectAll("*").remove();
+            view.box.select("#heights").selectAll("*").remove();
             updateHistory();
         }
 
@@ -1010,7 +1010,7 @@ export function editHeightmap() {
 
         // remove all heights
         grid.cells.h = new Uint8Array(grid.cells.i.length);
-        viewbox.select("#heights").selectAll("*").remove();
+        view.box.select("#heights").selectAll("*").remove();
         updateHistory();
 
         if (modules.openImageConverter) return;
@@ -1075,14 +1075,14 @@ export function editHeightmap() {
             const data = q.reduce(sampleCanvas);
             const pallete = q.palette(true);
 
-            viewbox.select("#heights").selectAll("*").remove();
+            view.box.select("#heights").selectAll("*").remove();
             d3.select("#imageConverter").selectAll("div.color-div").remove();
             colorsSelect.style.display = "block";
             colorsUnassigned.style.display = "block";
             colorsAssigned.style.display = "none";
             sampleCanvas.remove(); // no need to keep
 
-            viewbox.select("#heights").selectAll("polygon").data(grid.cells.i).join("polygon")
+            view.box.select("#heights").selectAll("polygon").data(grid.cells.i).join("polygon")
                 .attr("points", d => getGridPolygon(d)).attr("id", d => "cell" + d)
                 .attr("fill", d => `rgb(${data[d * 4]}, ${data[d * 4 + 1]}, ${data[d * 4 + 2]})`)
                 .on("click", mapClicked);
@@ -1102,7 +1102,7 @@ export function editHeightmap() {
         }
 
         function colorClicked() {
-            viewbox.select("#heights").selectAll(".selectedCell").attr("class", null);
+            view.box.select("#heights").selectAll(".selectedCell").attr("class", null);
             const unselect = this.classList.contains("selectedColor");
 
             const selectedColor = imageConverter.querySelector("div.selectedColor");
@@ -1122,8 +1122,8 @@ export function editHeightmap() {
             }
 
             const color = this.getAttribute("data-color");
-            viewbox.select("#heights").selectAll("polygon.selectedCell").classed("selectedCell", 0);
-            viewbox.select("#heights").selectAll("polygon[fill='" + color + "']").classed("selectedCell", 1);
+            view.box.select("#heights").selectAll("polygon.selectedCell").classed("selectedCell", 0);
+            view.box.select("#heights").selectAll("polygon[fill='" + color + "']").classed("selectedCell", 1);
         }
 
         function assignHeight() {
@@ -1134,7 +1134,7 @@ export function editHeightmap() {
             selectedColor.setAttribute("data-color", rgb);
             selectedColor.setAttribute("data-height", height);
 
-            viewbox.select("#heights").selectAll(".selectedCell").each(function () {
+            view.box.select("#heights").selectAll(".selectedCell").each(function () {
                 this.setAttribute("fill", rgb);
                 this.setAttribute("data-height", height);
             });
@@ -1189,7 +1189,7 @@ export function editHeightmap() {
                 const clr = el.dataset.color;
                 const height = type === "hue" ? getHeightByHue(clr) : type === "lum" ? getHeightByLum(clr) : getHeightByScheme(clr);
                 const colorTo = color(1 - (height < 20 ? (height - 5) / 100 : height / 100));
-                viewbox.select("#heights").selectAll("polygon[fill='" + clr + "']").attr("fill", colorTo).attr("data-height", height);
+                view.box.select("#heights").selectAll("polygon[fill='" + clr + "']").attr("fill", colorTo).attr("data-height", height);
 
                 if (assinged[height]) { el.remove(); return; } // if color is already added, remove it
                 el.style.backgroundColor = el.dataset.color = colorTo;
@@ -1227,20 +1227,20 @@ export function editHeightmap() {
                 return;
             }
 
-            viewbox.select("#heights").selectAll("polygon").each(function () {
+            view.box.select("#heights").selectAll("polygon").each(function () {
                 const height = +this.dataset.height || 0;
                 const i = +this.id.slice(4);
                 grid.cells.h[i] = height;
             });
 
-            viewbox.select("#heights").selectAll("polygon").remove();
+            view.box.select("#heights").selectAll("polygon").remove();
             updateHeightmap();
             restoreImageConverterState();
         }
 
         function cancelConversion() {
             restoreImageConverterState();
-            viewbox.select("#heights").selectAll("polygon").remove();
+            view.box.select("#heights").selectAll("polygon").remove();
             restoreHistory(edits.n - 1);
         }
 
@@ -1252,7 +1252,7 @@ export function editHeightmap() {
             colorsAssigned.style.display = "none";
             colorsUnassigned.style.display = "none";
             colorsSelectValue.innerHTML = colorsSelectFriendly.innerHTML = 0;
-            viewbox.style("cursor", "default").on(".drag", null);
+            view.box.style("cursor", "default").on(".drag", null);
             tip('Heightmap edit mode is active. Click on "Exit Customization" to finalize the heightmap', true);
             $("#imageConverter").dialog("destroy");
             openBrushesPanel();
@@ -1280,7 +1280,7 @@ export function editHeightmap() {
                     Close: function () {
                         $(this).dialog("close");
                         restoreImageConverterState();
-                        viewbox.select("#heights").selectAll("polygon").remove();
+                        view.box.select("#heights").selectAll("polygon").remove();
                         restoreHistory(edits.n - 1);
                     }
                 }

@@ -1,4 +1,4 @@
-import { modules, pack, viewbox, debug } from "../../main.js";
+import { modules, pack, view, debug } from "../../main.js";
 
 import { closeDialogs, clicked, unselect } from "./editors.js";
 
@@ -21,7 +21,7 @@ export function editRiver(id) {
 
     const node = id ? document.getElementById(id) : d3.event.target;
     elSelected = d3.select(node).on("click", addInterimControlPoint);
-    viewbox.on("touchmove mousemove", showEditorTips);
+    view.box.on("touchmove mousemove", showEditorTips);
     debug.append("g").attr("id", "controlPoints").attr("transform", elSelected.attr("transform"));
     drawControlPoints(node);
     updateRiverName(node);
@@ -227,7 +227,7 @@ export function editRiver(id) {
         else {
             document.getElementById("riverNew").classList.add("pressed");
             tip("Click on map to add control points", true, "warn");
-            viewbox.on("click", addPointOnClick).style("cursor", "crosshair");
+            view.box.on("click", addPointOnClick).style("cursor", "crosshair");
             elSelected.on("click", null);
         }
     }
@@ -271,7 +271,7 @@ export function editRiver(id) {
     function exitRiverCreationMode() {
         riverNew.classList.remove("pressed");
         clearMainTip();
-        viewbox.on("click", clicked).style("cursor", "default");
+        view.box.on("click", clicked).style("cursor", "default");
         elSelected.on("click", addInterimControlPoint);
 
         if (!elSelected.attr("data-new")) return; // no need to create a new river

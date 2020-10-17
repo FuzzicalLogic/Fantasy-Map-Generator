@@ -2,7 +2,7 @@ import {
     pack,
     svg, svgWidth, svgHeight,
     defs, debug,
-    viewbox, legend, fogging, scale,
+    view, legend, fogging, scale,
     zoom,
     burgIcons, anchors, burgLabels,
     elSelected
@@ -37,7 +37,7 @@ export function initialize() {
 // restore default viewbox events
 export function restoreDefaultEvents() {
     svg.call(zoom);
-    viewbox.style("cursor", "default")
+    view.box.style("cursor", "default")
         .on(".drag", null)
         .on("click", clicked)
         .on("touchmove mousemove", moved);
@@ -77,7 +77,7 @@ export function unselect() {
     if (!elSelected) return;
     elSelected.call(d3.drag().on("drag", null)).attr("class", null);
     debug.selectAll("*").remove();
-    viewbox.style("cursor", "default");
+    view.box.style("cursor", "default");
     elSelected = null;
 }
 

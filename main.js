@@ -55,52 +55,56 @@ initStorage();
 
 // append svg layers (in default order)
 export let svg = d3.select("#map");
+
+import { MapView } from "./map/MapView.js";
+export let view = MapView(document.getElementById('map'));
+
 export let defs = svg.select("#deftemp");
-export let viewbox = svg.select("#viewbox");
+//export let viewbox = svg.select("#viewbox");
 export let scaleBar = svg.select("#scaleBar");
 export let legend = svg.append("g").attr("id", "legend");
-export let ocean = viewbox.append("g").attr("id", "ocean");
+export let ocean = view.box.append("g").attr("id", "ocean");
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
-export let lakes = viewbox.append("g").attr("id", "lakes");
-export let landmass = viewbox.append("g").attr("id", "landmass");
-export let texture = viewbox.append("g").attr("id", "texture");
-export let terrs = viewbox.append("g").attr("id", "terrs");
-export let biomes = viewbox.append("g").attr("id", "biomes");
-export let cells = viewbox.append("g").attr("id", "cells");
-export let gridOverlay = viewbox.append("g").attr("id", "gridOverlay");
-export let coordinates = viewbox.append("g").attr("id", "coordinates");
-export let compass = viewbox.append("g").attr("id", "compass");
-export let rivers = viewbox.append("g").attr("id", "rivers");
-export let terrain = viewbox.append("g").attr("id", "terrain");
-export let relig = viewbox.append("g").attr("id", "relig");
-export let cults = viewbox.append("g").attr("id", "cults");
-export let regions = viewbox.append("g").attr("id", "regions");
+export let lakes = view.box.append("g").attr("id", "lakes");
+export let landmass = view.box.append("g").attr("id", "landmass");
+export let texture = view.box.append("g").attr("id", "texture");
+export let terrs = view.box.append("g").attr("id", "terrs");
+export let biomes = view.box.append("g").attr("id", "biomes");
+export let cells = view.box.append("g").attr("id", "cells");
+export let gridOverlay = view.box.append("g").attr("id", "gridOverlay");
+export let coordinates = view.box.append("g").attr("id", "coordinates");
+export let compass = view.box.append("g").attr("id", "compass");
+export let rivers = view.box.append("g").attr("id", "rivers");
+export let terrain = view.box.append("g").attr("id", "terrain");
+export let relig = view.box.append("g").attr("id", "relig");
+export let cults = view.box.append("g").attr("id", "cults");
+export let regions = view.box.append("g").attr("id", "regions");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
-export let provs = viewbox.append("g").attr("id", "provs");
-export let zones = viewbox.append("g").attr("id", "zones").style("display", "none");
-export let borders = viewbox.append("g").attr("id", "borders");
+export let provs = view.box.append("g").attr("id", "provs");
+export let zones = view.box.append("g").attr("id", "zones").style("display", "none");
+export let borders = view.box.append("g").attr("id", "borders");
 export let stateBorders = borders.append("g").attr("id", "stateBorders");
 export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
-export let routes = viewbox.append("g").attr("id", "routes");
+export let routes = view.box.append("g").attr("id", "routes");
 export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
-export let temperature = viewbox.append("g").attr("id", "temperature");
-export let coastline = viewbox.append("g").attr("id", "coastline");
-export let ice = viewbox.append("g").attr("id", "ice").style("display", "none");
-export let prec = viewbox.append("g").attr("id", "prec").style("display", "none");
-export let population = viewbox.append("g").attr("id", "population");
-export let labels = viewbox.append("g").attr("id", "labels");
-export let icons = viewbox.append("g").attr("id", "icons");
+export let temperature = view.box.append("g").attr("id", "temperature");
+export let coastline = view.box.append("g").attr("id", "coastline");
+export let ice = view.box.append("g").attr("id", "ice").style("display", "none");
+export let prec = view.box.append("g").attr("id", "prec").style("display", "none");
+export let population = view.box.append("g").attr("id", "population");
+export let labels = view.box.append("g").attr("id", "labels");
+export let icons = view.box.append("g").attr("id", "icons");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
 export let anchors = icons.append("g").attr("id", "anchors");
-export let armies = viewbox.append("g").attr("id", "armies").style("display", "none");
-export let markers = viewbox.append("g").attr("id", "markers").style("display", "none");
-export let fogging = viewbox.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
-export let ruler = viewbox.append("g").attr("id", "ruler").style("display", "none");
-export let debug = viewbox.append("g").attr("id", "debug");
+export let armies = view.box.append("g").attr("id", "armies").style("display", "none");
+export let markers = view.box.append("g").attr("id", "markers").style("display", "none");
+export let fogging = view.box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
+export let ruler = view.box.append("g").attr("id", "ruler").style("display", "none");
+export let debug = view.box.append("g").attr("id", "debug");
 
 // lake and coast groups
 lakes.append("g").attr("id", "freshwater");
@@ -278,54 +282,54 @@ export function setNameBases(v) { nameBases = v; }
 export function setSvgWidth(v) { svgWidth = v; }
 export function setSvgHeight(v) { svgHeight = v; }
 
-export function redefineElements() {
-    svg = d3.select("#map");
+export function redefineElements(mapview) {
+    view = mapview;
+    svg = view.svg;
     defs = svg.select("#deftemp");
-    viewbox = svg.select("#viewbox");
     scaleBar = svg.select("#scaleBar");
-    legend = svg.select("#legend");
-    ocean = viewbox.select("#ocean");
+    legend = view.svg.select("#legend");
+    ocean = view.box.select("#ocean");
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
-    lakes = viewbox.select("#lakes");
-    landmass = viewbox.select("#landmass");
-    texture = viewbox.select("#texture");
-    terrs = viewbox.select("#terrs");
-    biomes = viewbox.select("#biomes");
-    ice = viewbox.select("#ice");
-    cells = viewbox.select("#cells");
-    gridOverlay = viewbox.select("#gridOverlay");
-    coordinates = viewbox.select("#coordinates");
-    compass = viewbox.select("#compass");
-    rivers = viewbox.select("#rivers");
-    terrain = viewbox.select("#terrain");
-    relig = viewbox.select("#relig");
-    cults = viewbox.select("#cults");
-    regions = viewbox.select("#regions");
+    lakes = view.box.select("#lakes");
+    landmass = view.box.select("#landmass");
+    texture = view.box.select("#texture");
+    terrs = view.box.select("#terrs");
+    biomes = view.box.select("#biomes");
+    ice = view.box.select("#ice");
+    cells = view.box.select("#cells");
+    gridOverlay = view.box.select("#gridOverlay");
+    coordinates = view.box.select("#coordinates");
+    compass = view.box.select("#compass");
+    rivers = view.box.select("#rivers");
+    terrain = view.box.select("#terrain");
+    relig = view.box.select("#relig");
+    cults = view.box.select("#cults");
+    regions = view.box.select("#regions");
     statesBody = regions.select("#statesBody");
     statesHalo = regions.select("#statesHalo");
-    provs = viewbox.select("#provs");
-    zones = viewbox.select("#zones");
-    borders = viewbox.select("#borders");
+    provs = view.box.select("#provs");
+    zones = view.box.select("#zones");
+    borders = view.box.select("#borders");
     stateBorders = borders.select("#stateBorders");
     provinceBorders = borders.select("#provinceBorders");
-    routes = viewbox.select("#routes");
+    routes = view.box.select("#routes");
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");
-    temperature = viewbox.select("#temperature");
-    coastline = viewbox.select("#coastline");
-    prec = viewbox.select("#prec");
-    population = viewbox.select("#population");
-    labels = viewbox.select("#labels");
-    icons = viewbox.select("#icons");
+    temperature = view.box.select("#temperature");
+    coastline = view.box.select("#coastline");
+    prec = view.box.select("#prec");
+    population = view.box.select("#population");
+    labels = view.box.select("#labels");
+    icons = view.box.select("#icons");
     burgIcons = icons.select("#burgIcons");
     anchors = icons.select("#anchors");
-    armies = viewbox.select("#armies");
-    markers = viewbox.select("#markers");
-    ruler = viewbox.select("#ruler");
-    fogging = viewbox.select("#fogging");
-    debug = viewbox.select("#debug");
+    armies = view.box.select("#armies");
+    markers = view.box.select("#markers");
+    ruler = view.box.select("#ruler");
+    fogging = view.box.select("#fogging");
+    debug = view.box.select("#debug");
     burgLabels = labels.select("#burgLabels");
 }
 
@@ -535,7 +539,7 @@ function zoomed() {
     scale = transform.k;
     viewX = transform.x;
     viewY = transform.y;
-    viewbox.attr("transform", transform);
+    view.box.attr("transform", transform);
 
     // update grid only if view position
     if (positionDiff) drawCoordinates();
@@ -622,7 +626,7 @@ export function invokeActiveZooming() {
         ruler.selectAll("line, path").attr("stroke-width", size);
     }
 }
-import * as MapData from "./modules/MapData.js";
+import * as MapData from "./map/MapData.js";
 export function generate() {
     try {
         const timeStart = performance.now();
@@ -1765,7 +1769,7 @@ export const regenerateMap = debounce(function () {
 
 // clear the map
 export function undraw() {
-    viewbox.selectAll("path, circle, polygon, line, text, use, #zones > g, #armies > g, #ruler > g").remove();
+    view.box.selectAll("path, circle, polygon, line, text, use, #zones > g, #armies > g, #ruler > g").remove();
     defs.selectAll("path, clipPath").remove();
     notes = [];
     unfog();

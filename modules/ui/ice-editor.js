@@ -1,3 +1,4 @@
+import { view } from "../../main.js";
 import { clicked, unselect } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findGridCell, getGridPolygon, rn, ra, parseTransform } from "../utils.js";
@@ -56,11 +57,11 @@ export function editIce() {
     function toggleAdd() {
         document.getElementById("iceNew").classList.toggle("pressed");
         if (document.getElementById("iceNew").classList.contains("pressed")) {
-            viewbox.style("cursor", "crosshair").on("click", addIcebergOnClick);
+            view.box.style("cursor", "crosshair").on("click", addIcebergOnClick);
             tip("Click on map to create an iceberg. Hold Shift to add multiple", true);
         } else {
             clearMainTip();
-            viewbox.on("click", clicked).style("cursor", "default");
+            view.box.on("click", clicked).style("cursor", "default");
         }
     }
 

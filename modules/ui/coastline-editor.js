@@ -1,4 +1,6 @@
-import { unselect } from "./editors.js";
+import { modules, view, defs, lineGen, pack } from "../../main.js";
+
+import { closeDialogs, unselect } from "./editors.js";
 
 import { tip } from "./general.js";
 import { getPackPolygon, rn, clipPoly, si } from "../utils.js";
@@ -20,7 +22,7 @@ export function editCoastline(node = d3.event.target) {
     elSelected = d3.select(node);
     selectCoastlineGroup(node);
     drawCoastlineVertices();
-    viewbox.on("touchmove mousemove", null);
+    view.box.on("touchmove mousemove", null);
 
     if (modules.editCoastline) return;
     modules.editCoastline = true;

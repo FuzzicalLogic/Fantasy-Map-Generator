@@ -1,6 +1,6 @@
 import {
     modules, legend,
-    viewbox,
+    view,
     pack, biomes, biomesData,
     defineBiomes, setBiomesData, applyDefaultBiomesSystem, customization
 } from "../../main.js";
@@ -320,7 +320,7 @@ function enterBiomesCustomizationMode() {
     $("#biomesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
 
     tip("Click on biome to select, drag the circle to change biome", true);
-    viewbox.style("cursor", "crosshair")
+    view.box.style("cursor", "crosshair")
         .on("click", selectBiomeOnMapClick)
         .call(d3.drag().on("start", dragBiomeBrush))
         .on("touchmove mousemove", moveBiomeBrush);

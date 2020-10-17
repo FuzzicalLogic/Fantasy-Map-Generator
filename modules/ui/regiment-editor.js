@@ -1,3 +1,4 @@
+import { view } from "../../main.js";
 import { clicked, selectIcon } from "./editors.js";
 
 import * as Military from "../military-generator.js";
@@ -69,7 +70,7 @@ export function editRegiment(selector) {
     function drawBase() {
         const reg = regiment();
         const clr = pack.states[elSelected.dataset.state].color;
-        const base = viewbox.insert("g", "g#armies").attr("id", "regimentBase").attr("stroke-width", .3).attr("stroke", "#000").attr("cursor", "move");
+        const base = view.box.insert("g", "g#armies").attr("id", "regimentBase").attr("stroke-width", .3).attr("stroke", "#000").attr("cursor", "move");
         base.on("mouseenter", () => { tip("Regiment base. Drag to re-base the regiment", true); }).on("mouseleave", () => { tip('', true); });
 
         base.append("line").attr("x1", reg.bx).attr("y1", reg.by).attr("x2", reg.x).attr("y2", reg.y).attr("class", "dragLine");
@@ -152,11 +153,11 @@ export function editRegiment(selector) {
     function toggleAdd() {
         document.getElementById("regimentAdd").classList.toggle("pressed");
         if (document.getElementById("regimentAdd").classList.contains("pressed")) {
-            viewbox.style("cursor", "crosshair").on("click", addRegimentOnClick);
+            view.box.style("cursor", "crosshair").on("click", addRegimentOnClick);
             tip("Click on map to create new regiment or fleet", true);
         } else {
             clearMainTip();
-            viewbox.on("click", clicked).style("cursor", "default");
+            view.box.on("click", clicked).style("cursor", "default");
         }
     }
 
@@ -179,13 +180,13 @@ export function editRegiment(selector) {
     function toggleAttack() {
         document.getElementById("regimentAttack").classList.toggle("pressed");
         if (document.getElementById("regimentAttack").classList.contains("pressed")) {
-            viewbox.style("cursor", "crosshair").on("click", attackRegimentOnClick);
+            view.box.style("cursor", "crosshair").on("click", attackRegimentOnClick);
             tip("Click on another regiment to initiate battle", true);
             armies.selectAll(":scope > g").classed("draggable", false);
         } else {
             clearMainTip();
             armies.selectAll(":scope > g").classed("draggable", true);
-            viewbox.on("click", clicked).style("cursor", "default");
+            view.box.on("click", clicked).style("cursor", "default");
         }
     }
 
@@ -222,13 +223,13 @@ export function editRegiment(selector) {
     function toggleAttach() {
         document.getElementById("regimentAttach").classList.toggle("pressed");
         if (document.getElementById("regimentAttach").classList.contains("pressed")) {
-            viewbox.style("cursor", "crosshair").on("click", attachRegimentOnClick);
+            view.box.style("cursor", "crosshair").on("click", attachRegimentOnClick);
             tip("Click on another regiment to unite both regiments. The current regiment will be removed", true);
             armies.selectAll(":scope > g").classed("draggable", false);
         } else {
             clearMainTip();
             armies.selectAll(":scope > g").classed("draggable", true);
-            viewbox.on("click", clicked).style("cursor", "default");
+            view.box.on("click", clicked).style("cursor", "default");
         }
     }
 
@@ -315,7 +316,7 @@ export function editRegiment(selector) {
         const icon = this.querySelector(".regimentIcon");
 
         const self = elSelected === this;
-        const baseLine = viewbox.select("g#regimentBase > line");
+        const baseLine = view.box.select("g#regimentBase > line");
 
         d3.event.on("drag", function () {
             const x = reg.x = d3.event.x, y = reg.y = d3.event.y;
@@ -333,7 +334,7 @@ export function editRegiment(selector) {
     }
 
     function dragBase() {
-        const baseLine = viewbox.select("g#regimentBase > line");
+        const baseLine = view.box.select("g#regimentBase > line");
         const reg = regiment();
 
         d3.event.on("drag", function () {
@@ -348,7 +349,7 @@ export function editRegiment(selector) {
     function closeEditor() {
         armies.selectAll(":scope > g").classed("draggable", false);
         armies.selectAll("g>g").call(d3.drag().on("drag", null));
-        viewbox.selectAll("g#regimentBase").remove();
+        view.box.selectAll("g#regimentBase").remove();
         document.getElementById("regimentAdd").classList.remove("pressed");
         document.getElementById("regimentAttack").classList.remove("pressed");
         document.getElementById("regimentAttach").classList.remove("pressed");

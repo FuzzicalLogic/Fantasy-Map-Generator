@@ -1,6 +1,6 @@
 import {
     modules, pack, customization,
-    viewbox, mapCoordinates, graphWidth, graphHeight,
+    view, mapCoordinates, graphWidth, graphHeight,
     burgLabels,
     zoomTo
 } from "../../main.js";
@@ -300,7 +300,7 @@ function enterAddBurgMode() {
     customization = 3;
     this.classList.add("pressed");
     tip("Click on the map to create a new burg. Hold Shift to add multiple", true, "warn");
-    viewbox.style("cursor", "crosshair").on("click", addBurgOnClick);
+    view.box.style("cursor", "crosshair").on("click", addBurgOnClick);
 }
 
 function addBurgOnClick() {

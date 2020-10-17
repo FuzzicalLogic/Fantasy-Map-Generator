@@ -1,7 +1,7 @@
 import {
     modules, pack, defs,
     provs, provinceBorders, stateBorders, debug,
-    viewbox, zoomTo, customization
+    view, zoomTo, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -694,7 +694,7 @@ function enterProvincesManualAssignent() {
     $("#provincesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg", collision: "fit" } });
 
     tip("Click on a province to select, drag the circle to change province", true);
-    viewbox.style("cursor", "crosshair")
+    view.box.style("cursor", "crosshair")
         .on("click", selectProvinceOnMapClick)
         .call(d3.drag().on("start", dragBrush))
         .on("touchmove mousemove", moveBrush);
@@ -847,7 +847,7 @@ function enterAddProvinceMode() {
     customization = 12;
     this.classList.add("pressed");
     tip("Click on the map to place a new province center", true);
-    viewbox.style("cursor", "crosshair").on("click", addProvince);
+    view.box.style("cursor", "crosshair").on("click", addProvince);
     getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "none");
 }
 
