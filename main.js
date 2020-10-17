@@ -92,7 +92,7 @@ export let armies = view.box.append("g").attr("id", "armies").style("display", "
 export let markers = view.box.append("g").attr("id", "markers").style("display", "none");
 export let fogging = view.box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
 export let ruler = view.box.append("g").attr("id", "ruler").style("display", "none");
-export let debug = view.box.append("g").attr("id", "debug");
+view.box.append("g").attr("id", "debug");
 
 // lake and coast groups
 lakes.append("g").attr("id", "freshwater");
@@ -325,7 +325,6 @@ export function redefineElements(mapview) {
     markers = view.box.select("#markers");
     ruler = view.box.select("#ruler");
     fogging = view.box.select("#fogging");
-    debug = view.box.select("#debug");
     burgLabels = labels.select("#burgLabels");
 }
 

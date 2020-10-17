@@ -1,7 +1,7 @@
 import {
     modules,
     labels,
-    view, lineGen, debug
+    view, lineGen
 } from "../../main.js";
 import { closeDialogs, unselect, fitContent } from "./editors.js";
 
@@ -72,6 +72,8 @@ export function editLabel() {
     }
 
     function drawControlPointsAndLine() {
+        let { debug } = view;
+
         debug.select("#controlPoints").remove();
         debug.append("g").attr("id", "controlPoints").attr("transform", elSelected.attr("transform"));
         const path = document.getElementById("textPath_" + elSelected.attr("id"));
@@ -79,11 +81,13 @@ export function editLabel() {
         const l = path.getTotalLength();
         if (!l) return;
         const increment = l / Math.max(Math.ceil(l / 200), 2);
-        for (let i = 0; i <= l; i += increment) { addControlPoint(path.getPointAtLength(i)); }
+        for (let i = 0; i <= l; i += increment) {
+            addControlPoint(path.getPointAtLength(i));
+        }
     }
 
     function addControlPoint(point) {
-        debug.select("#controlPoints").append("circle")
+        view.debug.select("#controlPoints").append("circle")
             .attr("cx", point.x).attr("cy", point.y).attr("r", 2.5).attr("stroke-width", .8)
             .call(d3.drag().on("drag", dragControlPoint))
             .on("click", clickControlPoint);
@@ -99,12 +103,12 @@ export function editLabel() {
         const path = document.getElementById("textPath_" + elSelected.attr("id"));
         lineGen.curve(d3.curveBundle.beta(1));
         const points = [];
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             points.push([this.getAttribute("cx"), this.getAttribute("cy")]);
         });
         const d = round(lineGen(points));
         path.setAttribute("d", d);
-        debug.select("#controlPoints > path").attr("d", d);
+        view.debug.select("#controlPoints > path").attr("d", d);
     }
 
     function clickControlPoint() {
@@ -116,7 +120,7 @@ export function editLabel() {
         const point = d3.mouse(this);
 
         const dists = [];
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             const x = +this.getAttribute("cx");
             const y = +this.getAttribute("cy");
             dists.push((point[0] - x) ** 2 + (point[1] - y) ** 2);
@@ -131,7 +135,7 @@ export function editLabel() {
         }
 
         const before = ":nth-child(" + (index + 2) + ")";
-        debug.select("#controlPoints").insert("circle", before)
+        view.debug.select("#controlPoints").insert("circle", before)
             .attr("cx", point[0]).attr("cy", point[1]).attr("r", 2.5).attr("stroke-width", .8)
             .call(d3.drag().on("drag", dragControlPoint))
             .on("click", clickControlPoint);
@@ -147,7 +151,7 @@ export function editLabel() {
             const x = d3.event.x, y = d3.event.y;
             const transform = `translate(${(dx + x)},${(dy + y)})`;
             elSelected.attr("transform", transform);
-            debug.select("#controlPoints").attr("transform", transform);
+            view.debug.select("#controlPoints").attr("transform", transform);
         });
     }
 
@@ -361,6 +365,6 @@ function updateValues(textPath) {
 }
 
 function closeLabelEditor() {
-    debug.select("#controlPoints").remove();
+    view.debug.select("#controlPoints").remove();
     unselect();
 }

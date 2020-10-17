@@ -1,6 +1,6 @@
 import {
     modules,
-    seed, pack, regions, debug,
+    seed, pack, regions,
     statesBody, statesHalo,
     notes, armies, burgLabels,
     view, zoomTo, customization
@@ -228,7 +228,7 @@ function stateHighlightOn(event) {
     if (customization || !state) return;
     const d = regions.select("#state" + state).attr("d");
 
-    const path = debug.append("path").attr("class", "highlight").attr("d", d)
+    const path = view.debug.append("path").attr("class", "highlight").attr("d", d)
         .attr("fill", "none").attr("stroke", "red").attr("stroke-width", 1).attr("opacity", 1)
         .attr("filter", "url(#blur1)");
 
@@ -238,7 +238,7 @@ function stateHighlightOn(event) {
 }
 
 function stateHighlightOff() {
-    debug.selectAll(".highlight").each(function () {
+    view.debug.selectAll(".highlight").each(function () {
         d3.select(this).transition().duration(1000).attr("opacity", 0).remove();
     });
 }
@@ -517,7 +517,7 @@ function stateRemove(state) {
     // clean state object
     pack.states[state].military = [];
 
-    debug.selectAll(".highlight").remove();
+    view.debug.selectAll(".highlight").remove();
     if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
     if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
     if (layerIsOn("toggleProvinces")) drawProvinces();
@@ -983,6 +983,6 @@ function downloadStatesData() {
 function closeStatesEditor() {
     if (customization === 2) exitStatesManualAssignment("close");
     if (customization === 3) exitAddStateMode();
-    debug.selectAll(".highlight").remove();
+    view.debug.selectAll(".highlight").remove();
     getBody().innerHTML = "";
 }

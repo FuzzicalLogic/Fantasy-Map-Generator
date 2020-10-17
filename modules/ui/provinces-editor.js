@@ -1,6 +1,6 @@
 import {
     modules, pack,
-    provs, provinceBorders, stateBorders, debug,
+    provs, provinceBorders, stateBorders,
     view, zoomTo, customization
 } from "../../main.js";
 
@@ -732,9 +732,9 @@ function selectProvinceOnMapClick() {
 }
 
 function selectProvince(p) {
-    debug.selectAll("path.selected").remove();
+    view.debug.selectAll("path.selected").remove();
     const path = provs.select("#province" + p).attr("d");
-    debug.append("path").attr("class", "selected").attr("d", path);
+    view.debug.append("path").attr("class", "selected").attr("d", path);
 }
 
 function dragBrush() {
@@ -820,7 +820,7 @@ function exitProvincesManualAssignment(close) {
     // restore borders style
     provinceBorders.select("path").attr("stroke", null).attr("stroke-width", null);
     stateBorders.select("path").attr("stroke", null).attr("stroke-width", null);
-    debug.selectAll("path.selected").remove();
+    view.debug.selectAll("path.selected").remove();
 
     document.querySelectorAll("#provincesBottom > *").forEach(el => el.style.display = "inline-block");
     document.getElementById("provincesManuallyButtons").style.display = "none";

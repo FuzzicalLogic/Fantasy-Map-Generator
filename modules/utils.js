@@ -1,5 +1,6 @@
 /** TODO: Complete dependency branch from P() below. */
 import {
+    view,
     graphWidth, graphHeight,
     pack, grid
 } from "../main.js"
@@ -578,8 +579,8 @@ export function getNumberInRange(r) {
 
 // helper function non-used for the generation
 function drawCellsValue(data) {
-    debug.selectAll("text").remove();
-    debug.selectAll("text").data(data).enter().append("text")
+    view.debug.selectAll("text").remove();
+    view.debug.selectAll("text").data(data).enter().append("text")
         .attr("x", (d, i) => pack.cells.p[i][0]).attr("y", (d, i) => pack.cells.p[i][1]).text(d => d);
 }
 
@@ -588,8 +589,8 @@ function drawPolygons(data) {
     const max = d3.max(data), min = d3.min(data), scheme = getColorScheme();
     data = data.map(d => 1 - normalize(d, min, max));
 
-    debug.selectAll("polygon").remove();
-    debug.selectAll("polygon").data(data).enter().append("polygon")
+    view.debug.selectAll("polygon").remove();
+    view.debug.selectAll("polygon").data(data).enter().append("polygon")
         .attr("points", (d, i) => getPackPolygon(i))
         .attr("fill", d => scheme(d)).attr("stroke", d => scheme(d));
 }

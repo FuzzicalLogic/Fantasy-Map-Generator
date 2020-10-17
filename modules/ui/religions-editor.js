@@ -1,6 +1,6 @@
 import {
     modules,
-    pack, view, relig, debug, customization
+    pack, view, relig, customization
 } from "../../main.js";
 
 import * as Religions from "../religions-generator.js";
@@ -180,7 +180,7 @@ function religionHighlightOn(event) {
     if (!layerIsOn("toggleReligions")) return;
     if (customization) return;
     relig.select("#religion" + religion).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#c13119");
-    debug.select("#religionsCenter" + religion).raise().transition(animate).attr("r", 8).attr("stroke-width", 2).attr("stroke", "#c13119");
+    view.debug.select("#religionsCenter" + religion).raise().transition(animate).attr("r", 8).attr("stroke-width", 2).attr("stroke", "#c13119");
 }
 
 function religionHighlightOff(event) {
@@ -196,7 +196,7 @@ function religionHighlightOff(event) {
     if (el) el.classList.remove("active");
 
     relig.select("#religion" + religion).transition().attr("stroke-width", null).attr("stroke", null);
-    debug.select("#religionsCenter" + religion).transition().attr("r", 4).attr("stroke-width", 1.2).attr("stroke", null);
+    view.debug.select("#religionsCenter" + religion).transition().attr("r", 4).attr("stroke-width", 1.2).attr("stroke", null);
 }
 
 function religionChangeColor() {
@@ -208,7 +208,7 @@ function religionChangeColor() {
         el.setAttribute("fill", fill);
         pack.religions[religion].color = fill;
         relig.select("#religion" + religion).attr("fill", fill);
-        debug.select("#religionsCenter" + religion).attr("fill", fill);
+        view.debug.select("#religionsCenter" + religion).attr("fill", fill);
     }
 
     openPicker(currentFill, callback);
@@ -319,7 +319,7 @@ function religionRemove() {
             Remove: function () {
                 relig.select("#religion" + religion).remove();
                 relig.select("#religion-gap" + religion).remove();
-                debug.select("#religionsCenter" + religion).remove();
+                view.debug.select("#religionsCenter" + religion).remove();
 
                 pack.cells.religion.forEach((r, i) => { if (r === religion) pack.cells.religion[i] = 0; });
                 pack.religions[religion].removed = true;
@@ -335,8 +335,8 @@ function religionRemove() {
 }
 
 function drawReligionCenters() {
-    debug.select("#religionCenters").remove();
-    const religionCenters = debug.append("g").attr("id", "religionCenters")
+    view.debug.select("#religionCenters").remove();
+    const religionCenters = view.debug.append("g").attr("id", "religionCenters")
         .attr("stroke-width", 1.2).attr("stroke", "#444444").style("cursor", "move");
 
     const data = pack.religions.filter(r => r.i && r.center && r.cells && !r.removed);
@@ -493,7 +493,7 @@ function enterReligionsManualAssignent() {
     relig.append("g").attr("id", "temp");
     document.querySelectorAll("#religionsBottom > button").forEach(el => el.style.display = "none");
     document.getElementById("religionsManuallyButtons").style.display = "inline-block";
-    debug.select("#religionCenters").style("display", "none");
+    view.debug.select("#religionCenters").style("display", "none");
 
     religionsEditor.querySelectorAll(".hide").forEach(el => el.classList.add("hidden"));
     religionsFooter.style.display = "none";
@@ -596,7 +596,7 @@ function exitReligionsManualAssignment(close) {
     body.querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     if (!close) $("#religionsEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
 
-    debug.select("#religionCenters").style("display", null);
+    view.debug.select("#religionCenters").style("display", null);
     restoreDefaultEvents();
     clearMainTip();
     const selected = body.querySelector("div.selected");
@@ -655,7 +655,7 @@ function downloadReligionsData() {
 }
 
 function closeReligionsEditor() {
-    debug.select("#religionCenters").remove();
+    view.debug.select("#religionCenters").remove();
     exitReligionsManualAssignment("close");
     exitAddReligionMode();
 }

@@ -18,7 +18,7 @@ export function editCoastline(node = d3.event.target) {
         close: closeCoastlineEditor
     });
 
-    debug.append("g").attr("id", "vertices");
+    view.debug.append("g").attr("id", "vertices");
     elSelected = d3.select(node);
     selectCoastlineGroup(node);
     drawCoastlineVertices();
@@ -42,10 +42,10 @@ export function editCoastline(node = d3.event.target) {
 
         const l = pack.cells.i.length;
         const c = [... new Set(v.map(v => pack.vertices.c[v]).flat())].filter(c => c < l);
-        debug.select("#vertices").selectAll("polygon").data(c).enter().append("polygon")
+        view.debug.select("#vertices").selectAll("polygon").data(c).enter().append("polygon")
             .attr("points", d => getPackPolygon(d)).attr("data-c", d => d);
 
-        debug.select("#vertices").selectAll("circle").data(v).enter().append("circle")
+        view.debug.select("#vertices").selectAll("circle").data(v).enter().append("circle")
             .attr("cx", d => pack.vertices.p[d][0]).attr("cy", d => pack.vertices.p[d][1])
             .attr("r", .4).attr("data-v", d => d).call(d3.drag().on("drag", dragVertex))
             .on("mousemove", () => tip("Drag to move the vertex, please use for fine-tuning only. Edit heightmap to change actual cell heights"));
@@ -61,7 +61,7 @@ export function editCoastline(node = d3.event.target) {
         this.setAttribute("cy", y);
         const v = +this.dataset.v;
         pack.vertices.p[v] = [x, y];
-        debug.select("#vertices").selectAll("polygon").attr("points", d => getPackPolygon(d));
+        view.debug.select("#vertices").selectAll("polygon").attr("points", d => getPackPolygon(d));
         redrawCoastline();
     }
 
@@ -190,7 +190,7 @@ export function editCoastline(node = d3.event.target) {
     }
 
     function closeCoastlineEditor() {
-        debug.select("#vertices").remove();
+        view.debug.select("#vertices").remove();
         unselect();
     }
 }

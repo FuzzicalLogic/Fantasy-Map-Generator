@@ -1,7 +1,6 @@
 import {
     pack,
     svg, svgWidth, svgHeight,
-    debug,
     view, fogging, scale,
     zoom,
     burgIcons, anchors, burgLabels,
@@ -76,7 +75,7 @@ export function unselect() {
     restoreDefaultEvents();
     if (!elSelected) return;
     elSelected.call(d3.drag().on("drag", null)).attr("class", null);
-    debug.selectAll("*").remove();
+    view.debug.selectAll("*").remove();
     view.box.style("cursor", "default");
     elSelected = null;
 }
@@ -618,13 +617,13 @@ export function uploadFile(el, callback) {
 }
 
 export function highlightElement(element) {
-    if (debug.select(".highlighted").size()) return; // allow only 1 highlight element simultaniosly
+    if (view.debug.select(".highlighted").size()) return; // allow only 1 highlight element simultaniosly
     const box = element.getBBox();
     const transform = element.getAttribute("transform") || null;
     const enter = d3.transition().duration(1000).ease(d3.easeBounceOut);
     const exit = d3.transition().duration(500).ease(d3.easeLinear);
 
-    const highlight = debug.append("rect").attr("x", box.x).attr("y", box.y)
+    const highlight = view.debug.append("rect").attr("x", box.x).attr("y", box.y)
         .attr("width", box.width).attr("height", box.height).attr("transform", transform);
 
     highlight.classed("highlighted", 1)

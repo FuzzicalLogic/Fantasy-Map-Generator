@@ -1,4 +1,4 @@
-import { modules, pack, view, debug } from "../../main.js";
+import { modules, pack, view } from "../../main.js";
 
 import { closeDialogs, clicked, unselect } from "./editors.js";
 
@@ -22,7 +22,7 @@ export function editRiver(id) {
     const node = id ? document.getElementById(id) : d3.event.target;
     elSelected = d3.select(node).on("click", addInterimControlPoint);
     view.box.on("touchmove mousemove", showEditorTips);
-    debug.append("g").attr("id", "controlPoints").attr("transform", elSelected.attr("transform"));
+    view.debug.append("g").attr("id", "controlPoints").attr("transform", elSelected.attr("transform"));
     drawControlPoints(node);
     updateRiverName(node);
 
@@ -80,7 +80,7 @@ export function editRiver(id) {
     }
 
     function addControlPoint(point) {
-        debug.select("#controlPoints").append("circle")
+        view.debug.select("#controlPoints").append("circle")
             .attr("cx", point[0]).attr("cy", point[1]).attr("r", .8)
             .call(d3.drag().on("drag", dragControlPoint))
             .on("click", clickControlPoint);
@@ -94,7 +94,7 @@ export function editRiver(id) {
 
     function redrawRiver() {
         const points = [];
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             points.push([+this.getAttribute("cx"), +this.getAttribute("cy")]);
         });
 
@@ -133,7 +133,7 @@ export function editRiver(id) {
         const point = d3.mouse(this);
 
         const dists = [];
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             const x = +this.getAttribute("cx");
             const y = +this.getAttribute("cy");
             dists.push((point[0] - x) ** 2 + (point[1] - y) ** 2);
@@ -148,7 +148,7 @@ export function editRiver(id) {
         }
 
         const before = ":nth-child(" + (index + 1) + ")";
-        debug.select("#controlPoints").insert("circle", before)
+        view.debug.select("#controlPoints").insert("circle", before)
             .attr("cx", point[0]).attr("cy", point[1]).attr("r", .8)
             .call(d3.drag().on("drag", dragControlPoint))
             .on("click", clickControlPoint);
@@ -234,7 +234,7 @@ export function editRiver(id) {
 
     function addPointOnClick() {
         if (!elSelected.attr("data-new")) {
-            debug.select("#controlPoints").selectAll("circle").remove();
+            view.debug.select("#controlPoints").selectAll("circle").remove();
             const id = getNextId("river");
             elSelected = d3.select(elSelected.node().parentNode).append("path").attr("id", id)
                 .attr("data-new", 1).attr("data-width", 1).attr("data-increment", .5);
@@ -300,7 +300,7 @@ export function editRiver(id) {
     function closeRiverEditor() {
         exitRiverCreationMode();
         elSelected.on("click", null);
-        debug.select("#controlPoints").remove();
+        view.debug.select("#controlPoints").remove();
         unselect();
     }
 

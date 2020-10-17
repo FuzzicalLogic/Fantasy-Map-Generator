@@ -1,6 +1,6 @@
 import {
     modules,
-    notes, debug
+    notes
 } from "../../main.js";
 
 import { getFileName, downloadFile, uploadFile, highlightElement } from "./editors.js";

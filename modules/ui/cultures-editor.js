@@ -1,4 +1,4 @@
-import { modules, pack, view, cults, debug, nameBases, customization } from "../../main.js";
+import { modules, pack, view, cults, nameBases, customization } from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
@@ -184,7 +184,7 @@ function cultureHighlightOn(event) {
     if (customization) return;
     const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
     cults.select("#culture" + culture).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
-    debug.select("#cultureCenter" + culture).raise().transition(animate).attr("r", 8).attr("stroke", "#d0240f");
+    view.debug.select("#cultureCenter" + culture).raise().transition(animate).attr("r", 8).attr("stroke", "#d0240f");
 }
 
 function cultureHighlightOff(event) {
@@ -198,7 +198,7 @@ function cultureHighlightOff(event) {
 
     if (!layerIsOn("toggleCultures")) return;
     cults.select("#culture" + culture).transition().attr("stroke-width", null).attr("stroke", null);
-    debug.select("#cultureCenter" + culture).transition().attr("r", 6).attr("stroke", null);
+    view.debug.select("#cultureCenter" + culture).transition().attr("r", 6).attr("stroke", null);
 }
 
 function cultureChangeColor() {
@@ -210,7 +210,7 @@ function cultureChangeColor() {
         el.setAttribute("fill", fill);
         pack.cultures[culture].color = fill;
         cults.select("#culture" + culture).attr("fill", fill).attr("stroke", fill);
-        debug.select("#cultureCenter" + culture).attr("fill", fill);
+        view.debug.select("#cultureCenter" + culture).attr("fill", fill);
     }
 
     openPicker(currentFill, callback);
@@ -323,7 +323,7 @@ function cultureRemove() {
         buttons: {
             Remove: function () {
                 cults.select("#culture" + culture).remove();
-                debug.select("#cultureCenter" + culture).remove();
+                view.debug.select("#cultureCenter" + culture).remove();
 
                 pack.burgs.filter(b => b.culture == culture).forEach(b => b.culture = 0);
                 pack.states.forEach((s, i) => { if (s.culture === culture) s.culture = 0; });
@@ -342,8 +342,8 @@ function cultureRemove() {
 
 function drawCultureCenters() {
     const tooltip = 'Drag to move the culture center (ancestral home)';
-    debug.select("#cultureCenters").remove();
-    const cultureCenters = debug.append("g").attr("id", "cultureCenters")
+    view.debug.select("#cultureCenters").remove();
+    const cultureCenters = view.debug.append("g").attr("id", "cultureCenters")
         .attr("stroke-width", 2).attr("stroke", "#444444").style("cursor", "move");
 
     const body = getBody();
@@ -511,7 +511,7 @@ function enterCultureManualAssignent() {
     cults.append("g").attr("id", "temp");
     document.querySelectorAll("#culturesBottom > *").forEach(el => el.style.display = "none");
     document.getElementById("culturesManuallyButtons").style.display = "inline-block";
-    debug.select("#cultureCenters").style("display", "none");
+    view.debug.select("#cultureCenters").style("display", "none");
 
     culturesEditor.querySelectorAll(".hide").forEach(el => el.classList.add("hidden"));
     culturesHeader.querySelector("div[data-sortby='type']").style.left = "6.8em";
@@ -617,7 +617,7 @@ function exitCulturesManualAssignment(close) {
     getBody().querySelectorAll("div > input, select, span, svg").forEach(e => e.style.pointerEvents = "all");
     if (!close) $("#culturesEditor").dialog({ position: { my: "right top", at: "right-10 top+10", of: "svg" } });
 
-    debug.select("#cultureCenters").style("display", null);
+    view.debug.select("#cultureCenters").style("display", null);
     restoreDefaultEvents();
     clearMainTip();
     const selected = getBody().querySelector("div.selected");
@@ -677,7 +677,7 @@ function downloadCulturesData() {
 }
 
 function closeCulturesEditor() {
-    debug.select("#cultureCenters").remove();
+    view.debug.select("#cultureCenters").remove();
     exitCulturesManualAssignment("close");
     exitAddCultureMode()
 }

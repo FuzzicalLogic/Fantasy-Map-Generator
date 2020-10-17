@@ -20,7 +20,7 @@ export function editRoute(onClick) {
         close: closeRoutesEditor
     });
 
-    debug.append("g").attr("id", "controlPoints");
+    view.debug.append("g").attr("id", "controlPoints");
     const node = onClick ? elSelected.node() : d3.event.target;
     elSelected = d3.select(node).on("click", addInterimControlPoint);
     drawControlPoints(node);
@@ -50,8 +50,10 @@ export function editRoute(onClick) {
     function showEditorTips() {
         showMainTip();
         if (routeNew.classList.contains("pressed")) return;
-        if (d3.event.target.id === elSelected.attr("id")) tip("Click to add a control point"); else
-            if (d3.event.target.parentNode.id === "controlPoints") tip("Drag to move, click to delete the control point");
+        if (d3.event.target.id === elSelected.attr("id"))
+            tip("Click to add a control point");
+        else if (d3.event.target.parentNode.id === "controlPoints")
+            tip("Drag to move, click to delete the control point");
     }
 
     function drawControlPoints(node) {
@@ -62,7 +64,7 @@ export function editRoute(onClick) {
     }
 
     function addControlPoint(point) {
-        debug.select("#controlPoints").append("circle")
+        view.debug.select("#controlPoints").append("circle")
             .attr("cx", point.x).attr("cy", point.y).attr("r", .8)
             .call(d3.drag().on("drag", dragControlPoint))
             .on("click", clickControlPoint);
@@ -72,7 +74,7 @@ export function editRoute(onClick) {
         const point = d3.mouse(this);
 
         const dists = [];
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             const x = +this.getAttribute("cx");
             const y = +this.getAttribute("cy");
             dists.push((point[0] - x) ** 2 + (point[1] - y) ** 2);
@@ -87,7 +89,7 @@ export function editRoute(onClick) {
         }
 
         const before = ":nth-child(" + (index + 1) + ")";
-        debug.select("#controlPoints").insert("circle", before)
+        view.debug.select("#controlPoints").insert("circle", before)
             .attr("cx", point[0]).attr("cy", point[1]).attr("r", .8)
             .call(d3.drag().on("drag", dragControlPoint))
             .on("click", clickControlPoint);
@@ -104,7 +106,7 @@ export function editRoute(onClick) {
     function redrawRoute() {
         lineGen.curve(d3.curveCatmullRom.alpha(.1));
         const points = [];
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             points.push([this.getAttribute("cx"), this.getAttribute("cy")]);
         });
 
@@ -112,7 +114,8 @@ export function editRoute(onClick) {
         const l = elSelected.node().getTotalLength();
         routeLength.innerHTML = rn(l * distanceScaleInput.value) + " " + distanceUnitInput.value;
 
-        if (modules.elevation) showEPForRoute(elSelected.node());
+        if (modules.elevation)
+            showEPForRoute(elSelected.node());
     }
 
     function showElevationProfile() {
@@ -237,7 +240,7 @@ export function editRoute(onClick) {
 
         const points1 = [], points2 = [];
         let points = points1;
-        debug.select("#controlPoints").selectAll("circle").each(function () {
+        view.debug.select("#controlPoints").selectAll("circle").each(function () {
             points.push([this.getAttribute("cx"), this.getAttribute("cy")]);
             if (this === clicked) {
                 points = points2;
@@ -249,7 +252,7 @@ export function editRoute(onClick) {
         elSelected.attr("d", round(lineGen(points1)));
         const id = getNextId("route");
         group.append("path").attr("id", id).attr("d", lineGen(points2));
-        debug.select("#controlPoints").selectAll("circle").remove();
+        view.debug.select("#controlPoints").selectAll("circle").remove();
         drawControlPoints(elSelected.node());
     }
 
@@ -270,7 +273,7 @@ export function editRoute(onClick) {
     function addPointOnClick() {
         // create new route
         if (!elSelected.attr("data-new")) {
-            debug.select("#controlPoints").selectAll("circle").remove();
+            view.debug.select("#controlPoints").selectAll("circle").remove();
             const parent = elSelected.node().parentNode;
             const id = getNextId("route");
             elSelected = d3.select(parent).append("path").attr("id", id).attr("data-new", 1);
@@ -307,7 +310,7 @@ export function editRoute(onClick) {
         clearMainTip();
         routeSplit.classList.remove("pressed");
         routeNew.classList.remove("pressed");
-        debug.select("#controlPoints").remove();
+        view.debug.select("#controlPoints").remove();
         unselect();
     }
 }

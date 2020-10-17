@@ -1,4 +1,4 @@
-import { modules, pack, statesBody, statesHalo, view, regions, debug, customization } from "../../main.js";
+import { modules, pack, statesBody, statesHalo, view, regions, customization } from "../../main.js";
 
 import * as BurgsAndStates from "../burgs-and-states.js";
 
@@ -117,7 +117,7 @@ function stateHighlightOn(event) {
     if (customization || !state) return;
     const d = regions.select("#state" + state).attr("d");
 
-    const path = debug.append("path")
+    const path = view.debug.append("path")
         .attr("class", "highlight")
         .attr("d", d)
         .attr("fill", "none")
@@ -238,7 +238,7 @@ function regenerateRelations() {
 }
 
 function stateHighlightOff(event) {
-    debug.selectAll(".highlight").each(() => {
+    view.debug.selectAll(".highlight").each(() => {
         d3.select(this).transition().duration(1000).attr("opacity", 0).remove();
     });
 }
@@ -301,8 +301,10 @@ function close() {
     clearMainTip();
     const selected = getSelected();
     if (selected) selected.classList.remove("Self");
-    if (layerIsOn("toggleStates")) drawStates(); else toggleStates();
-    debug.selectAll(".highlight").remove();
+    if (layerIsOn("toggleStates"))
+        drawStates();
+    else toggleStates();
+    view.debug.selectAll(".highlight").remove();
 }
 
 function showRelationsMatrix() {

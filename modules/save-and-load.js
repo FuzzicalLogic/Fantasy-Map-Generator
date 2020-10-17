@@ -18,7 +18,7 @@ import {
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
     labels, icons, burgIcons, anchors,
-    armies, markers, ruler, fogging, debug, burgLabels,
+    armies, markers, ruler, fogging, burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics,

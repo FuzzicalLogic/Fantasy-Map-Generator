@@ -1,4 +1,4 @@
-import { modules, options, pack, regions, armies, debug, customization } from "../../main.js";
+import { modules, options, pack, regions, armies, customization } from "../../main.js";
 
 import { closeDialogs, fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
 
@@ -140,7 +140,7 @@ export function overviewMilitary() {
         if (!layerIsOn("toggleStates")) return;
         const d = regions.select("#state" + state).attr("d");
 
-        const path = debug.append("path").attr("class", "highlight").attr("d", d)
+        const path = view.debug.append("path").attr("class", "highlight").attr("d", d)
             .attr("fill", "none").attr("stroke", "red").attr("stroke-width", 1).attr("opacity", 1)
             .attr("filter", "url(#blur1)");
 
@@ -150,7 +150,7 @@ export function overviewMilitary() {
     }
 
     function stateHighlightOff(event) {
-        debug.selectAll(".highlight").each(function () {
+        view.debug.selectAll(".highlight").each(function () {
             d3.select(this).transition().duration(1000).attr("opacity", 0).remove();
         });
 

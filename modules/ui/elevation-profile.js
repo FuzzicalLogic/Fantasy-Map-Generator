@@ -1,4 +1,4 @@
-import { debug } from "../../main.js";
+import { view } from "../../main.js";
 
 import { getFileName, downloadFile } from "./editors.js";
 import { getHeight } from "./general.js";
@@ -7,7 +7,7 @@ import { getColorScheme, getColor } from "./layers.js";
 
 export function showEPForRoute(node) {
     const points = [];
-    debug.select("#controlPoints").selectAll("circle").each(function () {
+    view.debug.select("#controlPoints").selectAll("circle").each(function () {
         const i = findCell(this.getAttribute("cx"), this.getAttribute("cy"));
         points.push(i);
     });
@@ -18,7 +18,7 @@ export function showEPForRoute(node) {
 
 export function showEPForRiver(node) {
     const points = [];
-    debug.select("#controlPoints").selectAll("circle").each(function () {
+    view.debug.select("#controlPoints").selectAll("circle").each(function () {
         const i = findCell(this.getAttribute("cx"), this.getAttribute("cy"));
         points.push(i);
     });
