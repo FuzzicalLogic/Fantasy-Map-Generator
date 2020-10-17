@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    cells, gridOverlay, coordinates, compass,
+    compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
@@ -730,9 +730,9 @@ function parseLoadedData(data) {
             if (view.texture.style("display") !== "none" && view.texture.select("image").size()) turnButtonOn("toggleTexture"); else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
             if (view.biomes.selectAll("*").size()) turnButtonOn("toggleBiomes"); else turnButtonOff("toggleBiomes");
-            if (cells.selectAll("*").size()) turnButtonOn("toggleCells"); else turnButtonOff("toggleCells");
-            if (gridOverlay.selectAll("*").size()) turnButtonOn("toggleGrid"); else turnButtonOff("toggleGrid");
-            if (coordinates.selectAll("*").size()) turnButtonOn("toggleCoordinates"); else turnButtonOff("toggleCoordinates");
+            if (view.cells.selectAll("*").size()) turnButtonOn("toggleCells"); else turnButtonOff("toggleCells");
+            if (view.gridOverlay.selectAll("*").size()) turnButtonOn("toggleGrid"); else turnButtonOff("toggleGrid");
+            if (view.coordinates.selectAll("*").size()) turnButtonOn("toggleCoordinates"); else turnButtonOff("toggleCoordinates");
             if (compass.style("display") !== "none" && compass.select("use").size()) turnButtonOn("toggleCompass"); else turnButtonOff("toggleCompass");
             if (rivers.style("display") !== "none") turnButtonOn("toggleRivers"); else turnButtonOff("toggleRivers");
             if (terrain.style("display") !== "none" && terrain.selectAll("*").size()) turnButtonOn("toggleRelief"); else turnButtonOff("toggleRelief");
@@ -903,7 +903,7 @@ function parseLoadedData(data) {
                 view.terrs.attr("scheme", "bright").attr("terracing", 0).attr("skip", 5).attr("relax", 0).attr("curve", 0);
                 svg.select("#oceanic > rect").attr("id", "oceanicPattern");
                 oceanLayers.attr("layers", "-6,-3,-1");
-                gridOverlay.attr("type", "pointyHex").attr("size", 10);
+                view.gridOverlay.attr("type", "pointyHex").attr("size", 10);
 
                 // v 1.11 added cultures heirarchy tree
                 if (pack.cultures[1] && !pack.cultures[1].code) {

@@ -1,13 +1,13 @@
 "use strict";
 import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
-    seed, pack, cells,
-    grid, gridOverlay,
+    seed, pack,
+    grid,
     labels, prec, ice, temperature, biomesData,
     population, regions, statesBody, provs, cults, relig, terrain,
     borders, stateBorders, provinceBorders,
     statesHalo,
-    compass, coordinates, scale,
+    compass, scale,
     lineGen, invokeActiveZooming, zoom,
     mapCoordinates, customization
 } from "../../main.js";
@@ -473,12 +473,12 @@ export function drawPopulation(event) {
 }
 
 function drawCells() {
-    cells.selectAll("path").remove();
+    view.cells.selectAll("path").remove();
     const data = customization === 1 ? grid.cells.i : pack.cells.i;
     const polygon = customization === 1 ? getGridPolygon : getPackPolygon;
     let path = "";
     data.forEach(i => path += "M" + polygon(i));
-    cells.append("path").attr("d", path);
+    view.cells.append("path").attr("d", path);
 }
 
 export function drawIce() {
@@ -894,6 +894,7 @@ export function drawProvinces() {
 }
 
 export function drawGrid() {
+    let { gridOverlay } = view;
     console.time("drawGrid");
     gridOverlay.selectAll("*").remove();
     const type = styleGridType.value;
@@ -942,6 +943,7 @@ export function drawGrid() {
 }
 
 export function drawCoordinates() {
+    let { coordinates } = view;
     if (!layerIsOn("toggleCoordinates")) return;
     coordinates.selectAll("*").remove(); // remove every time
     const steps = [.5, 1, 2, 5, 10, 15, 30]; // possible steps
@@ -1044,6 +1046,7 @@ export function toggleProvinces(event) {
 }
 
 export function toggleGrid(event) {
+    let { gridOverlay } = view;
     if (!gridOverlay.selectAll("*").size()) {
         turnButtonOn("toggleGrid");
         drawGrid();
@@ -1057,6 +1060,7 @@ export function toggleGrid(event) {
 }
 
 export function toggleCoordinates(event) {
+    let { coordinates } = view;
     if (!coordinates.selectAll("*").size()) {
         turnButtonOn("toggleCoordinates");
         drawCoordinates();
@@ -1270,13 +1274,13 @@ export function togglePopulation(event) {
 }
 
 export function toggleCells(event) {
-    if (!cells.selectAll("path").size()) {
+    if (!view.cells.selectAll("path").size()) {
         turnButtonOn("toggleCells");
         drawCells();
         if (event && isCtrlClick(event)) editStyle("cells");
     } else {
         if (event && isCtrlClick(event)) { editStyle("cells"); return; }
-        cells.selectAll("path").remove();
+        view.cells.selectAll("path").remove();
         turnButtonOff("toggleCells");
     }
 }

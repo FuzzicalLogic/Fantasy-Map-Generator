@@ -11,6 +11,9 @@ export const MapView = el => {
         get texture() { return this.box.select("#texture") },
         get terrs() { return this.box.select('#terrs') },
         get biomes() { return this.box.select('#biomes') },
+        get cells() { return this.box.select('#cells') },
+        get gridOverlay() { return this.box.select('#gridOverlay') },
+        get coordinates() { return this.box.select('#coordinates') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -19,13 +22,16 @@ export const MapView = el => {
 }
 
 MapView.initialize = view => {
+    let { box } = view;
     view.svg.append("g").attr("id", "legend");
 
-    let { box } = view;
     box.append("g").attr("id", "ocean");
     box.append("g").attr("id", "lakes");
     box.append("g").attr("id", "landmass");
     box.append("g").attr("id", "texture");
     box.append("g").attr("id", "terrs");
     box.append("g").attr("id", "biomes");
+    box.append("g").attr("id", "cells");
+    box.append("g").attr("id", "gridOverlay");
+    box.append("g").attr("id", "coordinates");
 }
