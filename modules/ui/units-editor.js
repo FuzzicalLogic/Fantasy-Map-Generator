@@ -13,6 +13,7 @@ import { rn } from "../utils.js";
 import { calculateFriendlyGridSize } from "./style.js";
 import { drawTemp, toggleRulers, layerIsOn } from "./layers.js";
 
+window.editUnits = editUnits;
 export function editUnits() {
     closeDialogs("#unitsEditor, .stable");
     $("#unitsEditor").dialog();
