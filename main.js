@@ -61,7 +61,6 @@ export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
 export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
-export let temperature = view.box.append("g").attr("id", "temperature");
 export let coastline = view.box.append("g").attr("id", "coastline");
 export let ice = view.box.append("g").attr("id", "ice").style("display", "none");
 export let prec = view.box.append("g").attr("id", "prec").style("display", "none");
@@ -277,7 +276,6 @@ export function redefineElements(mapview) {
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");
-    temperature = view.box.select("#temperature");
     coastline = view.box.select("#coastline");
     prec = view.box.select("#prec");
     population = view.box.select("#population");

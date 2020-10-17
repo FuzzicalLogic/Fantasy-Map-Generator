@@ -24,6 +24,7 @@ export const MapView = el => {
         get zones() { return this.box.select('#zones') },
         get borders() { return this.box.select('#borders') },
         get routes() { return this.box.select('#routes') },
+        get temperature() { return this.box.select('#temperature') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -54,4 +55,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "zones").style("display", "none");
     box.append("g").attr("id", "borders");
     box.append("g").attr("id", "routes");
+    box.append("g").attr("id", "temperature");
 }

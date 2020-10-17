@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack,
     grid,
-    labels, prec, ice, temperature, biomesData,
+    labels, prec, ice, biomesData,
     population, statesBody,
     stateBorders, provinceBorders,
     statesHalo,
@@ -304,6 +304,8 @@ export function drawHeightmap() {
 }
 
 export function drawTemp() {
+    let { temperature } = view;
+
     console.time("drawTemp");
     temperature.selectAll("*").remove();
     lineGen.curve(d3.curveBasisClosed);
@@ -1001,6 +1003,7 @@ export function toggleHeight(event) {
 }
 
 export function toggleTemp(event) {
+    let { temperature } = view;
     if (!temperature.selectAll("*").size()) {
         turnButtonOn("toggleTemp");
         drawTemp();
