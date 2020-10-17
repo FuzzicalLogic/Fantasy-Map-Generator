@@ -1,6 +1,5 @@
 import {
-    pack, notes,
-    armies
+    view, pack, notes,
 } from "../main.js";
 
 import { gauss, rn, ra, nth, si, rand } from "./utils.js";
@@ -8,6 +7,8 @@ import { gauss, rn, ra, nth, si, rand } from "./utils.js";
 let cells, p, states;
 
 export function generate() {
+    let { armies } = view;
+
     console.time("generateMilitaryForces");
     cells = pack.cells, p = cells.p, states = pack.states;
     const valid = states.filter(s => s.i && !s.removed); // valid states
@@ -191,6 +192,7 @@ export function getDefaultOptions() {
 }
 
 export function drawRegiments(regiments, s) {
+    let { armies } = view;
     const size = +armies.attr("box-size");
     const w = d => d.n ? size * 4 : size * 6;
     const h = size * 2;
@@ -210,6 +212,7 @@ export function drawRegiments(regiments, s) {
 }
 
 export function drawRegiment(reg, s) {
+    let { armies } = view;
     const size = +armies.attr("box-size");
     const w = reg.n ? size * 4 : size * 6;
     const h = size * 2;
@@ -232,6 +235,7 @@ export function drawRegiment(reg, s) {
 
 // move one regiment to another
 export function moveRegiment(reg, x, y) {
+    let { armies } = view;
     const el = armies.select("g#army" + reg.state).select("g#regiment" + reg.state + "-" + reg.i);
     if (!el.size()) return;
 

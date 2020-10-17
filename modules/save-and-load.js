@@ -15,7 +15,7 @@ import {
     stateBorders, provinceBorders,
     roads, trails, searoutes,
     burgIcons, anchors,
-    armies, markers, ruler, fogging, burgLabels,
+    markers, ruler, fogging, burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics,
@@ -724,7 +724,7 @@ function parseLoadedData(data) {
         }()
 
         void function restoreLayersState() {
-            let { texture, compass, terrain, zones, routes } = view;
+            let { texture, compass, terrain, zones, routes, armies } = view;
             if (texture.style("display") !== "none" && texture.select("image").size()) turnButtonOn("toggleTexture");
             else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
@@ -974,8 +974,8 @@ function parseLoadedData(data) {
 
                 // v 1.3 added militry layer
                 svg.select("defs").append("style").text(armiesStyle()); // add armies style
-                armies = view.box.insert("g", "#icons").attr("id", "armies");
-                armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
+                view.box.insert("g", "#icons").attr("id", "armies");
+                view.armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
                 turnButtonOn("toggleMilitary");
                 Military.generate();
             }

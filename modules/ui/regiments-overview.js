@@ -1,4 +1,4 @@
-import { modules, options, pack, armies, view } from "../../main.js";
+import { modules, options, pack, view } from "../../main.js";
 
 import { closeDialogs, clicked, fitContent, sortLines, applySorting, getFileName, downloadFile } from "./editors.js";
 
@@ -105,13 +105,13 @@ export function overviewRegiments(state) {
         const state = +event.target.dataset.s;
         const id = +event.target.dataset.id;
         if (customization || !state) return;
-        armies.select(`g > g#regiment${state}-${id}`).transition().duration(2000).style("fill", "#ff0000");
+        view.armies.select(`g > g#regiment${state}-${id}`).transition().duration(2000).style("fill", "#ff0000");
     }
 
     function regimentHighlightOff(event) {
         const state = +event.target.dataset.s;
         const id = +event.target.dataset.id;
-        armies.select(`g > g#regiment${state}-${id}`).transition().duration(1000).style("fill", null);
+        view.armies.select(`g > g#regiment${state}-${id}`).transition().duration(1000).style("fill", null);
     }
 
     function togglePercentageMode() {

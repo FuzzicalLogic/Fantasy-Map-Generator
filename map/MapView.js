@@ -31,6 +31,7 @@ export const MapView = el => {
         get population() { return this.box.select('#population') },
         get labels() { return this.box.select('#labels') },
         get icons() { return this.box.select('#icons') },
+        get armies() { return this.box.select('#armies') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -68,4 +69,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "population");
     box.append("g").attr("id", "labels");
     box.append("g").attr("id", "icons");
+    box.append("g").attr("id", "armies").style("display", "none");
 }

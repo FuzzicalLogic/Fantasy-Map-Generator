@@ -2,7 +2,7 @@ import {
     modules,
     seed, pack,
     statesBody, statesHalo,
-    notes, armies, burgLabels,
+    notes, burgLabels,
     view, zoomTo, customization
 } from "../../main.js";
 
@@ -247,6 +247,7 @@ function stateChangeFill(el) {
     const currentFill = el.getAttribute("fill");
     const state = +el.parentNode.parentNode.dataset.id;
 
+    let { armies } = view;
     const callback = function (fill) {
         const body = getBody();
         el.setAttribute("fill", fill);
@@ -507,7 +508,7 @@ function stateRemove(state) {
         const index = notes.findIndex(n => n.id === id);
         if (index != -1) notes.splice(index, 1);
     });
-    armies.select("g#army" + state).remove();
+    view.armies.select("g#army" + state).remove();
 
     const capital = pack.states[state].capital;
     pack.burgs[capital].capital = 0;

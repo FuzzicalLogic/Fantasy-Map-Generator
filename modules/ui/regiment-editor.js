@@ -16,6 +16,7 @@ export function editRegiment(selector) {
     closeDialogs(".stable");
     if (!layerIsOn("toggleMilitary")) toggleMilitary();
 
+    let { armies } = view;
     armies.selectAll(":scope > g").classed("draggable", true);
     armies.selectAll(":scope > g > g").call(d3.drag().on("drag", dragRegiment));
     elSelected = selector ? document.querySelector(selector) : d3.event.target.parentElement; // select g element

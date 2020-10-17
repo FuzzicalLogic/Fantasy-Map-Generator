@@ -1,6 +1,6 @@
 import {
     view, svg, fonts, pack,
-    oceanLayers, armies, stateBorders,
+    oceanLayers, stateBorders,
     provinceBorders,
     markers,
     ruler, roads, trails, searoutes, statesHalo,
@@ -314,6 +314,7 @@ export function initialize() {
         statesHalo.attr("opacity", this.value);
     });
 
+    let { armies } = view;
     styleArmiesFillOpacity.addEventListener("input", function () {
         armies.attr("fill-opacity", this.value);
         styleArmiesFillOpacityOutput.value = this.value;
@@ -754,7 +755,7 @@ export function addDefaulsStyles() {
 // set default style
 function applyDefaultStyle() {
     let { legend, lakes, texture, coastline } = view;
-    armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
+    view.armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
     view.biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
     view.ice.attr("opacity", .8).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");

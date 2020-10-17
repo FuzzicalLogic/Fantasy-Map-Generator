@@ -1,4 +1,4 @@
-import { modules, options, pack, armies, customization } from "../../main.js";
+import { modules, options, pack, customization } from "../../main.js";
 
 import { closeDialogs, fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
 
@@ -11,6 +11,8 @@ import { toggleStates, toggleBorders, toggleMilitary, layerIsOn } from "./layers
 
 export function overviewMilitary() {
     if (customization) return;
+
+    let { armies } = view;
     closeDialogs("#militaryOverview, .stable");
     if (!layerIsOn("toggleStates")) toggleStates();
     if (!layerIsOn("toggleBorders")) toggleBorders();

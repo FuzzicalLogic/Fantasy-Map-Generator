@@ -68,7 +68,6 @@ export let searoutes = routes.append("g").attr("id", "searoutes");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
 export let anchors = icons.append("g").attr("id", "anchors");
 
-export let armies = view.box.append("g").attr("id", "armies").style("display", "none");
 export let markers = view.box.append("g").attr("id", "markers").style("display", "none");
 export let fogging = view.box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
 export let ruler = view.box.append("g").attr("id", "ruler").style("display", "none");
@@ -276,7 +275,6 @@ export function redefineElements(mapview) {
     searoutes = routes.select("#searoutes");
     burgIcons = icons.select("#burgIcons");
     anchors = icons.select("#anchors");
-    armies = view.box.select("#armies");
     markers = view.box.select("#markers");
     ruler = view.box.select("#ruler");
     fogging = view.box.select("#fogging");

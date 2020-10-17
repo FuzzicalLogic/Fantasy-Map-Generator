@@ -1,3 +1,4 @@
+import { view } from "../../main.js";
 import * as Names from "../names-generator.js";
 import * as Military from "../military-generator.js";
 
@@ -624,7 +625,7 @@ export class Battle {
 
             r.u = Object.assign({}, r.survivors);
             r.a = d3.sum(Object.values(r.u)); // reg total
-            armies.select(`g#${id} > text`).text(Military.getTotal(r)); // update reg box
+            view.armies.select(`g#${id} > text`).text(Military.getTotal(r)); // update reg box
             Military.moveRegiment(r, r.x + rand(20) - 10, r.y + rand(20) - 10);
         }
 
