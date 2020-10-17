@@ -1,6 +1,7 @@
 import {
+    view,
     svgWidth, svgHeight,
-    scale, scaleBar, ruler, lineGen
+    scale, ruler, lineGen
 } from "../../main.js";
 import { restoreDefaultEvents } from "./editors.js";
 
@@ -230,8 +231,8 @@ export function drawPlanimeter() {
 
 // draw scale bar
 export function drawScaleBar() {
-    if (scaleBar.style("display") === "none") return; // no need to re-draw hidden element
-    scaleBar.selectAll("*").remove(); // fully redraw every time
+    if (view.scaleBar.style("display") === "none") return; // no need to re-draw hidden element
+    view.scaleBar.selectAll("*").remove(); // fully redraw every time
 
     const dScale = distanceScaleInput.value;
     const unit = distanceUnitInput.value;
@@ -246,26 +247,26 @@ export function drawScaleBar() {
     else val = rn(val) // round to 1
     const l = val * scale / dScale; // actual length in pixels on this scale
 
-    scaleBar.append("line").attr("x1", 0.5).attr("y1", 0).attr("x2", l + size - 0.5).attr("y2", 0).attr("stroke-width", size).attr("stroke", "white");
-    scaleBar.append("line").attr("x1", 0).attr("y1", size).attr("x2", l + size).attr("y2", size).attr("stroke-width", size).attr("stroke", "#3d3d3d");
+    view.scaleBar.append("line").attr("x1", 0.5).attr("y1", 0).attr("x2", l + size - 0.5).attr("y2", 0).attr("stroke-width", size).attr("stroke", "white");
+    view.scaleBar.append("line").attr("x1", 0).attr("y1", size).attr("x2", l + size).attr("y2", size).attr("stroke-width", size).attr("stroke", "#3d3d3d");
     const dash = size + " " + rn(l / 5 - size, 2);
-    scaleBar.append("line").attr("x1", 0).attr("y1", 0).attr("x2", l + size).attr("y2", 0)
+    view.scaleBar.append("line").attr("x1", 0).attr("y1", 0).attr("x2", l + size).attr("y2", 0)
         .attr("stroke-width", rn(size * 3, 2)).attr("stroke-dasharray", dash).attr("stroke", "#3d3d3d");
 
     const fontSize = rn(5 * size, 1);
-    scaleBar.selectAll("text").data(d3.range(0, 6)).enter().append("text")
+    view.scaleBar.selectAll("text").data(d3.range(0, 6)).enter().append("text")
         .attr("x", d => rn(d * l / 5, 2)).attr("y", 0).attr("dy", "-.5em")
         .attr("font-size", fontSize).text(d => rn(d * l / 5 * dScale / scale) + (d < 5 ? "" : " " + unit));
 
     if (barLabel.value !== "") {
-        scaleBar.append("text").attr("x", (l + 1) / 2).attr("y", 2 * size)
+        view.scaleBar.append("text").attr("x", (l + 1) / 2).attr("y", 2 * size)
             .attr("dominant-baseline", "text-before-edge")
             .attr("font-size", fontSize).text(barLabel.value);
     }
 
-    const bbox = scaleBar.node().getBBox();
+    const bbox = view.scaleBar.node().getBBox();
     // append backbround rectangle
-    scaleBar.insert("rect", ":first-child").attr("x", -10).attr("y", -20).attr("width", bbox.width + 10).attr("height", bbox.height + 15)
+    view.scaleBar.insert("rect", ":first-child").attr("x", -10).attr("y", -20).attr("width", bbox.width + 10).attr("height", bbox.height + 15)
         .attr("stroke-width", size).attr("stroke", "none").attr("filter", "url(#blur5)")
         .attr("fill", barBackColor.value).attr("opacity", +barBackOpacity.value);
 
@@ -274,10 +275,10 @@ export function drawScaleBar() {
 
 // fit ScaleBar to canvas size
 export function fitScaleBar() {
-    if (!scaleBar.select("rect").size() || scaleBar.style("display") === "none") return;
+    if (!view.scaleBar.select("rect").size() || view.scaleBar.style("display") === "none") return;
     const px = isNaN(+barPosX.value) ? .99 : barPosX.value / 100;
     const py = isNaN(+barPosY.value) ? .99 : barPosY.value / 100;
-    const bbox = scaleBar.select("rect").node().getBBox();
+    const bbox = view.scaleBar.select("rect").node().getBBox();
     const x = rn(svgWidth * px - bbox.width + 10), y = rn(svgHeight * py - bbox.height + 20);
-    scaleBar.attr("transform", `translate(${x},${y})`);
+    view.scaleBar.attr("transform", `translate(${x},${y})`);
 }

@@ -10,7 +10,7 @@ import {
     biomesData, setBiomesData, applyDefaultBiomesSystem,
     pack, setPack,
     nameBases, 
-    scaleBar, legend, ocean, oceanLayers, oceanPattern,
+    ocean, oceanLayers, oceanPattern,
     lakes, landmass, texture, terrs, biomes, ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
@@ -232,8 +232,9 @@ function getFontsToLoad() {
         if (!font || webSafe.includes(font)) return;
         fontsInUse.add(font);
     });
-    const legendFont = legend.attr("data-font");
-    if (legend.node().hasChildNodes() && !webSafe.includes(legendFont)) fontsInUse.add(legendFont);
+    const legendFont = view.legend.attr("data-font");
+    if (view.legend.node().hasChildNodes() && !webSafe.includes(legendFont))
+        fontsInUse.add(legendFont);
     const fonts = [...fontsInUse];
     return fonts.length ? "https://fonts.googleapis.com/css?family=" + fonts.join("|") : null;
 }
@@ -749,7 +750,7 @@ function parseLoadedData(data) {
             if (armies.selectAll("*").size() && armies.style("display") !== "none") turnButtonOn("toggleMilitary"); else turnButtonOff("toggleMilitary");
             if (markers.selectAll("*").size() && markers.style("display") !== "none") turnButtonOn("toggleMarkers"); else turnButtonOff("toggleMarkers");
             if (ruler.style("display") !== "none") turnButtonOn("toggleRulers"); else turnButtonOff("toggleRulers");
-            if (scaleBar.style("display") !== "none") turnButtonOn("toggleScaleBar"); else turnButtonOff("toggleScaleBar");
+            if (view.scaleBar.style("display") !== "none") turnButtonOn("toggleScaleBar"); else turnButtonOff("toggleScaleBar");
 
             // special case for population bars
             const populationIsOn = population.selectAll("line").size();
@@ -768,8 +769,8 @@ function parseLoadedData(data) {
             ruler.selectAll("g.opisometer circle").call(d3.drag().on("start", dragOpisometerEnd));
             ruler.selectAll("g.opisometer circle").call(d3.drag().on("start", dragOpisometerEnd));
 
-            scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
-            legend.on("mousemove", () => tip("Drag to change the position. Click to hide the legend")).on("click", () => clearLegend());
+            view.scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
+            view.legend.on("mousemove", () => tip("Drag to change the position. Click to hide the legend")).on("click", () => clearLegend());
         }()
 
         void function resolveVersionConflicts() {

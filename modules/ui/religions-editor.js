@@ -1,6 +1,6 @@
 import {
     modules,
-    pack, view, relig, legend, debug, customization
+    pack, view, relig, debug, customization
 } from "../../main.js";
 
 import * as Religions from "../religions-generator.js";
@@ -365,7 +365,10 @@ function religionCenterDrag() {
 }
 
 function toggleLegend() {
-    if (legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
+    if (view.legend.selectAll("*").size()) {
+        clearLegend();
+        return;
+    }; // hide legend
     const data = pack.religions.filter(r => r.i && !r.removed && r.area).sort((a, b) => b.area - a.area).map(r => [r.i, r.color, r.name]);
     drawLegend("Religions", data);
 }

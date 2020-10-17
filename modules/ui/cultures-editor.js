@@ -1,4 +1,4 @@
-import { modules, pack, view, cults, debug, nameBases, legend, customization } from "../../main.js";
+import { modules, pack, view, cults, debug, nameBases, customization } from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
@@ -370,7 +370,7 @@ function cultureCenterDrag() {
 }
 
 function toggleLegend() {
-    if (legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
+    if (view.legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
     const data = pack.cultures.filter(c => c.i && !c.removed && c.cells).sort((a, b) => b.area - a.area).map(c => [c.i, c.color, c.name]);
     drawLegend("Cultures", data);
 }

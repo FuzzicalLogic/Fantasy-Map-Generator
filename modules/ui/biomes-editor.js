@@ -1,5 +1,5 @@
 import {
-    modules, legend,
+    modules,
     view,
     pack, biomes, biomesData,
     defineBiomes, setBiomesData, applyDefaultBiomesSystem, customization
@@ -210,7 +210,7 @@ function openWiki(el) {
 }
 
 function toggleLegend() {
-    if (legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
+    if (view.legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
     const d = biomesData;
     const data = Array.from(d.i).filter(i => d.cells[i]).sort((a, b) => d.area[b] - d.area[a]).map(i => [i, d.color[i], d.name[i]]);
     drawLegend("Biomes", data);

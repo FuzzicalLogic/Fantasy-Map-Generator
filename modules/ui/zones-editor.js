@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    pack, view, zones, legend, customization
+    pack, view, zones, customization
 } from "../../main.js";
 
 import { editStyle } from "./style.js";
@@ -284,7 +284,7 @@ function toggleFog(z, cl) {
 }
 
 function toggleLegend() {
-    if (legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
+    if (view.legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
     const data = [];
 
     zones.selectAll("g").each(function () {

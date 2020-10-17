@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    view, scale, scaleBar,
+    view, scale,
     calculateTemperatures, ruler
 } from "../../main.js";
 
@@ -132,12 +132,12 @@ function changeScaleBarLabel() {
 }
 
 function changeScaleBarOpacity() {
-    scaleBar.select("rect").attr("opacity", this.value);
+    view.scaleBar.select("rect").attr("opacity", this.value);
     lock("barBackOpacity");
 }
 
 function changeScaleBarColor() {
-    scaleBar.select("rect").attr("fill", this.value);
+    view.scaleBar.select("rect").attr("fill", this.value);
     lock("barBackColor");
 }
 

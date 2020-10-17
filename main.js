@@ -59,13 +59,7 @@ initStyle();
 initStorage();
 
 // append svg layers (in default order)
-export let svg = d3.select("#map");
-
-import { MapView } from "./map/MapView.js";
-export let view = MapView(document.getElementById('map'));
-
-export let scaleBar = svg.select("#scaleBar");
-export let legend = svg.append("g").attr("id", "legend");
+view.svg.append("g").attr("id", "legend");
 export let ocean = view.box.append("g").attr("id", "ocean");
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
@@ -140,8 +134,8 @@ fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("hei
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
 // assign events separately as not a viewbox child
-scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
-legend.on("mousemove", () => tip("Drag to change the position. Click to hide the legend")).on("click", () => clearLegend());
+view.scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
+view.legend.on("mousemove", () => tip("Drag to change the position. Click to hide the legend")).on("click", () => clearLegend());
 
 // main data variables
 export let grid = {}; // initial grapg based on jittered square grid and data
@@ -288,8 +282,6 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function redefineElements(mapview) {
     view = mapview;
     svg = view.svg;
-    scaleBar = svg.select("#scaleBar");
-    legend = view.svg.select("#legend");
     ocean = view.box.select("#ocean");
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");

@@ -2,7 +2,7 @@ import {
     pack,
     svg, svgWidth, svgHeight,
     debug,
-    view, legend, fogging, scale,
+    view, fogging, scale,
     zoom,
     burgIcons, anchors, burgLabels,
     elSelected
@@ -41,7 +41,7 @@ export function restoreDefaultEvents() {
         .on(".drag", null)
         .on("click", clicked)
         .on("touchmove mousemove", moved);
-    legend.call(d3.drag().on("start", dragLegendBox));
+    view.legend.call(d3.drag().on("start", dragLegendBox));
 }
 
 // on viewbox click event - run function based on target
@@ -237,6 +237,8 @@ export function togglePort(burg) {
 
 // draw legend box
 export function drawLegend(name, data) {
+    let { legend } = view;
+
     legend.selectAll("*").remove(); // fully redraw every time
     legend.attr("data", data.join("|")); // store data
 
@@ -289,6 +291,8 @@ export function drawLegend(name, data) {
 
 // fit Legend box to canvas size
 export function fitLegendBox() {
+    let { legend } = view;
+
     if (!legend.selectAll("*").size()) return;
     const px = isNaN(+legend.attr("data-x")) ? 99 : legend.attr("data-x") / 100;
     const py = isNaN(+legend.attr("data-y")) ? 93 : legend.attr("data-y") / 100;
@@ -299,6 +303,8 @@ export function fitLegendBox() {
 
 // draw legend with the same data, but using different settings
 export function redrawLegend() {
+    let { legend } = view;
+
     if (!legend.select("rect").size()) return;
     const name = legend.select("#legendLabel").text();
     const data = legend.attr("data").split("|").map(l => l.split(","));
@@ -306,6 +312,8 @@ export function redrawLegend() {
 }
 
 function dragLegendBox() {
+    let { legend } = view;
+
     const tr = parseTransform(this.getAttribute("transform"));
     const x = +tr[0] - d3.event.x, y = +tr[1] - d3.event.y;
     const bbox = legend.node().getBBox();
@@ -319,6 +327,8 @@ function dragLegendBox() {
 }
 
 export function clearLegend() {
+    let { legend } = view;
+
     legend.selectAll("*").remove();
     legend.attr("data", null);
 }

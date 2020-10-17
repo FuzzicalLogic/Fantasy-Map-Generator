@@ -3,7 +3,7 @@ import {
     seed, pack, regions, debug,
     statesBody, statesHalo,
     notes, armies, burgLabels,
-    view, zoomTo, legend, customization
+    view, zoomTo, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -525,7 +525,7 @@ function stateRemove(state) {
 }
 
 function toggleLegend() {
-    if (legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
+    if (view.legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
     const data = pack.states.filter(s => s.i && !s.removed && s.cells).sort((a, b) => b.area - a.area).map(s => [s.i, s.color, s.name]);
     drawLegend("States", data);
 }
