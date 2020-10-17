@@ -7,7 +7,7 @@ import {
     population, regions, statesBody, provs, cults, relig, terrain,
     borders, stateBorders, provinceBorders,
     statesHalo,
-    compass, scale,
+    scale,
     lineGen, invokeActiveZooming, zoom,
     mapCoordinates, customization
 } from "../../main.js";
@@ -93,7 +93,7 @@ export function restoreLayers() {
     if (layerIsOn("toggleCells")) drawCells();
     if (layerIsOn("toggleGrid")) drawGrid();
     if (layerIsOn("toggleCoordinates")) drawCoordinates();
-    if (layerIsOn("toggleCompass")) compass.style("display", "block");
+    if (layerIsOn("toggleCompass")) view.compass.style("display", "block");
     if (layerIsOn("toggleTemp")) drawTemp();
     if (layerIsOn("togglePrec")) drawPrec();
     if (layerIsOn("togglePopulation")) drawPopulation();
@@ -1073,6 +1073,7 @@ export function toggleCoordinates(event) {
 }
 
 export function toggleCompass(event) {
+    let { compass } = view;
     if (!layerIsOn("toggleCompass")) {
         turnButtonOn("toggleCompass");
         $('#compass').fadeIn();

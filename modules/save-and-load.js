@@ -12,7 +12,6 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
@@ -727,7 +726,9 @@ function parseLoadedData(data) {
         }()
 
         void function restoreLayersState() {
-            if (view.texture.style("display") !== "none" && view.texture.select("image").size()) turnButtonOn("toggleTexture"); else turnButtonOff("toggleTexture");
+            let { texture, compass } = view;
+            if (texture.style("display") !== "none" && texture.select("image").size()) turnButtonOn("toggleTexture");
+            else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
             if (view.biomes.selectAll("*").size()) turnButtonOn("toggleBiomes"); else turnButtonOff("toggleBiomes");
             if (view.cells.selectAll("*").size()) turnButtonOn("toggleCells"); else turnButtonOff("toggleCells");

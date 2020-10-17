@@ -2,7 +2,7 @@ import {
     view, svg, fonts, pack,
     oceanLayers, armies, ice, stateBorders,
     provinceBorders,
-    compass, relig, cults, markers, prec,
+    relig, cults, markers, prec,
     population, coastline, terrain, rivers,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, zones, oceanPattern,
@@ -762,7 +762,7 @@ function applyDefaultStyle() {
 
     view.gridOverlay.attr("opacity", .8).attr("type", "pointyHex").attr("size", 10).attr("stroke", "#808080").attr("stroke-width", .5).attr("stroke-dasharray", null).attr("transform", null).attr("filter", null).attr("mask", null);
     view.coordinates.attr("opacity", 1).attr("data-size", 12).attr("font-size", 12).attr("stroke", "#d4d4d4").attr("stroke-width", 1).attr("stroke-dasharray", 5).attr("filter", null).attr("mask", null);
-    compass.attr("opacity", .8).attr("transform", null).attr("filter", null).attr("mask", "url(#water)").attr("shape-rendering", "optimizespeed");
+    view.compass.attr("opacity", .8).attr("transform", null).attr("filter", null).attr("mask", "url(#water)").attr("shape-rendering", "optimizespeed");
     if (!d3.select("#initial").size()) d3.select("#rose").attr("transform", "translate(80 80) scale(.25)");
 
     relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
