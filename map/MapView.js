@@ -43,7 +43,7 @@ export const MapView = el => {
 }
 
 MapView.initialize = view => {
-    let { box } = view;
+    let { box, lakes, coastline, population, labels, fogging } = view;
     view.svg.append("g").attr("id", "legend");
 
     box.append("g").attr("id", "ocean");
@@ -74,6 +74,27 @@ MapView.initialize = view => {
     box.append("g").attr("id", "icons");
     box.append("g").attr("id", "armies").style("display", "none");
     box.append("g").attr("id", "markers").style("display", "none");
-    box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
+    box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)")
+        .append("g").attr("id", "fogging").style("display", "none");
     box.append("g").attr("id", "ruler").style("display", "none");
+    box.append("g").attr("id", "debug");
+
+    lakes.append("g").attr("id", "freshwater");
+    lakes.append("g").attr("id", "salt");
+    lakes.append("g").attr("id", "sinkhole");
+    lakes.append("g").attr("id", "frozen");
+    lakes.append("g").attr("id", "lava");
+    lakes.append("g").attr("id", "dry");
+
+    coastline.append("g").attr("id", "sea_island");
+    coastline.append("g").attr("id", "lake_island");
+
+    population.append("g").attr("id", "rural");
+    population.append("g").attr("id", "urban");
+
+    labels.append("g").attr("id", "states");
+    labels.append("g").attr("id", "addedLabels");
+
+    fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
+    fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 }
