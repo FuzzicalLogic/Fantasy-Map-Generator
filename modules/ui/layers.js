@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack,
     grid,
-    labels, biomesData,
+    biomesData,
     statesBody,
     stateBorders, provinceBorders,
     statesHalo,
@@ -1187,6 +1187,8 @@ export function toggleMarkers(event) {
 }
 
 export function toggleLabels(event) {
+    let { labels } = view;
+
     if (!layerIsOn("toggleLabels")) {
         turnButtonOn("toggleLabels");
         labels.style("display", null)

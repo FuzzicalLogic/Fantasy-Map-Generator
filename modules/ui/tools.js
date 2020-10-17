@@ -1,6 +1,6 @@
 import {
     pack, grid, graphWidth, graphHeight, view,
-    markers, labels, scale, elSelected,
+    markers, scale, elSelected,
     elevateLakes, notes, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
 
@@ -219,7 +219,7 @@ function regenerateStates() {
         pack.cells.state = new Uint16Array(pack.cells.i.length); // reset cells data
         view.borders.selectAll("path").remove(); // remove borders
         view.regions.selectAll("path").remove(); // remove states fill
-        labels.select("#states").selectAll("text"); // remove state labels
+        view.labels.select("#states").selectAll("text"); // remove state labels
         view.defs.select("#textPaths").selectAll("path[id*='stateLabel']").remove(); // remove state labels paths
 
         if (document.getElementById("burgsOverviewRefresh").offsetParent) burgsOverviewRefresh.click();
@@ -360,8 +360,8 @@ function addLabelOnClick() {
     const name = Names.getCulture(culture);
     const id = getNextId("label");
 
-    let group = labels.select("#addedLabels");
-    if (!group.size()) group = labels.append("g").attr("id", "addedLabels")
+    let group = view.labels.select("#addedLabels");
+    if (!group.size()) group = view.labels.append("g").attr("id", "addedLabels")
         .attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a")
         .attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC")
         .attr("font-size", 18).attr("data-size", 18).attr("filter", null);

@@ -14,7 +14,7 @@ import {
     statesBody, statesHalo,
     stateBorders, provinceBorders,
     roads, trails, searoutes,
-    labels, icons, burgIcons, anchors,
+    icons, burgIcons, anchors,
     armies, markers, ruler, fogging, burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
@@ -223,7 +223,7 @@ function getFontsToLoad() {
     const webSafe = ["Georgia", "Times+New+Roman", "Comic+Sans+MS", "Lucida+Sans+Unicode", "Courier+New", "Verdana", "Arial", "Impact"]; // fonts to not fetch
 
     const fontsInUse = new Set(); // to store fonts currently in use
-    labels.selectAll("g").each(function () {
+    view.labels.selectAll("g").each(function () {
         if (!this.hasChildNodes()) return;
         const font = this.dataset.font;
         if (!font || webSafe.includes(font)) return;
@@ -744,7 +744,7 @@ function parseLoadedData(data) {
             if (routes.style("display") !== "none" && routes.selectAll("path").size()) turnButtonOn("toggleRoutes"); else turnButtonOff("toggleRoutes");
             if (view.temperature.selectAll("*").size()) turnButtonOn("toggleTemp"); else turnButtonOff("toggleTemp");
             if (view.prec.selectAll("circle").size()) turnButtonOn("togglePrec"); else turnButtonOff("togglePrec");
-            if (labels.style("display") !== "none") turnButtonOn("toggleLabels"); else turnButtonOff("toggleLabels");
+            if (view.labels.style("display") !== "none") turnButtonOn("toggleLabels"); else turnButtonOff("toggleLabels");
             if (icons.style("display") !== "none") turnButtonOn("toggleIcons"); else turnButtonOff("toggleIcons");
             if (armies.selectAll("*").size() && armies.style("display") !== "none") turnButtonOn("toggleMilitary"); else turnButtonOff("toggleMilitary");
             if (markers.selectAll("*").size() && markers.style("display") !== "none") turnButtonOn("toggleMarkers"); else turnButtonOff("toggleMarkers");
@@ -831,7 +831,7 @@ function parseLoadedData(data) {
                 }
 
                 // 1.0 changed labels to multi-lined
-                labels.selectAll("textPath").each(function () {
+                view.labels.selectAll("textPath").each(function () {
                     const text = this.textContent;
                     const shift = this.getComputedTextLength() / -1.5;
                     this.innerHTML = `<tspan x="${shift}">${text}</tspan>`;
@@ -855,7 +855,7 @@ function parseLoadedData(data) {
                 }
 
                 // labels should be toggled via style attribute, so remove display attribute
-                labels.attr("display", null);
+                view.labels.attr("display", null);
 
                 // v 1.0 added religions heirarchy tree
                 if (pack.religions[1] && !pack.religions[1].code) {

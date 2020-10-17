@@ -1,7 +1,7 @@
 import {
     graphWidth, graphHeight, grid,
     seed, pack, view,
-    biomesData, burgIcons, icons, anchors, burgLabels, labels,
+    biomesData, burgIcons, icons, anchors, burgLabels,
     lineGen
 } from "../main.js";
 
@@ -485,7 +485,7 @@ export function drawStateLabels(list) {
     }
 
     void function drawLabels() {
-        const g = labels.select("#states"),
+        const g = view.labels.select("#states"),
             t = view.defs.select("#textPaths");
         const displayed = layerIsOn("toggleLabels");
         if (!displayed) toggleLabels();

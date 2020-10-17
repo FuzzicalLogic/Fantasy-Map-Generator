@@ -308,7 +308,7 @@ function cultureRegenerateBurgs() {
     const cBurgs = pack.burgs.filter(b => b.culture === culture);
     cBurgs.forEach(b => {
         b.name = Names.getCulture(culture);
-        labels.select("[data-id='" + b.i + "']").text(b.name);
+        view.labels.select("[data-id='" + b.i + "']").text(b.name);
     });
     tip(`Names for ${cBurgs.length} burgs are re-generated`);
 }

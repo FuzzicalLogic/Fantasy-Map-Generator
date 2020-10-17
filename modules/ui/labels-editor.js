@@ -1,6 +1,5 @@
 import {
     modules,
-    labels,
     view, lineGen
 } from "../../main.js";
 import { closeDialogs, unselect, fitContent } from "./editors.js";
@@ -219,6 +218,7 @@ export function editLabel() {
     }
 
     function removeLabelsGroup() {
+        let { labels } = view;
         const group = elSelected.node().parentNode.id;
         const basic = group === "states" || group === "addedLabels";
         const count = elSelected.node().parentNode.childElementCount;
@@ -352,7 +352,7 @@ function selectLabelGroup(text) {
     const select = document.getElementById("labelGroupSelect");
     select.options.length = 0; // remove all options
 
-    labels.selectAll(":scope > g").each(function () {
+    view.labels.selectAll(":scope > g").each(function () {
         if (this.id === "burgLabels") return;
         select.options.add(new Option(this.id, this.id, false, this.id === group));
     });

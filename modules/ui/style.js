@@ -5,7 +5,7 @@ import {
     markers,
     ruler, roads, trails, searoutes, statesHalo,
     oceanPattern,
-    burgLabels, burgIcons, anchors, labels, fogging,
+    burgLabels, burgIcons, anchors, fogging,
     invokeActiveZooming, customization
 } from "../../main.js";
 
@@ -832,6 +832,7 @@ function applyDefaultStyle() {
     burgIcons.select("#towns").attr("opacity", 1).attr("size", .5).attr("stroke-width", .12).attr("fill", "#ffffff").attr("stroke", "#3e3e4b").attr("fill-opacity", .7).attr("stroke-dasharray", "").attr("stroke-linecap", "butt");
     anchors.select("#towns").attr("opacity", 1).attr("fill", "#ffffff").attr("stroke", "#3e3e4b").attr("stroke-width", 1.2).attr("size", 1);
 
+    let { labels } = view;
     const stateLabelSize = Math.max(rn(24 - regionsInput.value / 6), 6);
     labels.select("#states").attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a").attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", stateLabelSize).attr("data-size", stateLabelSize).attr("filter", null);
     labels.select("#addedLabels").attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a").attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", 18).attr("data-size", 18).attr("filter", null);
