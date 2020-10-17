@@ -49,15 +49,6 @@ export let svg = d3.select("#map");
 import { MapView } from "./map/MapView.js";
 export let view = MapView(document.getElementById('map'));
 
-// Necessary Load order -- Prior to main
-initUtilities();
-Religions.initialize();
-initLayers();
-initGeneral();
-initOptions();
-initStyle();
-initStorage();
-
 // append svg layers (in default order)
 view.svg.append("g").attr("id", "legend");
 export let ocean = view.box.append("g").attr("id", "ocean");
@@ -132,6 +123,17 @@ population.append("g").attr("id", "urban");
 // fogging
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
+
+
+// Necessary Load order -- Prior to main
+initUtilities();
+Religions.initialize();
+initLayers();
+initGeneral();
+initOptions();
+initStyle();
+initStorage();
+
 
 // assign events separately as not a viewbox child
 view.scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
