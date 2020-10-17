@@ -51,14 +51,13 @@ export let view = MapView(document.getElementById('map'));
 MapView.initialize(view);
 
 // append svg layers (in default order)
-let { ocean, lakes, regions, borders } = view;
+let { ocean, lakes, regions, borders, routes } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
 export let stateBorders = borders.append("g").attr("id", "stateBorders");
 export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
-export let routes = view.box.append("g").attr("id", "routes");
 export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
@@ -267,7 +266,7 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function redefineElements(mapview) {
     view = mapview;
     svg = view.svg;
-    let { ocean, regions } = view;
+    let { ocean, regions, borders, routes } = view;
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
     ice = view.box.select("#ice");
@@ -275,7 +274,6 @@ export function redefineElements(mapview) {
     statesHalo = regions.select("#statesHalo");
     stateBorders = borders.select("#stateBorders");
     provinceBorders = borders.select("#provinceBorders");
-    routes = view.box.select("#routes");
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");

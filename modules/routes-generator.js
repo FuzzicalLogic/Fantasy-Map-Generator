@@ -1,7 +1,7 @@
 import {
     grid, lineGen,
     pack,
-    biomesData, roads, trails, searoutes, routes
+    biomesData, roads, trails, searoutes
 } from "../main.js";
 
 import { round } from "./utils.js";
@@ -138,7 +138,7 @@ export function draw(main, small, ocean) {
 }
 
 export function regenerate() {
-    routes.selectAll("path").remove();
+    view.routes.selectAll("path").remove();
     pack.cells.road = new Uint16Array(pack.cells.i.length);
     pack.cells.crossroad = new Uint16Array(pack.cells.i.length);
     const main = getRoads();

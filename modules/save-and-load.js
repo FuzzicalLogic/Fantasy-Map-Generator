@@ -14,7 +14,7 @@ import {
     ice,
     statesBody, statesHalo,
     stateBorders, provinceBorders,
-    routes, roads, trails, searoutes,
+    roads, trails, searoutes,
     temperature, coastline, prec, population,
     labels, icons, burgIcons, anchors,
     armies, markers, ruler, fogging, burgLabels,
@@ -400,7 +400,7 @@ export function saveGeoJSON_Cells() {
 export function saveGeoJSON_Roads() {
     let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
 
-    routes._groups[0][0].childNodes.forEach(n => {
+    view.routes._groups[0][0].childNodes.forEach(n => {
         n.childNodes.forEach(r => {
             data += "{\n   \"type\": \"Feature\",\n   \"geometry\": { \"type\": \"LineString\", \"coordinates\": ";
             data += JSON.stringify(getRoadPoints(r));
@@ -726,7 +726,7 @@ function parseLoadedData(data) {
         }()
 
         void function restoreLayersState() {
-            let { texture, compass, terrain, zones } = view;
+            let { texture, compass, terrain, zones, routes } = view;
             if (texture.style("display") !== "none" && texture.select("image").size()) turnButtonOn("toggleTexture");
             else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");

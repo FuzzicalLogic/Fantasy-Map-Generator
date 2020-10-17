@@ -1,6 +1,6 @@
 import {
     pack, grid, graphWidth, graphHeight, view,
-    markers, routes, labels, scale, elSelected,
+    markers, labels, scale, elSelected,
     elevateLakes, ice, notes, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
 
@@ -512,7 +512,7 @@ function addRouteOnClick() {
     unpressClickToAddButton();
     const point = d3.mouse(this);
     const id = getNextId("route");
-    elSelected = routes.select("g").append("path").attr("id", id).attr("data-new", 1).attr("d", `M${point[0]},${point[1]}`);
+    elSelected = view.routes.select("g").append("path").attr("id", id).attr("data-new", 1).attr("d", `M${point[0]},${point[1]}`);
     editRoute(true);
 }
 

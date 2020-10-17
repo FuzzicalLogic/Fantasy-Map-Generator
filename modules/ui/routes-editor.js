@@ -141,7 +141,7 @@ export function editRoute(onClick) {
         const select = document.getElementById("routeGroup");
         select.options.length = 0; // remove all options
 
-        routes.selectAll("g").each(function () {
+        view.routes.selectAll("g").each(function () {
             select.options.add(new Option(this.id, this.id, false, this.id === group));
         });
     }
@@ -197,6 +197,7 @@ export function editRoute(onClick) {
     }
 
     function removeRouteGroup() {
+        let { routes } = view;
         const group = elSelected.node().parentNode.id;
         const basic = ["roads", "trails", "searoutes"].includes(group);
         const count = elSelected.node().parentNode.childElementCount;
