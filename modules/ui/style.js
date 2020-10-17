@@ -2,7 +2,7 @@ import {
     view, svg, fonts, pack,
     oceanLayers, armies, ice, stateBorders,
     provinceBorders,
-    cults, markers, prec,
+    markers, prec,
     population, coastline,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, zones, oceanPattern,
@@ -767,7 +767,7 @@ function applyDefaultStyle() {
     if (!d3.select("#initial").size()) d3.select("#rose").attr("transform", "translate(80 80) scale(.25)");
 
     view.relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
-    cults.attr("opacity", .6).attr("stroke", "#777777").attr("stroke-width", .5).attr("filter", null);
+    view.cults.attr("opacity", .6).attr("stroke", "#777777").attr("stroke-width", .5).attr("filter", null);
     view.landmass.attr("opacity", 1).attr("fill", "#eef6fb").attr("filter", null);
     markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
 

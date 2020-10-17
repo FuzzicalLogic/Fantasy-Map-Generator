@@ -1,4 +1,4 @@
-import { modules, pack, view, cults, nameBases, customization } from "../../main.js";
+import { modules, pack, view, nameBases, customization } from "../../main.js";
 
 import * as Names from "../names-generator.js";
 import * as Cultures from "../cultures-generator.js";
@@ -183,7 +183,7 @@ function cultureHighlightOn(event) {
     if (!layerIsOn("toggleCultures")) return;
     if (customization) return;
     const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
-    cults.select("#culture" + culture).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
+    view.cults.select("#culture" + culture).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
     view.debug.select("#cultureCenter" + culture).raise().transition(animate).attr("r", 8).attr("stroke", "#d0240f");
 }
 
@@ -197,7 +197,7 @@ function cultureHighlightOff(event) {
     }
 
     if (!layerIsOn("toggleCultures")) return;
-    cults.select("#culture" + culture).transition().attr("stroke-width", null).attr("stroke", null);
+    view.cults.select("#culture" + culture).transition().attr("stroke-width", null).attr("stroke", null);
     view.debug.select("#cultureCenter" + culture).transition().attr("r", 6).attr("stroke", null);
 }
 
@@ -209,7 +209,7 @@ function cultureChangeColor() {
     const callback = function (fill) {
         el.setAttribute("fill", fill);
         pack.cultures[culture].color = fill;
-        cults.select("#culture" + culture).attr("fill", fill).attr("stroke", fill);
+        view.cults.select("#culture" + culture).attr("fill", fill).attr("stroke", fill);
         view.debug.select("#cultureCenter" + culture).attr("fill", fill);
     }
 
@@ -322,7 +322,7 @@ function cultureRemove() {
         resizable: false, title: "Remove culture",
         buttons: {
             Remove: function () {
-                cults.select("#culture" + culture).remove();
+                view.cults.select("#culture" + culture).remove();
                 view.debug.select("#cultureCenter" + culture).remove();
 
                 pack.burgs.filter(b => b.culture == culture).forEach(b => b.culture = 0);
@@ -508,7 +508,7 @@ function recalculateCultures(must) {
 function enterCultureManualAssignent() {
     if (!layerIsOn("toggleCultures")) toggleCultures();
     customization = 4;
-    cults.append("g").attr("id", "temp");
+    view.cults.append("g").attr("id", "temp");
     document.querySelectorAll("#culturesBottom > *").forEach(el => el.style.display = "none");
     document.getElementById("culturesManuallyButtons").style.display = "inline-block";
     view.debug.select("#cultureCenters").style("display", "none");
@@ -540,7 +540,7 @@ function selectCultureOnMapClick() {
     const i = findCell(point[0], point[1]);
     if (pack.cells.h[i] < 20) return;
 
-    const assigned = cults.select("#temp").select("polygon[data-cell='" + i + "']");
+    const assigned = view.cults.select("#temp").select("polygon[data-cell='" + i + "']");
     const culture = assigned.size() ? +assigned.attr("data-culture") : pack.cells.culture[i];
 
     const body = getBody();
@@ -563,7 +563,7 @@ function dragCultureBrush() {
 }
 
 function changeCultureForSelection(selection) {
-    const temp = cults.select("#temp");
+    const temp = view.cults.select("#temp");
     const selected = getBody().querySelector("div.selected");
 
     const cultureNew = +selected.dataset.id;
@@ -588,7 +588,7 @@ function moveCultureBrush() {
 }
 
 function applyCultureManualAssignent() {
-    const changed = cults.select("#temp").selectAll("polygon");
+    const changed = view.cults.select("#temp").selectAll("polygon");
     changed.each(function () {
         const i = +this.dataset.cell;
         const c = +this.dataset.culture;
@@ -605,7 +605,7 @@ function applyCultureManualAssignent() {
 
 function exitCulturesManualAssignment(close) {
     customization = 0;
-    cults.select("#temp").remove();
+    view.cults.select("#temp").remove();
     removeCircle();
     document.querySelectorAll("#culturesBottom > *").forEach(el => el.style.display = "inline-block");
     document.getElementById("culturesManuallyButtons").style.display = "none";

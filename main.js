@@ -54,7 +54,6 @@ MapView.initialize(view);
 let { ocean, lakes } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
-export let cults = view.box.append("g").attr("id", "cults");
 export let regions = view.box.append("g").attr("id", "regions");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
@@ -276,7 +275,6 @@ export function redefineElements(mapview) {
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
     ice = view.box.select("#ice");
-    cults = view.box.select("#cults");
     regions = view.box.select("#regions");
     statesBody = regions.select("#statesBody");
     statesHalo = regions.select("#statesHalo");

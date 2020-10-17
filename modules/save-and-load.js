@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    cults, regions, statesBody, statesHalo, provs, zones,
+    regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
@@ -738,7 +738,7 @@ function parseLoadedData(data) {
             if (view.rivers.style("display") !== "none") turnButtonOn("toggleRivers"); else turnButtonOff("toggleRivers");
             if (terrain.style("display") !== "none" && terrain.selectAll("*").size()) turnButtonOn("toggleRelief"); else turnButtonOff("toggleRelief");
             if (view.relig.selectAll("*").size()) turnButtonOn("toggleReligions"); else turnButtonOff("toggleReligions");
-            if (cults.selectAll("*").size()) turnButtonOn("toggleCultures"); else turnButtonOff("toggleCultures");
+            if (view.cults.selectAll("*").size()) turnButtonOn("toggleCultures"); else turnButtonOff("toggleCultures");
             if (statesBody.selectAll("*").size()) turnButtonOn("toggleStates"); else turnButtonOff("toggleStates");
             if (provs.selectAll("*").size()) turnButtonOn("toggleProvinces"); else turnButtonOff("toggleProvinces");
             if (zones.selectAll("*").size() && zones.style("display") !== "none") turnButtonOn("toggleZones"); else turnButtonOff("toggleZones");

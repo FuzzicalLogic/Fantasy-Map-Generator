@@ -4,7 +4,7 @@ import {
     seed, pack,
     grid,
     labels, prec, ice, temperature, biomesData,
-    population, regions, statesBody, provs, cults,
+    population, regions, statesBody, provs,
     borders, stateBorders, provinceBorders,
     statesHalo,
     scale,
@@ -545,6 +545,7 @@ export function drawIce() {
 }
 
 export function drawCultures() {
+    let { cults } = view;
     console.time("drawCultures");
 
     cults.selectAll("path").remove();
@@ -1302,6 +1303,7 @@ export function toggleIce() {
 }
 
 export function toggleCultures(event) {
+    let { cults } = view;
     const cultures = pack.cultures.filter(c => c.i && !c.removed);
     const empty = !cults.selectAll("path").size();
     if (empty && cultures.length) {
