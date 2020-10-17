@@ -295,7 +295,7 @@ export function editHeightmap() {
         }
 
         // recalculate zones to grid
-        zones.selectAll("g").each(function () {
+        view.zones.selectAll("g").each(function () {
             const zone = d3.select(this);
             const dataCells = zone.attr("data-cells");
             const cells = dataCells ? dataCells.split(",").map(i => +i) : [];
@@ -411,7 +411,7 @@ export function editHeightmap() {
         if (changeHeights.checked) Rivers.specify();
 
         // restore zones from grid
-        zones.selectAll("g").each(function () {
+        view.zones.selectAll("g").each(function () {
             const zone = d3.select(this);
             const g = zone.attr("data-cells");
             const gCells = g ? g.split(",").map(i => +i) : [];

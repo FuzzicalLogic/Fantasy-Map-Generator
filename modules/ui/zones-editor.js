@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    pack, view, zones, customization
+    pack, view, customization
 } from "../../main.js";
 
 import { editStyle } from "./style.js";
@@ -51,7 +51,8 @@ export function editZones() {
 
     body.addEventListener("input", function (ev) {
         const el = ev.target, zone = el.parentNode.dataset.id;
-        if (el.classList.contains("religionName")) zones.select("#" + zone).attr("data-description", el.value);
+        if (el.classList.contains("religionName"))
+            view.zones.select("#" + zone).attr("data-description", el.value);
     });
 
 }
@@ -60,6 +61,7 @@ export function editZones() {
 function zonesEditorAddLines() {
     const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
     let lines = "";
+    let { zones } = view;
 
     zones.selectAll("g").each(function () {
         const c = this.dataset.cells ? this.dataset.cells.split(",").map(c => +c) : [];
@@ -111,12 +113,12 @@ function zonesEditorAddLines() {
 
 function zoneHighlightOn(event) {
     const zone = event.target.dataset.id;
-    zones.select("#" + zone).style("outline", "1px solid red");
+    view.zones.select("#" + zone).style("outline", "1px solid red");
 }
 
 function zoneHighlightOff(event) {
     const zone = event.target.dataset.id;
-    zones.select("#" + zone).style("outline", null);
+    view.zones.select("#" + zone).style("outline", null);
 }
 
 $(getBody()).sortable({ items: "div.states", handle: ".icon-resize-vertical", containment: "parent", axis: "y", update: movezone });
@@ -148,7 +150,7 @@ function enterZonesManualAssignent() {
         .on("touchmove mousemove", moveZoneBrush);
 
     body.querySelector("div").classList.add("selected");
-    zones.selectAll("g").each(function () { this.setAttribute("data-init", this.getAttribute("data-cells")); });
+    view.zones.selectAll("g").each(function () { this.setAttribute("data-init", this.getAttribute("data-cells")); });
 }
 
 function selectZone(el) {
@@ -175,7 +177,7 @@ function dragZoneBrush() {
         if (!selection) return;
 
         const selected = getBody().querySelector("div.selected");
-        const zone = zones.select("#" + selected.dataset.id);
+        const zone = view.zones.select("#" + selected.dataset.id);
         const base = zone.attr("id") + "_"; // id generic part
         const dataCells = zone.attr("data-cells");
         let cells = dataCells ? dataCells.split(",").map(i => +i) : [];
@@ -210,7 +212,7 @@ function moveZoneBrush() {
 }
 
 function applyZonesManualAssignent() {
-    zones.selectAll("g").each(function () {
+    view.zones.selectAll("g").each(function () {
         if (this.dataset.cells) return;
         // all zone cells are removed
         unfog("focusZone" + this.id);
@@ -223,7 +225,7 @@ function applyZonesManualAssignent() {
 
 // restore initial zone cells
 function cancelZonesManualAssignent() {
-    zones.selectAll("g").each(function () {
+    view.zones.selectAll("g").each(function () {
         const zone = d3.select(this);
         const dataCells = zone.attr("data-init");
         const cells = dataCells ? dataCells.split(",").map(i => +i) : [];
@@ -252,7 +254,7 @@ function exitZonesManualAssignment(close) {
 
     restoreDefaultEvents();
     clearMainTip();
-    zones.selectAll("g").each(function () { this.removeAttribute("data-init"); });
+    view.zones.selectAll("g").each(function () { this.removeAttribute("data-init"); });
     const selected = body.querySelector("div.selected");
     if (selected) selected.classList.remove("selected");
 }
@@ -268,14 +270,14 @@ function changeFill(el) {
 }
 
 function toggleVisibility(el) {
-    const zone = zones.select("#" + el.parentNode.dataset.id);
+    const zone = view.zones.select("#" + el.parentNode.dataset.id);
     const inactive = zone.style("display") === "none";
     inactive ? zone.style("display", "block") : zone.style("display", "none");
     el.classList.toggle("inactive");
 }
 
 function toggleFog(z, cl) {
-    const dataCells = zones.select("#" + z).attr("data-cells");
+    const dataCells = view.zones.select("#" + z).attr("data-cells");
     if (!dataCells) return;
 
     const path = "M" + dataCells.split(",").map(c => getPackPolygon(+c)).join("M") + "Z", id = "focusZone" + z;
@@ -287,7 +289,7 @@ function toggleLegend() {
     if (view.legend.selectAll("*").size()) { clearLegend(); return; }; // hide legend
     const data = [];
 
-    zones.selectAll("g").each(function () {
+    view.zones.selectAll("g").each(function () {
         const id = this.dataset.id;
         const description = this.dataset.description;
         const fill = this.getAttribute("fill");
@@ -321,6 +323,7 @@ function addZonesLayer() {
     const id = getNextId("zone");
     const description = "Unknown zone";
     const fill = "url(#hatch" + id.slice(4) % 14 + ")";
+    let { zones } = view;
     zones.append("g").attr("id", id).attr("data-description", description).attr("data-cells", "").attr("fill", fill);
     const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
 
@@ -365,6 +368,7 @@ function toggleEraseMode() {
 }
 
 function changePopulation(zone) {
+    let { zones } = view;
     const dataCells = zones.select("#" + zone).attr("data-cells");
     const cells = dataCells ? dataCells.split(",").map(i => +i).filter(i => pack.cells.h[i] >= 20) : [];
     if (!cells.length) { tip("Zone does not have any land cells, cannot change population", false, "error"); return; }
@@ -424,7 +428,7 @@ function changePopulation(zone) {
 }
 
 function zoneRemove(zone) {
-    zones.select("#" + zone).remove();
+    view.zones.select("#" + zone).remove();
     unfog("focusZone" + zone);
     zonesEditorAddLines();
 }

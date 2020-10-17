@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    statesBody, statesHalo, zones,
+    statesBody, statesHalo,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
@@ -726,7 +726,7 @@ function parseLoadedData(data) {
         }()
 
         void function restoreLayersState() {
-            let { texture, compass, terrain } = view;
+            let { texture, compass, terrain, zones } = view;
             if (texture.style("display") !== "none" && texture.select("image").size()) turnButtonOn("toggleTexture");
             else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
@@ -816,8 +816,8 @@ function parseLoadedData(data) {
                 document.getElementsByTagName("defs")[0].appendChild(hatching);
 
                 // 1.0 adds zones layer
-                zones = view.box.insert("g", "#borders").attr("id", "zones").attr("display", "none");
-                zones.attr("opacity", .6).attr("stroke", null).attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt");
+                view.box.insert("g", "#borders").attr("id", "zones").attr("display", "none");
+                view.zones.attr("opacity", .6).attr("stroke", null).attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt");
                 addZones();
                 if (!markers.selectAll("*").size()) { addMarkers(); turnButtonOn("toggleMarkers"); }
 

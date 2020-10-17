@@ -56,7 +56,6 @@ export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
-export let zones = view.box.append("g").attr("id", "zones").style("display", "none");
 export let borders = view.box.append("g").attr("id", "borders");
 export let stateBorders = borders.append("g").attr("id", "stateBorders");
 export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
@@ -275,7 +274,6 @@ export function redefineElements(mapview) {
     ice = view.box.select("#ice");
     statesBody = regions.select("#statesBody");
     statesHalo = regions.select("#statesHalo");
-    zones = view.box.select("#zones");
     borders = view.box.select("#borders");
     stateBorders = borders.select("#stateBorders");
     provinceBorders = borders.select("#provinceBorders");
@@ -1688,7 +1686,7 @@ export function addZones(number = 1) {
     }
 
     void function drawZones() {
-        zones.selectAll("g").data(data).enter().append("g")
+        view.zones.selectAll("g").data(data).enter().append("g")
             .attr("id", (d, i) => "zone" + i).attr("data-description", d => d.name).attr("data-type", d => d.type)
             .attr("data-cells", d => d.cells.join(",")).attr("fill", d => d.fill)
             .selectAll("polygon").data(d => d.cells).enter().append("polygon")

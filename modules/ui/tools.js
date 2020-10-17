@@ -1,7 +1,7 @@
 import {
     pack, grid, graphWidth, graphHeight, view,
     markers, routes, labels, scale, elSelected,
-    elevateLakes, ice, notes, zones, customization, rankCells, addMarkers, addZones
+    elevateLakes, ice, notes, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
 
 import * as Rivers from "../river-generator.js";
@@ -326,7 +326,7 @@ function regenerateZones(event) {
     else addNumberOfZones(gauss(1, .5, .6, 5, 2));
 
     function addNumberOfZones(number) {
-        zones.selectAll("g").remove(); // remove existing zones
+        view.zones.selectAll("g").remove(); // remove existing zones
         addZones(number);
         if (document.getElementById("zonesEditorRefresh").offsetParent) zonesEditorRefresh.click();
         if (!layerIsOn("toggleZones")) toggleZones();

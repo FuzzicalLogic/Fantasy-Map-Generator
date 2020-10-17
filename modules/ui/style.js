@@ -5,7 +5,7 @@ import {
     markers, prec,
     population, coastline,
     ruler, roads, trails, searoutes, statesHalo,
-    temperature, zones, oceanPattern,
+    temperature, oceanPattern,
     burgLabels, burgIcons, anchors, labels, fogging,
     invokeActiveZooming, customization
 } from "../../main.js";
@@ -801,7 +801,7 @@ function applyDefaultStyle() {
     temperature.attr("opacity", null).attr("fill", "#000000").attr("stroke-width", 1.8).attr("fill-opacity", .3).attr("font-size", "8px").attr("stroke-dasharray", null).attr("filter", null).attr("mask", null);
     texture.attr("opacity", null).attr("filter", null).attr("mask", "url(#land)");
     texture.select("#textureImage").attr("x", 0).attr("y", 0);
-    zones.attr("opacity", .6).attr("stroke", "#333333").attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
+    view.zones.attr("opacity", .6).attr("stroke", "#333333").attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
 
     // ocean and svg default style
     svg.attr("background-color", "#000000").attr("data-filter", null).attr("filter", null);
