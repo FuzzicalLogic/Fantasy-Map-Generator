@@ -56,7 +56,6 @@ export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
-export let provs = view.box.append("g").attr("id", "provs");
 export let zones = view.box.append("g").attr("id", "zones").style("display", "none");
 export let borders = view.box.append("g").attr("id", "borders");
 export let stateBorders = borders.append("g").attr("id", "stateBorders");
@@ -276,7 +275,6 @@ export function redefineElements(mapview) {
     ice = view.box.select("#ice");
     statesBody = regions.select("#statesBody");
     statesHalo = regions.select("#statesHalo");
-    provs = view.box.select("#provs");
     zones = view.box.select("#zones");
     borders = view.box.select("#borders");
     stateBorders = borders.select("#stateBorders");

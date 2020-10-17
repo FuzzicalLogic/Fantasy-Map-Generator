@@ -20,6 +20,7 @@ export const MapView = el => {
         get relig() { return this.box.select('#relig') },
         get cults() { return this.box.select('#cults') },
         get regions() { return this.box.select('#regions') },
+        get provs() { return this.box.select('#provs') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -46,4 +47,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "relig");
     box.append("g").attr("id", "cults");
     box.append("g").attr("id", "regions");
+    box.append("g").attr("id", "provs");
 }

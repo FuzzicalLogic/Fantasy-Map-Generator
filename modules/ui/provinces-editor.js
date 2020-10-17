@@ -1,6 +1,6 @@
 import {
     modules, pack,
-    provs, provinceBorders, stateBorders,
+    provinceBorders, stateBorders,
     view, zoomTo, customization
 } from "../../main.js";
 
@@ -201,7 +201,7 @@ function provinceHighlightOn(event) {
     if (!layerIsOn("toggleProvinces")) return;
     if (customization) return;
     const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
-    provs.select("#province" + province).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
+    view.provs.select("#province" + province).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
 }
 
 function provinceHighlightOff(event) {
@@ -210,7 +210,7 @@ function provinceHighlightOff(event) {
     if (el) el.classList.remove("active");
 
     if (!layerIsOn("toggleProvinces")) return;
-    provs.select("#province" + province).transition().attr("stroke-width", null).attr("stroke", null);
+    view.provs.select("#province" + province).transition().attr("stroke-width", null).attr("stroke", null);
 }
 
 function changeFill(el) {
@@ -220,7 +220,7 @@ function changeFill(el) {
     const callback = function (fill) {
         el.setAttribute("fill", fill);
         pack.provinces[p].color = fill;
-        const g = provs.select("#provincesBody");
+        const g = view.provs.select("#provincesBody");
         g.select("#province" + p).attr("fill", fill);
         g.select("#province-gap" + p).attr("stroke", fill);
     }
@@ -406,7 +406,7 @@ function changePopulation(province) {
 }
 
 function toggleFog(p, cl) {
-    const path = provs.select("#province" + p).attr("d"), id = "focusProvince" + p;
+    const path = view.provs.select("#province" + p).attr("d"), id = "focusProvince" + p;
     cl.contains("inactive") ? fog(id, path) : unfog(id);
     cl.toggle("inactive");
 }
@@ -428,7 +428,7 @@ function removeProvince(p) {
                 pack.provinces[p].removed = true;
                 unfog("focusProvince" + p);
 
-                const g = provs.select("#provincesBody");
+                const g = view.provs.select("#provincesBody");
                 g.select("#province" + p).remove();
                 g.select("#province-gap" + p).remove();
                 if (!layerIsOn("toggleBorders"))
@@ -505,7 +505,7 @@ function editProvinceName(province) {
         p.name = document.getElementById("provinceNameEditorShort").value;
         p.formName = document.getElementById("provinceNameEditorSelectForm").value;
         p.fullName = document.getElementById("provinceNameEditorFull").value;
-        provs.select("#provinceLabel" + p.i).text(p.name);
+        view.provs.select("#provinceLabel" + p.i).text(p.name);
         refreshProvincesEditor();
     }
 }
@@ -662,6 +662,7 @@ function showChart() {
 }
 
 function toggleLabels() {
+    let { provs } = view;
     const hidden = provs.select("#provinceLabels").style("display") === "none";
     provs.select("#provinceLabels").style("display", `${hidden ? "block" : "none"}`);
     provs.attr("data-labels", +hidden);
@@ -669,6 +670,7 @@ function toggleLabels() {
 
 function enterProvincesManualAssignent() {
     const body = getBody();
+    let { provs } = view;
 
     if (!layerIsOn("toggleProvinces"))
         toggleProvinces();
@@ -717,7 +719,7 @@ function selectProvinceOnMapClick() {
     const i = findCell(point[0], point[1]);
     if (pack.cells.h[i] < 20 || !pack.cells.state[i]) return;
 
-    const assigned = provs.select("g#temp").select("polygon[data-cell='" + i + "']");
+    const assigned = view.provs.select("g#temp").select("polygon[data-cell='" + i + "']");
     const province = assigned.size() ? +assigned.attr("data-province") : pack.cells.province[i];
 
     const editorLine = body.querySelector("div[data-id='" + province + "']");
@@ -733,7 +735,7 @@ function selectProvinceOnMapClick() {
 
 function selectProvince(p) {
     view.debug.selectAll("path.selected").remove();
-    const path = provs.select("#province" + p).attr("d");
+    const path = view.provs.select("#province" + p).attr("d");
     view.debug.append("path").attr("class", "selected").attr("d", path);
 }
 
@@ -794,7 +796,7 @@ function moveBrush() {
 }
 
 function applyProvincesManualAssignent() {
-    provs.select("#temp").selectAll("polygon").each(function () {
+    view.provs.select("#temp").selectAll("polygon").each(function () {
         const i = +this.dataset.cell;
         pack.cells.province[i] = +this.dataset.province;;
     });
@@ -811,6 +813,7 @@ function applyProvincesManualAssignent() {
 
 function exitProvincesManualAssignment(close) {
     const body = getBody();
+    let { provs } = view;
 
     customization = 0;
     provs.select("#temp").remove();
@@ -966,7 +969,7 @@ function removeAllProvinces() {
                 if (!layerIsOn("toggleBorders"))
                     toggleBorders();
                 else drawBorders();
-                provs.select("#provincesBody").remove();
+                view.provs.select("#provincesBody").remove();
                 turnButtonOff("toggleProvinces");
 
                 provincesEditorAddLines();

@@ -4,7 +4,7 @@ import {
     seed, pack,
     grid,
     labels, prec, ice, temperature, biomesData,
-    population, statesBody, provs,
+    population, statesBody,
     borders, stateBorders, provinceBorders,
     statesHalo,
     scale,
@@ -824,6 +824,7 @@ export function drawBorders() {
 }
 
 export function drawProvinces() {
+    let { provs } = view;
     console.time("drawProvinces");
     const labelsOn = provs.attr("data-labels") == 1;
     provs.selectAll("*").remove();
@@ -1043,7 +1044,7 @@ export function toggleProvinces(event) {
         if (event && isCtrlClick(event)) editStyle("provs");
     } else {
         if (event && isCtrlClick(event)) { editStyle("provs"); return; }
-        provs.selectAll("*").remove();
+        view.provs.selectAll("*").remove();
         turnButtonOff("toggleProvinces");
     }
 }

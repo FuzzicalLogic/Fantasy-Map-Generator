@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    statesBody, statesHalo, provs, zones,
+    statesBody, statesHalo, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
@@ -740,7 +740,7 @@ function parseLoadedData(data) {
             if (view.relig.selectAll("*").size()) turnButtonOn("toggleReligions"); else turnButtonOff("toggleReligions");
             if (view.cults.selectAll("*").size()) turnButtonOn("toggleCultures"); else turnButtonOff("toggleCultures");
             if (statesBody.selectAll("*").size()) turnButtonOn("toggleStates"); else turnButtonOff("toggleStates");
-            if (provs.selectAll("*").size()) turnButtonOn("toggleProvinces"); else turnButtonOff("toggleProvinces");
+            if (view.provs.selectAll("*").size()) turnButtonOn("toggleProvinces"); else turnButtonOff("toggleProvinces");
             if (zones.selectAll("*").size() && zones.style("display") !== "none") turnButtonOn("toggleZones"); else turnButtonOff("toggleZones");
             if (borders.style("display") !== "none") turnButtonOn("toggleBorders"); else turnButtonOff("toggleBorders");
             if (routes.style("display") !== "none" && routes.selectAll("path").size()) turnButtonOn("toggleRoutes"); else turnButtonOff("toggleRoutes");
@@ -801,7 +801,7 @@ function parseLoadedData(data) {
                 provinceBorders.attr("opacity", .8).attr("stroke", "#56566d").attr("stroke-width", .5).attr("stroke-dasharray", "1").attr("stroke-linecap", "butt");
 
                 // 1.0 adds state relations, provinces, forms and full names
-                provs = view.box.insert("g", "#borders").attr("id", "provs").attr("opacity", .6);
+                view.box.insert("g", "#borders").attr("id", "provs").attr("opacity", .6);
                 BurgsAndStates.collectStatistics();
                 BurgsAndStates.generateCampaigns();
                 BurgsAndStates.generateDiplomacy();
