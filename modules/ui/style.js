@@ -6,7 +6,7 @@ import {
     population, coastline, terrain, rivers,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, zones, oceanPattern,
-    terrs, burgLabels, burgIcons, anchors, labels, fogging,
+    burgLabels, burgIcons, anchors, labels, fogging,
     invokeActiveZooming, customization
 } from "../../main.js";
 
@@ -22,7 +22,7 @@ import { showOptions } from "./options.js";
 import { drawHeightmap, drawGrid, toggleRelief, layerIsOn } from "./layers.js";
 
 export function initialize() {
-    let { legend, texture } = view;
+    let { legend, texture, terrs } = view;
     styleElementSelect.addEventListener("change", selectStyleElement);
 
     // Handle style inputs change
@@ -421,6 +421,7 @@ function selectStyleElement() {
     if (sel === "routes" || sel === "labels" || sel == "anchors" || sel == "burgIcons" || sel === "coastline" || sel === "lakes" || sel === "borders") styleGroup.style.display = "block";
 
     if (sel === "terrs") {
+        let { terrs } = view;
         styleHeightmap.style.display = "block";
         styleHeightmapScheme.value = terrs.attr("scheme");
         styleHeightmapTerracing.value = styleHeightmapTerracingOutput.value = terrs.attr("terracing");
@@ -810,7 +811,7 @@ function applyDefaultStyle() {
     svg.select("#oceanicPattern").attr("filter", "url(#pattern1)");
 
     // heightmap style
-    terrs.attr("opacity", null).attr("filter", null).attr("mask", "url(#land)").attr("stroke", "none")
+    view.terrs.attr("opacity", null).attr("filter", null).attr("mask", "url(#land)").attr("stroke", "none")
         .attr("scheme", "bright").attr("terracing", 0).attr("skip", 5).attr("relax", 0).attr("curve", 0);
 
     // legend

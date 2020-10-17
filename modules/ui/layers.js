@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack, cells,
     grid, gridOverlay,
-    labels, prec, ice, temperature, biomes, biomesData, terrs,
+    labels, prec, ice, temperature, biomes, biomesData,
     population, regions, statesBody, provs, cults, relig, terrain,
     borders, stateBorders, provinceBorders,
     statesHalo,
@@ -225,12 +225,13 @@ export function getColorScheme() {
         green: d3.interpolateGreens,
         monochrome: d3.interpolateGreys
     };
-    let scheme = interpolations[terrs.attr("scheme")];
+    let scheme = interpolations[view.terrs.attr("scheme")];
     return d3.scaleSequential(scheme || d3.interpolateSpectral);
 }
 
 export function drawHeightmap() {
     console.time("drawHeightmap");
+    let { terrs } = view;
     terrs.selectAll("*").remove();
     const { cells, vertices } = pack,
         n = cells.i.length;
@@ -980,7 +981,7 @@ function getViewPoint(x, y) {
 }
 
 export function toggleHeight(event) {
-    if (!terrs.selectAll("*").size()) {
+    if (!view.terrs.selectAll("*").size()) {
         turnButtonOn("toggleHeight");
         drawHeightmap();
         if (event && isCtrlClick(event)) editStyle("terrs");
@@ -988,7 +989,7 @@ export function toggleHeight(event) {
         if (event && isCtrlClick(event)) { editStyle("terrs"); return; }
         if (customization === 1) { tip("You cannot turn off the layer when heightmap is in edit mode", false, "error"); return; }
         turnButtonOff("toggleHeight");
-        terrs.selectAll("*").remove();
+        view.terrs.selectAll("*").remove();
     }
 }
 

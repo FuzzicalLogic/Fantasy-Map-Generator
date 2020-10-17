@@ -54,7 +54,6 @@ MapView.initialize(view);
 let { ocean, lakes } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
-export let terrs = view.box.append("g").attr("id", "terrs");
 export let biomes = view.box.append("g").attr("id", "biomes");
 export let cells = view.box.append("g").attr("id", "cells");
 export let gridOverlay = view.box.append("g").attr("id", "gridOverlay");
@@ -284,7 +283,6 @@ export function redefineElements(mapview) {
     let { ocean } = view;
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
-    terrs = view.box.select("#terrs");
     biomes = view.box.select("#biomes");
     ice = view.box.select("#ice");
     cells = view.box.select("#cells");
