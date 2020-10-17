@@ -53,7 +53,7 @@ MapView.initialize(view);
 // append svg layers (in default order)
 let {
     ocean, lakes, regions, borders, routes, coastline, population,
-    labels, icons
+    labels, icons, fogging
 } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
@@ -68,8 +68,6 @@ export let searoutes = routes.append("g").attr("id", "searoutes");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
 export let anchors = icons.append("g").attr("id", "anchors");
 
-export let fogging = view.box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
-export let ruler = view.box.append("g").attr("id", "ruler").style("display", "none");
 view.box.append("g").attr("id", "debug");
 
 // lake and coast groups
@@ -274,8 +272,6 @@ export function redefineElements(mapview) {
     searoutes = routes.select("#searoutes");
     burgIcons = icons.select("#burgIcons");
     anchors = icons.select("#anchors");
-    ruler = view.box.select("#ruler");
-    fogging = view.box.select("#fogging");
     burgLabels = labels.select("#burgLabels");
 }
 
@@ -565,6 +561,7 @@ export function invokeActiveZooming() {
     }
 
     // rescale rulers to have always the same size
+    let { ruler } = view;
     if (ruler.style("display") !== "none") {
         const size = rn(1 / scale ** .3 * 2, 1);
         ruler.selectAll("circle").attr("r", 2 * size).attr("stroke-width", .5 * size);

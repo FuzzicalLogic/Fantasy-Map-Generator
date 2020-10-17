@@ -2,7 +2,7 @@ import {
     modules,
     graphWidth, graphHeight,
     view, scale,
-    calculateTemperatures, ruler
+    calculateTemperatures
 } from "../../main.js";
 
 import { closeDialogs, restoreDefaultEvents } from "./editors.js";
@@ -255,6 +255,7 @@ function togglePlanimeterMode() {
 }
 
 function removeAllRulers() {
+    let { ruler } = view;
     if (!ruler.selectAll("g").size()) return;
     alertMessage.innerHTML = `Are you sure you want to remove all placed rulers?`;
     $("#alert").dialog({

@@ -33,6 +33,8 @@ export const MapView = el => {
         get icons() { return this.box.select('#icons') },
         get armies() { return this.box.select('#armies') },
         get markers() { return this.box.select('#markers') },
+        get fogging() { return this.box.select('#fogging') },
+        get ruler() { return this.box.select('#ruler') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -72,4 +74,6 @@ MapView.initialize = view => {
     box.append("g").attr("id", "icons");
     box.append("g").attr("id", "armies").style("display", "none");
     box.append("g").attr("id", "markers").style("display", "none");
+    box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
+    box.append("g").attr("id", "ruler").style("display", "none");
 }

@@ -2,9 +2,9 @@ import {
     view, svg, fonts, pack,
     oceanLayers, stateBorders,
     provinceBorders,
-    ruler, roads, trails, searoutes, statesHalo,
+    roads, trails, searoutes, statesHalo,
     oceanPattern,
-    burgLabels, burgIcons, anchors, fogging,
+    burgLabels, burgIcons, anchors,
     invokeActiveZooming, customization
 } from "../../main.js";
 
@@ -790,7 +790,7 @@ function applyDefaultStyle() {
 
     view.terrain.attr("opacity", null).attr("set", "simple").attr("size", 1).attr("density", .4).attr("filter", null).attr("mask", null);
     view.rivers.attr("opacity", null).attr("fill", "#5d97bb").attr("filter", null);
-    ruler.attr("opacity", null).attr("filter", null);
+    view.ruler.attr("opacity", null).attr("filter", null);
 
     roads.attr("opacity", .9).attr("stroke", "#d06324").attr("stroke-width", .7).attr("stroke-dasharray", "2").attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
     trails.attr("opacity", .9).attr("stroke", "#d06324").attr("stroke-width", .25).attr("stroke-dasharray", ".8 1.6").attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
@@ -837,7 +837,7 @@ function applyDefaultStyle() {
     labels.select("#states").attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a").attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", stateLabelSize).attr("data-size", stateLabelSize).attr("filter", null);
     labels.select("#addedLabels").attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a").attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", 18).attr("data-size", 18).attr("filter", null);
 
-    fogging.attr("opacity", .98).attr("fill", "#30426f");
+    view.fogging.attr("opacity", .98).attr("fill", "#30426f");
 }
 
 // apply style settings in JSON

@@ -1,7 +1,7 @@
 import {
     pack,
     svg, svgWidth, svgHeight,
-    view, fogging, scale,
+    view, scale,
     zoom,
     burgIcons, anchors, burgLabels,
     elSelected
@@ -560,6 +560,7 @@ function changePickerSpace() {
 
 // add fogging
 export function fog(id, path) {
+    let { fogging } = view;
     if (view.defs.select("#fog #" + id).size())
         return;
     const fadeIn = d3.transition().duration(2000).ease(d3.easeSinInOut);
@@ -580,7 +581,7 @@ export function unfog(id) {
 
     el.remove();
     if (!view.defs.selectAll("#fog path").size())
-        fogging.style("display", "none");
+        view.fogging.style("display", "none");
 }
 
 export function getFileName(dataType) {

@@ -15,7 +15,7 @@ import {
     stateBorders, provinceBorders,
     roads, trails, searoutes,
     burgIcons, anchors,
-    ruler, fogging, burgLabels,
+    burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics,
@@ -753,7 +753,7 @@ function parseLoadedData(data) {
             if (view.icons.style("display") !== "none") turnButtonOn("toggleIcons"); else turnButtonOff("toggleIcons");
             if (armies.selectAll("*").size() && armies.style("display") !== "none") turnButtonOn("toggleMilitary"); else turnButtonOff("toggleMilitary");
             if (markers.selectAll("*").size() && markers.style("display") !== "none") turnButtonOn("toggleMarkers"); else turnButtonOff("toggleMarkers");
-            if (ruler.style("display") !== "none") turnButtonOn("toggleRulers"); else turnButtonOff("toggleRulers");
+            if (view.ruler.style("display") !== "none") turnButtonOn("toggleRulers"); else turnButtonOff("toggleRulers");
             if (view.scaleBar.style("display") !== "none") turnButtonOn("toggleScaleBar"); else turnButtonOff("toggleScaleBar");
 
             // special case for population bars
@@ -765,6 +765,7 @@ function parseLoadedData(data) {
         }()
 
         void function restoreEvents() {
+            let { ruler } = view;
             ruler.selectAll("g").call(d3.drag().on("start", dragRuler));
             ruler.selectAll("text").on("click", removeParent);
             ruler.selectAll("g.ruler circle").call(d3.drag().on("drag", dragRulerEdge));
@@ -825,8 +826,8 @@ function parseLoadedData(data) {
                 if (!view.markers.selectAll("*").size()) { addMarkers(); turnButtonOn("toggleMarkers"); }
 
                 // 1.0 add fogging layer (state focus)
-                fogging = view.box.insert("g", "#ruler").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
-                fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
+                view.box.insert("g", "#ruler").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
+                view.fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
                 view.defs.append("mask").attr("id", "fog").append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "white");
 
                 // 1.0 changes states opacity bask to regions level
