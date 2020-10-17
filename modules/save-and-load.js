@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
+    cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
@@ -160,7 +160,7 @@ export async function getMapURL(type, subtype) {
 
 // remove hidden g elements and g elements without children to make downloaded svg smaller in size
 function removeUnusedElements(clone) {
-    if (!terrain.selectAll("use").size()) clone.select("#defs-relief").remove();
+    if (!view.terrain.selectAll("use").size()) clone.select("#defs-relief").remove();
     if (markers.style("display") === "none") clone.select("#defs-markers").remove();
 
     for (let empty = 1; empty;) {
@@ -726,7 +726,7 @@ function parseLoadedData(data) {
         }()
 
         void function restoreLayersState() {
-            let { texture, compass } = view;
+            let { texture, compass, terrain } = view;
             if (texture.style("display") !== "none" && texture.select("image").size()) turnButtonOn("toggleTexture");
             else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
@@ -737,7 +737,7 @@ function parseLoadedData(data) {
             if (compass.style("display") !== "none" && compass.select("use").size()) turnButtonOn("toggleCompass"); else turnButtonOff("toggleCompass");
             if (view.rivers.style("display") !== "none") turnButtonOn("toggleRivers"); else turnButtonOff("toggleRivers");
             if (terrain.style("display") !== "none" && terrain.selectAll("*").size()) turnButtonOn("toggleRelief"); else turnButtonOff("toggleRelief");
-            if (relig.selectAll("*").size()) turnButtonOn("toggleReligions"); else turnButtonOff("toggleReligions");
+            if (view.relig.selectAll("*").size()) turnButtonOn("toggleReligions"); else turnButtonOff("toggleReligions");
             if (cults.selectAll("*").size()) turnButtonOn("toggleCultures"); else turnButtonOff("toggleCultures");
             if (statesBody.selectAll("*").size()) turnButtonOn("toggleStates"); else turnButtonOff("toggleStates");
             if (provs.selectAll("*").size()) turnButtonOn("toggleProvinces"); else turnButtonOff("toggleProvinces");
@@ -783,7 +783,7 @@ function parseLoadedData(data) {
 
             if (version < 1) {
                 // 1.0 adds a new religions layer
-                relig = view.box.insert("g", "#terrain").attr("id", "relig");
+                view.box.insert("g", "#terrain").attr("id", "relig");
                 Religions.generate();
 
                 // 1.0 adds a legend box
@@ -846,7 +846,8 @@ function parseLoadedData(data) {
 
             if (version < 1.1) {
                 // v 1.0 initial code had a bug with religion layer id
-                if (!relig.size()) relig = view.box.insert("g", "#terrain").attr("id", "relig");
+                if (!view.relig.size())
+                    view.box.insert("g", "#terrain").attr("id", "relig");
 
                 // v 1.0 initially has Sympathy status then relaced with Friendly
                 for (const s of pack.states) {
@@ -918,6 +919,7 @@ function parseLoadedData(data) {
                 unfog();
 
                 // v 1.2 added new terrain attributes
+                let { terrain } = view;
                 if (!terrain.attr("set")) terrain.attr("set", "simple");
                 if (!terrain.attr("size")) terrain.attr("size", 1);
                 if (!terrain.attr("density")) terrain.attr("density", .4);

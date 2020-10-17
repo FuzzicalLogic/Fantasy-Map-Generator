@@ -1,11 +1,12 @@
 import {
-    pack, grid,
-    terrain, biomesData
+    pack, grid, view, biomesData
 } from "../main.js";
 
 import { poissonDiscSampler, getPackPolygon, rn } from "./utils.js";
 
 export function ReliefIcons() {
+    let { terrain } = view;
+
     console.time('drawRelief');
     terrain.selectAll("*").remove();
     const density = terrain.attr("density") || .4;
@@ -106,7 +107,7 @@ function getOldIcon(type) {
 }
 
 function getIcon(type) {
-    const set = terrain.attr("set") || "simple";
+    const set = view.terrain.attr("set") || "simple";
     if (set === "simple") return "#relief-" + getOldIcon(type) + "-1";
     if (set === "colored") return "#relief-" + type + "-" + getVariant(type);
     if (set === "gray") return "#relief-" + type + "-" + getVariant(type) + "-bw";

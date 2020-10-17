@@ -7,6 +7,8 @@ import { toggleRelief, layerIsOn } from "./layers.js";
 
 export function editReliefIcon() {
     if (customization) return;
+
+    let { terrain } = view;
     closeDialogs(".stable");
     if (!layerIsOn("toggleRelief")) toggleRelief();
 

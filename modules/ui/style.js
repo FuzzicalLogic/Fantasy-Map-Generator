@@ -2,8 +2,8 @@ import {
     view, svg, fonts, pack,
     oceanLayers, armies, ice, stateBorders,
     provinceBorders,
-    relig, cults, markers, prec,
-    population, coastline, terrain,
+    cults, markers, prec,
+    population, coastline,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, zones, oceanPattern,
     burgLabels, burgIcons, anchors, labels, fogging,
@@ -22,7 +22,7 @@ import { showOptions } from "./options.js";
 import { drawHeightmap, drawGrid, toggleRelief, layerIsOn } from "./layers.js";
 
 export function initialize() {
-    let { legend, texture, terrs } = view;
+    let { legend, texture, terrs, terrain } = view;
     styleElementSelect.addEventListener("change", selectStyleElement);
 
     // Handle style inputs change
@@ -453,6 +453,7 @@ function selectStyleElement() {
         styleCompassSizeInput.value = styleCompassSizeOutput.value = tr[2];
     }
 
+    let { terrain } = view;
     if (sel === "terrain") {
         styleRelief.style.display = "block";
         styleReliefSizeOutput.innerHTML = styleReliefSizeInput.value = terrain.attr("size");
@@ -765,7 +766,7 @@ function applyDefaultStyle() {
     view.compass.attr("opacity", .8).attr("transform", null).attr("filter", null).attr("mask", "url(#water)").attr("shape-rendering", "optimizespeed");
     if (!d3.select("#initial").size()) d3.select("#rose").attr("transform", "translate(80 80) scale(.25)");
 
-    relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
+    view.relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
     cults.attr("opacity", .6).attr("stroke", "#777777").attr("stroke-width", .5).attr("filter", null);
     view.landmass.attr("opacity", 1).attr("fill", "#eef6fb").attr("filter", null);
     markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
@@ -785,7 +786,7 @@ function applyDefaultStyle() {
     coastline.select("#sea_island").attr("opacity", .5).attr("stroke", "#1f3846").attr("stroke-width", .7).attr("auto-filter", 1).attr("filter", "url(#dropShadow)");
     coastline.select("#lake_island").attr("opacity", 1).attr("stroke", "#7c8eaf").attr("stroke-width", .35).attr("filter", null);
 
-    terrain.attr("opacity", null).attr("set", "simple").attr("size", 1).attr("density", .4).attr("filter", null).attr("mask", null);
+    view.terrain.attr("opacity", null).attr("set", "simple").attr("size", 1).attr("density", .4).attr("filter", null).attr("mask", null);
     view.rivers.attr("opacity", null).attr("fill", "#5d97bb").attr("filter", null);
     ruler.attr("opacity", null).attr("filter", null);
 

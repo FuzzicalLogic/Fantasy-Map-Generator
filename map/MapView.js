@@ -16,6 +16,8 @@ export const MapView = el => {
         get coordinates() { return this.box.select('#coordinates') },
         get compass() { return this.box.select('#compass') },
         get rivers() { return this.box.select('#rivers') },
+        get terrain() { return this.box.select('#terrain') },
+        get relig() { return this.box.select('#relig') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -38,4 +40,6 @@ MapView.initialize = view => {
     box.append("g").attr("id", "coordinates");
     box.append("g").attr("id", "compass");
     box.append("g").attr("id", "rivers");
+    box.append("g").attr("id", "terrain");
+    box.append("g").attr("id", "relig");
 }

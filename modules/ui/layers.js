@@ -4,7 +4,7 @@ import {
     seed, pack,
     grid,
     labels, prec, ice, temperature, biomesData,
-    population, regions, statesBody, provs, cults, relig, terrain,
+    population, regions, statesBody, provs, cults,
     borders, stateBorders, provinceBorders,
     statesHalo,
     scale,
@@ -592,6 +592,7 @@ export function drawCultures() {
 }
 
 export function drawReligions() {
+    let { relig } = view;
     console.time("drawReligions");
 
     relig.selectAll("path").remove();
@@ -1093,6 +1094,7 @@ export function toggleCompass(event) {
 }
 
 export function toggleRelief(event) {
+    let { terrain } = view;
     if (!layerIsOn("toggleRelief")) {
         turnButtonOn("toggleRelief");
         if (!terrain.selectAll("*").size()) ReliefIcons();
@@ -1315,6 +1317,7 @@ export function toggleCultures(event) {
 
 export function toggleReligions(event) {
     const religions = pack.religions.filter(r => r.i && !r.removed);
+    let { relig } = view;
     if (!relig.selectAll("path").size() && religions.length) {
         turnButtonOn("toggleReligions");
         drawReligions();

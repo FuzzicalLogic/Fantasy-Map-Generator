@@ -1,6 +1,6 @@
 import {
     modules,
-    pack, view, relig, customization
+    pack, view, customization
 } from "../../main.js";
 
 import * as Religions from "../religions-generator.js";
@@ -179,7 +179,7 @@ function religionHighlightOn(event) {
 
     if (!layerIsOn("toggleReligions")) return;
     if (customization) return;
-    relig.select("#religion" + religion).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#c13119");
+    view.relig.select("#religion" + religion).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#c13119");
     view.debug.select("#religionsCenter" + religion).raise().transition(animate).attr("r", 8).attr("stroke-width", 2).attr("stroke", "#c13119");
 }
 
@@ -195,7 +195,7 @@ function religionHighlightOff(event) {
     const el = getBody().querySelector(`div[data-id='${religion}']`)
     if (el) el.classList.remove("active");
 
-    relig.select("#religion" + religion).transition().attr("stroke-width", null).attr("stroke", null);
+    view.relig.select("#religion" + religion).transition().attr("stroke-width", null).attr("stroke", null);
     view.debug.select("#religionsCenter" + religion).transition().attr("r", 4).attr("stroke-width", 1.2).attr("stroke", null);
 }
 
@@ -207,7 +207,7 @@ function religionChangeColor() {
     const callback = function (fill) {
         el.setAttribute("fill", fill);
         pack.religions[religion].color = fill;
-        relig.select("#religion" + religion).attr("fill", fill);
+        view.relig.select("#religion" + religion).attr("fill", fill);
         view.debug.select("#religionsCenter" + religion).attr("fill", fill);
     }
 
@@ -311,6 +311,7 @@ function changePopulation() {
 function religionRemove() {
     if (customization) return;
     const religion = +this.parentNode.dataset.id;
+    let { relig } = view;
 
     alertMessage.innerHTML = "Are you sure you want to remove the religion? <br>This action cannot be reverted";
     $("#alert").dialog({
@@ -490,7 +491,7 @@ function toggleExtinct() {
 function enterReligionsManualAssignent() {
     if (!layerIsOn("toggleReligions")) toggleReligions();
     customization = 7;
-    relig.append("g").attr("id", "temp");
+    view.relig.append("g").attr("id", "temp");
     document.querySelectorAll("#religionsBottom > button").forEach(el => el.style.display = "none");
     document.getElementById("religionsManuallyButtons").style.display = "inline-block";
     view.debug.select("#religionCenters").style("display", "none");
@@ -520,7 +521,7 @@ function selectReligionOnMapClick() {
     const i = findCell(point[0], point[1]);
     if (pack.cells.h[i] < 20) return;
 
-    const assigned = relig.select("#temp").select("polygon[data-cell='" + i + "']");
+    const assigned = view.relig.select("#temp").select("polygon[data-cell='" + i + "']");
     const religion = assigned.size() ? +assigned.attr("data-religion") : pack.cells.religion[i];
 
     const body = getBody();
@@ -544,7 +545,7 @@ function dragReligionBrush() {
 
 // change religion within selection
 function changeReligionForSelection(selection) {
-    const temp = relig.select("#temp");
+    const temp = view.relig.select("#temp");
     const selected = getBody().querySelector("div.selected");
     const r = +selected.dataset.id; // religionNew
     const color = pack.religions[r].color || "#ffffff";
@@ -568,7 +569,7 @@ function moveReligionBrush() {
 }
 
 function applyReligionsManualAssignent() {
-    const changed = relig.select("#temp").selectAll("polygon");
+    const changed = view.relig.select("#temp").selectAll("polygon");
     changed.each(function () {
         const i = +this.dataset.cell;
         const r = +this.dataset.religion;
@@ -586,7 +587,7 @@ function applyReligionsManualAssignent() {
 function exitReligionsManualAssignment(close) {
     const body = getBody();
     customization = 0;
-    relig.select("#temp").remove();
+    view.relig.select("#temp").remove();
     removeCircle();
     document.querySelectorAll("#religionsBottom > button").forEach(el => el.style.display = "inline-block");
     document.getElementById("religionsManuallyButtons").style.display = "none";
