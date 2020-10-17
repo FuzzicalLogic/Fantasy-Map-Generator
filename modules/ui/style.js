@@ -3,7 +3,7 @@ import {
     oceanLayers, armies, biomes, ice, stateBorders,
     provinceBorders, cells, gridOverlay, coordinates,
     compass, relig, cults, landmass, markers, prec,
-    population, lakes, coastline, terrain, rivers,
+    population, coastline, terrain, rivers,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, texture, zones, oceanPattern,
     terrs, burgLabels, burgIcons, anchors, labels, fogging,
@@ -774,6 +774,7 @@ function applyDefaultStyle() {
     population.select("#rural").attr("stroke", "#0000ff");
     population.select("#urban").attr("stroke", "#ff0000");
 
+    let { lakes } = view;
     lakes.select("#freshwater").attr("opacity", .5).attr("fill", "#a6c1fd").attr("stroke", "#5f799d").attr("stroke-width", .7).attr("filter", null);
     lakes.select("#salt").attr("opacity", .5).attr("fill", "#409b8a").attr("stroke", "#388985").attr("stroke-width", .7).attr("filter", null);
     lakes.select("#sinkhole").attr("opacity", 1).attr("fill", "#5bc9fd").attr("stroke", "#53a3b0").attr("stroke-width", .7).attr("filter", null);

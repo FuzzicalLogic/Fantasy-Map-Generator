@@ -51,10 +51,9 @@ export let view = MapView(document.getElementById('map'));
 MapView.initialize(view);
 
 // append svg layers (in default order)
-let { ocean } = view;
+let { ocean, lakes } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
-export let lakes = view.box.append("g").attr("id", "lakes");
 export let landmass = view.box.append("g").attr("id", "landmass");
 export let texture = view.box.append("g").attr("id", "texture");
 export let terrs = view.box.append("g").attr("id", "terrs");

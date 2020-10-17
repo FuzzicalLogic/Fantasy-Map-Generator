@@ -11,7 +11,7 @@ import {
     pack, setPack,
     nameBases, 
     oceanLayers, 
-    lakes, landmass, texture, terrs, biomes, ice,
+    landmass, texture, terrs, biomes, ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
@@ -864,6 +864,7 @@ function parseLoadedData(data) {
                     });
                 }
 
+                let { lakes } = view;
                 if (!document.getElementById("freshwater")) {
                     lakes.append("g").attr("id", "freshwater");
                     lakes.select("#freshwater").attr("opacity", .5).attr("fill", "#a6c1fd").attr("stroke", "#5f799d").attr("stroke-width", .7).attr("filter", null);
@@ -978,6 +979,7 @@ function parseLoadedData(data) {
 
             if (version < 1.4) {
                 // v 1.35 added dry lakes
+                let { lakes } = view;
                 if (!lakes.select("#dry").size()) {
                     lakes.append("g").attr("id", "dry");
                     lakes.select("#dry").attr("opacity", 1).attr("fill", "#c9bfa7").attr("stroke", "#8e816f").attr("stroke-width", .7).attr("filter", null);

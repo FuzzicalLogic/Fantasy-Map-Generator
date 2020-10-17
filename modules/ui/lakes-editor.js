@@ -100,7 +100,7 @@ export function editLake() {
         const select = document.getElementById("lakeGroup");
         select.options.length = 0; // remove all options
 
-        lakes.selectAll("g").each(function () {
+        view.lakes.selectAll("g").each(function () {
             select.options.add(new Option(this.id, this.id, false, this.id === group));
         });
     }
