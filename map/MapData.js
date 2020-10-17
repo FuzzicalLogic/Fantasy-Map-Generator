@@ -1,7 +1,7 @@
-import { Voronoi } from "./voronoi.js";
-import { randomizeOptions } from "./ui/options.js";
-import { rn } from "./utils.js";
-import { generate as generateHeight } from "./heightmap-generator.js";
+import { Voronoi } from "../modules/voronoi.js";
+import { randomizeOptions } from "../modules/ui/options.js";
+import { rn } from "../modules/utils.js";
+import { generate as generateHeight } from "../modules/heightmap-generator.js";
 export function generate(seed, w, h, view) {
     let data = MapData(seed);
     Math.seedrandom(seed);
