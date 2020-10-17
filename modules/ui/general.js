@@ -1,8 +1,9 @@
 import {
+    svg,
     graphWidth, graphHeight,
     pack, grid, notes,
     biomesData,
-    resetZoom
+    resetZoom, zoom
 } from "../../main.js";
 import { closeDialogs } from "./editors.js";
 
