@@ -2,7 +2,6 @@ import {
     view, svg, fonts, pack,
     oceanLayers, stateBorders,
     provinceBorders,
-    markers,
     ruler, roads, trails, searoutes, statesHalo,
     oceanPattern,
     burgLabels, burgIcons, anchors, fogging,
@@ -98,7 +97,7 @@ export function initialize() {
     styleShiftY.addEventListener("input", shiftElement);
 
     styleRescaleMarkers.addEventListener("change", function () {
-        markers.attr("rescale", +this.checked);
+        view.markers.attr("rescale", +this.checked);
         invokeActiveZooming();
     });
 
@@ -433,7 +432,7 @@ function selectStyleElement() {
 
     if (sel === "markers") {
         styleMarkers.style.display = "block";
-        styleRescaleMarkers.checked = +markers.attr("rescale");
+        styleRescaleMarkers.checked = +view.markers.attr("rescale");
     }
 
     if (sel === "gridOverlay") {
@@ -771,7 +770,7 @@ function applyDefaultStyle() {
     view.relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
     view.cults.attr("opacity", .6).attr("stroke", "#777777").attr("stroke-width", .5).attr("filter", null);
     view.landmass.attr("opacity", 1).attr("fill", "#eef6fb").attr("filter", null);
-    markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
+    view.markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
 
     view.prec.attr("opacity", null).attr("stroke", "#000000").attr("stroke-width", .1).attr("fill", "#003dff").attr("filter", null);
     let { population } = view;

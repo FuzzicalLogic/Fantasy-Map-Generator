@@ -1,6 +1,6 @@
 import {
     pack, grid, graphWidth, graphHeight, view,
-    markers, scale, elSelected,
+    scale, elSelected,
     elevateLakes, notes, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
 
@@ -311,7 +311,7 @@ function regenerateMarkers(event) {
 
     function addNumberOfMarkers(number) {
         // remove existing markers and assigned notes
-        markers.selectAll("use").each(function () {
+        view.markers.selectAll("use").each(function () {
             const index = notes.findIndex(n => n.id === this.id);
             if (index != -1) notes.splice(index, 1);
         }).remove();
@@ -536,6 +536,7 @@ function addMarkerOnClick() {
     const selected = markerSelectGroup.value;
     const valid = selected && d3.select("#defs-markers").select("#" + selected).size();
     const symbol = valid ? "#" + selected : "#marker0";
+    let { markers } = view;
     const added = markers.select("[data-id='" + symbol + "']").size();
     let desired = valid && added ? markers.select("[data-id='" + symbol + "']").attr("data-size") : 1;
     if (isNaN(desired)) desired = 1;

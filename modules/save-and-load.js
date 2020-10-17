@@ -15,7 +15,7 @@ import {
     stateBorders, provinceBorders,
     roads, trails, searoutes,
     burgIcons, anchors,
-    markers, ruler, fogging, burgLabels,
+    ruler, fogging, burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics,
@@ -158,14 +158,19 @@ export async function getMapURL(type, subtype) {
 
 // remove hidden g elements and g elements without children to make downloaded svg smaller in size
 function removeUnusedElements(clone) {
-    if (!view.terrain.selectAll("use").size()) clone.select("#defs-relief").remove();
-    if (markers.style("display") === "none") clone.select("#defs-markers").remove();
+    if (!view.terrain.selectAll("use").size())
+        clone.select("#defs-relief").remove();
+    if (view.markers.style("display") === "none")
+        clone.select("#defs-markers").remove();
 
     for (let empty = 1; empty;) {
         empty = 0;
         clone.selectAll("g").each(function () {
-            if (!this.hasChildNodes() || this.style.display === "none") { empty++; this.remove(); }
-            if (this.hasAttribute("display") && this.style.display === "inline") this.removeAttribute("display");
+            if (!this.hasChildNodes() || this.style.display === "none") {
+                empty++; this.remove();
+            }
+            if (this.hasAttribute("display") && this.style.display === "inline")
+                this.removeAttribute("display");
         });
     }
 }
@@ -437,7 +442,7 @@ export function saveGeoJSON_Rivers() {
 export function saveGeoJSON_Markers() {
     let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
 
-    markers._groups[0][0].childNodes.forEach(n => {
+    view.markers._groups[0][0].childNodes.forEach(n => {
         let x = mapCoordinates.lonW + (n.dataset.x / graphWidth) * mapCoordinates.lonT;
         let y = mapCoordinates.latN - (n.dataset.y / graphHeight) * mapCoordinates.latT; // this is inverted in QGIS otherwise
 
@@ -724,7 +729,7 @@ function parseLoadedData(data) {
         }()
 
         void function restoreLayersState() {
-            let { texture, compass, terrain, zones, routes, armies } = view;
+            let { texture, compass, terrain, zones, routes, armies, markers } = view;
             if (texture.style("display") !== "none" && texture.select("image").size()) turnButtonOn("toggleTexture");
             else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
@@ -817,7 +822,7 @@ function parseLoadedData(data) {
                 view.box.insert("g", "#borders").attr("id", "zones").attr("display", "none");
                 view.zones.attr("opacity", .6).attr("stroke", null).attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt");
                 addZones();
-                if (!markers.selectAll("*").size()) { addMarkers(); turnButtonOn("toggleMarkers"); }
+                if (!view.markers.selectAll("*").size()) { addMarkers(); turnButtonOn("toggleMarkers"); }
 
                 // 1.0 add fogging layer (state focus)
                 fogging = view.box.insert("g", "#ruler").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");

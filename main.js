@@ -68,7 +68,6 @@ export let searoutes = routes.append("g").attr("id", "searoutes");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
 export let anchors = icons.append("g").attr("id", "anchors");
 
-export let markers = view.box.append("g").attr("id", "markers").style("display", "none");
 export let fogging = view.box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
 export let ruler = view.box.append("g").attr("id", "ruler").style("display", "none");
 view.box.append("g").attr("id", "debug");
@@ -275,7 +274,6 @@ export function redefineElements(mapview) {
     searoutes = routes.select("#searoutes");
     burgIcons = icons.select("#burgIcons");
     anchors = icons.select("#anchors");
-    markers = view.box.select("#markers");
     ruler = view.box.select("#ruler");
     fogging = view.box.select("#fogging");
     burgLabels = labels.select("#burgLabels");
@@ -557,6 +555,7 @@ export function invokeActiveZooming() {
     }
 
     // rescale map markers
+    let { markers } = view;
     if (+markers.attr("rescale") && markers.style("display") !== "none") {
         markers.selectAll("use").each(function (d) {
             const x = +this.dataset.x, y = +this.dataset.y, desired = +this.dataset.size;
@@ -1350,7 +1349,7 @@ export function addMarkers(number = 1) {
         const id = getNextId("markerElement");
         const name = "#marker_" + type;
 
-        markers.append("use").attr("id", id)
+        view.markers.append("use").attr("id", id)
             .attr("xlink:href", name).attr("data-id", name)
             .attr("data-x", x).attr("data-y", y).attr("x", x - 15).attr("y", y - 30)
             .attr("data-size", 1).attr("width", 30).attr("height", 30);

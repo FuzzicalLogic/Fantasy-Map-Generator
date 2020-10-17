@@ -649,7 +649,7 @@ export class Battle {
         const id = getNextId("markerElement");
         notes.push({ id, name: this.name, legend });
 
-        markers.append("use").attr("id", id)
+        view.markers.append("use").attr("id", id)
             .attr("xlink:href", "#marker_battlefield").attr("data-id", "#marker_battlefield")
             .attr("data-x", this.x).attr("data-y", this.y).attr("x", this.x - 15).attr("y", this.y - 30)
             .attr("data-size", 1).attr("width", 30).attr("height", 30);
