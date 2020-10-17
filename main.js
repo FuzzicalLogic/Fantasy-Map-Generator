@@ -63,7 +63,7 @@ export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
 export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
-export let prec = view.box.append("g").attr("id", "prec").style("display", "none");
+
 export let population = view.box.append("g").attr("id", "population");
 export let labels = view.box.append("g").attr("id", "labels");
 export let icons = view.box.append("g").attr("id", "icons");
@@ -275,7 +275,6 @@ export function redefineElements(mapview) {
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");
-    prec = view.box.select("#prec");
     population = view.box.select("#population");
     labels = view.box.select("#labels");
     icons = view.box.select("#icons");
@@ -768,7 +767,7 @@ export function calculateTemperatures() {
 // simplest precipitation model
 export function generatePrecipitation() {
     console.time('generatePrecipitation');
-    prec.selectAll("*").remove();
+    view.prec.selectAll("*").remove();
     const cells = grid.cells;
     cells.prec = new Uint8Array(cells.i.length); // precipitation array
     const modifier = precInput.value / 100; // user's input
@@ -853,7 +852,7 @@ export function generatePrecipitation() {
     }
 
     void function drawWindDirection() {
-        const wind = prec.append("g").attr("id", "wind");
+        const wind = view.prec.append("g").attr("id", "wind");
 
         d3.range(0, 6).forEach(function (t) {
             if (westerly.length > 1) {

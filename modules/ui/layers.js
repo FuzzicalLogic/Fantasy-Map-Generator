@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack,
     grid,
-    labels, prec, biomesData,
+    labels, biomesData,
     population, statesBody,
     stateBorders, provinceBorders,
     statesHalo,
@@ -444,6 +444,8 @@ export function drawBiomes() {
 }
 
 export function drawPrec() {
+    let { prec } = view;
+
     prec.selectAll("circle").remove();
     const cells = grid.cells, p = grid.points;
     prec.style("display", "block");
@@ -1255,6 +1257,8 @@ export function turnButtonOn(el) {
 }
 
 export function togglePrec(event) {
+    let { prec } = view;
+
     if (!prec.selectAll("circle").size()) {
         turnButtonOn("togglePrec");
         drawPrec();
