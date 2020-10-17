@@ -5,7 +5,7 @@ import {
     compass, relig, cults, markers, prec,
     population, coastline, terrain, rivers,
     ruler, roads, trails, searoutes, regions, statesHalo,
-    provs, temperature, texture, zones, oceanPattern,
+    provs, temperature, zones, oceanPattern,
     terrs, burgLabels, burgIcons, anchors, labels, fogging,
     invokeActiveZooming, customization
 } from "../../main.js";
@@ -22,7 +22,7 @@ import { showOptions } from "./options.js";
 import { drawHeightmap, drawGrid, toggleRelief, layerIsOn } from "./layers.js";
 
 export function initialize() {
-    let { legend } = view;
+    let { legend, texture } = view;
     styleElementSelect.addEventListener("change", selectStyleElement);
 
     // Handle style inputs change
@@ -680,7 +680,7 @@ export function setBase64Texture(url) {
     xhr.onload = function () {
         const reader = new FileReader();
         reader.onloadend = function () {
-            texture.select("image").attr("xlink:href", reader.result);
+            view.texture.select("image").attr("xlink:href", reader.result);
         }
         reader.readAsDataURL(xhr.response);
     };
@@ -750,7 +750,7 @@ export function addDefaulsStyles() {
 
 // set default style
 function applyDefaultStyle() {
-    let { legend, lakes } = view;
+    let { legend, lakes, texture } = view;
     armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
     biomes.attr("opacity", null).attr("filter", null).attr("mask", null);

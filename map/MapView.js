@@ -8,6 +8,7 @@ export const MapView = el => {
         get ocean() { return this.box.select("#ocean") },
         get lakes() { return this.box.select("#lakes") },
         get landmass() { return this.box.select("#landmass") },
+        get texture() { return this.box.select("#texture") },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -22,4 +23,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "ocean");
     box.append("g").attr("id", "lakes");
     box.append("g").attr("id", "landmass");
+    box.append("g").attr("id", "texture");
 }

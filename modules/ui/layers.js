@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack, cells,
     grid, gridOverlay,
-    labels, prec, ice, temperature, biomes, biomesData, terrs, texture,
+    labels, prec, ice, temperature, biomes, biomesData, terrs,
     population, regions, statesBody, provs, cults, relig, terrain,
     borders, stateBorders, provinceBorders,
     statesHalo,
@@ -1101,10 +1101,10 @@ export function toggleTexture(event) {
     if (!layerIsOn("toggleTexture")) {
         turnButtonOn("toggleTexture");
         // append default texture image selected by default. Don't append on load to not harm performance
-        if (!texture.selectAll("*").size()) {
+        if (!view.texture.selectAll("*").size()) {
             const x = +styleTextureShiftX.value, y = +styleTextureShiftY.value;
             const href = styleTextureInput.value === "default" ? getDefaultTexture() : setBase64Texture(styleTextureInput.value);
-            texture.append("image").attr("id", "textureImage")
+            view.texture.append("image").attr("id", "textureImage")
                 .attr("x", x).attr("y", y).attr("width", graphWidth - x).attr("height", graphHeight - y)
                 .attr("xlink:href", href).attr("preserveAspectRatio", "xMidYMid slice");
         }
