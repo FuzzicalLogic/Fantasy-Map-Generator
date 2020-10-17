@@ -1,4 +1,4 @@
-import { modules, pack, statesBody, statesHalo, view, regions, customization } from "../../main.js";
+import { modules, pack, statesBody, statesHalo, view, customization } from "../../main.js";
 
 import * as BurgsAndStates from "../burgs-and-states.js";
 
@@ -115,7 +115,7 @@ function stateHighlightOn(event) {
     if (!layerIsOn("toggleStates")) return;
     const state = +event.target.dataset.id;
     if (customization || !state) return;
-    const d = regions.select("#state" + state).attr("d");
+    const d = view.regions.select("#state" + state).attr("d");
 
     const path = view.debug.append("path")
         .attr("class", "highlight")

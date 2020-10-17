@@ -51,10 +51,9 @@ export let view = MapView(document.getElementById('map'));
 MapView.initialize(view);
 
 // append svg layers (in default order)
-let { ocean, lakes } = view;
+let { ocean, lakes, regions } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
-export let regions = view.box.append("g").attr("id", "regions");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
 export let provs = view.box.append("g").attr("id", "provs");
@@ -271,11 +270,10 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function redefineElements(mapview) {
     view = mapview;
     svg = view.svg;
-    let { ocean } = view;
+    let { ocean, regions } = view;
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
     ice = view.box.select("#ice");
-    regions = view.box.select("#regions");
     statesBody = regions.select("#statesBody");
     statesHalo = regions.select("#statesHalo");
     provs = view.box.select("#provs");

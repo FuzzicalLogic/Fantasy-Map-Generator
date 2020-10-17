@@ -1,6 +1,6 @@
 import {
     modules,
-    seed, pack, regions,
+    seed, pack,
     statesBody, statesHalo,
     notes, armies, burgLabels,
     view, zoomTo, customization
@@ -226,7 +226,7 @@ function stateHighlightOn(event) {
 
     const state = +event.target.dataset.id;
     if (customization || !state) return;
-    const d = regions.select("#state" + state).attr("d");
+    const d = view.regions.select("#state" + state).attr("d");
 
     const path = view.debug.append("path").attr("class", "highlight").attr("d", d)
         .attr("fill", "none").attr("stroke", "red").attr("stroke-width", 1).attr("opacity", 1)

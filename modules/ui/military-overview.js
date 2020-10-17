@@ -1,4 +1,4 @@
-import { modules, options, pack, regions, armies, customization } from "../../main.js";
+import { modules, options, pack, armies, customization } from "../../main.js";
 
 import { closeDialogs, fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
 
@@ -138,7 +138,7 @@ export function overviewMilitary() {
         armies.select("#army" + state).transition().duration(2000).style("fill", "#ff0000");
 
         if (!layerIsOn("toggleStates")) return;
-        const d = regions.select("#state" + state).attr("d");
+        const d = view.regions.select("#state" + state).attr("d");
 
         const path = view.debug.append("path").attr("class", "highlight").attr("d", d)
             .attr("fill", "none").attr("stroke", "red").attr("stroke-width", 1).attr("opacity", 1)

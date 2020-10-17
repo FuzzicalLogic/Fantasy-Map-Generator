@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    regions, statesBody, statesHalo, provs, zones,
+    statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
@@ -782,6 +782,7 @@ function parseLoadedData(data) {
             }
 
             if (version < 1) {
+                let { regions } = view;
                 // 1.0 adds a new religions layer
                 view.box.insert("g", "#terrain").attr("id", "relig");
                 Religions.generate();

@@ -4,7 +4,7 @@ import {
     provinceBorders,
     markers, prec,
     population, coastline,
-    ruler, roads, trails, searoutes, regions, statesHalo,
+    ruler, roads, trails, searoutes, statesHalo,
     provs, temperature, zones, oceanPattern,
     burgLabels, burgIcons, anchors, labels, fogging,
     invokeActiveZooming, customization
@@ -794,7 +794,7 @@ function applyDefaultStyle() {
     trails.attr("opacity", .9).attr("stroke", "#d06324").attr("stroke-width", .25).attr("stroke-dasharray", ".8 1.6").attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
     searoutes.attr("opacity", .8).attr("stroke", "#ffffff").attr("stroke-width", .45).attr("stroke-dasharray", "1 2").attr("stroke-linecap", "round").attr("filter", null).attr("mask", null);
 
-    regions.attr("opacity", .4).attr("filter", null);
+    view.regions.attr("opacity", .4).attr("filter", null);
     statesHalo.attr("data-width", 10).attr("stroke-width", 10).attr("opacity", 1);
     provs.attr("opacity", .6).attr("filter", null);
 

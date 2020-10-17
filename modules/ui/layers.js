@@ -4,7 +4,7 @@ import {
     seed, pack,
     grid,
     labels, prec, ice, temperature, biomesData,
-    population, regions, statesBody, provs,
+    population, statesBody, provs,
     borders, stateBorders, provinceBorders,
     statesHalo,
     scale,
@@ -106,7 +106,7 @@ export function restoreLayers() {
 
     // states are getting rendered each time, if it's not required than layers should be hidden
     if (!layerIsOn("toggleBorders")) $('#borders').fadeOut();
-    if (!layerIsOn("toggleStates")) regions.style("display", "none").selectAll("path").remove();
+    if (!layerIsOn("toggleStates")) view.regions.style("display", "none").selectAll("path").remove();
 }
 
 export function layerIsOn(el) {
@@ -654,6 +654,7 @@ export function drawReligions() {
 
 // draw states
 export function drawStates() {
+    let { regions } = view;
     console.time("drawStates");
     regions.selectAll("path").remove();
 
@@ -1332,6 +1333,7 @@ export function toggleReligions(event) {
 }
 
 export function toggleStates(event) {
+    let { regions } = view;
     if (!layerIsOn("toggleStates")) {
         turnButtonOn("toggleStates");
         regions.style("display", null);
