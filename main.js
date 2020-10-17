@@ -51,7 +51,7 @@ export let view = MapView(document.getElementById('map'));
 MapView.initialize(view);
 
 // append svg layers (in default order)
-let { ocean, lakes, regions, borders, routes } = view;
+let { ocean, lakes, regions, borders, routes, coastline } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
 export let statesBody = regions.append("g").attr("id", "statesBody");
@@ -61,7 +61,6 @@ export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
 export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
-export let coastline = view.box.append("g").attr("id", "coastline");
 export let ice = view.box.append("g").attr("id", "ice").style("display", "none");
 export let prec = view.box.append("g").attr("id", "prec").style("display", "none");
 export let population = view.box.append("g").attr("id", "population");
@@ -276,7 +275,6 @@ export function redefineElements(mapview) {
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");
-    coastline = view.box.select("#coastline");
     prec = view.box.select("#prec");
     population = view.box.select("#population");
     labels = view.box.select("#labels");

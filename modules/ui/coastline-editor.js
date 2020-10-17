@@ -98,7 +98,7 @@ export function editCoastline(node = d3.event.target) {
         const select = document.getElementById("coastlineGroup");
         select.options.length = 0; // remove all options
 
-        coastline.selectAll("g").each(function () {
+        view.coastline.selectAll("g").each(function () {
             select.options.add(new Option(this.id, this.id, false, this.id === group));
         });
     }

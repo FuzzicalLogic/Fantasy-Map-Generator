@@ -15,7 +15,7 @@ import {
     statesBody, statesHalo,
     stateBorders, provinceBorders,
     roads, trails, searoutes,
-    coastline, prec, population,
+    prec, population,
     labels, icons, burgIcons, anchors,
     armies, markers, ruler, fogging, burgLabels,
     mapHistory,
@@ -878,6 +878,7 @@ function parseLoadedData(data) {
                     lakes.select("#salt").attr("opacity", .5).attr("fill", "#409b8a").attr("stroke", "#388985").attr("stroke-width", .7).attr("filter", null);
                 }
 
+                let { coastline } = view;
                 // v 1.1 added new lake and coast groups
                 if (!document.getElementById("sinkhole")) {
                     lakes.append("g").attr("id", "sinkhole");

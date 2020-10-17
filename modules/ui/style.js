@@ -3,7 +3,7 @@ import {
     oceanLayers, armies, ice, stateBorders,
     provinceBorders,
     markers, prec,
-    population, coastline,
+    population,
     ruler, roads, trails, searoutes, statesHalo,
     oceanPattern,
     burgLabels, burgIcons, anchors, labels, fogging,
@@ -104,7 +104,7 @@ export function initialize() {
     });
 
     styleCoastlineAuto.addEventListener("change", function () {
-        coastline.select("#sea_island").attr("auto-filter", +this.checked);
+        view.coastline.select("#sea_island").attr("auto-filter", +this.checked);
         styleFilter.style.display = this.checked ? "none" : "block";
         invokeActiveZooming();
     });
@@ -581,7 +581,7 @@ function selectStyleElement() {
 
     if (sel === "coastline" && styleGroupSelect.value === "sea_island") {
         styleCoastline.style.display = "block";
-        const auto = styleCoastlineAuto.checked = coastline.select("#sea_island").attr("auto-filter");
+        const auto = styleCoastlineAuto.checked = view.coastline.select("#sea_island").attr("auto-filter");
         if (auto) styleFilter.style.display = "none";
     }
 
@@ -753,7 +753,7 @@ export function addDefaulsStyles() {
 
 // set default style
 function applyDefaultStyle() {
-    let { legend, lakes, texture } = view;
+    let { legend, lakes, texture, coastline } = view;
     armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
     view.biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
