@@ -53,7 +53,7 @@ MapView.initialize(view);
 // append svg layers (in default order)
 let {
     ocean, lakes, regions, borders, routes, coastline, population,
-    labels
+    labels, icons
 } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
@@ -65,9 +65,9 @@ export let roads = routes.append("g").attr("id", "roads");
 export let trails = routes.append("g").attr("id", "trails");
 export let searoutes = routes.append("g").attr("id", "searoutes");
 
-export let icons = view.box.append("g").attr("id", "icons");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
 export let anchors = icons.append("g").attr("id", "anchors");
+
 export let armies = view.box.append("g").attr("id", "armies").style("display", "none");
 export let markers = view.box.append("g").attr("id", "markers").style("display", "none");
 export let fogging = view.box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
@@ -264,7 +264,7 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function redefineElements(mapview) {
     view = mapview;
     svg = view.svg;
-    let { ocean, regions, borders, routes, labels } = view;
+    let { ocean, regions, borders, routes, labels, icons } = view;
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
     statesBody = regions.select("#statesBody");
@@ -274,7 +274,6 @@ export function redefineElements(mapview) {
     roads = routes.select("#roads");
     trails = routes.select("#trails");
     searoutes = routes.select("#searoutes");
-    icons = view.box.select("#icons");
     burgIcons = icons.select("#burgIcons");
     anchors = icons.select("#anchors");
     armies = view.box.select("#armies");

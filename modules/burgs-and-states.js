@@ -1,7 +1,7 @@
 import {
     graphWidth, graphHeight, grid,
     seed, pack, view,
-    biomesData, burgIcons, icons, anchors, burgLabels,
+    biomesData, burgIcons, anchors, burgLabels,
     lineGen
 } from "../main.js";
 
@@ -219,7 +219,7 @@ export function drawBurgs() {
     // remove old data
     burgIcons.selectAll("circle").remove();
     burgLabels.selectAll("text").remove();
-    icons.selectAll("use").remove();
+    view.icons.selectAll("use").remove();
 
     // capitals
     const capitals = pack.burgs.filter(b => b.capital);

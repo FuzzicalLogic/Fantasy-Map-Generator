@@ -14,7 +14,7 @@ import {
     statesBody, statesHalo,
     stateBorders, provinceBorders,
     roads, trails, searoutes,
-    icons, burgIcons, anchors,
+    burgIcons, anchors,
     armies, markers, ruler, fogging, burgLabels,
     mapHistory,
     calculateVoronoi, reGraph, reMarkFeatures,
@@ -745,7 +745,7 @@ function parseLoadedData(data) {
             if (view.temperature.selectAll("*").size()) turnButtonOn("toggleTemp"); else turnButtonOff("toggleTemp");
             if (view.prec.selectAll("circle").size()) turnButtonOn("togglePrec"); else turnButtonOff("togglePrec");
             if (view.labels.style("display") !== "none") turnButtonOn("toggleLabels"); else turnButtonOff("toggleLabels");
-            if (icons.style("display") !== "none") turnButtonOn("toggleIcons"); else turnButtonOff("toggleIcons");
+            if (view.icons.style("display") !== "none") turnButtonOn("toggleIcons"); else turnButtonOff("toggleIcons");
             if (armies.selectAll("*").size() && armies.style("display") !== "none") turnButtonOn("toggleMilitary"); else turnButtonOff("toggleMilitary");
             if (markers.selectAll("*").size() && markers.style("display") !== "none") turnButtonOn("toggleMarkers"); else turnButtonOff("toggleMarkers");
             if (ruler.style("display") !== "none") turnButtonOn("toggleRulers"); else turnButtonOff("toggleRulers");
