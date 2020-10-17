@@ -22,6 +22,7 @@ export const MapView = el => {
         get regions() { return this.box.select('#regions') },
         get provs() { return this.box.select('#provs') },
         get zones() { return this.box.select('#zones') },
+        get borders() { return this.box.select('#borders') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -50,4 +51,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "regions");
     box.append("g").attr("id", "provs");
     box.append("g").attr("id", "zones").style("display", "none");
+    box.append("g").attr("id", "borders");
 }

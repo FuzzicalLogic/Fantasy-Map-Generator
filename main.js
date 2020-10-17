@@ -51,12 +51,11 @@ export let view = MapView(document.getElementById('map'));
 MapView.initialize(view);
 
 // append svg layers (in default order)
-let { ocean, lakes, regions } = view;
+let { ocean, lakes, regions, borders } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
 export let statesBody = regions.append("g").attr("id", "statesBody");
 export let statesHalo = regions.append("g").attr("id", "statesHalo");
-export let borders = view.box.append("g").attr("id", "borders");
 export let stateBorders = borders.append("g").attr("id", "stateBorders");
 export let provinceBorders = borders.append("g").attr("id", "provinceBorders");
 export let routes = view.box.append("g").attr("id", "routes");
@@ -274,7 +273,6 @@ export function redefineElements(mapview) {
     ice = view.box.select("#ice");
     statesBody = regions.select("#statesBody");
     statesHalo = regions.select("#statesHalo");
-    borders = view.box.select("#borders");
     stateBorders = borders.select("#stateBorders");
     provinceBorders = borders.select("#provinceBorders");
     routes = view.box.select("#routes");

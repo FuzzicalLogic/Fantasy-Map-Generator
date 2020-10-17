@@ -5,7 +5,7 @@ import {
     grid,
     labels, prec, ice, temperature, biomesData,
     population, statesBody,
-    borders, stateBorders, provinceBorders,
+    stateBorders, provinceBorders,
     statesHalo,
     scale,
     lineGen, invokeActiveZooming, zoom,
@@ -728,7 +728,7 @@ export function drawStates() {
 // draw state and province borders
 export function drawBorders() {
     console.time("drawBorders");
-    borders.selectAll("path").remove();
+    view.borders.selectAll("path").remove();
 
     const cells = pack.cells, vertices = pack.vertices, n = cells.i.length;
     const sPath = [], pPath = [];

@@ -13,7 +13,7 @@ import {
     oceanLayers, 
     ice,
     statesBody, statesHalo,
-    borders, stateBorders, provinceBorders,
+    stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
     labels, icons, burgIcons, anchors,
@@ -742,7 +742,7 @@ function parseLoadedData(data) {
             if (statesBody.selectAll("*").size()) turnButtonOn("toggleStates"); else turnButtonOff("toggleStates");
             if (view.provs.selectAll("*").size()) turnButtonOn("toggleProvinces"); else turnButtonOff("toggleProvinces");
             if (zones.selectAll("*").size() && zones.style("display") !== "none") turnButtonOn("toggleZones"); else turnButtonOff("toggleZones");
-            if (borders.style("display") !== "none") turnButtonOn("toggleBorders"); else turnButtonOff("toggleBorders");
+            if (view.borders.style("display") !== "none") turnButtonOn("toggleBorders"); else turnButtonOff("toggleBorders");
             if (routes.style("display") !== "none" && routes.selectAll("path").size()) turnButtonOn("toggleRoutes"); else turnButtonOff("toggleRoutes");
             if (temperature.selectAll("*").size()) turnButtonOn("toggleTemp"); else turnButtonOff("toggleTemp");
             if (prec.selectAll("circle").size()) turnButtonOn("togglePrec"); else turnButtonOff("togglePrec");
@@ -782,7 +782,7 @@ function parseLoadedData(data) {
             }
 
             if (version < 1) {
-                let { regions } = view;
+                let { regions, borders } = view;
                 // 1.0 adds a new religions layer
                 view.box.insert("g", "#terrain").attr("id", "relig");
                 Religions.generate();

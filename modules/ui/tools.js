@@ -217,7 +217,7 @@ function regenerateStates() {
         pack.states[0].diplomacy = []; // clear diplomacy
         pack.provinces = [0]; // remove all provinces
         pack.cells.state = new Uint16Array(pack.cells.i.length); // reset cells data
-        borders.selectAll("path").remove(); // remove borders
+        view.borders.selectAll("path").remove(); // remove borders
         view.regions.selectAll("path").remove(); // remove states fill
         labels.select("#states").selectAll("text"); // remove state labels
         view.defs.select("#textPaths").selectAll("path[id*='stateLabel']").remove(); // remove state labels paths
