@@ -54,7 +54,6 @@ MapView.initialize(view);
 let { ocean, lakes } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
-export let landmass = view.box.append("g").attr("id", "landmass");
 export let texture = view.box.append("g").attr("id", "texture");
 export let terrs = view.box.append("g").attr("id", "terrs");
 export let biomes = view.box.append("g").attr("id", "biomes");
@@ -163,7 +162,7 @@ options.winds = [225, 45, 225, 315, 135, 315]; // default wind directions
 applyStoredOptions();
 export let graphWidth = +mapWidthInput.value, graphHeight = +mapHeightInput.value; // voronoi graph extention, cannot be changed arter generation
 export let svgWidth = graphWidth, svgHeight = graphHeight; // svg canvas resolution, can be changed
-landmass.append("rect").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
+view.landmass.append("rect").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 oceanPattern.append("rect").attr("fill", "url(#oceanic)").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 oceanLayers.append("rect").attr("id", "oceanBase").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 
@@ -286,8 +285,6 @@ export function redefineElements(mapview) {
     let { ocean } = view;
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
-    lakes = view.box.select("#lakes");
-    landmass = view.box.select("#landmass");
     texture = view.box.select("#texture");
     terrs = view.box.select("#terrs");
     biomes = view.box.select("#biomes");

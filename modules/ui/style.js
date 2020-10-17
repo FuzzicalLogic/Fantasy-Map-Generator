@@ -2,7 +2,7 @@ import {
     view, svg, fonts, pack,
     oceanLayers, armies, biomes, ice, stateBorders,
     provinceBorders, cells, gridOverlay, coordinates,
-    compass, relig, cults, landmass, markers, prec,
+    compass, relig, cults, markers, prec,
     population, coastline, terrain, rivers,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, texture, zones, oceanPattern,
@@ -750,7 +750,7 @@ export function addDefaulsStyles() {
 
 // set default style
 function applyDefaultStyle() {
-    let { legend } = view;
+    let { legend, lakes } = view;
     armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
     biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
@@ -766,7 +766,7 @@ function applyDefaultStyle() {
 
     relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
     cults.attr("opacity", .6).attr("stroke", "#777777").attr("stroke-width", .5).attr("filter", null);
-    landmass.attr("opacity", 1).attr("fill", "#eef6fb").attr("filter", null);
+    view.landmass.attr("opacity", 1).attr("fill", "#eef6fb").attr("filter", null);
     markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
 
     prec.attr("opacity", null).attr("stroke", "#000000").attr("stroke-width", .1).attr("fill", "#003dff").attr("filter", null);
@@ -774,7 +774,6 @@ function applyDefaultStyle() {
     population.select("#rural").attr("stroke", "#0000ff");
     population.select("#urban").attr("stroke", "#ff0000");
 
-    let { lakes } = view;
     lakes.select("#freshwater").attr("opacity", .5).attr("fill", "#a6c1fd").attr("stroke", "#5f799d").attr("stroke-width", .7).attr("filter", null);
     lakes.select("#salt").attr("opacity", .5).attr("fill", "#409b8a").attr("stroke", "#388985").attr("stroke-width", .7).attr("filter", null);
     lakes.select("#sinkhole").attr("opacity", 1).attr("fill", "#5bc9fd").attr("stroke", "#53a3b0").attr("stroke-width", .7).attr("filter", null);

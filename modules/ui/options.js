@@ -4,7 +4,7 @@ import {
     svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
     graphWidth, setWidth, graphHeight, setHeight,
     zoom, resetZoom,
-    landmass, oceanPattern, oceanLayers,
+    view, oceanPattern, oceanLayers,
     mapHistory, regenerateMap,
     customization
 } from "../../main.js";
@@ -261,7 +261,7 @@ export function changeMapSize() {
     const maxWidth = Math.max(+doc.mapWidthInput().value, graphWidth);
     const maxHeight = Math.max(+doc.mapHeightInput().value, graphHeight);
     zoom.translateExtent([[0, 0], [maxWidth, maxHeight]]);
-    landmass.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
+    view.landmass.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
     oceanPattern.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
     oceanLayers.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
 

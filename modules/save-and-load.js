@@ -11,7 +11,7 @@ import {
     pack, setPack,
     nameBases, 
     oceanLayers, 
-    landmass, texture, terrs, biomes, ice,
+    texture, terrs, biomes, ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
