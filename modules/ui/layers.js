@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack, cells,
     grid, gridOverlay,
-    labels, prec, ice, temperature, biomes, biomesData,
+    labels, prec, ice, temperature, biomesData,
     population, regions, statesBody, provs, cults, relig, terrain,
     borders, stateBorders, provinceBorders,
     statesHalo,
@@ -396,6 +396,7 @@ export function drawTemp() {
 }
 
 export function drawBiomes() {
+    let { biomes } = view;
     biomes.selectAll("path").remove();
     const cells = pack.cells, vertices = pack.vertices, n = cells.i.length;
     const used = new Uint8Array(cells.i.length);
@@ -1006,6 +1007,7 @@ export function toggleTemp(event) {
 }
 
 export function toggleBiomes(event) {
+    let { biomes } = view;
     if (!biomes.selectAll("path").size()) {
         turnButtonOn("toggleBiomes");
         drawBiomes();

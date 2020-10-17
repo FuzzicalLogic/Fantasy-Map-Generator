@@ -11,7 +11,7 @@ import {
     pack, setPack,
     nameBases, 
     oceanLayers, 
-    biomes, ice,
+    ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
@@ -729,7 +729,7 @@ function parseLoadedData(data) {
         void function restoreLayersState() {
             if (view.texture.style("display") !== "none" && view.texture.select("image").size()) turnButtonOn("toggleTexture"); else turnButtonOff("toggleTexture");
             if (view.terrs.selectAll("*").size()) turnButtonOn("toggleHeight"); else turnButtonOff("toggleHeight");
-            if (biomes.selectAll("*").size()) turnButtonOn("toggleBiomes"); else turnButtonOff("toggleBiomes");
+            if (view.biomes.selectAll("*").size()) turnButtonOn("toggleBiomes"); else turnButtonOff("toggleBiomes");
             if (cells.selectAll("*").size()) turnButtonOn("toggleCells"); else turnButtonOff("toggleCells");
             if (gridOverlay.selectAll("*").size()) turnButtonOn("toggleGrid"); else turnButtonOff("toggleGrid");
             if (coordinates.selectAll("*").size()) turnButtonOn("toggleCoordinates"); else turnButtonOff("toggleCoordinates");

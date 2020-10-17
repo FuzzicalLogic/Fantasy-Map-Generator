@@ -1,7 +1,7 @@
 import {
     modules,
     view,
-    pack, biomes, biomesData,
+    pack, biomesData,
     defineBiomes, setBiomesData, applyDefaultBiomesSystem, customization
 } from "../../main.js";
 import { ReliefIcons } from "../relief-icons.js";
@@ -144,14 +144,14 @@ function biomeHighlightOn(event) {
     if (customization === 6) return;
     const biome = +event.target.dataset.id;
     const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
-    biomes.select("#biome" + biome).raise().transition(animate).attr("stroke-width", 2).attr("stroke", "#cd4c11");
+    view.biomes.select("#biome" + biome).raise().transition(animate).attr("stroke-width", 2).attr("stroke", "#cd4c11");
 }
 
 function biomeHighlightOff(event) {
     if (customization === 6) return;
     const biome = +event.target.dataset.id;
     const color = biomesData.color[biome];
-    biomes.select("#biome" + biome).transition().attr("stroke-width", .7).attr("stroke", color);
+    view.biomes.select("#biome" + biome).transition().attr("stroke-width", .7).attr("stroke", color);
 }
 
 function biomeChangeColor(el) {
@@ -161,7 +161,7 @@ function biomeChangeColor(el) {
     const callback = function (fill) {
         el.setAttribute("fill", fill);
         biomesData.color[biome] = fill;
-        biomes.select("#biome" + biome).attr("fill", fill).attr("stroke", fill);
+        view.biomes.select("#biome" + biome).attr("fill", fill).attr("stroke", fill);
     }
 
     openPicker(currentFill, callback);
@@ -307,7 +307,7 @@ function downloadBiomesData() {
 function enterBiomesCustomizationMode() {
     if (!layerIsOn("toggleBiomes")) toggleBiomes();
     customization = 6;
-    biomes.append("g").attr("id", "temp");
+    view.biomes.append("g").attr("id", "temp");
 
     const body = getBody();
     document.querySelectorAll("#biomesBottom > button").forEach(el => el.style.display = "none");
@@ -337,7 +337,7 @@ function selectBiomeOnMapClick() {
     const i = findCell(point[0], point[1]);
     if (pack.cells.h[i] < 20) { tip("You cannot reassign water via biomes. Please edit the Heightmap to change water", false, "error"); return; }
 
-    const assigned = biomes.select("#temp").select("polygon[data-cell='" + i + "']");
+    const assigned = view.biomes.select("#temp").select("polygon[data-cell='" + i + "']");
     const biome = assigned.size() ? +assigned.attr("data-biome") : pack.cells.biome[i];
 
     const body = getBody();
@@ -362,7 +362,7 @@ function dragBiomeBrush() {
 // change region within selection
 function changeBiomeForSelection(selection) {
     const body = getBody();
-    const temp = biomes.select("#temp");
+    const temp = view.biomes.select("#temp");
     const selected = body.querySelector("div.selected");
 
     const biomeNew = selected.dataset.id;
@@ -387,7 +387,7 @@ function moveBiomeBrush() {
 }
 
 function applyBiomesChange() {
-    const changed = biomes.select("#temp").selectAll("polygon");
+    const changed = view.biomes.select("#temp").selectAll("polygon");
     changed.each(function () {
         const i = +this.dataset.cell;
         const b = +this.dataset.biome;
@@ -403,7 +403,7 @@ function applyBiomesChange() {
 
 function exitBiomesCustomizationMode(close) {
     customization = 0;
-    biomes.select("#temp").remove();
+    view.biomes.select("#temp").remove();
     removeCircle();
 
     document.querySelectorAll("#biomesBottom > button").forEach(el => el.style.display = "inline-block");
