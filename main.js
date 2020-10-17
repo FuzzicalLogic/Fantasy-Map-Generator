@@ -44,6 +44,11 @@ import {
 import { initialize as initOptions, applyStoredOptions, applyMapSize, randomizeOptions } from "./modules/ui/options.js";
 import { initialize as initTools } from "./modules/ui/tools.js";
 
+export let svg = d3.select("#map");
+
+import { MapView } from "./map/MapView.js";
+export let view = MapView(document.getElementById('map'));
+
 // Necessary Load order -- Prior to main
 initUtilities();
 Religions.initialize();
