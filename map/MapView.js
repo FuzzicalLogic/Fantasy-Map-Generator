@@ -12,3 +12,8 @@ export const MapView = el => {
         }
     }
 }
+
+MapView.initialize = view => {
+    view.svg.append("g").attr("id", "legend");
+    view.box.append("g").attr("id", "ocean");
+}

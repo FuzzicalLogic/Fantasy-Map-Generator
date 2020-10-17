@@ -5,7 +5,7 @@ import {
     compass, relig, cults, landmass, markers, prec,
     population, lakes, coastline, terrain, rivers,
     ruler, roads, trails, searoutes, regions, statesHalo,
-    provs, temperature, texture, zones, ocean, oceanPattern,
+    provs, temperature, texture, zones, oceanPattern,
     terrs, burgLabels, burgIcons, anchors, labels, fogging,
     invokeActiveZooming, customization
 } from "../../main.js";
@@ -803,7 +803,7 @@ function applyDefaultStyle() {
 
     // ocean and svg default style
     svg.attr("background-color", "#000000").attr("data-filter", null).attr("filter", null);
-    ocean.attr("opacity", null);
+    view.ocean.attr("opacity", null);
     oceanLayers.select("rect").attr("fill", "#466eab"); // old color #53679f
     oceanLayers.attr("filter", null).attr("layers", "-6,-3,-1");
     oceanPattern.attr("opacity", null);

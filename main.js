@@ -48,10 +48,10 @@ export let svg = d3.select("#map");
 
 import { MapView } from "./map/MapView.js";
 export let view = MapView(document.getElementById('map'));
+MapView.initialize(view);
 
 // append svg layers (in default order)
-view.svg.append("g").attr("id", "legend");
-export let ocean = view.box.append("g").attr("id", "ocean");
+let { ocean } = view;
 export let oceanLayers = ocean.append("g").attr("id", "oceanLayers");
 export let oceanPattern = ocean.append("g").attr("id", "oceanPattern");
 export let lakes = view.box.append("g").attr("id", "lakes");
@@ -284,7 +284,7 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function redefineElements(mapview) {
     view = mapview;
     svg = view.svg;
-    ocean = view.box.select("#ocean");
+    let { ocean } = view;
     oceanLayers = ocean.select("#oceanLayers");
     oceanPattern = ocean.select("#oceanPattern");
     lakes = view.box.select("#lakes");

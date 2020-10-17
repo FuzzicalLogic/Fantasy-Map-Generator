@@ -10,7 +10,7 @@ import {
     biomesData, setBiomesData, applyDefaultBiomesSystem,
     pack, setPack,
     nameBases, 
-    ocean, oceanLayers, oceanPattern,
+    oceanLayers, 
     lakes, landmass, texture, terrs, biomes, ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
