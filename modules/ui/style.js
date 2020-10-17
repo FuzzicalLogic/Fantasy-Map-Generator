@@ -1,6 +1,6 @@
 import {
     view, svg, fonts, pack,
-    oceanLayers, armies, ice, stateBorders,
+    oceanLayers, armies, stateBorders,
     provinceBorders,
     markers, prec,
     population,
@@ -757,7 +757,7 @@ function applyDefaultStyle() {
     armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
 
     view.biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
-    ice.attr("opacity", .8).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");
+    view.ice.attr("opacity", .8).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");
     stateBorders.attr("opacity", .8).attr("stroke", "#56566d").attr("stroke-width", 1).attr("stroke-dasharray", "2").attr("stroke-linecap", "butt").attr("filter", null);
     provinceBorders.attr("opacity", .8).attr("stroke", "#56566d").attr("stroke-width", .2).attr("stroke-dasharray", "1").attr("stroke-linecap", "butt").attr("filter", null);
     view.cells.attr("opacity", null).attr("stroke", "#808080").attr("stroke-width", .1).attr("filter", null).attr("mask", null);

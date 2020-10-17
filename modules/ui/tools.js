@@ -1,7 +1,7 @@
 import {
     pack, grid, graphWidth, graphHeight, view,
     markers, labels, scale, elSelected,
-    elevateLakes, ice, notes, customization, rankCells, addMarkers, addZones
+    elevateLakes, notes, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
 
 import * as Rivers from "../river-generator.js";
@@ -301,7 +301,7 @@ function regenerateMilitary() {
 
 function regenerateIce() {
     if (!layerIsOn("toggleIce")) toggleIce();
-    ice.selectAll("*").remove();
+    view.ice.selectAll("*").remove();
     drawIce();
 }
 

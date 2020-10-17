@@ -11,7 +11,6 @@ import {
     pack, setPack,
     nameBases, 
     oceanLayers, 
-    ice,
     statesBody, statesHalo,
     stateBorders, provinceBorders,
     roads, trails, searoutes,
@@ -991,8 +990,8 @@ function parseLoadedData(data) {
                 }
 
                 // v 1.4 added ice layer
-                ice = view.box.insert("g", "#coastline").attr("id", "ice").style("display", "none");
-                ice.attr("opacity", null).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");
+                view.box.insert("g", "#coastline").attr("id", "ice").style("display", "none");
+                view.ice.attr("opacity", null).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");
                 drawIce();
 
                 // v 1.4 added icon and power attributes for units

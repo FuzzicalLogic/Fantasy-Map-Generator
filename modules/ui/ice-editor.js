@@ -6,6 +6,8 @@ import { editStyle } from "./style.js";
 import { toggleIce, layerIsOn } from "./layers.js";
 
 export function editIce() {
+    let { ice } = view;
+
     if (customization) return;
     closeDialogs(".stable");
     if (!layerIsOn("toggleIce")) toggleIce();

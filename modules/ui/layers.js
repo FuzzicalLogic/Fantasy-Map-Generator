@@ -3,7 +3,7 @@ import {
     svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack,
     grid,
-    labels, prec, ice, biomesData,
+    labels, prec, biomesData,
     population, statesBody,
     stateBorders, provinceBorders,
     statesHalo,
@@ -492,6 +492,7 @@ export function drawIce() {
     const shieldMin = -6; // max temp to form ice shield (glacier)
     const icebergMax = 2; // max temp to form an iceberg
 
+    let { ice } = view;
     for (const i of grid.cells.i) {
         const t = temp[i];
         if (t > icebergMax) continue; // too warm: no ice
@@ -1298,7 +1299,7 @@ export function toggleIce() {
     if (!layerIsOn("toggleIce")) {
         turnButtonOn("toggleIce");
         $('#ice').fadeIn();
-        if (!ice.selectAll("*").size()) drawIce();
+        if (!view.ice.selectAll("*").size()) drawIce();
         if (event && isCtrlClick(event)) editStyle("ice");
     } else {
         if (event && isCtrlClick(event)) { editStyle("ice"); return; }
