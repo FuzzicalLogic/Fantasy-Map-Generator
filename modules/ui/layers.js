@@ -1,7 +1,7 @@
 "use strict";
 import {
-    svg, svgWidth, svgHeight, graphWidth, graphHeight,
-    seed, pack, cells, defs,
+    svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
+    seed, pack, cells,
     grid, gridOverlay,
     labels, prec, ice, temperature, biomes, biomesData, terrs, texture,
     population, regions, statesBody, provs, cults, relig, terrain,
@@ -687,8 +687,8 @@ export function drawStates() {
     const gapData = gap.map((p, i) => [p.length > 10 ? p : null, i, states[i].color]).filter(d => d[0]);
     statesBody.selectAll(".path").data(gapData).enter().append("path").attr("d", d => d[0]).attr("fill", "none").attr("stroke", d => d[2]).attr("id", d => "state-gap" + d[1]);
 
-    defs.select("#statePaths").selectAll("clipPath").remove();
-    defs.select("#statePaths").selectAll("clipPath").data(bodyData).enter().append("clipPath").attr("id", d => "state-clip" + d[1]).append("use").attr("href", d => "#state" + d[1]);
+    view.defs.select("#statePaths").selectAll("clipPath").remove();
+    view.defs.select("#statePaths").selectAll("clipPath").data(bodyData).enter().append("clipPath").attr("id", d => "state-clip" + d[1]).append("use").attr("href", d => "#state" + d[1]);
     statesHalo.selectAll(".path").data(bodyData).enter().append("path")
         .attr("d", d => d[0]).attr("stroke", d => d3.color(d[2]) ? d3.color(d[2]).darker().hex() : "#666666")
         .attr("id", d => "state-border" + d[1]).attr("clip-path", d => "url(#state-clip" + d[1] + ")");

@@ -1,5 +1,5 @@
 import {
-    modules, defs,
+    modules,
     labels,
     view, lineGen, debug
 } from "../../main.js";
@@ -315,7 +315,7 @@ export function editLabel() {
     function editLabelAlign() {
         const bbox = elSelected.node().getBBox();
         const c = [bbox.x + bbox.width / 2, bbox.y + bbox.height / 2];
-        const path = defs.select("#textPath_" + elSelected.attr("id"));
+        const path = view.defs.select("#textPath_" + elSelected.attr("id"));
         path.attr("d", `M${c[0] - bbox.width},${c[1]}h${bbox.width * 2}`);
         drawControlPointsAndLine();
     }
@@ -333,7 +333,7 @@ export function editLabel() {
             buttons: {
                 Remove: function () {
                     $(this).dialog("close");
-                    defs.select("#textPath_" + elSelected.attr("id")).remove();
+                    view.defs.select("#textPath_" + elSelected.attr("id")).remove();
                     elSelected.remove();
                     $("#labelEditor").dialog("close");
                 },

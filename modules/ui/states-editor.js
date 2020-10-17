@@ -1,6 +1,6 @@
 import {
     modules,
-    seed, pack, defs, regions, debug,
+    seed, pack, regions, debug,
     statesBody, statesHalo,
     notes, armies, burgLabels,
     view, zoomTo, legend, customization
@@ -131,7 +131,7 @@ function statesEditorAddLines() {
         totalArea += area;
         totalPopulation += population;
         totalBurgs += s.burgs;
-        const focused = defs.select("#fog #focusState" + s.i).size();
+        const focused = view.defs.select("#fog #focusState" + s.i).size();
 
         if (!s.i) {
             // Neutral line
@@ -222,7 +222,7 @@ function getTypeOptions(type) {
 
 function stateHighlightOn(event) {
     if (!layerIsOn("toggleStates")) return;
-    if (defs.select("#fog path").size()) return;
+    if (view.defs.select("#fog path").size()) return;
 
     const state = +event.target.dataset.id;
     if (customization || !state) return;

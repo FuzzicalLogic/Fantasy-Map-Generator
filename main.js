@@ -59,8 +59,6 @@ export let svg = d3.select("#map");
 import { MapView } from "./map/MapView.js";
 export let view = MapView(document.getElementById('map'));
 
-export let defs = svg.select("#deftemp");
-//export let viewbox = svg.select("#viewbox");
 export let scaleBar = svg.select("#scaleBar");
 export let legend = svg.append("g").attr("id", "legend");
 export let ocean = view.box.append("g").attr("id", "ocean");
@@ -285,7 +283,6 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function redefineElements(mapview) {
     view = mapview;
     svg = view.svg;
-    defs = svg.select("#deftemp");
     scaleBar = svg.select("#scaleBar");
     legend = view.svg.select("#legend");
     ocean = view.box.select("#ocean");
@@ -982,8 +979,8 @@ export function drawCoastline() {
     const cells = pack.cells, vertices = pack.vertices, n = cells.i.length, features = pack.features;
     const used = new Uint8Array(features.length); // store conneted features
     const largestLand = d3.scan(features.map(f => f.land ? f.cells : 0), (a, b) => b - a);
-    const landMask = defs.select("#land");
-    const waterMask = defs.select("#water");
+    const landMask = view.defs.select("#land");
+    const waterMask = view.defs.select("#water");
     lineGen.curve(d3.curveBasisClosed);
 
     for (const i of cells.i) {
@@ -1770,7 +1767,7 @@ export const regenerateMap = debounce(function () {
 // clear the map
 export function undraw() {
     view.box.selectAll("path, circle, polygon, line, text, use, #zones > g, #armies > g, #ruler > g").remove();
-    defs.selectAll("path, clipPath").remove();
+    view.defs.selectAll("path, clipPath").remove();
     notes = [];
     unfog();
 }

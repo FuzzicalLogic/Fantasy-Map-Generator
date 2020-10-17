@@ -1,6 +1,6 @@
 import {
     modules,
-    grid, defs,
+    grid,
     view,
     reGraph, resetZoom, rankCells
 } from "../../main.js";
@@ -78,7 +78,7 @@ export function editHeightmap() {
             view.box.selectAll("#landmass, #lakes").style("display", "none");
             changeOnlyLand.checked = true;
         } else if (type === "risk") {
-            defs.selectAll("#land, #water").selectAll("path").remove();
+            view.defs.selectAll("#land, #water").selectAll("path").remove();
             view.box.selectAll("#coastline path, #lakes path, #oceanLayers path").remove();
             changeOnlyLand.checked = false;
         }

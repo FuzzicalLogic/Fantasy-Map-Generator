@@ -75,7 +75,7 @@ export function editLake() {
         const points = vertices.map(v => pack.vertices.p[v]);
         const d = round(lineGen(points));
         elSelected.attr("d", d);
-        defs.select("mask#land > path#land_" + f).attr("d", d); // update land mask
+        view.defs.select("mask#land > path#land_" + f).attr("d", d); // update land mask
 
         const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
         const area = Math.abs(d3.polygonArea(points));

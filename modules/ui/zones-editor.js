@@ -1,7 +1,7 @@
 import {
     modules,
     graphWidth, graphHeight,
-    pack, defs, view, zones, legend, customization
+    pack, view, zones, legend, customization
 } from "../../main.js";
 
 import { editStyle } from "./style.js";
@@ -71,7 +71,7 @@ function zonesEditorAddLines() {
         const population = rural + urban;
         const populationTip = `Total population: ${si(population)}; Rural population: ${si(rural)}; Urban population: ${si(urban)}. Click to change`;
         const inactive = this.style.display === "none";
-        const focused = defs.select("#fog #focus" + this.id).size();
+        const focused = view.defs.select("#fog #focus" + this.id).size();
 
         lines += `<div class="states" data-id="${this.id}" data-fill="${fill}" data-description="${description}" data-cells=${c.length} data-area=${area} data-population=${population}>
         <svg data-tip="Zone fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${fill}" class="fillRect pointer"></svg>

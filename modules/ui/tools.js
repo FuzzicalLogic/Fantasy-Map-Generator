@@ -220,7 +220,7 @@ function regenerateStates() {
         borders.selectAll("path").remove(); // remove borders
         regions.selectAll("path").remove(); // remove states fill
         labels.select("#states").selectAll("text"); // remove state labels
-        defs.select("#textPaths").selectAll("path[id*='stateLabel']").remove(); // remove state labels paths
+        view.defs.select("#textPaths").selectAll("path[id*='stateLabel']").remove(); // remove state labels paths
 
         if (document.getElementById("burgsOverviewRefresh").offsetParent) burgsOverviewRefresh.click();
         if (document.getElementById("statesEditorRefresh").offsetParent) statesEditorRefresh.click();
@@ -376,7 +376,7 @@ function addLabelOnClick() {
         .append("textPath").attr("xlink:href", "#textPath_" + id).attr("startOffset", "50%").attr("font-size", "100%")
         .append("tspan").attr("x", x).text(name);
 
-    defs.select("#textPaths")
+    view.defs.select("#textPaths")
         .append("path").attr("id", "textPath_" + id)
         .attr("d", `M${point[0] - width},${point[1]} h${width * 2}`);
 

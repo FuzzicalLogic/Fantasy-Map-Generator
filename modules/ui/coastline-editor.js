@@ -1,4 +1,4 @@
-import { modules, view, defs, lineGen, pack } from "../../main.js";
+import { modules, view, lineGen, pack } from "../../main.js";
 
 import { closeDialogs, unselect } from "./editors.js";
 
@@ -72,8 +72,8 @@ export function editCoastline(node = d3.event.target) {
         const points = clipPoly(vertices.map(v => pack.vertices.p[v]), 1);
         const d = round(lineGen(points));
         elSelected.attr("d", d);
-        defs.select("mask#land > path#land_" + f).attr("d", d); // update land mask
-        defs.select("mask#water > path#water_" + f).attr("d", d); // update water mask
+        view.defs.select("mask#land > path#land_" + f).attr("d", d); // update land mask
+        view.defs.select("mask#water > path#water_" + f).attr("d", d); // update water mask
 
         const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
         const area = Math.abs(d3.polygonArea(points));

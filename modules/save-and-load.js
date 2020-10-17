@@ -10,7 +10,7 @@ import {
     biomesData, setBiomesData, applyDefaultBiomesSystem,
     pack, setPack,
     nameBases, 
-    defs, scaleBar, legend, ocean, oceanLayers, oceanPattern,
+    scaleBar, legend, ocean, oceanLayers, oceanPattern,
     lakes, landmass, texture, terrs, biomes, ice,
     cells, gridOverlay, coordinates, compass,
     rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
@@ -821,7 +821,7 @@ function parseLoadedData(data) {
                 // 1.0 add fogging layer (state focus)
                 fogging = view.box.insert("g", "#ruler").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");
                 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
-                defs.append("mask").attr("id", "fog").append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "white");
+                view.defs.append("mask").attr("id", "fog").append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "white");
 
                 // 1.0 changes states opacity bask to regions level
                 if (statesBody.attr("opacity")) {
@@ -889,8 +889,8 @@ function parseLoadedData(data) {
                 }
 
                 // v 1.1 features stores more data
-                defs.select("#land").selectAll("path").remove();
-                defs.select("#water").selectAll("path").remove();
+                view.defs.select("#land").selectAll("path").remove();
+                view.defs.select("#water").selectAll("path").remove();
                 coastline.selectAll("path").remove();
                 lakes.selectAll("path").remove();
                 drawCoastline();

@@ -1,5 +1,5 @@
 import {
-    modules, pack, defs,
+    modules, pack,
     provs, provinceBorders, stateBorders, debug,
     view, zoomTo, customization
 } from "../../main.js";
@@ -146,7 +146,7 @@ function provincesEditorAddLines() {
         const stateName = pack.states[p.state].name;
         const capital = p.burg ? pack.burgs[p.burg].name : '';
         const separable = p.burg && p.burg !== pack.states[p.state].capital;
-        const focused = defs.select("#fog #focusProvince" + p.i).size();
+        const focused = view.defs.select("#fog #focusProvince" + p.i).size();
         lines += `<div class="states" data-id=${p.i} data-name="${p.name}" data-form="${p.formName}" data-color="${p.color}" data-capital="${capital}" data-state="${stateName}" data-area=${area} data-population=${population}>
         <svg data-tip="Province fill style. Click to change" width=".9em" height=".9em" style="margin-bottom:-1px"><rect x="0" y="0" width="100%" height="100%" fill="${p.color}" class="fillRect pointer"></svg>
         <input data-tip="Province name. Click to change" class="name pointer" value="${p.name}" readonly>

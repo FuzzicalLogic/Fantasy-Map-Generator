@@ -1,7 +1,7 @@
 import {
     pack,
     svg, svgWidth, svgHeight,
-    defs, debug,
+    debug,
     view, legend, fogging, scale,
     zoom,
     burgIcons, anchors, burgLabels,
@@ -551,12 +551,13 @@ function changePickerSpace() {
 
 // add fogging
 export function fog(id, path) {
-    if (defs.select("#fog #" + id).size()) return;
+    if (view.defs.select("#fog #" + id).size())
+        return;
     const fadeIn = d3.transition().duration(2000).ease(d3.easeSinInOut);
-    if (defs.select("#fog path").size()) {
-        defs.select("#fog").append("path").attr("d", path).attr("id", id).attr("opacity", 0).transition(fadeIn).attr("opacity", 1);
+    if (view.defs.select("#fog path").size()) {
+        view.defs.select("#fog").append("path").attr("d", path).attr("id", id).attr("opacity", 0).transition(fadeIn).attr("opacity", 1);
     } else {
-        defs.select("#fog").append("path").attr("d", path).attr("id", id).attr("opacity", 1);
+        view.defs.select("#fog").append("path").attr("d", path).attr("id", id).attr("opacity", 1);
         const opacity = fogging.attr("opacity");
         fogging.style("display", "block").attr("opacity", 0).transition(fadeIn).attr("opacity", opacity);
     }
@@ -564,11 +565,13 @@ export function fog(id, path) {
 
 // remove fogging
 export function unfog(id) {
-    let el = defs.select("#fog #" + id);
-    if (!id || !el.size()) el = defs.select("#fog").selectAll("path");
+    let el = view.defs.select("#fog #" + id);
+    if (!id || !el.size())
+        el = view.defs.select("#fog").selectAll("path");
 
     el.remove();
-    if (!defs.selectAll("#fog path").size()) fogging.style("display", "none");
+    if (!view.defs.selectAll("#fog path").size())
+        fogging.style("display", "none");
 }
 
 export function getFileName(dataType) {
