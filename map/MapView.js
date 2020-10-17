@@ -15,6 +15,7 @@ export const MapView = el => {
         get gridOverlay() { return this.box.select('#gridOverlay') },
         get coordinates() { return this.box.select('#coordinates') },
         get compass() { return this.box.select('#compass') },
+        get rivers() { return this.box.select('#rivers') },
         get debug() { return this.box.select("#debug") },
         layers: {
 
@@ -36,4 +37,5 @@ MapView.initialize = view => {
     box.append("g").attr("id", "gridOverlay");
     box.append("g").attr("id", "coordinates");
     box.append("g").attr("id", "compass");
+    box.append("g").attr("id", "rivers");
 }

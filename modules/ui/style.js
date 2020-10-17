@@ -3,7 +3,7 @@ import {
     oceanLayers, armies, ice, stateBorders,
     provinceBorders,
     relig, cults, markers, prec,
-    population, coastline, terrain, rivers,
+    population, coastline, terrain,
     ruler, roads, trails, searoutes, regions, statesHalo,
     provs, temperature, zones, oceanPattern,
     burgLabels, burgIcons, anchors, labels, fogging,
@@ -786,7 +786,7 @@ function applyDefaultStyle() {
     coastline.select("#lake_island").attr("opacity", 1).attr("stroke", "#7c8eaf").attr("stroke-width", .35).attr("filter", null);
 
     terrain.attr("opacity", null).attr("set", "simple").attr("size", 1).attr("density", .4).attr("filter", null).attr("mask", null);
-    rivers.attr("opacity", null).attr("fill", "#5d97bb").attr("filter", null);
+    view.rivers.attr("opacity", null).attr("fill", "#5d97bb").attr("filter", null);
     ruler.attr("opacity", null).attr("filter", null);
 
     roads.attr("opacity", .9).attr("stroke", "#d06324").attr("stroke-width", .7).attr("stroke-dasharray", "2").attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);

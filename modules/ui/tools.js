@@ -1,6 +1,6 @@
 import {
     pack, grid, graphWidth, graphHeight, view,
-    markers, routes, rivers, labels, scale, elSelected,
+    markers, routes, labels, scale, elSelected,
     elevateLakes, ice, notes, zones, customization, rankCells, addMarkers, addZones
 } from "../../main.js";
 
@@ -459,7 +459,7 @@ function addRiverOnClick() {
         }
 
         // extend old river
-        rivers.select("#river" + r).remove();
+        view.rivers.select("#river" + r).remove();
         cells.i.filter(i => cells.r[i] === river).forEach(i => cells.r[i] = r);
         riverCells.forEach(i => cells.r[i] = 0);
         river = r;
@@ -471,7 +471,7 @@ function addRiverOnClick() {
     const width = Math.random() * .5 + .9;
     const increment = Math.random() * .4 + .8;
     const [path, length] = Rivers.getPath(points, width, increment);
-    rivers.append("path").attr("d", path).attr("id", "river" + river).attr("data-width", width).attr("data-increment", increment);
+    view.rivers.append("path").attr("d", path).attr("id", "river" + river).attr("data-width", width).attr("data-increment", increment);
 
     // add new river to data or change extended river attributes
     const r = pack.rivers.find(r => r.i === river);

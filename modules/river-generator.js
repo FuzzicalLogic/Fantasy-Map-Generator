@@ -1,7 +1,7 @@
 import {
-    seed, pack,
+    seed, pack, view,
     grid, graphWidth, graphHeight,
-    lineGen, rivers
+    lineGen
 } from "../main.js";
 
 import * as Names from "./names-generator.js";
@@ -131,8 +131,8 @@ export const generate = function (changeHeights = true) {
         }
 
         // drawRivers
-        rivers.selectAll("path").remove();
-        rivers.selectAll("path").data(riverPaths).enter()
+        view.rivers.selectAll("path").remove();
+        view.rivers.selectAll("path").data(riverPaths).enter()
             .append("path").attr("d", d => d[1]).attr("id", d => "river" + d[0])
             .attr("data-width", d => d[2]).attr("data-increment", d => d[3]);
     }()
@@ -278,7 +278,7 @@ export function getName(cell) {
 export function remove(id) {
     const cells = pack.cells;
     const riversToRemove = pack.rivers.filter(r => r.i === id || getBasin(r.i, r.parent, id) === id).map(r => r.i);
-    riversToRemove.forEach(r => rivers.select("#river" + r).remove());
+    riversToRemove.forEach(r => view.rivers.select("#river" + r).remove());
     cells.r.forEach((r, i) => {
         if (!r || !riversToRemove.includes(r)) return;
         cells.r[i] = 0;

@@ -1,4 +1,4 @@
-import { modules, pack, rivers, customization } from "../../main.js";
+import { modules, pack, view, customization } from "../../main.js";
 
 import { closeDialogs, fitContent, applySorting, getFileName, downloadFile, highlightElement } from "./editors.js";
 
@@ -76,12 +76,12 @@ export function overviewRivers() {
     function riverHighlightOn(event) {
         if (!layerIsOn("toggleRivers")) toggleRivers();
         const r = +event.target.dataset.id;
-        rivers.select("#river" + r).attr("stroke", "red").attr("stroke-width", 1);
+        view.rivers.select("#river" + r).attr("stroke", "red").attr("stroke-width", 1);
     }
 
     function riverHighlightOff() {
         const r = +event.target.dataset.id;
-        rivers.select("#river" + r).attr("stroke", null).attr("stroke-width", null);
+        view.rivers.select("#river" + r).attr("stroke", null).attr("stroke-width", null);
     }
 
     function changeRiverName() {
@@ -107,11 +107,12 @@ export function overviewRivers() {
 
     function zoomToRiver() {
         const r = +this.parentNode.dataset.id;
-        const river = rivers.select("#river" + r).node();
+        const river = view.rivers.select("#river" + r).node();
         highlightElement(river);
     }
 
     function toggleBasinsHightlight() {
+        let { rivers } = view;
         if (rivers.attr("data-basin") === "hightlighted") {
             rivers.selectAll("*").attr("fill", null);
             rivers.attr("data-basin", null);
@@ -181,7 +182,7 @@ export function overviewRivers() {
 
     function removeAllRivers() {
         pack.rivers = [];
-        rivers.selectAll("*").remove();
+        view.rivers.selectAll("*").remove();
         riversOverviewAddLines();
     }
 

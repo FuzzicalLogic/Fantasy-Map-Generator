@@ -12,7 +12,7 @@ import {
     nameBases, 
     oceanLayers, 
     ice,
-    rivers, terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
+    terrain, relig, cults, regions, statesBody, statesHalo, provs, zones,
     borders, stateBorders, provinceBorders,
     routes, roads, trails, searoutes,
     temperature, coastline, prec, population,
@@ -420,7 +420,7 @@ export function saveGeoJSON_Roads() {
 export function saveGeoJSON_Rivers() {
     let data = "{ \"type\": \"FeatureCollection\", \"features\": [\n";
 
-    rivers._groups[0][0].childNodes.forEach(n => {
+    view.rivers._groups[0][0].childNodes.forEach(n => {
         data += "{\n   \"type\": \"Feature\",\n   \"geometry\": { \"type\": \"LineString\", \"coordinates\": ";
         data += JSON.stringify(getRiverPoints(n));
         data += " },\n   \"properties\": {\n";
@@ -735,7 +735,7 @@ function parseLoadedData(data) {
             if (view.gridOverlay.selectAll("*").size()) turnButtonOn("toggleGrid"); else turnButtonOff("toggleGrid");
             if (view.coordinates.selectAll("*").size()) turnButtonOn("toggleCoordinates"); else turnButtonOff("toggleCoordinates");
             if (compass.style("display") !== "none" && compass.select("use").size()) turnButtonOn("toggleCompass"); else turnButtonOff("toggleCompass");
-            if (rivers.style("display") !== "none") turnButtonOn("toggleRivers"); else turnButtonOff("toggleRivers");
+            if (view.rivers.style("display") !== "none") turnButtonOn("toggleRivers"); else turnButtonOff("toggleRivers");
             if (terrain.style("display") !== "none" && terrain.selectAll("*").size()) turnButtonOn("toggleRelief"); else turnButtonOff("toggleRelief");
             if (relig.selectAll("*").size()) turnButtonOn("toggleReligions"); else turnButtonOff("toggleReligions");
             if (cults.selectAll("*").size()) turnButtonOn("toggleCultures"); else turnButtonOff("toggleCultures");
@@ -934,7 +934,7 @@ function parseLoadedData(data) {
 
                 // v 1.21 added rivers data to pack
                 pack.rivers = []; // rivers data
-                rivers.selectAll("path").each(function () {
+                view.rivers.selectAll("path").each(function () {
                     const i = +this.id.slice(5);
                     const length = this.getTotalLength() / 2;
                     const s = this.getPointAtLength(length), e = this.getPointAtLength(0);
