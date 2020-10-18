@@ -110,6 +110,7 @@ initOptions();
 initStyle();
 initStorage();
 
+window.invokeActiveZooming = invokeActiveZooming;
 
 // assign events separately as not a viewbox child
 view.scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
