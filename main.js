@@ -68,6 +68,21 @@ export let searoutes = routes.append("g").attr("id", "searoutes");
 export let burgIcons = icons.append("g").attr("id", "burgIcons");
 export let anchors = icons.append("g").attr("id", "anchors");
 
+view.box.append("g").attr("id", "debug");
+
+// lake and coast groups
+lakes.append("g").attr("id", "freshwater");
+lakes.append("g").attr("id", "salt");
+lakes.append("g").attr("id", "sinkhole");
+lakes.append("g").attr("id", "frozen");
+lakes.append("g").attr("id", "lava");
+lakes.append("g").attr("id", "dry");
+coastline.append("g").attr("id", "sea_island");
+coastline.append("g").attr("id", "lake_island");
+
+labels.append("g").attr("id", "states");
+labels.append("g").attr("id", "addedLabels");
+
 export let burgLabels = labels.append("g").attr("id", "burgLabels");
 burgIcons.append("g").attr("id", "cities");
 burgLabels.append("g").attr("id", "cities");
@@ -77,6 +92,15 @@ burgIcons.append("g").attr("id", "towns");
 burgLabels.append("g").attr("id", "towns");
 anchors.append("g").attr("id", "towns");
 
+// population groups
+population.append("g").attr("id", "rural");
+population.append("g").attr("id", "urban");
+
+// fogging
+fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
+fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
+
+
 // Necessary Load order -- Prior to main
 initUtilities();
 Religions.initialize();
@@ -85,6 +109,7 @@ initGeneral();
 initOptions();
 initStyle();
 initStorage();
+
 
 // assign events separately as not a viewbox child
 view.scaleBar.on("mousemove", () => tip("Click to open Units Editor"));
