@@ -59,7 +59,9 @@ export function editRoute(onClick) {
     function drawControlPoints(node) {
         const l = node.getTotalLength();
         const increment = l / Math.ceil(l / 4);
-        for (let i = 0; i <= l; i += increment) { addControlPoint(node.getPointAtLength(i)); }
+        for (let i = 0; i <= l; i += increment) {
+            addControlPoint(node.getPointAtLength(i));
+        }
         routeLength.innerHTML = rn(l * distanceScaleInput.value) + " " + distanceUnitInput.value;
     }
 

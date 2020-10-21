@@ -94,20 +94,28 @@ export function initialize() {
 }
 
 function processFeatureRegeneration(event, button) {
-    if (button === "regenerateStateLabels") { BurgsAndStates.drawStateLabels(); if (!layerIsOn("toggleLabels")) toggleLabels(); } else
-        if (button === "regenerateReliefIcons") { ReliefIcons(); if (!layerIsOn("toggleRelief")) toggleRelief(); } else
-            if (button === "regenerateRoutes") { Routes.regenerate(); if (!layerIsOn("toggleRoutes")) toggleRoutes(); } else
-                if (button === "regenerateRivers") regenerateRivers(); else
-                    if (button === "regeneratePopulation") recalculatePopulation(); else
-                        if (button === "regenerateBurgs") regenerateBurgs(); else
-                            if (button === "regenerateStates") regenerateStates(); else
-                                if (button === "regenerateProvinces") regenerateProvinces(); else
-                                    if (button === "regenerateReligions") regenerateReligions(); else
-                                        if (button === "regenerateCultures") regenerateCultures(); else
-                                            if (button === "regenerateMilitary") regenerateMilitary(); else
-                                                if (button === "regenerateIce") regenerateIce(); else
-                                                    if (button === "regenerateMarkers") regenerateMarkers(event); else
-                                                        if (button === "regenerateZones") regenerateZones(event);
+    if (button === "regenerateStateLabels") {
+        BurgsAndStates.drawStateLabels();
+        if (!layerIsOn("toggleLabels")) toggleLabels();
+    }
+    else if (button === "regenerateReliefIcons") {
+        ReliefIcons();
+        if (!layerIsOn("toggleRelief")) toggleRelief();
+    }
+    else if (button === "regenerateRoutes") {
+        Routes.regenerate(pack);
+        if (!layerIsOn("toggleRoutes")) toggleRoutes();
+    } else if (button === "regenerateRivers") regenerateRivers();
+    else if (button === "regeneratePopulation") recalculatePopulation();
+    else if (button === "regenerateBurgs") regenerateBurgs();
+    else if (button === "regenerateStates") regenerateStates();
+    else if (button === "regenerateProvinces") regenerateProvinces();
+    else if (button === "regenerateReligions") regenerateReligions();
+    else if (button === "regenerateCultures") regenerateCultures();
+    else if (button === "regenerateMilitary") regenerateMilitary();
+    else if (button === "regenerateIce") regenerateIce();
+    else if (button === "regenerateMarkers") regenerateMarkers(event);
+    else if (button === "regenerateZones") regenerateZones(event);
 }
 
 function regenerateRivers() {

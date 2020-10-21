@@ -355,8 +355,11 @@ export function focusOn() {
 
 // find burg for MFCG and focus on it
 export function findBurgForMFCG(params) {
-    const cells = pack.cells, burgs = pack.burgs;
-    if (pack.burgs.length < 2) { console.error("Cannot select a burg for MFCG"); return; }
+    const { cells, burgs } = pack;
+    if (pack.burgs.length < 2) {
+        console.error("Cannot select a burg for MFCG");
+        return;
+    }
 
     // used for selection
     const size = +params.get("size");
@@ -386,11 +389,11 @@ export function findBurgForMFCG(params) {
     const b = burgs[burgId];
     const referrer = new URL(document.referrer);
     for (let p of referrer.searchParams) {
-        if (p[0] === "name") b.name = p[1]; else
-            if (p[0] === "size") b.population = +p[1]; else
-                if (p[0] === "seed") b.MFCG = +p[1]; else
-                    if (p[0] === "shantytown") b.shanty = +p[1]; else
-                        b[p[0]] = +p[1]; // other parameters
+        if (p[0] === "name") b.name = p[1];
+        else if (p[0] === "size") b.population = +p[1];
+        else if (p[0] === "seed") b.MFCG = +p[1];
+        else if (p[0] === "shantytown") b.shanty = +p[1];
+        else b[p[0]] = +p[1]; // other parameters
     }
     b.MFCGlink = document.referrer; // set direct link to MFCG
     if (params.get("name") && params.get("name") != "null") b.name = params.get("name");
