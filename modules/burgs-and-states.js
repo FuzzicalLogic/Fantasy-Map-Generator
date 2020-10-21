@@ -592,7 +592,8 @@ export function collectStatistics({ cells, states, burgs }) {
         const s = cells.state[i];
 
         // check for neighboring states
-        cells.c[i].filter(c => cells.h[c] >= 20 && cells.state[c] !== s).forEach(c => states[s].neighbors.add(cells.state[c]));
+        cells.c[i].filter(c => cells.h[c] >= 20 && cells.state[c] !== s)
+            .forEach(c => states[s].neighbors.add(cells.state[c]));
 
         // collect stats
         states[s].cells += 1;
