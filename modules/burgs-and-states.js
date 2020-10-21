@@ -31,7 +31,7 @@ export function generate() {
     normalizeStates();
     specifyBurgs();
 
-    Routes.regenerate(pack);
+    Routes.generate(pack);
 
     collectStatistics(pack);
     assignColors();

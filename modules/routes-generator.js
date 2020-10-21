@@ -5,7 +5,33 @@ export const addEventListener = (...args) => emitter.addEventListener(...args);
 export const removeEventListener = (...args) => emitter.removeEventListener(...args);
 export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 
-export function getRoads(pack) {
+export function generate(pack) {
+    view.routes.selectAll("path").remove();
+    pack.cells.road = new Uint16Array(pack.cells.i.length);
+    pack.cells.crossroad = new Uint16Array(pack.cells.i.length);
+
+    dispatchEvent(new CustomEvent('add', {
+        detail: {
+            type: 'road',
+            data: getRoads(pack)
+        }
+    }));
+    dispatchEvent(new CustomEvent('add', {
+        detail: {
+            type: 'trail',
+            data: getTrails(pack)
+        }
+    }));
+    dispatchEvent(new CustomEvent('add', {
+        detail: {
+            type: 'searoute',
+            data: getSearoutes(pack)
+        }
+    }));
+
+}
+
+function getRoads(pack) {
     console.time("generateMainRoads");
     const cells = pack.cells, burgs = pack.burgs.filter(b => b.i && !b.removed);
     const capitals = burgs.filter(b => b.capital);
@@ -26,7 +52,7 @@ export function getRoads(pack) {
     return paths;
 }
 
-export function getTrails(pack) {
+function getTrails(pack) {
     console.time("generateTrails");
     const cells = pack.cells, burgs = pack.burgs.filter(b => b.i && !b.removed);
     if (burgs.length < 2) return []; // not enough burgs to build trails
@@ -60,7 +86,7 @@ export function getTrails(pack) {
     return paths;
 }
 
-export function getSearoutes(pack) {
+function getSearoutes(pack) {
     console.time("generateSearoutes");
     const allPorts = pack.burgs.filter(b => b.port > 0 && !b.removed);
     if (allPorts.length < 2) return [];
@@ -97,32 +123,6 @@ export function getSearoutes(pack) {
 
     console.timeEnd("generateSearoutes");
     return paths;
-}
-
-export function regenerate(pack) {
-    view.routes.selectAll("path").remove();
-    pack.cells.road = new Uint16Array(pack.cells.i.length);
-    pack.cells.crossroad = new Uint16Array(pack.cells.i.length);
-
-    dispatchEvent(new CustomEvent('add', {
-        detail: {
-            type: 'road',
-            data: getRoads(pack)
-        }
-    }));
-    dispatchEvent(new CustomEvent('add', {
-        detail: {
-            type: 'trail',
-            data: getTrails(pack)
-        }
-    }));
-    dispatchEvent(new CustomEvent('add', {
-        detail: {
-            type: 'searoute',
-            data: getSearoutes(pack)
-        }
-    }));
-
 }
 
 

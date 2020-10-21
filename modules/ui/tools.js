@@ -103,7 +103,7 @@ function processFeatureRegeneration(event, button) {
         if (!layerIsOn("toggleRelief")) toggleRelief();
     }
     else if (button === "regenerateRoutes") {
-        Routes.regenerate(pack);
+        Routes.generate(pack);
         if (!layerIsOn("toggleRoutes")) toggleRoutes();
     } else if (button === "regenerateRivers") regenerateRivers();
     else if (button === "regeneratePopulation") recalculatePopulation();
@@ -189,7 +189,7 @@ function regenerateBurgs() {
     BurgsAndStates.specifyBurgs();
     BurgsAndStates.defineBurgFeatures();
     BurgsAndStates.drawBurgs();
-    Routes.regenerate(pack);
+    Routes.generate(pack);
 
     if (document.getElementById("burgsOverviewRefresh").offsetParent) burgsOverviewRefresh.click();
     if (document.getElementById("statesEditorRefresh").offsetParent) statesEditorRefresh.click();
