@@ -1,10 +1,4 @@
-import {
-    grid, lineGen,
-    pack,
-    biomesData, roads, trails, searoutes
-} from "../main.js";
-
-import { round } from "./utils.js";
+import { grid, view, biomesData }  from "../main.js";
 
 const emitter = new EventTarget();
 export const addEventListener = (...args) => emitter.addEventListener(...args);
