@@ -5,6 +5,12 @@ import {
 } from "../main.js";
 
 import { round } from "./utils.js";
+
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 export function getRoads(pack) {
     console.time("generateMainRoads");
     const cells = pack.cells, burgs = pack.burgs.filter(b => b.i && !b.removed);
@@ -99,53 +105,30 @@ export function getSearoutes(pack) {
     return paths;
 }
 
-export function draw(main, small, ocean) {
-    console.time("drawRoutes");
-    const cells = pack.cells, burgs = pack.burgs;
-    lineGen.curve(d3.curveCatmullRom.alpha(0.1));
-
-    // main routes
-    roads.selectAll("path").data(main).enter().append("path")
-        .attr("id", (d, i) => "road" + i)
-        .attr("d", d => round(lineGen(d.map(c => {
-            const b = cells.burg[c];
-            const x = b ? burgs[b].x : cells.p[c][0];
-            const y = b ? burgs[b].y : cells.p[c][1];
-            return [x, y];
-        })), 1));
-
-    // small routes
-    trails.selectAll("path").data(small).enter().append("path")
-        .attr("id", (d, i) => "trail" + i)
-        .attr("d", d => round(lineGen(d.map(c => {
-            const b = cells.burg[c];
-            const x = b ? burgs[b].x : cells.p[c][0];
-            const y = b ? burgs[b].y : cells.p[c][1];
-            return [x, y];
-        })), 1));
-
-    // ocean routes
-    lineGen.curve(d3.curveBundle.beta(1));
-    searoutes.selectAll("path").data(ocean).enter().append("path")
-        .attr("id", (d, i) => "searoute" + i)
-        .attr("d", d => round(lineGen(d.map(c => {
-            const b = cells.burg[c];
-            const x = b ? burgs[b].x : cells.p[c][0];
-            const y = b ? burgs[b].y : cells.p[c][1];
-            return [x, y];
-        })), 1));
-
-    console.timeEnd("drawRoutes");
-}
-
 export function regenerate(pack) {
     view.routes.selectAll("path").remove();
     pack.cells.road = new Uint16Array(pack.cells.i.length);
     pack.cells.crossroad = new Uint16Array(pack.cells.i.length);
-    const main = getRoads();
-    const small = getTrails();
-    const ocean = getSearoutes();
-    draw(main, small, ocean);
+
+    dispatchEvent(new CustomEvent('add', {
+        detail: {
+            type: 'road',
+            data: getRoads(pack)
+        }
+    }));
+    dispatchEvent(new CustomEvent('add', {
+        detail: {
+            type: 'trail',
+            data: getTrails(pack)
+        }
+    }));
+    dispatchEvent(new CustomEvent('add', {
+        detail: {
+            type: 'searoute',
+            data: getSearoutes(pack)
+        }
+    }));
+
 }
 
 

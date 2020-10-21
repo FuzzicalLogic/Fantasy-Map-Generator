@@ -38,7 +38,7 @@ export function generate() {
 
     generateCampaigns();
     generateDiplomacy();
-    Routes.draw(capitalRoutes, townRoutes, oceanRoutes);
+
     drawBurgs();
 
     function placeCapitals() {

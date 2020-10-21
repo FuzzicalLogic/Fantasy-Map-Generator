@@ -100,6 +100,7 @@ population.append("g").attr("id", "urban");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
+import "./map/RoutesLayer.js";
 
 // Necessary Load order -- Prior to main
 initUtilities();
