@@ -5,30 +5,17 @@ export const addEventListener = (...args) => emitter.addEventListener(...args);
 export const removeEventListener = (...args) => emitter.removeEventListener(...args);
 export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 
+const generators = {
+    'road': getRoads, 'trail': getTrails, 'searoute': getSearoutes
+};
 export function generate(pack) {
     view.routes.selectAll("path").remove();
     pack.cells.road = new Uint16Array(pack.cells.i.length);
     pack.cells.crossroad = new Uint16Array(pack.cells.i.length);
 
-    dispatchEvent(new CustomEvent('add', {
-        detail: {
-            type: 'road',
-            data: getRoads(pack)
-        }
-    }));
-    dispatchEvent(new CustomEvent('add', {
-        detail: {
-            type: 'trail',
-            data: getTrails(pack)
-        }
-    }));
-    dispatchEvent(new CustomEvent('add', {
-        detail: {
-            type: 'searoute',
-            data: getSearoutes(pack)
-        }
-    }));
-
+    Object.keys(generators).map(x => new CustomEvent('add', {
+        detail: { type: x, data: generators[x](pack) }
+    })).map(x => dispatchEvent(x));
 }
 
 function getRoads(pack) {
