@@ -15,9 +15,9 @@ import {
 } from "./utils.js";
 import { toggleLabels, layerIsOn } from "./ui/layers.js";
 
-
 export function generate() {
-    const cells = pack.cells, cultures = pack.cultures, n = cells.i.length;
+    const { cells, cultures } = pack,
+        n = cells.i.length;
 
     cells.burg = new Uint16Array(n); // cell burg
     cells.road = new Uint16Array(n); // cell road power
@@ -25,15 +25,13 @@ export function generate() {
 
     const burgs = pack.burgs = placeCapitals();
     pack.states = createStates();
-    const capitalRoutes = Routes.getRoads();
 
     placeTowns();
     expandStates();
     normalizeStates();
-    const townRoutes = Routes.getTrails();
     specifyBurgs();
 
-    const oceanRoutes = Routes.getSearoutes();
+    Routes.regenerate(pack);
 
     collectStatistics();
     assignColors();

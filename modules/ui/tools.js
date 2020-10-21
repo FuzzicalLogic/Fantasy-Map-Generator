@@ -181,7 +181,7 @@ function regenerateBurgs() {
     BurgsAndStates.specifyBurgs();
     BurgsAndStates.defineBurgFeatures();
     BurgsAndStates.drawBurgs();
-    Routes.regenerate();
+    Routes.regenerate(pack);
 
     if (document.getElementById("burgsOverviewRefresh").offsetParent) burgsOverviewRefresh.click();
     if (document.getElementById("statesEditorRefresh").offsetParent) statesEditorRefresh.click();
