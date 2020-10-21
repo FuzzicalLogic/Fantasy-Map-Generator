@@ -26,14 +26,14 @@ export function generate() {
     const burgs = pack.burgs = placeCapitals();
     pack.states = createStates();
 
-    placeTowns();
+    placeTowns(burgs, cells);
     expandStates();
     normalizeStates();
     specifyBurgs();
 
     Routes.regenerate(pack);
 
-    collectStatistics();
+    collectStatistics(pack);
     assignColors();
 
     generateCampaigns();
@@ -109,7 +109,7 @@ export function generate() {
     }
 
     // place secondary settlements based on geo and economical evaluation
-    function placeTowns() {
+    function placeTowns(burgs, cells) {
         console.time('placeTowns');
         const score = new Int16Array(cells.s.map(s => s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
         const sorted = cells.i.filter(i => !cells.burg[i] && score[i] > 0 && cells.culture[i]).sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
@@ -579,9 +579,9 @@ export function drawStateLabels(list) {
 }
 
 // calculate states data like area, population etc.
-export function collectStatistics() {
+export function collectStatistics({ cells, states, burgs }) {
     console.time("collectStatistics");
-    const cells = pack.cells, states = pack.states;
+
     states.forEach(s => {
         s.cells = s.area = s.burgs = s.rural = s.urban = 0;
         s.neighbors = new Set();
@@ -599,7 +599,7 @@ export function collectStatistics() {
         states[s].area += cells.area[i];
         states[s].rural += cells.pop[i];
         if (cells.burg[i]) {
-            states[s].urban += pack.burgs[cells.burg[i]].population;
+            states[s].urban += burgs[cells.burg[i]].population;
             states[s].burgs++;
         }
     }
