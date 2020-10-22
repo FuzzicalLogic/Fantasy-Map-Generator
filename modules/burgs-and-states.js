@@ -23,7 +23,7 @@ export function generate() {
     cells.road = new Uint16Array(n); // cell road power
     cells.crossroad = new Uint16Array(n); // cell crossroad power
 
-    const burgs = pack.burgs = placeCapitals();
+    const burgs = pack.burgs = placeCapitals(cells, +regionsInput.value);
     pack.states = createStates();
 
     placeTowns(burgs, cells);
@@ -41,9 +41,8 @@ export function generate() {
 
     drawBurgs();
 
-    function placeCapitals() {
+    function placeCapitals(cells, count) {
         console.time('placeCapitals');
-        let count = +regionsInput.value;
         let burgs = [0];
 
         const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement

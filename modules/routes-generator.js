@@ -195,7 +195,7 @@ function findOceanPath(cells, start, exit = null, toRoute = null) {
     queue.queue({ e: start, p: 0 });
 
     while (queue.length) {
-        const next = queue.dequeue(), n = next.e, p = next.p;
+        const next = queue.dequeue(), { p, e: n } = next;
         if (toRoute && n !== start && cells.road[n]) return [from, n, true];
 
         for (const c of cells.c[n]) {
