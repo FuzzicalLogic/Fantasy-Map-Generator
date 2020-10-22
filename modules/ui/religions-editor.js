@@ -629,7 +629,7 @@ function addReligion() {
     if (occupied) { tip("This cell is already a religion center. Please select a different cell", false, "error"); return; }
 
     if (d3.event.shiftKey === false) exitAddReligionMode();
-    Religions.add(center);
+    Religions.add(center, pack);
 
     drawReligions();
     refreshReligionsEditor();

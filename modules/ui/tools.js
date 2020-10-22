@@ -288,7 +288,7 @@ function regenerateProvinces() {
 }
 
 function regenerateReligions() {
-    Religions.generate();
+    Religions.generate(religionsInput.value, pack);
     if (!layerIsOn("toggleReligions")) toggleReligions(); else drawReligions();
 }
 
@@ -296,7 +296,7 @@ function regenerateCultures() {
     Cultures.generate();
     Cultures.expand();
     BurgsAndStates.updateCultures();
-    Religions.updateCultures();
+    Religions.updateCultures(pack);
     if (!layerIsOn("toggleCultures")) toggleCultures(); else drawCultures();
     refreshAllEditors();
 }
