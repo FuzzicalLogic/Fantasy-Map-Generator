@@ -18,15 +18,7 @@ export const generate = function (changeHeights = true) {
     Math.seedrandom(seed);
     const cells = pack.cells, p = cells.p, features = pack.features;
 
-    // build distance field in cells from water (cells.t)
-    void function markupLand() {
-        const q = t => cells.i.filter(i => cells.t[i] === t);
-        for (let t = 2, queue = q(t); queue.length; t++ , queue = q(t)) {
-            queue.forEach(i => cells.c[i].forEach(c => {
-                if (!cells.t[c]) cells.t[c] = t + 1;
-            }));
-        }
-    }()
+    markupLand(cells);
 
     // height with added t value to make map less depressed
     const h = Array.from(cells.h)
@@ -113,29 +105,6 @@ export const generate = function (changeHeights = true) {
         });
     }()
 
-    void function defineRivers() {
-        pack.rivers = []; // rivers data
-        const riverPaths = []; // temporary data for all rivers
-
-        for (let r = 1; r <= riverNext; r++) {
-            const riverSegments = riversData.filter(d => d.river === r);
-
-            if (riverSegments.length > 2) {
-                const riverEnhanced = addMeandring(riverSegments);
-                const width = rn(.8 + Math.random() * .4, 1); // river width modifier
-                const increment = rn(.8 + Math.random() * .6, 1); // river bed widening modifier
-                const [path, length] = getPath(riverEnhanced, width, increment);
-                riverPaths.push([r, path, width, increment]);
-                const source = riverSegments[0], mouth = riverSegments[riverSegments.length - 2];
-                const parent = source.parent || 0;
-                pack.rivers.push({ i: r, parent, length, source: source.cell, mouth: mouth.cell });
-            } else {
-                // remove too short rivers
-                riverSegments.filter(s => cells.r[s.cell] === r).forEach(s => cells.r[s.cell] = 0);
-            }
-        }
-
-    }()
     dispatchEvent(new CustomEvent('add', {
         detail: defineRivers(pack, riverNext, riversData)
     }));
@@ -144,6 +113,42 @@ export const generate = function (changeHeights = true) {
     if (changeHeights) cells.h = Uint8Array.from(h);
 
     console.timeEnd('generateRivers');
+}
+
+// build distance field in cells from water (cells.t)
+function markupLand(cells) {
+    const q = t => cells.i.filter(i => cells.t[i] === t);
+    for (let t = 2, queue = q(t); queue.length; t++ , queue = q(t)) {
+        queue.forEach(i => cells.c[i].forEach(c => {
+            if (!cells.t[c]) cells.t[c] = t + 1;
+        }));
+    }
+}
+
+function defineRivers(pack, riverNext, riversData) {
+    const { cells } = pack;
+    pack.rivers = []; // rivers data
+    const riverPaths = []; // temporary data for all rivers
+
+    for (let r = 1; r <= riverNext; r++) {
+        const riverSegments = riversData.filter(d => d.river === r);
+
+        if (riverSegments.length > 2) {
+            const riverEnhanced = addMeandring(riverSegments);
+            const width = rn(.8 + Math.random() * .4, 1); // river width modifier
+            const increment = rn(.8 + Math.random() * .6, 1); // river bed widening modifier
+            const [path, length] = getPath(riverEnhanced, width, increment);
+            riverPaths.push([r, path, width, increment]);
+            const source = riverSegments[0], mouth = riverSegments[riverSegments.length - 2];
+            const parent = source.parent || 0;
+            pack.rivers.push({ i: r, parent, length, source: source.cell, mouth: mouth.cell });
+        } else {
+            // remove too short rivers
+            riverSegments.filter(s => cells.r[s.cell] === r)
+                .forEach(s => cells.r[s.cell] = 0);
+        }
+    }
+    return riverPaths;
 }
 
   // depression filling algorithm (for a correct water flux modeling)
