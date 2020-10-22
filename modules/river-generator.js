@@ -16,7 +16,7 @@ export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 export const generate = function (changeHeights = true) {
     console.time('generateRivers');
     Math.seedrandom(seed);
-    const cells = pack.cells, p = cells.p, features = pack.features;
+    const cells = pack.cells, features = pack.features;
 
     markupLand(cells);
 
@@ -47,10 +47,11 @@ export const generate = function (changeHeights = true) {
 
 // build distance field in cells from water (cells.t)
 function markupLand(cells) {
-    const q = t => cells.i.filter(i => cells.t[i] === t);
-    for (let t = 2, queue = q(t); queue.length; t++ , queue = q(t)) {
-        queue.forEach(i => cells.c[i].forEach(c => {
-            if (!cells.t[c]) cells.t[c] = t + 1;
+    const { i, c, t } = cells;
+    const q = j => i.filter(i => cells.t[i] === j);
+    for (let k = 2, queue = q(k); queue.length; k++ , queue = q(k)) {
+        queue.forEach(i => c[i].forEach(c => {
+            if (!t[c]) t[c] = k + 1;
         }));
     }
 }
@@ -258,9 +259,13 @@ export function getPath(points, width = 1, increment = 1) {
 
     // middle points
     for (let p = 1; p < last; p++) {
-        x = points[p][0], y = points[p][1], c = points[p][2] || 0;
-        const xPrev = points[p - 1][0], yPrev = points[p - 1][1];
-        const xNext = points[p + 1][0], yNext = points[p + 1][1];
+        x = points[p][0];
+        y = points[p][1];
+        c = points[p][2] || 0;
+        const xPrev = points[p - 1][0],
+            yPrev = points[p - 1][1];
+        const xNext = points[p + 1][0],
+            yNext = points[p + 1][1];
         angle = Math.atan2(yPrev - yNext, xPrev - xNext);
         sin = Math.sin(angle), cos = Math.cos(angle);
         offset = (Math.atan(Math.pow(p * factor, 2) / widening) / 2 * width) + extraOffset;
