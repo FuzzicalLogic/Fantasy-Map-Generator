@@ -157,7 +157,6 @@ function defineRivers(pack, riverNext, riversData) {
     const { cells } = pack;
     pack.rivers = []; // rivers data
     const riverPaths = []; // temporary data for all rivers
-
     for (let r = 1; r <= riverNext; r++) {
         const riverSegments = riversData.filter(d => d.river === r);
 

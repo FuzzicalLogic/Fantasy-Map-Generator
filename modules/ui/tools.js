@@ -479,7 +479,11 @@ function addRiverOnClick() {
     const width = Math.random() * .5 + .9;
     const increment = Math.random() * .4 + .8;
     const [path, length] = Rivers.getPath(points, width, increment);
-    view.rivers.append("path").attr("d", path).attr("id", "river" + river).attr("data-width", width).attr("data-increment", increment);
+    view.rivers.append("path")
+        .attr("d", path)
+        .attr("id", "river" + river)
+        .attr("data-width", width)
+        .attr("data-increment", increment);
 
     // add new river to data or change extended river attributes
     const r = pack.rivers.find(r => r.i === river);
