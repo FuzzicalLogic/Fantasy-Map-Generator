@@ -101,6 +101,7 @@ fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("hei
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
 import "./map/RoutesLayer.js";
+import "./map/RiversLayer.js";
 
 // Necessary Load order -- Prior to main
 initUtilities();

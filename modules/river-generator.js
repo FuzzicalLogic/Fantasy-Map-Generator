@@ -8,6 +8,11 @@ import * as Names from "./names-generator.js";
 
 import { P, rn, rw, round } from "./utils.js";
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 export const generate = function (changeHeights = true) {
     console.time('generateRivers');
     Math.seedrandom(seed);
@@ -130,12 +135,10 @@ export const generate = function (changeHeights = true) {
             }
         }
 
-        // drawRivers
-        view.rivers.selectAll("path").remove();
-        view.rivers.selectAll("path").data(riverPaths).enter()
-            .append("path").attr("d", d => d[1]).attr("id", d => "river" + d[0])
-            .attr("data-width", d => d[2]).attr("data-increment", d => d[3]);
     }()
+    dispatchEvent(new CustomEvent('add', {
+        detail: defineRivers(pack, riverNext, riversData)
+    }));
 
     // apply change heights as basic one
     if (changeHeights) cells.h = Uint8Array.from(h);
