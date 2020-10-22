@@ -8,9 +8,9 @@ import {
 import { round } from "../modules/utils.js";
 
 generator.addEventListener('add', render);
-function render({ detail: data }) {
+function render({ detail: rivers }) {
     view.rivers.selectAll("path").remove();
-    view.rivers.selectAll("path").data(data).enter()
+    view.rivers.selectAll("path").data(rivers).enter()
         .append("path")
         .attr("d", d => d[1])
         .attr("id", d => "river" + d[0])
