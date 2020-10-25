@@ -114,6 +114,10 @@ button, select, a, .pointer {
     cursor: pointer;
 }
 
+.Layer.Hidden {
+    display: none; pointer-events: none;
+}
+
 #prec text {
     font-size: 32px;
     stroke: none;

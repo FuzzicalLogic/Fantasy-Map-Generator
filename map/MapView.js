@@ -1,3 +1,5 @@
+import { MapLayer } from "./MapLayer.js";
+
 export const MapView = el => {
     return {
         get svg() { return d3.select(el) },
@@ -36,9 +38,7 @@ export const MapView = el => {
         get fogging() { return this.box.select('#fogging') },
         get ruler() { return this.box.select('#ruler') },
         get debug() { return this.box.select("#debug") },
-        layers: {
-
-        }
+        layers: []
     }
 }
 
@@ -50,7 +50,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "lakes");
     box.append("g").attr("id", "landmass");
     box.append("g").attr("id", "texture");
-    box.append("g").attr("id", "terrs");
+    box.append("g").attr("id", "terrs").attr('class', 'Layer');
     box.append("g").attr("id", "biomes");
     box.append("g").attr("id", "cells");
     box.append("g").attr("id", "gridOverlay");
