@@ -1,5 +1,4 @@
 import {
-    grid,
     oceanLayers, lineGen
 } from "../main.js";
 
