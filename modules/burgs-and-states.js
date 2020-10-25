@@ -15,7 +15,7 @@ import {
 } from "./utils.js";
 import { toggleLabels, layerIsOn } from "./ui/layers.js";
 
-export function generate() {
+export function generate(howMany) {
     const { cells, cultures } = pack,
         n = cells.i.length;
 
@@ -23,7 +23,7 @@ export function generate() {
     cells.road = new Uint16Array(n); // cell road power
     cells.crossroad = new Uint16Array(n); // cell crossroad power
 
-    const burgs = pack.burgs = placeCapitals(cells, +regionsInput.value);
+    const burgs = pack.burgs = placeCapitals(cells, howMany);
     pack.states = createStates(burgs, cells, cultures);
 
     placeTowns(burgs, cells);

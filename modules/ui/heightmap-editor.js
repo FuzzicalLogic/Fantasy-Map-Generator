@@ -213,8 +213,8 @@ export function editHeightmap() {
         rankCells();
         Cultures.generate();
         Cultures.expand();
-        BurgsAndStates.generate();
         Religions.generate(religionsInput.value, pack);
+        BurgsAndStates.generate(+regionsInput.value);
         BurgsAndStates.defineStateForms();
         BurgsAndStates.generateProvinces();
         BurgsAndStates.defineBurgFeatures();
