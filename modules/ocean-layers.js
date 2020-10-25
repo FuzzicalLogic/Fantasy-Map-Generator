@@ -7,13 +7,15 @@ import { P, rn, clipPoly, round } from "./utils.js";
 
 let cells, vertices, pointsN, used;
 
-export function OceanLayers() {
+export function OceanLayers(grid) {
     const outline = oceanLayers.attr("layers");
     if (outline === "none") return;
     console.time("drawOceanLayers");
 
     lineGen.curve(d3.curveBasisClosed);
-    cells = grid.cells, pointsN = grid.cells.i.length, vertices = grid.vertices;
+    ({ cells, vertices } = grid);
+    pointsN = cells.i.length;
+
     const limits = outline === "random"
         ? randomizeOutline()
         : outline.split(",").map(s => +s);

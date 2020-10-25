@@ -193,7 +193,7 @@ export function editHeightmap() {
         const change = changeHeights.checked;
         markFeatures();
         if (change) openNearSeaLakes();
-        OceanLayers();
+        OceanLayers(grid);
         calculateTemperatures();
         generatePrecipitation();
         reGraph();
@@ -305,7 +305,7 @@ export function editHeightmap() {
         });
 
         markFeatures();
-        OceanLayers();
+        OceanLayers(grid);
         calculateTemperatures();
         generatePrecipitation();
         reGraph();

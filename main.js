@@ -594,9 +594,9 @@ export function generate() {
         HeightmapGenerator.generate(grid);
         MapData.markFeatures(grid, seed);
         MapData.openNearSeaLakes(grid);
-        OceanLayers();
         defineMapSize();
         calculateMapCoordinates();
+        OceanLayers(grid);
         calculateTemperatures();
         generatePrecipitation();
         reGraph();
