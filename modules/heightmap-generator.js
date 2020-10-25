@@ -1,5 +1,5 @@
 import {
-    graphWidth, setWidth, graphHeight,setHeight, grid
+    graphWidth, graphHeight, grid
 } from "../main.js";
 
 import { findGridCell, P, getNumberInRange, lim, rand } from "./utils.js";
