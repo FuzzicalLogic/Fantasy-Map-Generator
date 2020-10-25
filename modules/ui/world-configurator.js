@@ -1,4 +1,5 @@
 import {
+    customization,
     graphWidth, graphHeight,
     pack, defineBiomes,
     calculateMapCoordinates, mapCoordinates,
