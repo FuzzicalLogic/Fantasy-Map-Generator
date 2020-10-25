@@ -53,13 +53,23 @@ const Steps = {
     Smooth: smooth
 }
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 export function generate(map) {
     console.time('generateHeightmap');
-    cells = map.cells, p = map.points;
-    cells.h = new Uint8Array(map.points.length);
+    ({ cells, points: p } = map);
+    cells.h = new Uint8Array(p.length);
 
     Templates[document.getElementById("templateInput").value]()
-
+    dispatchEvent(new CustomEvent('update', {
+        detail: {
+            cells: cells,
+            vertices: map.vertices
+        }
+    }))
     console.timeEnd('generateHeightmap');
 }
 
