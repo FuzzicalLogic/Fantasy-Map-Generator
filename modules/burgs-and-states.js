@@ -24,7 +24,7 @@ export function generate() {
     cells.crossroad = new Uint16Array(n); // cell crossroad power
 
     const burgs = pack.burgs = placeCapitals(cells, +regionsInput.value);
-    pack.states = createStates();
+    pack.states = createStates(burgs, cells, cultures);
 
     placeTowns(burgs, cells);
     expandStates();
@@ -77,36 +77,6 @@ export function generate() {
         return burgs;
     }
 
-    // For each capital create a state
-    function createStates() {
-        console.time('createStates');
-        const states = [{ i: 0, name: "Neutrals" }];
-        const colors = getColors(burgs.length - 1);
-
-        burgs.forEach(function (b, i) {
-            if (!i) return; // skip first element
-
-            // burgs data
-            b.i = b.state = i;
-            b.culture = cells.culture[b.cell];
-            b.name = Names.getCultureShort(b.culture);
-            b.feature = cells.f[b.cell];
-            b.capital = 1;
-
-            // states data
-            const expansionism = rn(Math.random() * powerInput.value + 1, 1);
-            const basename = b.name.length < 9 && b.cell % 5 === 0 ? b.name : Names.getCultureShort(b.culture);
-            const name = Names.getState(basename, b.culture);
-            const nomadic = [1, 2, 3, 4].includes(cells.biome[b.cell]);
-            const type = nomadic ? "Nomadic" : cultures[b.culture].type === "Nomadic" ? "Generic" : cultures[b.culture].type;
-            states.push({ i, color: colors[i - 1], name, expansionism, capital: i, type, center: b.cell, culture: b.culture });
-            cells.burg[b.cell] = i;
-        });
-
-        console.timeEnd('createStates');
-        return states;
-    }
-
     // place secondary settlements based on geo and economical evaluation
     function placeTowns(burgs, cells) {
         console.time('placeTowns');
@@ -144,6 +114,36 @@ export function generate() {
         burgs[0] = { name: undefined }; // do not store burgsTree anymore
         console.timeEnd('placeTowns');
     }
+}
+
+// For each capital create a state
+function createStates(capitals, cells, cultures) {
+    console.time('createStates');
+    const states = [{ i: 0, name: "Neutrals" }];
+    const colors = getColors(capitals.length - 1);
+
+    capitals.forEach(function (b, i) {
+        if (!i) return; // skip first element
+
+        // burgs data
+        b.i = b.state = i;
+        b.culture = cells.culture[b.cell];
+        b.name = Names.getCultureShort(b.culture);
+        b.feature = cells.f[b.cell];
+        b.capital = 1;
+
+        // states data
+        const expansionism = rn(Math.random() * powerInput.value + 1, 1);
+        const basename = b.name.length < 9 && b.cell % 5 === 0 ? b.name : Names.getCultureShort(b.culture);
+        const name = Names.getState(basename, b.culture);
+        const nomadic = [1, 2, 3, 4].includes(cells.biome[b.cell]);
+        const type = nomadic ? "Nomadic" : cultures[b.culture].type === "Nomadic" ? "Generic" : cultures[b.culture].type;
+        states.push({ i, color: colors[i - 1], name, expansionism, capital: i, type, center: b.cell, culture: b.culture });
+        cells.burg[b.cell] = i;
+    });
+
+    console.timeEnd('createStates');
+    return states;
 }
 
 // define burg coordinates, port status and define details
