@@ -594,9 +594,9 @@ export function generate() {
         HeightmapGenerator.generate(grid);
         MapData.markFeatures(grid, seed);
         MapData.openNearSeaLakes(grid);
-        calculateMapCoordinates();
         OceanLayers(grid);
         defineMapSize(grid);
+        calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
         calculateTemperatures();
         generatePrecipitation();
         reGraph();
@@ -718,10 +718,7 @@ function defineMapSize(grid) {
 }
 
 // calculate map position on globe
-export function calculateMapCoordinates() {
-    const size = +document.getElementById("mapSizeOutput").value;
-    const latShift = +document.getElementById("latitudeOutput").value;
-
+export function calculateMapCoordinates(size, latShift) {
     const latT = size / 100 * 180;
     const latN = 90 - (180 - latT) * latShift / 100;
     const latS = latN - latT;

@@ -120,7 +120,7 @@ function updateGlobePosition(globe, path) {
     const size = +document.getElementById("mapSizeOutput").value;
     const eqD = graphHeight / 2 * 100 / size;
 
-    calculateMapCoordinates();
+    calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
     const mc = mapCoordinates; // shortcut
     const scale = +document.getElementById('distanceScaleInput').value,
         unit = document.getElementById('distanceUnitInput').value;
