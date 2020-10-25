@@ -594,9 +594,9 @@ export function generate() {
         HeightmapGenerator.generate(grid);
         MapData.markFeatures(grid, seed);
         MapData.openNearSeaLakes(grid);
-        defineMapSize();
         calculateMapCoordinates();
         OceanLayers(grid);
+        defineMapSize(grid);
         calculateTemperatures();
         generatePrecipitation();
         reGraph();
@@ -680,7 +680,7 @@ export function calculateVoronoi(graph, points) {
 }
 
 // define map size and position based on template and random factor
-export function defineMapSize() {
+function defineMapSize(grid) {
     const [size, latitude] = getSizeAndLatitude();
     let mapSizeOutput = document.getElementById('mapSizeOutput'),
         latitudeOutput = document.getElementById('latitudeOutput'),
