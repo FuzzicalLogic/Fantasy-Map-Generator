@@ -599,7 +599,7 @@ export function generate() {
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
         calculateTemperatures(grid);
         generatePrecipitation(grid);
-        reGraph();
+        reGraph(grid);
         drawCoastline();
 
         elevateLakes();
@@ -872,11 +872,10 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
 }
 
 // recalculate Voronoi Graph to pack cells
-export function reGraph() {
+export function reGraph({ cells, points, features, spacing }) {
     console.time("reGraph");
-    let cells = grid.cells, points = grid.points, features = grid.features;
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
-    const spacing2 = grid.spacing ** 2;
+    const spacing2 = spacing ** 2;
 
     for (const i of cells.i) {
         const height = cells.h[i];
@@ -911,7 +910,7 @@ export function reGraph() {
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
     cells.p = newCells.p; // points coordinates [x, y]
-    cells.g = grid.cells.i.length < 65535 ? Uint16Array.from(newCells.g) : Uint32Array.from(newCells.g); // reference to initial grid cell
+    cells.g = cells.i.length < 65535 ? Uint16Array.from(newCells.g) : Uint32Array.from(newCells.g); // reference to initial grid cell
     cells.q = d3.quadtree(cells.p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
     cells.h = new Uint8Array(newCells.h); // heights
     cells.area = new Uint16Array(cells.i.length); // cell area

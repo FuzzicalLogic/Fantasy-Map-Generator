@@ -692,7 +692,7 @@ function parseLoadedData(data) {
 
         void function parsePackData() {
             setPack({});
-            reGraph();
+            reGraph(grid);
             reMarkFeatures();
             pack.features = JSON.parse(data[12]);
             pack.cultures = JSON.parse(data[13]);
