@@ -819,9 +819,33 @@ export function defineStateForms(list) {
         return tier;
     });
 
-    const monarchy = ["Duchy", "Grand Duchy", "Principality", "Kingdom", "Empire"]; // per expansionism tier
-    const republic = { Republic: 75, Federation: 4, Oligarchy: 2, Tetrarchy: 1, Triumvirate: 1, Diarchy: 1, "Trade Company": 4, Junta: 1 }; // weighted random
-    const union = { Union: 3, League: 4, Confederation: 1, "United Kingdom": 1, "United Republic": 1, "United Provinces": 2, Commonwealth: 1, Heptarchy: 1 }; // weighted random
+    const monarchy = [
+        "Duchy",
+        "Grand Duchy",
+        "Principality",
+        "Kingdom",
+        "Empire"
+    ]; // per expansionism tier
+    const republic = {
+        Republic: 75,
+        Federation: 4,
+        Oligarchy: 2,
+        Tetrarchy: 1,
+        Triumvirate: 1,
+        Diarchy: 1,
+        "Trade Company": 4,
+        Junta: 1
+    }; // weighted random
+    const union = {
+        Union: 3,
+        League: 4,
+        Confederation: 1,
+        "United Kingdom": 1,
+        "United Republic": 1,
+        "United Provinces": 2,
+        Commonwealth: 1,
+        Heptarchy: 1
+    }; // weighted random
 
     for (const s of states) {
         if (list && !list.includes(s.i)) continue;
@@ -855,19 +879,30 @@ export function defineStateForms(list) {
             // Default name depends on exponent tier, some culture bases have special names for tiers
             if (s.diplomacy) {
                 if (form === "Duchy" && s.neighbors.length > 1 && rand(6) < s.neighbors.length && s.diplomacy.includes("Vassal")) return "Marches"; // some vassal dutchies on borderland
-                if (P(.3) && s.diplomacy.includes("Vassal")) return "Protectorate"; // some vassals
+                if (P(.3) && s.diplomacy.includes("Vassal"))
+                    return "Protectorate"; // some vassals
             }
 
-            if (base === 16 && (form === "Empire" || form === "Kingdom")) return "Sultanate"; // Turkic
-            if (base === 5 && (form === "Empire" || form === "Kingdom")) return "Tsardom"; // Ruthenian
-            if (base === 31 && (form === "Empire" || form === "Kingdom")) return "Khaganate"; // Mongolian
-            if (base === 12 && (form === "Kingdom" || form === "Grand Duchy")) return "Shogunate"; // Japanese
-            if ([18, 17].includes(base) && form === "Empire") return "Caliphate"; // Arabic, Berber
-            if (base === 18 && (form === "Grand Duchy" || form === "Duchy")) return "Emirate"; // Arabic
-            if (base === 7 && (form === "Grand Duchy" || form === "Duchy")) return "Despotate"; // Greek
-            if (base === 31 && (form === "Grand Duchy" || form === "Duchy")) return "Ulus"; // Mongolian
-            if (base === 16 && (form === "Grand Duchy" || form === "Duchy")) return "Beylik"; // Turkic
-            if (base === 24 && (form === "Grand Duchy" || form === "Duchy")) return "Satrapy"; // Iranian
+            if (base === 16 && (form === "Empire" || form === "Kingdom"))
+                return "Sultanate"; // Turkic
+            if (base === 5 && (form === "Empire" || form === "Kingdom"))
+                return "Tsardom"; // Ruthenian
+            if (base === 31 && (form === "Empire" || form === "Kingdom"))
+                return "Khaganate"; // Mongolian
+            if (base === 12 && (form === "Kingdom" || form === "Grand Duchy"))
+                return "Shogunate"; // Japanese
+            if ([18, 17].includes(base) && form === "Empire")
+                return "Caliphate"; // Arabic, Berber
+            if (base === 18 && (form === "Grand Duchy" || form === "Duchy"))
+                return "Emirate"; // Arabic
+            if (base === 7 && (form === "Grand Duchy" || form === "Duchy"))
+                return "Despotate"; // Greek
+            if (base === 31 && (form === "Grand Duchy" || form === "Duchy"))
+                return "Ulus"; // Mongolian
+            if (base === 16 && (form === "Grand Duchy" || form === "Duchy"))
+                return "Beylik"; // Turkic
+            if (base === 24 && (form === "Grand Duchy" || form === "Duchy"))
+                return "Satrapy"; // Iranian
             return form;
         }
 
@@ -887,12 +922,18 @@ export function defineStateForms(list) {
 
         if (s.form === "Theocracy") {
             // default name is "Theocracy"
-            if (P(.5) && [0, 1, 2, 3, 4, 6, 8, 9, 13, 15, 20].includes(base)) return "Diocese"; // Euporean
-            if (P(.9) && [7, 5].includes(base)) return "Eparchy"; // Greek, Ruthenian
-            if (P(.9) && [21, 16].includes(base)) return "Imamah"; // Nigerian, Turkish
-            if (P(.8) && [18, 17, 28].includes(base)) return "Caliphate"; // Arabic, Berber, Swahili
-            if (P(.02)) return "Thearchy"; // "Thearchy" in very rare case
-            if (P(.05)) return "See"; // "See" in rare case
+            if (P(.5) && [0, 1, 2, 3, 4, 6, 8, 9, 13, 15, 20].includes(base))
+                return "Diocese"; // Euporean
+            if (P(.9) && [7, 5].includes(base))
+                return "Eparchy"; // Greek, Ruthenian
+            if (P(.9) && [21, 16].includes(base))
+                return "Imamah"; // Nigerian, Turkish
+            if (P(.8) && [18, 17, 28].includes(base))
+                return "Caliphate"; // Arabic, Berber, Swahili
+            if (P(.02))
+                return "Thearchy"; // "Thearchy" in very rare case
+            if (P(.05))
+                return "See"; // "See" in rare case
             return "Theocracy";
         }
     }
