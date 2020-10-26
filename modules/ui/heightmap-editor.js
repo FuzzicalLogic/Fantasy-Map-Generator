@@ -194,8 +194,8 @@ export function editHeightmap() {
         markFeatures();
         if (change) openNearSeaLakes();
         OceanLayers(grid);
-        calculateTemperatures();
-        generatePrecipitation();
+        calculateTemperatures(grid);
+        generatePrecipitation(grid);
         reGraph();
         drawCoastline();
 
@@ -306,8 +306,8 @@ export function editHeightmap() {
 
         markFeatures();
         OceanLayers(grid);
-        calculateTemperatures();
-        generatePrecipitation();
+        calculateTemperatures(grid);
+        generatePrecipitation(grid);
         reGraph();
         drawCoastline();
 
