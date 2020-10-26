@@ -810,9 +810,6 @@ export function defineStateForms(list) {
 
     const generic = { Monarchy: 25, Republic: 2, Union: 1 };
     const naval = { Monarchy: 25, Republic: 8, Union: 3 };
-    const genericArray = [], navalArray = []; // turn weighted array into simple array
-    for (const t in generic) { for (let j = 0; j < generic[t]; j++) { genericArray.push(t); } }
-    for (const t in naval) { for (let j = 0; j < naval[t]; j++) { navalArray.push(t); } }
 
     const median = d3.median(pack.states.map(s => s.area));
     const empireMin = states.map(s => s.area).sort((a, b) => b - a)[Math.max(Math.ceil(states.length ** .4) - 2, 0)];
@@ -838,8 +835,14 @@ export function defineStateForms(list) {
         }
 
         const religion = pack.cells.religion[s.center];
-        const theocracy = religion && pack.religions[religion].expansion === "state" || (P(.1) && pack.religions[religion].type === "Organized");
-        s.form = theocracy ? "Theocracy" : s.type === "Naval" ? ra(navalArray) : ra(genericArray);
+        const theocracy = religion
+            && pack.religions[religion].expansion === "state"
+            || (P(.1) && pack.religions[religion].type === "Organized");
+        s.form = theocracy
+            ? "Theocracy"
+            : s.type === "Naval"
+                ? rw(naval)
+                : rw(generic);
         s.formName = selectForm(s);
         s.fullName = getFullName(s);
     }
