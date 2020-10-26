@@ -1,5 +1,5 @@
 import {
-    modules,
+    modules, grid,
     graphWidth, graphHeight,
     view, scale,
     calculateTemperatures
@@ -103,7 +103,7 @@ function changeHeightUnit() {
 function changeHeightExponent() {
     document.getElementById("heightExponentInput").value = this.value;
     document.getElementById("heightExponentOutput").value = this.value;
-    calculateTemperatures();
+    calculateTemperatures(grid);
     if (layerIsOn("toggleTemp")) drawTemp();
     lock("heightExponent");
 }
@@ -192,7 +192,7 @@ function restoreDefaultUnits() {
     // height exponent
     heightExponentInput.value = heightExponentOutput.value = 1.8;
     localStorage.removeItem("heightExponent");
-    calculateTemperatures();
+    calculateTemperatures(grid);
 
     // scale bar
     barSizeOutput.value = barSize.value = 2;

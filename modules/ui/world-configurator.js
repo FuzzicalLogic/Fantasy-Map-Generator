@@ -1,5 +1,5 @@
 import {
-    customization,
+    customization, grid,
     graphWidth, graphHeight,
     pack, defineBiomes,
     calculateMapCoordinates, mapCoordinates,
@@ -101,7 +101,7 @@ function updateWorld(globe, path, el) {
 
     updateGlobeTemperature(globe);
     updateGlobePosition(globe, path);
-    calculateTemperatures();
+    calculateTemperatures(grid);
     generatePrecipitation();
     elevateLakes();
     const heights = new Uint8Array(pack.cells.h);

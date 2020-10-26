@@ -597,7 +597,7 @@ export function generate() {
         OceanLayers(grid);
         defineMapSize(grid);
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
-        calculateTemperatures();
+        calculateTemperatures(grid);
         generatePrecipitation();
         reGraph();
         drawCoastline();
@@ -728,7 +728,7 @@ export function calculateMapCoordinates(size, latShift) {
 }
 
 // temperature model
-export function calculateTemperatures() {
+export function calculateTemperatures({ cells, cellsX, points }) {
     console.time('calculateTemperatures');
     const cells = grid.cells;
     cells.temp = new Int8Array(cells.i.length); // temperature array
@@ -738,11 +738,11 @@ export function calculateTemperatures() {
     const tDelta = tEq - tPole;
     const int = d3.easePolyInOut.exponent(.5); // interpolation function
 
-    d3.range(0, cells.i.length, grid.cellsX).forEach(function (r) {
-        const y = grid.points[r][1];
+    d3.range(0, cells.i.length, cellsX).forEach(function (r) {
+        const y = points[r][1];
         const lat = Math.abs(mapCoordinates.latN - y / graphHeight * mapCoordinates.latT); // [0; 90]
         const initTemp = tEq - int(lat / 90) * tDelta;
-        for (let i = r; i < r + grid.cellsX; i++) {
+        for (let i = r; i < r + cellsX; i++) {
             cells.temp[i] = Math.max(Math.min(initTemp - convertToFriendly(cells.h[i]), 127), -128);
         }
     });
