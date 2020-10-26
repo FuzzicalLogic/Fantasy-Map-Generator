@@ -603,7 +603,7 @@ export function generate() {
         pack.features = reMarkFeatures(pack);
         drawCoastline(pack);
 
-        elevateLakes();
+        elevateLakes(pack);
         Rivers.generate();
         defineBiomes();
 
@@ -1112,14 +1112,17 @@ export function reMarkFeatures({ cells }) {
 }
 
 // temporary elevate some lakes to resolve depressions and flux the water to form an open (exorheic) lake
-export function elevateLakes() {
+export function elevateLakes({ cells, features }) {
     if (templateInput.value === "Atoll") return; // no need for Atolls
     console.time('elevateLakes');
     const cells = pack.cells, features = pack.features;
     const maxCells = cells.i.length / 100; // size limit; let big lakes be closed (endorheic)
     cells.i.forEach(i => {
-        if (cells.h[i] >= 20) return;
-        if (features[cells.f[i]].group !== "freshwater" || features[cells.f[i]].cells > maxCells) return;
+        if (cells.h[i] >= 20)
+            return;
+        if (features[cells.f[i]].group !== "freshwater"
+        || features[cells.f[i]].cells > maxCells)
+            return;
         cells.h[i] = 20;
         //debug.append("circle").attr("cx", cells.p[i][0]).attr("cy", cells.p[i][1]).attr("r", .5).attr("fill", "blue");
     });

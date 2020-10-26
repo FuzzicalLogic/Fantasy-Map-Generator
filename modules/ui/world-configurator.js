@@ -103,7 +103,7 @@ function updateWorld(globe, path, el) {
     updateGlobePosition(globe, path);
     calculateTemperatures(grid);
     generatePrecipitation(grid);
-    elevateLakes();
+    elevateLakes(pack);
     const heights = new Uint8Array(pack.cells.h);
     Rivers.generate();
     Rivers.specify();

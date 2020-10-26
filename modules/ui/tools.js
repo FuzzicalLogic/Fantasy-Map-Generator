@@ -119,7 +119,7 @@ function processFeatureRegeneration(event, button) {
 }
 
 function regenerateRivers() {
-    elevateLakes();
+    elevateLakes(pack);
     Rivers.generate();
     for (const i of pack.cells.i) {
         const f = pack.features[pack.cells.f[i]]; // feature
