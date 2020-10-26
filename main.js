@@ -600,8 +600,8 @@ export function generate() {
         calculateTemperatures(grid);
         generatePrecipitation(grid);
         reGraph(grid);
-        drawCoastline();
         pack.features = reMarkFeatures(pack);
+        drawCoastline(pack);
 
         elevateLakes();
         Rivers.generate();
@@ -921,9 +921,9 @@ export function reGraph({ cells, points, features, spacing }) {
 }
 
 // Detect and draw the coasline
-export function drawCoastline() {
+export function drawCoastline({ cells, vertices, features }) {
     console.time('drawCoastline');
-    const cells = pack.cells, vertices = pack.vertices, n = cells.i.length, features = pack.features;
+    const n = cells.i.length;
     const used = new Uint8Array(features.length); // store conneted features
     const largestLand = d3.scan(features.map(f => f.land ? f.cells : 0), (a, b) => b - a);
     const landMask = view.defs.select("#land");
@@ -932,16 +932,21 @@ export function drawCoastline() {
 
     for (const i of cells.i) {
         const startFromEdge = !i && cells.h[i] >= 20;
-        if (!startFromEdge && cells.t[i] !== -1 && cells.t[i] !== 1) continue; // non-edge cell
+        if (!startFromEdge && cells.t[i] !== -1 && cells.t[i] !== 1)
+            continue; // non-edge cell
         const f = cells.f[i];
-        if (used[f]) continue; // already connected
-        if (features[f].type === "ocean") continue; // ocean cell
+        if (used[f])
+            continue; // already connected
+        if (features[f].type === "ocean")
+            continue; // ocean cell
 
         const type = features[f].type === "lake" ? 1 : -1; // type value to search for
         const start = findStart(i, type);
-        if (start === -1) continue; // cannot start here
+        if (start === -1)
+            continue; // cannot start here
         let vchain = connectVertices(start, type);
-        if (features[f].type === "lake") relax(vchain, 1.2);
+        if (features[f].type === "lake")
+            relax(vchain, 1.2);
         used[f] = 1;
         let points = clipPoly(vchain.map(v => vertices.p[v]), 1);
         const area = d3.polygonArea(points); // area with lakes/islands
@@ -975,7 +980,8 @@ export function drawCoastline() {
 
     // find cell vertex to start path detection
     function findStart(i, t) {
-        if (t === -1 && cells.b[i]) return cells.v[i].find(v => vertices.c[v].some(c => c >= n)); // map border cell
+        if (t === -1 && cells.b[i])
+            return cells.v[i].find(v => vertices.c[v].some(c => c >= n)); // map border cell
         const filtered = cells.c[i].filter(c => cells.t[c] === t);
         const index = cells.c[i].indexOf(d3.min(filtered));
         return index === -1 ? index : cells.v[i][index];
@@ -993,10 +999,16 @@ export function drawCoastline() {
             const c0 = c[0] >= n || cells.t[c[0]] === t;
             const c1 = c[1] >= n || cells.t[c[1]] === t;
             const c2 = c[2] >= n || cells.t[c[2]] === t;
-            if (v[0] !== prev && c0 !== c1) current = v[0]; else
-                if (v[1] !== prev && c1 !== c2) current = v[1]; else
-                    if (v[2] !== prev && c0 !== c2) current = v[2];
-            if (current === chain[chain.length - 1]) { console.error("Next vertex is not found"); break; }
+            if (v[0] !== prev && c0 !== c1)
+                current = v[0];
+            else if (v[1] !== prev && c1 !== c2)
+                current = v[1];
+            else if (v[2] !== prev && c0 !== c2)
+                current = v[2];
+            if (current === chain[chain.length - 1]) {
+                console.error("Next vertex is not found");
+                break;
+            }
         }
         //chain.push(chain[0]); // push first vertex as the last one
         return chain;

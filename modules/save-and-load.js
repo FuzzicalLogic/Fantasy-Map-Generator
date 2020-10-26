@@ -903,7 +903,7 @@ function parseLoadedData(data) {
                 view.defs.select("#water").selectAll("path").remove();
                 coastline.selectAll("path").remove();
                 lakes.selectAll("path").remove();
-                drawCoastline();
+                drawCoastline(pack);
             }
 
             if (version < 1.11) {
