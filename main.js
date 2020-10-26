@@ -730,7 +730,6 @@ export function calculateMapCoordinates(size, latShift) {
 // temperature model
 export function calculateTemperatures({ cells, cellsX, points }) {
     console.time('calculateTemperatures');
-    const cells = grid.cells;
     cells.temp = new Int8Array(cells.i.length); // temperature array
 
     const tEq = +temperatureEquatorInput.value;
