@@ -1,8 +1,11 @@
 import {
     modules,
-    grid,
+    grid, pack,
     view,
-    reGraph, resetZoom, rankCells
+    reGraph, resetZoom, rankCells,
+    drawCoastline, defineBiomes, elevateLakes,
+    markFeatures, calculateTemperatures, generatePrecipitation,
+    addMarkers, addZones
 } from "../../main.js";
 
 import * as HeightmapGenerator from "../heightmap-generator.js";
