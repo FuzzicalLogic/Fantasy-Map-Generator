@@ -1,13 +1,14 @@
 import {
-    modules,
+    modules, seed,
     grid, pack,
     view,
     reGraph, resetZoom, rankCells,
     drawCoastline, defineBiomes, elevateLakes,
-    markFeatures, calculateTemperatures, generatePrecipitation,
+    calculateTemperatures, generatePrecipitation,
     addMarkers, addZones
 } from "../../main.js";
 
+import * as MapData from "../../map/MapData.js";
 import * as HeightmapGenerator from "../heightmap-generator.js";
 import { OceanLayers } from "../ocean-layers.js";
 import * as Rivers from "../river-generator.js";
@@ -194,7 +195,7 @@ export function editHeightmap() {
         console.time("regenerateErasedData");
 
         const change = changeHeights.checked;
-        markFeatures();
+        MapData.markFeatures(grid, seed);
         if (change) openNearSeaLakes();
         OceanLayers(grid);
         calculateTemperatures(grid);
@@ -202,7 +203,7 @@ export function editHeightmap() {
         reGraph(grid);
         drawCoastline();
 
-        elevateLakes();
+        elevateLakes(pack);
         Rivers.generate(change);
 
         if (!change) {
