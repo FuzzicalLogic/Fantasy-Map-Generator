@@ -598,7 +598,7 @@ export function generate() {
         defineMapSize(grid);
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
         calculateTemperatures(grid);
-        generatePrecipitation();
+        generatePrecipitation(grid);
         reGraph();
         drawCoastline();
 
@@ -758,13 +758,11 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 }
 
 // simplest precipitation model
-export function generatePrecipitation() {
+export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
     console.time('generatePrecipitation');
     view.prec.selectAll("*").remove();
-    const cells = grid.cells;
     cells.prec = new Uint8Array(cells.i.length); // precipitation array
     const modifier = precInput.value / 100; // user's input
-    const cellsX = grid.cellsX, cellsY = grid.cellsY;
     let westerly = [], easterly = [], southerly = 0, northerly = 0;
 
     {// latitude bands
@@ -852,7 +850,7 @@ export function generatePrecipitation() {
                 const west = westerly.filter(w => w[2] === t);
                 if (west && west.length > 3) {
                     const from = west[0][0], to = west[west.length - 1][0];
-                    const y = (grid.points[from][1] + grid.points[to][1]) / 2;
+                    const y = (points[from][1] + points[to][1]) / 2;
                     wind.append("text").attr("x", 20).attr("y", y).text("\u21C9");
                 }
             }
@@ -860,7 +858,7 @@ export function generatePrecipitation() {
                 const east = easterly.filter(w => w[2] === t);
                 if (east && east.length > 3) {
                     const from = east[0][0], to = east[east.length - 1][0];
-                    const y = (grid.points[from][1] + grid.points[to][1]) / 2;
+                    const y = (points[from][1] + points[to][1]) / 2;
                     wind.append("text").attr("x", graphWidth - 52).attr("y", y).text("\u21C7");
                 }
             }
