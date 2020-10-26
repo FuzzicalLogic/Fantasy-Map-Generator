@@ -601,6 +601,7 @@ export function generate() {
         generatePrecipitation(grid);
         reGraph(grid);
         drawCoastline();
+        pack.features = reMarkFeatures(pack);
 
         elevateLakes();
         Rivers.generate();
@@ -922,7 +923,6 @@ export function reGraph({ cells, points, features, spacing }) {
 // Detect and draw the coasline
 export function drawCoastline() {
     console.time('drawCoastline');
-    reMarkFeatures();
     const cells = pack.cells, vertices = pack.vertices, n = cells.i.length, features = pack.features;
     const used = new Uint8Array(features.length); // store conneted features
     const largestLand = d3.scan(features.map(f => f.land ? f.cells : 0), (a, b) => b - a);
@@ -1024,9 +1024,10 @@ export function drawCoastline() {
 }
 
 // Re-mark features (ocean, lakes, islands)
-export function reMarkFeatures() {
+export function reMarkFeatures({ cells }) {
     console.time("reMarkFeatures");
-    const cells = pack.cells, features = pack.features = [0], temp = grid.cells.temp;
+    const features = [0],
+        temp = grid.cells.temp;
     cells.f = new Uint16Array(cells.i.length); // cell feature number
     cells.t = new Int16Array(cells.i.length); // cell type: 1 = land along coast; -1 = water along coast;
     cells.haven = cells.i.length < 65535 ? new Uint16Array(cells.i.length) : new Uint32Array(cells.i.length);// cell haven (opposite water cell);
@@ -1069,6 +1070,8 @@ export function reMarkFeatures() {
         features.push({ i, land, border, type, cells: cellNumber, firstCell: start, group });
         queue[0] = cells.f.findIndex(f => !f); // find unmarked cell
     }
+
+    return features;
 
     function defineLakeGroup(cell, number, temp) {
         if (temp > 31) return "dry";
