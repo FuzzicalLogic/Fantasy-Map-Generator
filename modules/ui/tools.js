@@ -186,7 +186,7 @@ function regenerateBurgs() {
     });
 
     pack.features.forEach(f => { if (f.port) f.port = 0 }); // reset features ports counter
-    BurgsAndStates.specifyBurgs();
+    BurgsAndStates.specifyBurgs(pack, grid);
     BurgsAndStates.defineBurgFeatures();
     BurgsAndStates.drawBurgs();
     Routes.generate(pack);

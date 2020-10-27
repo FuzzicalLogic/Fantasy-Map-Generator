@@ -579,34 +579,10 @@ export function drawStateLabels(list) {
 }
 
 // calculate states data like area, population etc.
-export function collectStatistics({ cells, states, burgs }) {
+export function collectStatistics(pack) {
     console.time("collectStatistics");
 
-    states.forEach(s => {
-        s.cells = s.area = s.burgs = s.rural = s.urban = 0;
-        s.neighbors = new Set();
-    });
-
-    for (const i of cells.i) {
-        if (cells.h[i] < 20) continue;
-        const s = cells.state[i];
-
-        // check for neighboring states
-        cells.c[i].filter(c => cells.h[c] >= 20 && cells.state[c] !== s)
-            .forEach(c => states[s].neighbors.add(cells.state[c]));
-
-        // collect stats
-        states[s].cells += 1;
-        states[s].area += cells.area[i];
-        states[s].rural += cells.pop[i];
-        if (cells.burg[i]) {
-            states[s].urban += burgs[cells.burg[i]].population;
-            states[s].burgs++;
-        }
-    }
-
-    // convert neighbors Set object into array
-    states.forEach(s => s.neighbors = Array.from(s.neighbors));
+    pack.states.forEach(state => State.setStatistics(state, pack))
 
     console.timeEnd("collectStatistics");
 }

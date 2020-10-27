@@ -187,3 +187,24 @@ const ALT_FORMNAMES = {
         },
     }
 }
+
+window.getStateCells = getCells;
+export function getCells(state, cells = pack.cells) {
+    return cells.i.filter(idx => cells.state[idx] === state.i);
+}
+export function getBurgs(state, burgs = pack.burgs) {
+    return burgs.filter(({ state: inState }) => inState === state.i)
+}
+export function setStatistics(state, { cells: { area, pop, c, state: inState } }) {
+    let controlled = getCells(state);
+    state.cells = controlled.length;
+    state.area = controlled.reduce((sum, idx) => sum += area[idx], 0);
+    state.rural = controlled.reduce((sum, idx) => sum += pop[idx], 0);
+    state.neighbors = controlled.reduce((arr, idx) => [...arr, ...c[idx]], [])
+        .filter(x => !!inState[x] && inState[x] !== state.i)
+        .map(x => inState[x])
+        .reduce((arr, x) => arr.includes(x) ? arr : [...arr, x], []);
+    let myburgs = getBurgs(state);
+    state.burgs = myburgs.length;
+    state.urban = myburgs.reduce((sum, x) => sum += x.population, 0);
+}
