@@ -28,8 +28,8 @@ export function generate(howMany) {
     pack.states = createStates(burgs, cells, cultures);
 
     placeTowns(burgs, cells);
-    expandStates();
-    normalizeStates();
+    expandStates(pack);
+    normalizeStates(pack);
     specifyBurgs(pack, grid);
 
     Routes.generate(pack);
@@ -318,7 +318,8 @@ export function expandStates({ cells, states, cultures, burgs}) {
         });
     }
 
-    burgs.filter(b => b.i && !b.removed).forEach(b => b.state = cells.state[b.cell]); // assign state to burgs
+    burgs.filter(b => b.i && !b.removed)
+        .forEach(b => b.state = cells.state[b.cell]); // assign state to burgs
 
     function getBiomeCost(b, biome, type) {
         if (b === biome) return 10; // tiny penalty for native biome
@@ -355,20 +356,24 @@ export function expandStates({ cells, states, cultures, burgs}) {
     console.timeEnd("expandStates");
 }
 
-export function normalizeStates() {
+export function normalizeStates({ cells: { i, h, burg, c, state}, burgs }) {
     console.time("normalizeStates");
-    const cells = pack.cells, burgs = pack.burgs;
 
-    for (const i of cells.i) {
-        if (cells.h[i] < 20 || cells.burg[i]) continue; // do not overwrite burgs
-        if (cells.c[i].some(c => burgs[cells.burg[c]].capital)) continue; // do not overwrite near capital
-        const neibs = cells.c[i].filter(c => cells.h[c] >= 20);
-        const adversaries = neibs.filter(c => cells.state[c] !== cells.state[i]);
-        if (adversaries.length < 2) continue;
-        const buddies = neibs.filter(c => cells.state[c] === cells.state[i]);
-        if (buddies.length > 2) continue;
-        if (adversaries.length <= buddies.length) continue;
-        cells.state[i] = cells.state[adversaries[0]];
+    for (const idx of i) {
+        if (h[idx] < 20 || burg[idx])
+            continue; // do not overwrite burgs
+        if (c[idx].some(c => burgs[burg[c]].capital))
+            continue; // do not overwrite near capital
+        const neibs = c[idx].filter(c => h[c] >= 20);
+        const adversaries = neibs.filter(c => state[c] !== state[idx]);
+        if (adversaries.length < 2)
+            continue;
+        const buddies = neibs.filter(c => state[c] === state[idx]);
+        if (buddies.length > 2)
+            continue;
+        if (adversaries.length <= buddies.length)
+            continue;
+        state[idx] = state[adversaries[0]];
         //debug.append("circle").attr("cx", cells.p[i][0]).attr("cy", cells.p[i][1]).attr("r", .5).attr("fill", "red");
     }
     console.timeEnd("normalizeStates");

@@ -263,7 +263,7 @@ function regenerateStates() {
     });
 
     BurgsAndStates.expandStates(pack);
-    BurgsAndStates.normalizeStates();
+    BurgsAndStates.normalizeStates(pack);
     BurgsAndStates.collectStatistics();
     BurgsAndStates.assignColors();
     BurgsAndStates.generateCampaigns();
