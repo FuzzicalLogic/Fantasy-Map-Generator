@@ -154,30 +154,30 @@ function createStates(capitals, cells, cultures) {
 }
 
 // define burg coordinates, port status and define details
-export function specifyBurgs() {
+export function specifyBurgs({ burgs, cells: { haven, g, f, harbor, v, s, road, r, fl }, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
-    const cells = pack.cells, vertices = pack.vertices, features = pack.features, temp = grid.cells.temp;
-
-    for (const b of pack.burgs) {
+    
+    for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
 
         // asign port status to some coastline burgs with temp > 0 °C
-        const haven = cells.haven[i];
-        if (haven && temp[cells.g[i]] > 0) {
-            const f = cells.f[haven]; // water body id
+        const isHaven = haven[i];
+        if (isHaven && temp[g[i]] > 0) {
+            const idxF = f[isHaven]; // water body id
             // port is a capital with any harbor OR town with good harbor
-            const port = features[f].cells > 1 && ((b.capital && cells.harbor[i]) || cells.harbor[i] === 1);
-            b.port = port ? f : 0; // port is defined by water body id it lays on
+            const port = features[idxF].cells > 1 && ((b.capital && harbor[i]) || harbor[i] === 1);
+            b.port = port ? idxF : 0; // port is defined by water body id it lays on
         } else b.port = 0;
 
         // define burg population (keep urbanization at about 10% rate)
-        b.population = rn(Math.max((cells.s[i] + cells.road[i] / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
-        if (b.capital) b.population = rn(b.population * 1.3, 3); // increase capital population
+        b.population = rn(Math.max((s[i] + road[i] / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
+        if (b.capital)
+            b.population = rn(b.population * 1.3, 3); // increase capital population
 
         if (b.port) {
             b.population = b.population * 1.3; // increase port population
-            const e = cells.v[i].filter(v => vertices.c[v].some(c => c === cells.haven[i])); // vertices of common edge
+            const e = v[i].filter(v => vertices.c[v].some(c => c === haven[i])); // vertices of common edge
             b.x = rn((vertices.p[e[0]][0] + vertices.p[e[1]][0]) / 2, 2);
             b.y = rn((vertices.p[e[0]][1] + vertices.p[e[1]][1]) / 2, 2);
         }
@@ -198,7 +198,7 @@ export function specifyBurgs() {
     }
 
     // de-assign port status if it's the only one on feature
-    const ports = pack.burgs.filter(b => !b.removed && b.port > 0);
+    const ports = burgs.filter(b => !b.removed && b.port > 0);
     for (const f of features) {
         if (!f.i || f.land || f.border) continue;
         const featurePorts = ports.filter(b => b.port === f.i);
