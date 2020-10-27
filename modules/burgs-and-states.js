@@ -276,9 +276,8 @@ export function drawBurgs() {
 }
 
 // growth algorithm to assign cells to states like we did for cultures
-export function expandStates() {
+export function expandStates({ cells, states, cultures, burgs}) {
     console.time("expandStates");
-    const cells = pack.cells, states = pack.states, cultures = pack.cultures, burgs = pack.burgs;
 
     cells.state = new Uint16Array(cells.i.length); // cell state
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });

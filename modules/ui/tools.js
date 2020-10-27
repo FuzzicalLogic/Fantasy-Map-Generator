@@ -262,7 +262,7 @@ function regenerateStates() {
         return { i, name, type, capital: capital.i, center: capital.cell, culture, expansionism };
     });
 
-    BurgsAndStates.expandStates();
+    BurgsAndStates.expandStates(pack);
     BurgsAndStates.normalizeStates();
     BurgsAndStates.collectStatistics();
     BurgsAndStates.assignColors();

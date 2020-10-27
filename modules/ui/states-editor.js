@@ -659,7 +659,7 @@ function openRegenerationMenu() {
 function recalculateStates(must) {
     if (!must && !statesAutoChange.checked) return;
 
-    BurgsAndStates.expandStates();
+    BurgsAndStates.expandStates(pack);
     BurgsAndStates.generateProvinces();
     if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
     if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
