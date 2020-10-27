@@ -180,10 +180,14 @@ export function specifyBurgs() {
         b.population = rn(b.population * gauss(2, 3, .6, 20, 3), 3);
 
         // shift burgs on rivers semi-randomly and just a bit
-        if (!b.port && cells.r[i]) {
-            const shift = Math.min(cells.fl[i] / 150, 1);
-            if (i % 2) b.x = rn(b.x + shift, 2); else b.x = rn(b.x - shift, 2);
-            if (cells.r[i] % 2) b.y = rn(b.y + shift, 2); else b.y = rn(b.y - shift, 2);
+        if (!b.port && r[i]) {
+            const shift = Math.min(fl[i] / 150, 1);
+            if (i % 2)
+                b.x = rn(b.x + shift, 2);
+            else b.x = rn(b.x - shift, 2);
+            if (r[i] % 2)
+                b.y = rn(b.y + shift, 2);
+            else b.y = rn(b.y - shift, 2);
         }
     }
 
@@ -199,16 +203,17 @@ export function specifyBurgs() {
 }
 
 export function defineBurgFeatures(newburg) {
-    pack.burgs.filter(b => newburg ? b.i == newburg.i : (b.i && !b.removed)).forEach(b => {
-        const pop = b.population;
-        b.citadel = b.capital || pop > 50 && P(.75) || P(.5) ? 1 : 0;
-        b.plaza = pop > 50 || pop > 30 && P(.75) || pop > 10 && P(.5) || P(.25) ? 1 : 0;
-        b.walls = b.capital || pop > 30 || pop > 20 && P(.75) || pop > 10 && P(.5) || P(.2) ? 1 : 0;
-        b.shanty = pop > 30 || pop > 20 && P(.75) || b.walls && P(.75) ? 1 : 0;
-        const religion = pack.cells.religion[b.cell];
-        const theocracy = pack.states[b.state].form === "Theocracy";
-        b.temple = religion && theocracy || pop > 50 || pop > 35 && P(.75) || pop > 20 && P(.5) ? 1 : 0;
-    });
+    pack.burgs.filter(b => newburg ? b.i == newburg.i : (b.i && !b.removed))
+        .forEach(b => {
+            const pop = b.population;
+            b.citadel = b.capital || pop > 50 && P(.75) || P(.5) ? 1 : 0;
+            b.plaza = pop > 50 || pop > 30 && P(.75) || pop > 10 && P(.5) || P(.25) ? 1 : 0;
+            b.walls = b.capital || pop > 30 || pop > 20 && P(.75) || pop > 10 && P(.5) || P(.2) ? 1 : 0;
+            b.shanty = pop > 30 || pop > 20 && P(.75) || b.walls && P(.75) ? 1 : 0;
+            const religion = pack.cells.religion[b.cell];
+            const theocracy = pack.states[b.state].form === "Theocracy";
+            b.temple = religion && theocracy || pop > 50 || pop > 35 && P(.75) || pop > 20 && P(.5) ? 1 : 0;
+        });
 }
 
 export function drawBurgs() {
