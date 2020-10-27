@@ -122,7 +122,7 @@ export function getCulturedForm(s) {
 const ALT_FORMNAMES = {
     Monarchy: {
         Sultanate: {
-            tiers: [3,4],
+            tiers: [3, 4],
             cultures: [16]
         },
         Tsardom: {
@@ -177,7 +177,7 @@ const ALT_FORMNAMES = {
         },
         Caliphate: {
             probability: .8,
-            cultures: [17,18,28]
+            cultures: [17, 18, 28]
         },
         Thearchy: {
             probability: .02
