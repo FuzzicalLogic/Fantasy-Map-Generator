@@ -292,7 +292,8 @@ export function expandStates() {
     const neutral = cells.i.length / 5000 * 2500 * neutralInput.value * statesNeutral.value; // limit cost for state growth
 
     while (queue.length) {
-        const next = queue.dequeue(), n = next.e, p = next.p, s = next.s, b = next.b;
+        const next = queue.dequeue(),
+            { e: n, p, s, b } = next;
         const type = states[s].type;
         const culture = states[s].culture;
 
