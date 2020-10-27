@@ -1115,7 +1115,6 @@ export function reMarkFeatures({ cells }) {
 export function elevateLakes({ cells, features }) {
     if (templateInput.value === "Atoll") return; // no need for Atolls
     console.time('elevateLakes');
-    const cells = pack.cells, features = pack.features;
     const maxCells = cells.i.length / 100; // size limit; let big lakes be closed (endorheic)
     cells.i.forEach(i => {
         if (cells.h[i] >= 20)
