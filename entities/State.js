@@ -192,9 +192,11 @@ window.getStateCells = getCells;
 export function getCells(state, cells = pack.cells) {
     return cells.i.filter(idx => cells.state[idx] === state.i);
 }
+
 export function getBurgs(state, burgs = pack.burgs) {
     return burgs.filter(({ state: inState }) => inState === state.i)
 }
+
 export function setStatistics(state, { cells: { area, pop, c, state: inState } }) {
     let controlled = getCells(state);
     state.cells = controlled.length;
