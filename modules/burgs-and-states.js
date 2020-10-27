@@ -30,7 +30,7 @@ export function generate(howMany) {
     placeTowns(burgs, cells);
     expandStates();
     normalizeStates();
-    specifyBurgs();
+    specifyBurgs(pack, grid);
 
     Routes.generate(pack);
 
