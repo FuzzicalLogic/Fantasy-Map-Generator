@@ -381,26 +381,18 @@ export function normalizeStates({ cells: { i, h, burg, c, state}, burgs }) {
 
 // Resets the cultures of all burgs and states to their
 // cell or center cell's (respectively) culture.
-export function updateCultures() {
+export function updateCultures({ cells: { culture }, burgs, states }) {
     console.time('updateCulturesForBurgsAndStates');
 
     // Assign the culture associated with the burgs cell.
-    pack.burgs = pack.burgs.map((burg, index) => {
-        // Ignore metadata burg
-        if (index === 0) {
-            return burg;
-        }
-        return { ...burg, culture: pack.cells.culture[burg.cell] };
-    });
+    pack.burgs = burgs.map((burg, index) =>
+        index === 0 ? burg : { ...burg, culture: culture[burg.cell] }
+    );
 
     // Assign the culture associated with the states' center cell.
-    pack.states = pack.states.map((state, index) => {
-        // Ignore neutrals state
-        if (index === 0) {
-            return state;
-        }
-        return { ...state, culture: pack.cells.culture[state.center] };
-    });
+    pack.states = states.map((state, index) =>
+        index === 0 ? state : { ...state, culture: culture[state.center] }
+    );
 
     console.timeEnd('updateCulturesForBurgsAndStates');
 }

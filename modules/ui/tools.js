@@ -295,7 +295,7 @@ function regenerateReligions() {
 function regenerateCultures() {
     Cultures.generate();
     Cultures.expand();
-    BurgsAndStates.updateCultures();
+    BurgsAndStates.updateCultures(pack);
     Religions.updateCultures(pack);
     if (!layerIsOn("toggleCultures")) toggleCultures(); else drawCultures();
     refreshAllEditors();
