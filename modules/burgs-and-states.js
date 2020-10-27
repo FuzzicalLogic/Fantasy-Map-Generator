@@ -42,79 +42,85 @@ export function generate(howMany) {
 
     drawBurgs();
 
-    function placeCapitals(cells, count) {
-        console.time('placeCapitals');
-        let burgs = [0];
+}
 
-        const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
-        const sorted = cells.i.filter(i => score[i] > 0 && cells.culture[i]).sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
+function placeCapitals(cells, count) {
+    console.time('placeCapitals');
+    let burgs = [0];
 
-        if (sorted.length < count * 10) {
-            count = Math.floor(sorted.length / 10);
-            if (!count) { console.warn(`There is no populated cells. Cannot generate states`); return burgs; }
-            else { console.warn(`Not enough populated cells (${sorted.length}). Will generate only ${count} states`); }
-        }
+    const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
+    const sorted = cells.i.filter(i => score[i] > 0 && cells.culture[i]).sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
 
-        let burgsTree = d3.quadtree();
-        let spacing = (graphWidth + graphHeight) / 2 / count; // min distance between capitals
-
-        for (let i = 0; burgs.length <= count; i++) {
-            const cell = sorted[i], x = cells.p[cell][0], y = cells.p[cell][1];
-
-            if (burgsTree.find(x, y, spacing) === undefined) {
-                burgs.push({ cell, x, y });
-                burgsTree.add([x, y]);
-            }
-
-            if (i === sorted.length - 1) {
-                console.warn("Cannot place capitals with current spacing. Trying again with reduced spacing");
-                burgsTree = d3.quadtree();
-                i = -1, burgs = [0], spacing /= 1.2;
-            }
-        }
-
-        burgs[0] = burgsTree;
-        console.timeEnd('placeCapitals');
-        return burgs;
+    if (sorted.length < count * 10) {
+        count = Math.floor(sorted.length / 10);
+        if (!count) { console.warn(`There is no populated cells. Cannot generate states`); return burgs; }
+        else { console.warn(`Not enough populated cells (${sorted.length}). Will generate only ${count} states`); }
     }
 
-    // place secondary settlements based on geo and economical evaluation
-    function placeTowns(burgs, cells) {
-        console.time('placeTowns');
-        const score = new Int16Array(cells.s.map(s => s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
-        const sorted = cells.i.filter(i => !cells.burg[i] && score[i] > 0 && cells.culture[i]).sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
+    let burgsTree = d3.quadtree();
+    let spacing = (graphWidth + graphHeight) / 2 / count; // min distance between capitals
 
-        const desiredNumber = manorsInput.value == 1000 ? rn(sorted.length / 5 / (grid.points.length / 10000) ** .8) : manorsInput.valueAsNumber;
-        const burgsNumber = Math.min(desiredNumber, sorted.length); // towns to generate
-        let burgsAdded = 0;
+    for (let i = 0; burgs.length <= count; i++) {
+        const cell = sorted[i], x = cells.p[cell][0], y = cells.p[cell][1];
 
-        const burgsTree = burgs[0];
-        let spacing = (graphWidth + graphHeight) / 150 / (burgsNumber ** .7 / 66); // min distance between towns
-
-        while (burgsAdded < burgsNumber && spacing > 1) {
-            for (let i = 0; burgsAdded < burgsNumber && i < sorted.length; i++) {
-                if (cells.burg[sorted[i]]) continue;
-                const cell = sorted[i], x = cells.p[cell][0], y = cells.p[cell][1];
-                const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make placement not uniform
-                if (burgsTree.find(x, y, s) !== undefined) continue; // to close to existing burg
-                const burg = burgs.length;
-                const culture = cells.culture[cell];
-                const name = Names.getCulture(culture);
-                burgs.push({ cell, x, y, state: 0, i: burg, culture, name, capital: 0, feature: cells.f[cell] });
-                burgsTree.add([x, y]);
-                cells.burg[cell] = burg;
-                burgsAdded++;
-            }
-            spacing *= .5;
+        if (burgsTree.find(x, y, spacing) === undefined) {
+            burgs.push({ cell, x, y });
+            burgsTree.add([x, y]);
         }
 
-        if (manorsInput.value != 1000 && burgsAdded < desiredNumber) {
-            console.error(`Cannot place all burgs. Requested ${desiredNumber}, placed ${burgsAdded}`);
+        if (i === sorted.length - 1) {
+            console.warn("Cannot place capitals with current spacing. Trying again with reduced spacing");
+            burgsTree = d3.quadtree();
+            i = -1, burgs = [0], spacing /= 1.2;
         }
-
-        burgs[0] = { name: undefined }; // do not store burgsTree anymore
-        console.timeEnd('placeTowns');
     }
+
+    burgs[0] = burgsTree;
+    console.timeEnd('placeCapitals');
+    return burgs;
+}
+
+// place secondary settlements based on geo and economical evaluation
+function placeTowns(burgs, cells) {
+    console.time('placeTowns');
+    const score = new Int16Array(cells.s.map(s => s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
+    const sorted = cells.i.filter(i => !cells.burg[i] && score[i] > 0 && cells.culture[i])
+        .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
+
+    const desiredNumber = manorsInput.value == 1000
+        ? rn(sorted.length / 5 / (grid.points.length / 10000) ** .8)
+        : manorsInput.valueAsNumber;
+    const burgsNumber = Math.min(desiredNumber, sorted.length); // towns to generate
+    let burgsAdded = 0;
+
+    const burgsTree = burgs[0];
+    let spacing = (graphWidth + graphHeight) / 150 / (burgsNumber ** .7 / 66); // min distance between towns
+
+    while (burgsAdded < burgsNumber && spacing > 1) {
+        for (let i = 0; burgsAdded < burgsNumber && i < sorted.length; i++) {
+            if (cells.burg[sorted[i]]) continue;
+            const cell = sorted[i],
+                x = cells.p[cell][0],
+                y = cells.p[cell][1];
+            const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make placement not uniform
+            if (burgsTree.find(x, y, s) !== undefined) continue; // to close to existing burg
+            const burg = burgs.length;
+            const culture = cells.culture[cell];
+            const name = Names.getCulture(culture);
+            burgs.push({ cell, x, y, state: 0, i: burg, culture, name, capital: 0, feature: cells.f[cell] });
+            burgsTree.add([x, y]);
+            cells.burg[cell] = burg;
+            burgsAdded++;
+        }
+        spacing *= .5;
+    }
+
+    if (manorsInput.value != 1000 && burgsAdded < desiredNumber) {
+        console.error(`Cannot place all burgs. Requested ${desiredNumber}, placed ${burgsAdded}`);
+    }
+
+    burgs[0] = { name: undefined }; // do not store burgsTree anymore
+    console.timeEnd('placeTowns');
 }
 
 // For each capital create a state
