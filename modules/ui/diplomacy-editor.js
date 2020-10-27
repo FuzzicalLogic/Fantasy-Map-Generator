@@ -4,7 +4,7 @@ import * as BurgsAndStates from "../burgs-and-states.js";
 
 import { closeDialogs, restoreDefaultEvents, fitContent, applySorting, getFileName, downloadFile } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
-import { findCell, rn, getAdjective } from "../utils.js";
+import { findCell, rn, toAdjective } from "../utils.js";
 import { editStyle } from "./style.js";
 import { toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, toggleBorders, toggleProvinces, layerIsOn } from "./layers.js";
 
@@ -202,7 +202,7 @@ function diplomacyChangeRelations(event) {
     states[object].diplomacy[subject] = rel === "Vassal" ? "Suzerain" : rel === "Suzerain" ? "Vassal" : rel;
 
     // update relation history
-    const change = () => [`Relations change`, `${subjectName}-${getAdjective(objectName)} relations changed to ${rel.toLowerCase()}`];
+    const change = () => [`Relations change`, `${subjectName}-${toAdjective(objectName)} relations changed to ${rel.toLowerCase()}`];
     const ally = () => [`Defence pact`, `${subjectName} entered into defensive pact with ${objectName}`];
     const vassal = () => [`Vassalization`, `${subjectName} became a vassal of ${objectName}`];
     const suzerain = () => [`Vassalization`, `${subjectName} vassalized ${objectName}`];

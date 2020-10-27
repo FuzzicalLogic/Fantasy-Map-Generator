@@ -37,7 +37,7 @@ import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js
 import { initialize as initGeneral, getFriendlyHeight, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {
     initialize as initUtilities, parseError, getBoundaryPoints, getJitteredGrid, findCell, getPackPolygon, isLand, convertTemperature, P, gauss, rn,
-    generateDate, debounce, link, rw, ra, getAdjective, clipPoly, biased, normalize, capitalize, getNextId,
+    generateDate, debounce, link, rw, ra, toAdjective, clipPoly, biased, normalize, capitalize, getNextId,
     rand, round
 } from "./modules/utils.js";
 
@@ -1314,7 +1314,7 @@ export function addMarkers(number = 1) {
             const cell = lighthouses[i][0], vertex = lighthouses[i][1];
             const id = appendMarker(cell, "lighthouse");
             const proper = cells.burg[cell] ? pack.burgs[cells.burg[cell]].name : Names.getCulture(cells.culture[cell]);
-            notes.push({ id, name: getAdjective(proper) + " Lighthouse" + name, legend: `A lighthouse to keep the navigation safe` });
+            notes.push({ id, name: toAdjective(proper) + " Lighthouse" + name, legend: `A lighthouse to keep the navigation safe` });
         }
     }()
 
@@ -1327,7 +1327,7 @@ export function addMarkers(number = 1) {
             const cell = waterfalls[i];
             const id = appendMarker(cell, "waterfall");
             const proper = cells.burg[cell] ? pack.burgs[cells.burg[cell]].name : Names.getCulture(cells.culture[cell]);
-            notes.push({ id, name: getAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
+            notes.push({ id, name: toAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
         }
     }()
 
@@ -1422,7 +1422,7 @@ export function addZones(number = 1) {
             "Invasion": 4, "Occupation": 3, "Raid": 2, "Conquest": 2,
             "Subjugation": 1, "Foray": 1, "Skirmishes": 1, "Incursion": 2, "Pillaging": 1, "Intervention": 1
         });
-        const name = getAdjective(invader.name) + " " + invasion;
+        const name = toAdjective(invader.name) + " " + invasion;
         data.push({ name, type: "Invasion", cells: cellsArray, fill: "url(#hatch1)" });
     }
 
@@ -1452,7 +1452,7 @@ export function addZones(number = 1) {
             "Rebels": 5, "Insurgents": 2, "Mutineers": 1, "Rioters": 1, "Separatists": 1,
             "Secessionists": 1, "Insurrection": 2, "Rebellion": 1, "Conspiracy": 2
         });
-        const name = getAdjective(states[neib].name) + " " + rebels;
+        const name = toAdjective(states[neib].name) + " " + rebels;
         data.push({ name, type: "Rebels", cells: cellsArray, fill: "url(#hatch3)" });
     }
 
@@ -1480,7 +1480,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const name = getAdjective(organized.name.split(" ")[0]) + " Proselytism";
+        const name = toAdjective(organized.name.split(" ")[0]) + " Proselytism";
         data.push({ name, type: "Proselytism", cells: cellsArray, fill: "url(#hatch6)" });
     }
 
@@ -1492,7 +1492,7 @@ export function addZones(number = 1) {
         if (!cellsArray.length) return;
         cellsArray.forEach(i => used[i] = 1);
 
-        const name = getAdjective(heresy.name.split(" ")[0]) + " Crusade";
+        const name = toAdjective(heresy.name.split(" ")[0]) + " Crusade";
         data.push({ name, type: "Crusade", cells: cellsArray, fill: "url(#hatch6)" });
     }
 
@@ -1557,7 +1557,7 @@ export function addZones(number = 1) {
         }
 
         const type = rw({ "Famine": 5, "Dearth": 1, "Drought": 3, "Earthquake": 3, "Tornadoes": 1, "Wildfires": 1 });
-        const name = getAdjective(burg.name) + " " + type;
+        const name = toAdjective(burg.name) + " " + type;
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch5)" });
     }
 
@@ -1606,7 +1606,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const proper = getAdjective(Names.getCultureShort(cells.culture[cell]));
+        const proper = toAdjective(Names.getCultureShort(cells.culture[cell]));
         const name = proper + " Avalanche";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch5)" });
     }
@@ -1629,7 +1629,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const proper = getAdjective(Names.getCultureShort(cells.culture[cell]));
+        const proper = toAdjective(Names.getCultureShort(cells.culture[cell]));
         const name = proper + " Fault";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch2)" });
     }
@@ -1654,7 +1654,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const name = getAdjective(burgs[cells.burg[cell]].name) + " Flood";
+        const name = toAdjective(burgs[cells.burg[cell]].name) + " Flood";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch13)" });
     }
 
@@ -1679,7 +1679,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const proper = getAdjective(Names.getCultureShort(cells.culture[cell]));
+        const proper = toAdjective(Names.getCultureShort(cells.culture[cell]));
         const name = proper + " Tsunami";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch13)" });
     }

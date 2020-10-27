@@ -4,7 +4,7 @@ import * as Military from "../military-generator.js";
 
 import { fitContent, applySorting } from "./editors.js";
 import { tip } from "./general.js";
-import { findCell, P, Pint, rn, getAdjective, capitalize, getNextId, wiki } from "../utils.js";
+import { findCell, P, Pint, rn, toAdjective, capitalize, getNextId, wiki } from "../utils.js";
 
 export class Battle {
 
@@ -641,7 +641,7 @@ export class Battle {
 
         const getSide = (regs, n) => regs.length > 1 ?
             `${n ? "regiments" : "forces"} of ${list([... new Set(regs.map(r => pack.states[r.state].name))])}` :
-            getAdjective(pack.states[regs[0].state].name) + " " + regs[0].name;
+            toAdjective(pack.states[regs[0].state].name) + " " + regs[0].name;
         const getLosses = casualties => Math.min(rn(casualties * 100), 100);
 
         const legend = `${this.name} took place in ${options.year} ${options.eraShort}. It was fought between ${getSide(this.attackers.regiments, 1)} and ${getSide(this.defenders.regiments, 0)}. The ${this.type} ended in ${battleStatus[+P(.7)]}.

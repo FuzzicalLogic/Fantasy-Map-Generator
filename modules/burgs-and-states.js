@@ -10,7 +10,7 @@ import * as Routes from "./routes-generator.js";
 
 import {
     findCell, getColors, getRandomColor, getMixedColor,
-    P, gauss, rn, rw, ra, splitInTwo, getAdjective, trimVowels, common,
+    P, gauss, rn, rw, ra, splitInTwo, toAdjective, trimVowels, common,
     rand, round
 } from "./utils.js";
 import { toggleLabels, layerIsOn } from "./ui/layers.js";
@@ -646,7 +646,7 @@ export function generateCampaigns() {
             const name = i && P(.8) ? pack.states[i].name : Names.getCultureShort(s.culture);
             const start = gauss(options.year - 100, 150, 1, options.year - 6);
             const end = start + gauss(4, 5, 1, options.year - start - 1);
-            return { name: getAdjective(name) + " " + rw(wars), start, end };
+            return { name: toAdjective(name) + " " + rw(wars), start, end };
         }).sort((a, b) => a.start - b.start);
     });
 }

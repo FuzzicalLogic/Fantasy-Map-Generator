@@ -3,7 +3,7 @@ import {
 } from "../main.js"
 import * as Names from "./names-generator.js";
 
-import { getMixedColor, gauss, rn, rw, ra, getAdjective, trimVowels, biased, rand } from "./utils.js";
+import { getMixedColor, gauss, rn, rw, ra, toAdjective, trimVowels, biased, rand } from "./utils.js";
 
   // name generation approach and relative chance to be selected
 const approach = {
@@ -384,7 +384,7 @@ function getReligionName(form, deity, center, pack) {
     const place = function (adj) {
         const base = cells.burg[center] ? pack.burgs[cells.burg[center]].name : pack.states[cells.state[center]].name;
         let name = trimVowels(base.split(/[ ,]+/)[0]);
-        return adj ? getAdjective(name) : name;
+        return adj ? toAdjective(name) : name;
     }
     const culture = function () { return pack.cultures[cells.culture[center]].name; }
 
