@@ -8,6 +8,7 @@ import {
 import * as Names from "./names-generator.js";
 import * as Routes from "./routes-generator.js";
 import * as State from "../entities/State.js";
+import * as Province from "../entities/Province.js";
 
 import {
     findCell, getColors, getRandomColor, getMixedColor,
@@ -760,11 +761,21 @@ export function generateDiplomacy() {
 
         // attacker allies join if the defender is their rival or joined power > defenders power and defender is not an ally
         ad.forEach((r, d) => {
-            if (r !== "Ally" || states[d].diplomacy.includes("Vassal") || defenders.includes(d)) return;
+            if (r !== "Ally"
+            || states[d].diplomacy.includes("Vassal")
+            || defenders.includes(d))
+                return;
             const name = states[d].name;
-            if (states[d].diplomacy[defender] !== "Rival" && (P(.2) || ap <= dp * 1.2)) { war.push(`${an}'s ally ${name} avoided entering the war`); return; }
-            const allies = states[d].diplomacy.map((r, d) => r === "Ally" ? d : 0).filter(d => d);
-            if (allies.some(ally => defenders.includes(ally))) { war.push(`${an}'s ally ${name} did not join the war as its allies are in war on both sides`); return; };
+            if (states[d].diplomacy[defender] !== "Rival" && (P(.2) || ap <= dp * 1.2)) {
+                war.push(`${an}'s ally ${name} avoided entering the war`);
+                return;
+            }
+            const allies = states[d].diplomacy.map((r, d) => r === "Ally" ? d : 0)
+                .filter(d => d);
+            if (allies.some(ally => defenders.includes(ally))) {
+                war.push(`${an}'s ally ${name} did not join the war as its allies are in war on both sides`);
+                return;
+            };
 
             attackers.push(d);
             ap += states[d].area * states[d].expansionism;
@@ -825,24 +836,23 @@ export function defineStateForms(list) {
 
 export function generateProvinces(regenerate) {
     console.time("generateProvinces");
-    const localSeed = regenerate ? Math.floor(Math.random() * 1e9).toString() : seed;
+    const localSeed = regenerate
+        ? Math.floor(Math.random() * 1e9).toString()
+        : seed;
     Math.seedrandom(localSeed);
 
     const cells = pack.cells, states = pack.states, burgs = pack.burgs;
     const provinces = pack.provinces = [0];
     cells.province = new Uint16Array(cells.i.length); // cell state
     const percentage = +provincesInput.value;
-    if (states.length < 2 || !percentage) { states.forEach(s => s.provinces = []); return; } // no provinces
-    const max = percentage == 100 ? 1000 : gauss(20, 5, 5, 100) * percentage ** .5; // max growth
+    if (states.length < 2 || !percentage) {
+        states.forEach(s => s.provinces = []);
+        return;
+    } // no provinces
+    const max = percentage == 100
+        ? 1000
+        : gauss(20, 5, 5, 100) * percentage ** .5; // max growth
 
-    const forms = {
-        Monarchy: { County: 11, Earldom: 3, Shire: 1, Landgrave: 1, Margrave: 1, Barony: 1 },
-        Republic: { Province: 6, Department: 2, Governorate: 2, State: 1, Canton: 1, Prefecture: 1 },
-        Theocracy: { Parish: 5, Deanery: 3, Province: 2, Council: 1, District: 1 },
-        Union: { Province: 2, State: 1, Canton: 1, Republic: 1, County: 1 },
-        Wild: { Territory: 10, Land: 5, Province: 2, Region: 2, Tribe: 1, Clan: 1 },
-        Horde: { Horde: 1 }
-    }
 
     // generate provinces for a selected burgs
     Math.seedrandom(localSeed);
@@ -865,7 +875,7 @@ export function generateProvinces(regenerate) {
             const name = P(.5) ? Names.getState(Names.getCultureShort(c), c) : stateBurgs[i].name;
             const formName = rw(form);
             form[formName] += 5;
-            const fullName = name + " " + formName;
+            const fullName = `${name} ${formName}`;
             const color = getMixedColor(s.color);
             provinces.push({ i: province, state: s.i, center, burg, name, formName, fullName, color });
         }
@@ -874,21 +884,30 @@ export function generateProvinces(regenerate) {
     // expand generated provinces
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
-    provinces.forEach(function (p) {
-        if (!p.i || p.removed) return;
-        cells.province[p.center] = p.i;
-        queue.queue({ e: p.center, p: 0, province: p.i, state: p.state });
-        cost[p.center] = 1;
+    provinces.filter(({ i, removed }) => !!i && !removed)
+        .forEach(function ({ i, center, state}) {
+        cells.province[center] = i;
+        queue.queue({ e: center, p: 0, province: i, state: state });
+        cost[center] = 1;
         //debug.append("circle").attr("cx", cells.p[p.center][0]).attr("cy", cells.p[p.center][1]).attr("r", .3).attr("fill", "red");
     });
 
     while (queue.length) {
-        const next = queue.dequeue(), n = next.e, p = next.p, province = next.province, state = next.state;
+        const next = queue.dequeue(),
+            { e: n, p, province, state } = next;
         cells.c[n].forEach(function (e) {
             const land = cells.h[e] >= 20;
-            if (!land && !cells.t[e]) return; // cannot pass deep ocean
-            if (land && cells.state[e] !== state) return;
-            const evevation = cells.h[e] >= 70 ? 100 : cells.h[e] >= 50 ? 30 : cells.h[e] >= 20 ? 10 : 100;
+            if (!land && !cells.t[e])
+                return; // cannot pass deep ocean
+            if (land && cells.state[e] !== state)
+                return;
+            const evevation = cells.h[e] >= 70
+                ? 100
+                : cells.h[e] >= 50
+                    ? 30
+                    : cells.h[e] >= 20
+                        ? 10
+                        : 100;
             const totalCost = p + evevation;
 
             if (totalCost > max) return;
@@ -902,29 +921,39 @@ export function generateProvinces(regenerate) {
 
     // justify provinces shapes a bit
     for (const i of cells.i) {
-        if (cells.burg[i]) continue; // do not overwrite burgs
-        const neibs = cells.c[i].filter(c => cells.state[c] === cells.state[i]).map(c => cells.province[c]);
+        if (cells.burg[i])
+            continue; // do not overwrite burgs
+        const neibs = cells.c[i].filter(c => cells.state[c] === cells.state[i])
+            .map(c => cells.province[c]);
         const adversaries = neibs.filter(c => c !== cells.province[i]);
-        if (adversaries.length < 2) continue;
+        if (adversaries.length < 2)
+            continue;
         const buddies = neibs.filter(c => c === cells.province[i]).length;
-        if (buddies.length > 2) continue;
+        if (buddies.length > 2)
+            continue;
         const competitors = adversaries.map(p => adversaries.reduce((s, v) => v === p ? s + 1 : s, 0));
         const max = d3.max(competitors);
-        if (buddies >= max) continue;
+        if (buddies >= max)
+            continue;
         cells.province[i] = adversaries[competitors.indexOf(max)];
     }
 
     // add "wild" provinces if some cells don't have a province assigned
     const noProvince = Array.from(cells.i).filter(i => cells.state[i] && !cells.province[i]); // cells without province assigned
     states.forEach(s => {
-        if (!s.provinces.length) return;
+        if (!s.provinces.length)
+            return;
         let stateNoProvince = noProvince.filter(i => cells.state[i] === s.i && !cells.province[i]);
         while (stateNoProvince.length) {
             // add new province
             const province = provinces.length;
             const burgCell = stateNoProvince.find(i => cells.burg[i]);
-            const center = burgCell ? burgCell : stateNoProvince[0];
-            const burg = burgCell ? cells.burg[burgCell] : 0;
+            const center = burgCell
+                ? burgCell
+                : stateNoProvince[0];
+            const burg = burgCell
+                ? cells.burg[burgCell]
+                : 0;
             cells.province[center] = province;
 
             // expand province
@@ -934,15 +963,25 @@ export function generateProvinces(regenerate) {
                 const next = queue.dequeue(), n = next.e, p = next.p;
 
                 cells.c[n].forEach(function (e) {
-                    if (cells.province[e]) return;
+                    if (cells.province[e])
+                        return;
                     const land = cells.h[e] >= 20;
-                    if (cells.state[e] && cells.state[e] !== s.i) return;
-                    const ter = land ? cells.state[e] === s.i ? 3 : 20 : cells.t[e] ? 10 : 30;
+                    if (cells.state[e] && cells.state[e] !== s.i)
+                        return;
+                    const ter = land
+                        ? cells.state[e] === s.i
+                            ? 3
+                            : 20
+                        : cells.t[e]
+                            ? 10
+                            : 30;
                     const totalCost = p + ter;
 
-                    if (totalCost > max) return;
+                    if (totalCost > max)
+                        return;
                     if (!cost[e] || totalCost < cost[e]) {
-                        if (land && cells.state[e] === s.i) cells.province[e] = province; // assign province to a cell
+                        if (land && cells.state[e] === s.i)
+                            cells.province[e] = province; // assign province to a cell
                         cost[e] = totalCost;
                         queue.queue({ e, p: totalCost });
                     }
@@ -957,8 +996,14 @@ export function generateProvinces(regenerate) {
             const singleIsle = provCells.length === f.cells && !provCells.find(i => cells.f[i] !== f.i);
             const isleGroup = !singleIsle && !provCells.find(i => pack.features[cells.f[i]].group !== "isle");
             const colony = !singleIsle && !isleGroup && P(.5) && !isPassable(s.center, center);
-            const formName = singleIsle ? "Island" : isleGroup ? "Islands" : colony ? "Colony" : rw(forms["Wild"]);
-            const fullName = name + " " + formName;
+            const formName = singleIsle
+                ? "Island"
+                : isleGroup
+                    ? "Islands"
+                    : colony
+                        ? "Colony"
+                        : rw(forms["Wild"]);
+            const fullName = `${name} ${formName}`;
             const color = getMixedColor(s.color);
             provinces.push({ i: province, state: s.i, center, burg, name, formName, fullName, color });
             s.provinces.push(province);
