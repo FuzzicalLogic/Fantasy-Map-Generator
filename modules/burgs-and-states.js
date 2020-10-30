@@ -864,7 +864,7 @@ export function generateProvinces(regenerate) {
             .sort((a, b) => b.capital - a.capital);
         if (stateBurgs.length < 2) return; // at least 2 provinces are required
         const provincesNumber = Math.max(Math.ceil(stateBurgs.length * percentage / 100), 2);
-        const form = Object.assign({}, forms[s.form]);
+        const form = Object.assign({}, Province.forms[s.form]);
 
         for (let i = 0; i < provincesNumber; i++) {
             const province = provinces.length;
