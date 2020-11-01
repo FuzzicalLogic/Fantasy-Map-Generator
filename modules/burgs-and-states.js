@@ -1002,7 +1002,7 @@ export function generateProvinces(regenerate) {
                     ? "Islands"
                     : colony
                         ? "Colony"
-                        : rw(forms["Wild"]);
+                        : rw(Province.forms["Wild"]);
             const fullName = `${name} ${formName}`;
             const color = getMixedColor(s.color);
             provinces.push({ i: province, state: s.i, center, burg, name, formName, fullName, color });
