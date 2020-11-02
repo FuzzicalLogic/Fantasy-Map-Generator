@@ -453,10 +453,12 @@ function openInMFCG(event) {
         const temple = +burg.temple;
         const shanty = +burg.shanty;
 
-        const sea = coast && cells.haven[burg.cell] ? getSeaDirections(burg.cell) : "";
+        const sea = coast && cells[burg.cell].haven
+            ? getSeaDirections(burg.cell)
+            : "";
         function getSeaDirections(i) {
             const p1 = cells.p[i];
-            const p2 = cells.p[cells.haven[i]];
+            const p2 = cells.p[cells[i].haven];
             let deg = Math.atan2(p2[1] - p1[1], p2[0] - p1[0]) * 180 / Math.PI - 90;
             if (deg < 0) deg += 360;
             const norm = rn(normalize(deg, 0, 360) * 2, 2); // 0 = south, 0.5 = west, 1 = north, 1.5 = east

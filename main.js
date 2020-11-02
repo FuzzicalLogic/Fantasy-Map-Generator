@@ -1048,8 +1048,7 @@ export function reMarkFeatures({ cells }) {
         temp = grid.cells.temp;
     cells.f = new Uint16Array(cells.length); // cell feature number
     cells.t = new Int16Array(cells.length); // cell type: 1 = land along coast; -1 = water along coast;
-    cells.haven = cells.length < 65535 ? new Uint16Array(cells.length) : new Uint32Array(cells.length);// cell haven (opposite water cell);
-    //cells.harbor = new Uint8Array(cells.length); // cell harbor (number of adjacent water cells);
+    cells.forEach(x => x.haven = 0);
     cells.forEach(x => x.harbor = 0);
 
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
@@ -1068,10 +1067,13 @@ export function reMarkFeatures({ cells }) {
                     cells.t[q] = 1;
                     cells.t[e] = -1;
                     cells[q].harbor++;
-                    if (!cells.haven[q]) cells.haven[q] = e;
+                    if (!cells[q].haven)
+                        cells[q].haven = e;
                 } else if (land && eLand) {
-                    if (!cells.t[e] && cells.t[q] === 1) cells.t[e] = 2;
-                    else if (!cells.t[q] && cells.t[e] === 1) cells.t[q] = 2;
+                    if (!cells.t[e] && cells.t[q] === 1)
+                        cells.t[e] = 2;
+                    else if (!cells.t[q] && cells.t[e] === 1)
+                        cells.t[q] = 2;
                 }
                 if (!cells.f[e] && land === eLand) {
                     queue.push(e);
@@ -1193,8 +1195,8 @@ export function rankCells() {
 
         if (cells.t[i] === 1) {
             if (cells.r[i]) s += 15; // estuary is valued
-            const type = f[cells.f[cells.haven[i]]].type;
-            const group = f[cells.f[cells.haven[i]]].group;
+            const type = f[cells.f[cells[i].haven]].type;
+            const group = f[cells.f[cells[i].haven]].group;
             if (type === "lake") {
                 // lake coast is valued
                 if (group === "freshwater") s += 30;
@@ -1357,14 +1359,14 @@ export function addMarkers(number = 1) {
 
     void function addBattlefields() {
         let battlefields = cells.map((v, k) => k)
-            .filter(i => cells.state[i] && cells[i].pop > 2 && cells.h[i] < 50 && cells.h[i] > 25);
+            .filter(i => cells[i].state && cells[i].pop > 2 && cells.h[i] < 50 && cells.h[i] > 25);
         let count = battlefields.length < 100 ? 0 : Math.ceil(battlefields.length / 500 * number);
         if (count) addMarker("battlefield", "⚔️", 50, 52, 12);
 
         while (count && battlefields.length) {
             const cell = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
             const id = appendMarker(cell, "battlefield");
-            const campaign = ra(states[cells.state[cell]].campaigns);
+            const campaign = ra(states[cells[cell].state].campaigns);
             const date = generateDate(campaign.start, campaign.end);
             const name = Names.getCulture(cells[cell].culture) + " Battlefield";
             const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
@@ -1458,7 +1460,7 @@ export function addZones(number = 1) {
 
         const neib = ra(state.neighbors.filter(n => n));
         const cell = cells.map((v, k) => k)
-            .find(i => cells.state[i] === state.i && cells[i].c.some(c => cells.state[c] === neib));
+            .find(i => cells[i].state === state.i && cells[i].c.some(c => cells[c].state === neib));
         const cellsArray = [], queue = [cell], power = rand(10, 30);
 
         while (queue.length) {
@@ -1468,9 +1470,9 @@ export function addZones(number = 1) {
 
             cells[q].c.forEach(e => {
                 if (used[e]) return;
-                if (cells.state[e] !== state.i) return;
+                if (cells[e].state !== state.i) return;
                 used[e] = 1;
-                if (e % 4 !== 0 && !cells[e].c.some(c => cells.state[c] === neib)) return;
+                if (e % 4 !== 0 && !cells[e].c.some(c => cells[c].state === neib)) return;
                 queue.push(e);
             });
         }

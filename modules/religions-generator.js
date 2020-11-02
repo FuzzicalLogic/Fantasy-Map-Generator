@@ -104,13 +104,15 @@ export function generate(numReligions, pack) {
     for (let i = 0; religions.length < count && i < 1000; i++) {
         let center = sorted[biased(0, sorted.length - 1, 5)]; // religion center
         const form = rw(forms.Organized);
-        const state = cells.state[center];
+        const state = cells[center].state;
         const culture = cells[center].culture;
 
         const deity = form === "Non-theism" ? null : getDeityName(culture);
         let [name, expansion] = getReligionName(form, deity, center, pack);
-        if (expansion === "state" && !state) expansion = "global";
-        if (expansion === "culture" && !culture) expansion = "global";
+        if (expansion === "state" && !state)
+            expansion = "global";
+        if (expansion === "culture" && !culture)
+            expansion = "global";
 
         if (expansion === "state" && Math.random() > .5)
             center = states[state].center;
@@ -246,11 +248,12 @@ function expandReligions(pack) {
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
 
-    religions.filter(r => r.type === "Organized" || r.type === "Cult").forEach(r => {
-        cells.religion[r.center] = r.i;
-        queue.queue({ e: r.center, p: 0, r: r.i, s: cells.state[r.center], c: r.culture });
-        cost[r.center] = 1;
-    });
+    religions.filter(r => r.type === "Organized" || r.type === "Cult")
+        .forEach(r => {
+            cells.religion[r.center] = r.i;
+            queue.queue({ e: r.center, p: 0, r: r.i, s: cells[r.center].state, c: r.culture });
+            cost[r.center] = 1;
+        });
 
     const neutral = cells.length / 5000 * 200 * gauss(1, .3, .2, 2, 2) * neutralInput.value; // limit cost for organized religions growth
     const popCost = d3.max(cells.map(x => x.pop)) / 3; // enougth population to spered religion without penalty
@@ -262,11 +265,11 @@ function expandReligions(pack) {
         cells[n].c.forEach(function (e) {
             if (expansion === "culture" && c !== cells[e].culture)
                 return;
-            if (expansion === "state" && s !== cells.state[e])
+            if (expansion === "state" && s !== cells[e].state)
                 return;
 
             const cultureCost = c !== cells[e].culture ? 10 : 0;
-            const stateCost = s !== cells.state[e] ? 10 : 0;
+            const stateCost = s !== cells[e].state ? 10 : 0;
             const biomeCost = cells[e].road
                 ? 1
                 : biomesData.cost[cells[e].biome];

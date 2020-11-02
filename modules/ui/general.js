@@ -277,8 +277,8 @@ function showMapTooltip(point, e, i, g) {
         const type = religion.type === "Cult" || religion.type == "Heresy" ? religion.type : religion.type + " religion";
         tip(type + ": " + religion.name);
     }
-    else if (pack.cells.state[i] && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
-        const state = pack.states[pack.cells.state[i]].fullName;
+    else if (pack.cells[i].state && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
+        const state = pack.states[pack.cells[i].state].fullName;
         const province = pack.cells.province[i];
         const prov = province ? pack.provinces[province].fullName + ", " : "";
         tip(prov + state);

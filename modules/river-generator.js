@@ -135,7 +135,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
         const nx = p[min][0], ny = p[min][1];
         if (h[min] < 20) {
             // pour water to the sea haven
-            riversData.push({ river: r[i], cell: cells.haven[i], x: nx, y: ny });
+            riversData.push({ river: r[i], cell: cells[i].haven, x: nx, y: ny });
         }
         else {
             const mf = features[cells.f[min]]; // feature of min cell

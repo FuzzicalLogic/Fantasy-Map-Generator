@@ -72,7 +72,7 @@ export function generate() {
     for (const i of xs) {
         if (!cells[i].pop)
             continue;
-        const s = states[cells.state[i]]; // cell state
+        const s = states[cells[i].state]; // cell state
         if (!s.i || s.removed)
             continue;
 
@@ -93,9 +93,14 @@ export function generate() {
             const mod = type === "generic" ? 1 : cellTypeModifier[type][u.type] // cell specific modifier
             const army = m * perc * mod; // rural cell army
             const t = rn(army * s.temp[u.name] * populationRate.value); // total troops
-            if (!t) continue;
+            if (!t)
+                continue;
             let x = p[i][0], y = p[i][1], n = 0;
-            if (u.type === "naval") { let haven = cells.haven[i]; x = p[haven][0], y = p[haven][1]; n = 1 }; // place naval to sea
+            if (u.type === "naval") {
+                let haven = cells[i].haven;
+                x = p[haven][0], y = p[haven][1];
+                n = 1;
+            }; // place naval to sea
             s.temp.platoons.push({ cell: i, a: t, t, x, y, u: u.name, n, s: u.separate, type: u.type });
         }
     }
@@ -105,10 +110,14 @@ export function generate() {
         const s = states[b.state]; // burg state
 
         let m = b.population * urbanization.value / 100; // basic urban army in percentages
-        if (b.capital) m *= 1.2; // capital has household troops
-        if (b.culture !== s.culture) m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
-        if (cells.religion[b.cell] !== cells.religion[s.center]) m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
-        if (cells.f[b.cell] !== cells.f[s.center]) m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
+        if (b.capital)
+            m *= 1.2; // capital has household troops
+        if (b.culture !== s.culture)
+            m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
+        if (cells.religion[b.cell] !== cells.religion[s.center])
+            m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
+        if (cells.f[b.cell] !== cells.f[s.center])
+            m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
         const type = getType(b.cell);
 
         for (const u of options.military) {
@@ -121,7 +130,11 @@ export function generate() {
             const t = rn(army * s.temp[u.name] * populationRate.value); // total troops
             if (!t) continue;
             let x = p[b.cell][0], y = p[b.cell][1], n = 0;
-            if (u.type === "naval") { let haven = cells.haven[b.cell]; x = p[haven][0], y = p[haven][1]; n = 1 }; // place naval in sea cell
+            if (u.type === "naval") {
+                let haven = cells[b.cell].haven;
+                x = p[haven][0], y = p[haven][1];
+                n = 1;
+            }; // place naval in sea cell
             s.temp.platoons.push({ cell: b.cell, a: t, t, x, y, u: u.name, n, s: u.separate, type: u.type });
         }
     }

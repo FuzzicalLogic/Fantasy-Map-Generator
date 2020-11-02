@@ -691,17 +691,21 @@ export function drawStates() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (!cells.state[i] || used[i]) continue;
-        const s = cells.state[i];
-        const onborder = cells[i].c.some(n => cells.state[n] !== s);
-        if (!onborder) continue;
+        if (!cells[i].state || used[i])
+            continue;
+        const s = cells[i].state;
+        const onborder = cells[i].c.some(n => cells[n].state !== s);
+        if (!onborder)
+            continue;
 
-        const borderWith = cells[i].c.map(c => cells.state[c]).find(n => n !== s);
-        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.state[i] === borderWith));
+        const borderWith = cells[i].c.map(c => cells[c].state).find(n => n !== s);
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells[i].state === borderWith));
         const chain = connectVertices(vertex, s, borderWith);
-        if (chain.length < 3) continue;
+        if (chain.length < 3)
+            continue;
         const points = chain.map(v => vertices.p[v[0]]);
-        if (!vArray[s]) vArray[s] = [];
+        if (!vArray[s])
+            vArray[s] = [];
         vArray[s].push(points);
         body[s] += "M" + points.join("L");
         gap[s] += "M" + vertices.p[chain[0][0]] + chain.reduce((r, v, i, d) => !i ? r : !v[2] ? r + "L" + vertices.p[v[0]] : d[i + 1] && !d[i + 1][2] ? r + "M" + vertices.p[v[0]] : r, "");
@@ -727,22 +731,40 @@ export function drawStates() {
     // connect vertices to chain
     function connectVertices(start, t, state) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells.state[c] !== t);
-        function check(i) { state = cells.state[i]; land = cells.h[i] >= 20; }
+        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c].state !== t);
+        function check(i) {
+            state = cells[i].state;
+            land = cells.h[i] >= 20;
+        }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
-            const prev = chain[chain.length - 1] ? chain[chain.length - 1][0] : -1; // previous vertex in chain
+            const prev = chain[chain.length - 1]
+                ? chain[chain.length - 1][0]
+                : -1; // previous vertex in chain
             chain.push([current, state, land]); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells.state[c] === t).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || cells.state[c[0]] !== t;
-            const c1 = c[1] >= n || cells.state[c[1]] !== t;
-            const c2 = c[2] >= n || cells.state[c[2]] !== t;
+            c.filter(c => cells[c] && cells[c].state === t)
+                .forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].state !== t;
+            const c1 = c[1] >= n || cells[c[1]].state !== t;
+            const c2 = c[2] >= n || cells[c[2]].state !== t;
             const v = vertices.v[current]; // neighboring vertices
-            if (v[0] !== prev && c0 !== c1) { current = v[0]; check(c0 ? c[0] : c[1]); } else
-                if (v[1] !== prev && c1 !== c2) { current = v[1]; check(c1 ? c[1] : c[2]); } else
-                    if (v[2] !== prev && c0 !== c2) { current = v[2]; check(c2 ? c[2] : c[0]); }
-            if (current === chain[chain.length - 1][0]) { console.error("Next vertex is not found"); break; }
+            if (v[0] !== prev && c0 !== c1) {
+                current = v[0];
+                check(c0 ? c[0] : c[1]);
+            }
+            else if (v[1] !== prev && c1 !== c2) {
+                current = v[1];
+                check(c1 ? c[1] : c[2]);
+            }
+            else if (v[2] !== prev && c0 !== c2) {
+                current = v[2];
+                check(c2 ? c[2] : c[0]);
+            }
+            if (current === chain[chain.length - 1][0]) {
+                console.error("Next vertex is not found");
+                break;
+            }
         }
         chain.push([start, state, land]); // add starting vertex to sequence to close the path
         return chain;
@@ -756,18 +778,19 @@ export function drawBorders() {
     console.time("drawBorders");
     view.borders.selectAll("path").remove();
 
-    const cells = pack.cells, vertices = pack.vertices, n = cells.length;
+    const { cells, vertices } = pack,
+        n = cells.length;
     const sPath = [], pPath = [];
     const sUsed = new Array(pack.states.length).fill("").map(a => []);
     const pUsed = new Array(pack.provinces.length).fill("").map(a => []);
 
     for (let i = 0; i < cells.length; i++) {
-        if (!cells.state[i]) continue;
+        if (!cells[i].state) continue;
         const p = cells.province[i];
-        const s = cells.state[i];
+        const s = cells[i].state;
 
         // if cell is on province border
-        const provToCell = cells[i].c.find(n => cells.state[n] === s && p > cells.province[n] && pUsed[p][n] !== cells.province[n]);
+        const provToCell = cells[i].c.find(n => cells[n].state === s && p > cells.province[n] && pUsed[p][n] !== cells.province[n]);
         if (provToCell) {
             const provTo = cells.province[provToCell];
             pUsed[p][provToCell] = provTo;
@@ -782,12 +805,12 @@ export function drawBorders() {
         }
 
         // if cell is on state border
-        const stateToCell = cells[i].c.find(n => cells.h[n] >= 20 && s > cells.state[n] && sUsed[s][n] !== cells.state[n]);
+        const stateToCell = cells[i].c.find(n => cells.h[n] >= 20 && s > cells[n].state && sUsed[s][n] !== cells[n].state);
         if (stateToCell !== undefined) {
-            const stateTo = cells.state[stateToCell];
+            const stateTo = cells[stateToCell].state;
             sUsed[s][stateToCell] = stateTo;
-            const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] >= 20 && cells.state[i] === stateTo));
-            const chain = connectVertices(vertex, s, cells.state, stateTo, sUsed);
+            const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] >= 20 && cells[i].state === stateTo));
+            const chain = connectVertices(vertex, s, cells.map(x => x.state), stateTo, sUsed);
 
             if (chain.length > 1) {
                 sPath.push("M" + chain.map(c => vertices.p[c]).join(" "));
@@ -808,39 +831,55 @@ export function drawBorders() {
 
         // find starting vertex
         for (let i = 0; i < 1000; i++) {
-            if (i === 999) console.error("Find starting vertex: limit is reached", current, f, t);
+            if (i === 999)
+                console.error("Find starting vertex: limit is reached", current, f, t);
             const p = chain[chain.length - 2] || -1; // previous vertex
-            const v = vertices.v[current], c = vertices.c[current];
+            const v = vertices.v[current],
+                c = vertices.c[current];
 
             const v0 = checkCell(c[0]) !== checkCell(c[1]) && checkVertex(v[0]);
             const v1 = checkCell(c[1]) !== checkCell(c[2]) && checkVertex(v[1]);
             const v2 = checkCell(c[0]) !== checkCell(c[2]) && checkVertex(v[2]);
-            if (v0 + v1 + v2 === 1) break;
+            if (v0 + v1 + v2 === 1)
+                break;
             current = v0 && p !== v[0] ? v[0] : v1 && p !== v[1] ? v[1] : v[2];
 
-            if (current === chain[0]) break;
-            if (current === p) return [];
+            if (current === chain[0])
+                break;
+            if (current === p)
+                return [];
             chain.push(current);
         }
 
         chain = [current]; // vertices chain to form a path
         // find path
         for (let i = 0; i < 1000; i++) {
-            if (i === 999) console.error("Find path: limit is reached", current, f, t);
+            if (i === 999)
+                console.error("Find path: limit is reached", current, f, t);
             const p = chain[chain.length - 2] || -1; // previous vertex
-            const v = vertices.v[current], c = vertices.c[current];
-            c.filter(c => array[c] === t).forEach(c => used[f][c] = t);
+            const v = vertices.v[current],
+                c = vertices.c[current];
+            c.filter(c => array[c] === t)
+                .forEach(c => used[f][c] = t);
 
             const v0 = checkCell(c[0]) !== checkCell(c[1]) && checkVertex(v[0]);
             const v1 = checkCell(c[1]) !== checkCell(c[2]) && checkVertex(v[1]);
             const v2 = checkCell(c[0]) !== checkCell(c[2]) && checkVertex(v[2]);
-            current = v0 && p !== v[0] ? v[0] : v1 && p !== v[1] ? v[1] : v[2];
+            current = v0 && p !== v[0]
+                ? v[0]
+                : v1 && p !== v[1]
+                    ? v[1]
+                    : v[2];
 
-            if (current === p) break;
-            if (current === chain[chain.length - 1]) break;
-            if (chain.length > 1 && v0 + v1 + v2 < 2) break;
+            if (current === p)
+                break;
+            if (current === chain[chain.length - 1])
+                break;
+            if (chain.length > 1 && v0 + v1 + v2 < 2)
+                break;
             chain.push(current);
-            if (current === chain[0]) break;
+            if (current === chain[0])
+                break;
         }
 
         return chain;

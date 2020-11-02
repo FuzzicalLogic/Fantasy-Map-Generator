@@ -168,13 +168,13 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { haven, g, f, r, fl } = cells;
+    const { g, f, r, fl } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
 
         // asign port status to some coastline burgs with temp > 0 °C
-        const isHaven = haven[i];
+        const isHaven = cells[i].haven;
         if (isHaven && temp[g[i]] > 0) {
             const idxF = f[isHaven]; // water body id
             // port is a capital with any harbor OR town with good harbor
@@ -189,7 +189,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
 
         if (b.port) {
             b.population = b.population * 1.3; // increase port population
-            const e = cells[i].v.filter(cell => vertices.c[cell].some(c => c === haven[i])); // vertices of common edge
+            const e = cells[i].v.filter(cell => vertices.c[cell].some(c => c === cells[i].haven)); // vertices of common edge
             b.x = rn((vertices.p[e[0]][0] + vertices.p[e[1]][0]) / 2, 2);
             b.y = rn((vertices.p[e[0]][1] + vertices.p[e[1]][1]) / 2, 2);
         }
@@ -212,9 +212,11 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
     // de-assign port status if it's the only one on feature
     const ports = burgs.filter(b => !b.removed && b.port > 0);
     for (const f of features) {
-        if (!f.i || f.land || f.border) continue;
+        if (!f.i || f.land || f.border)
+            continue;
         const featurePorts = ports.filter(b => b.port === f.i);
-        if (featurePorts.length === 1) featurePorts[0].port = 0;
+        if (featurePorts.length === 1)
+            featurePorts[0].port = 0;
     }
 
     console.timeEnd("specifyBurgs");
@@ -291,11 +293,12 @@ export function drawBurgs() {
 export function expandStates({ cells, states, cultures, burgs}) {
     console.time("expandStates");
 
-    cells.state = new Uint16Array(cells.length); // cell state
+    cells.forEach(x => x.state = 0);
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
-    states.filter(s => s.i && !s.removed).forEach(function (s) {
-        cells.state[burgs[s.capital].cell] = s.i;
+    states.filter(s => s.i && !s.removed)
+    .forEach(function (s) {
+        cells[burgs[s.capital].cell].state = s.i;
         const b = cells[cultures[s.culture].center].biome; // native biome
         queue.queue({ e: s.center, p: 0, s: s.i, b });
         cost[s.center] = 1;
@@ -309,7 +312,8 @@ export function expandStates({ cells, states, cultures, burgs}) {
         const culture = states[s].culture;
 
         cells[n].c.forEach(function (e) {
-            if (cells.state[e] && e === states[cells.state[e]].center) return; // do not overwrite capital cells
+            if (cells[e].state && e === states[cells[e].state].center)
+                return; // do not overwrite capital cells
 
             const cultureCost = culture === cells[e].culture ? -9 : 100;
             const populationCost = cells.h[e] < 20
@@ -327,7 +331,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
             if (totalCost > neutral) return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.h[e] >= 20) cells.state[e] = s; // assign state to cell
+                if (cells.h[e] >= 20) cells[e].state = s; // assign state to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, s, b });
             }
@@ -335,12 +339,15 @@ export function expandStates({ cells, states, cultures, burgs}) {
     }
 
     burgs.filter(b => b.i && !b.removed)
-        .forEach(b => b.state = cells.state[b.cell]); // assign state to burgs
+        .forEach(b => b.state = cells[b.cell].state); // assign state to burgs
 
     function getBiomeCost(b, biome, type) {
-        if (b === biome) return 10; // tiny penalty for native biome
-        if (type === "Hunting") return biomesData.cost[biome] * 2; // non-native biome penalty for hunters
-        if (type === "Nomadic" && biome > 4 && biome < 10) return biomesData.cost[biome] * 3; // forest biome penalty for nomads
+        if (b === biome)
+            return 10; // tiny penalty for native biome
+        if (type === "Hunting")
+            return biomesData.cost[biome] * 2; // non-native biome penalty for hunters
+        if (type === "Nomadic" && biome > 4 && biome < 10)
+            return biomesData.cost[biome] * 3; // forest biome penalty for nomads
         return biomesData.cost[biome]; // general non-native biome penalty
     }
 
@@ -374,7 +381,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
 
 export function normalizeStates({ cells, burgs }) {
     console.time("normalizeStates");
-    let { h, burg, state } = cells;
+    let { h, burg } = cells;
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
         if (h[i] < 20 || burg[i])
@@ -382,15 +389,15 @@ export function normalizeStates({ cells, burgs }) {
         if (cells[i].c.some(c => burgs[burg[c]].capital))
             continue; // do not overwrite near capital
         const neibs = cells[i].c.filter(c => h[c] >= 20);
-        const adversaries = neibs.filter(c => state[c] !== state[i]);
+        const adversaries = neibs.filter(c => cells[c].state !== cells[i].state);
         if (adversaries.length < 2)
             continue;
-        const buddies = neibs.filter(c => state[c] === state[i]);
+        const buddies = neibs.filter(c => cells[c].state === cells[i].state);
         if (buddies.length > 2)
             continue;
         if (adversaries.length <= buddies.length)
             continue;
-        state[i] = state[adversaries[0]];
+        cells[i].state = cells[adversaries[0]].state;
         //debug.append("circle").attr("cx", cells.p[i][0]).attr("cy", cells.p[i][1]).attr("r", .5).attr("fill", "red");
     }
     console.timeEnd("normalizeStates");
@@ -418,15 +425,16 @@ export function updateCultures({ cells, burgs, states }) {
 import { Voronoi } from "./voronoi.js";
 export function drawStateLabels(list) {
     console.time("drawStateLabels");
-    const cells = pack.cells, features = pack.features, states = pack.states;
+    const { cells, features, states } = pack;
     const paths = []; // text paths
     lineGen.curve(d3.curveBundle.beta(1));
 
     for (const s of states) {
-        if (!s.i || s.removed || (list && !list.includes(s.i))) continue;
+        if (!s.i || s.removed || (list && !list.includes(s.i)))
+            continue;
         const used = [];
         const visualCenter = findCell(s.pole[0], s.pole[1]);
-        const start = cells.state[visualCenter] === s.i ? visualCenter : s.center;
+        const start = cells[visualCenter].state === s.i ? visualCenter : s.center;
         const hull = getHull(start, s.i, s.cells / 10);
         const points = [...hull].map(v => pack.vertices.p[v]);
         const delaunay = Delaunator.from(points);
@@ -445,15 +453,22 @@ export function drawStateLabels(list) {
 
             while (queue.length) {
                 const q = queue.pop();
-                const nQ = cells[q].c.filter(c => cells.state[c] === state);
+                const nQ = cells[q].c.filter(c => cells[c].state === state);
 
                 cells[q].c.forEach(function (c, d) {
                     const passableLake = features[cells.f[c]].type === "lake" && features[cells.f[c]].cells < maxLake;
-                    if (cells[c].b || (cells.state[c] !== state && !passableLake)) { hull.add(cells[q].v[d]); return; }
-                    const nC = cells[c].c.filter(n => cells.state[n] === state);
+                    if (cells[c].b || (cells[c].state !== state && !passableLake)) {
+                        hull.add(cells[q].v[d]);
+                        return;
+                    }
+                    const nC = cells[c].c.filter(n => cells[n].state === state);
                     const intersected = common(nQ, nC).length
-                    if (hull.size > 20 && !intersected && !passableLake) { hull.add(cells[q].v[d]); return; }
-                    if (used[c]) return;
+                    if (hull.size > 20 && !intersected && !passableLake) {
+                        hull.add(cells[q].v[d]);
+                        return;
+                    }
+                    if (used[c])
+                        return;
                     used[c] = 1;
                     queue.push(c);
                 });
@@ -578,7 +593,7 @@ export function drawStateLabels(list) {
             if (lines.length < 2) return;
 
             // check whether multilined label is generally inside the strate. If no, replace with short name label
-            const cs = pack.cells.state, b = el.parentNode.getBBox();
+            const cs = pack.cells.map(x => x.state), b = el.parentNode.getBBox();
             const c1 = () => +cs[findCell(b.x, b.y)] === id;
             const c2 = () => +cs[findCell(b.x + b.width / 2, b.y)] === id;
             const c3 = () => +cs[findCell(b.x + b.width, b.y)] === id;
@@ -915,7 +930,7 @@ export function generateProvinces(regenerate) {
             const land = cells.h[e] >= 20;
             if (!land && !cells.t[e])
                 return; // cannot pass deep ocean
-            if (land && cells.state[e] !== state)
+            if (land && cells[e].state !== state)
                 return;
             const evevation = cells.h[e] >= 70
                 ? 100
@@ -926,7 +941,8 @@ export function generateProvinces(regenerate) {
                         : 100;
             const totalCost = p + evevation;
 
-            if (totalCost > max) return;
+            if (totalCost > max)
+                return;
             if (!cost[e] || totalCost < cost[e]) {
                 if (land) cells.province[e] = province; // assign province to a cell
                 cost[e] = totalCost;
@@ -940,7 +956,7 @@ export function generateProvinces(regenerate) {
     for (const i of xs) {
         if (cells.burg[i])
             continue; // do not overwrite burgs
-        const neibs = cells[i].c.filter(c => cells.state[c] === cells.state[i])
+        const neibs = cells[i].c.filter(c => cells[c].state === cells[i].state)
             .map(c => cells.province[c]);
         const adversaries = neibs.filter(c => c !== cells.province[i]);
         if (adversaries.length < 2)
@@ -956,11 +972,11 @@ export function generateProvinces(regenerate) {
     }
 
     // add "wild" provinces if some cells don't have a province assigned
-    const noProvince = Array.from(xs).filter(i => cells.state[i] && !cells.province[i]); // cells without province assigned
+    const noProvince = Array.from(xs).filter(i => cells[i].state && !cells.province[i]); // cells without province assigned
     states.forEach(s => {
         if (!s.provinces.length)
             return;
-        let stateNoProvince = noProvince.filter(i => cells.state[i] === s.i && !cells.province[i]);
+        let stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells.province[i]);
         while (stateNoProvince.length) {
             // add new province
             const province = provinces.length;
@@ -983,10 +999,10 @@ export function generateProvinces(regenerate) {
                     if (cells.province[e])
                         return;
                     const land = cells.h[e] >= 20;
-                    if (cells.state[e] && cells.state[e] !== s.i)
+                    if (cells[e].state && cells[e].state !== s.i)
                         return;
                     const ter = land
-                        ? cells.state[e] === s.i
+                        ? cells[e].state === s.i
                             ? 3
                             : 20
                         : cells.t[e]
@@ -997,7 +1013,7 @@ export function generateProvinces(regenerate) {
                     if (totalCost > max)
                         return;
                     if (!cost[e] || totalCost < cost[e]) {
-                        if (land && cells.state[e] === s.i)
+                        if (land && cells[e].state === s.i)
                             cells.province[e] = province; // assign province to a cell
                         cost[e] = totalCost;
                         queue.queue({ e, p: totalCost });
@@ -1027,13 +1043,17 @@ export function generateProvinces(regenerate) {
 
             // check if there is a land way within the same state between two cells
             function isPassable(from, to) {
-                if (cells.f[from] !== cells.f[to]) return false; // on different islands
-                const queue = [from], used = new Uint8Array(cells.length), state = cells.state[from];
+                if (cells.f[from] !== cells.f[to])
+                    return false; // on different islands
+                const queue = [from],
+                    used = new Uint8Array(cells.length),
+                    state = cells[from].state;
                 while (queue.length) {
                     const current = queue.pop();
                     if (current === to) return true; // way is found
                     cells[current].c.forEach(c => {
-                        if (used[c] || cells.h[c] < 20 || cells.state[c] !== state) return;
+                        if (used[c] || cells.h[c] < 20 || cells[c].state !== state)
+                            return;
                         queue.push(c);
                         used[c] = 1;
                     });
@@ -1042,7 +1062,7 @@ export function generateProvinces(regenerate) {
             }
 
             // re-check
-            stateNoProvince = noProvince.filter(i => cells.state[i] === s.i && !cells.province[i]);
+            stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells.province[i]);
         }
     });
 

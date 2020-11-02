@@ -98,9 +98,11 @@ export function generate() {
     function defineCultureType(i) {
         if (cells.h[i] < 70 && [1, 2, 4].includes(cells[i].biome))
             return "Nomadic"; // high penalty in forest biomes and near coastline
-        if (cells.h[i] > 50) return "Highland"; // no penalty for hills and moutains, high for other elevations
-        const f = pack.features[cells.f[cells.haven[i]]]; // opposite feature
-        if (f.type === "lake" && f.cells > 5) return "Lake" // low water cross penalty and high for growth not along coastline
+        if (cells.h[i] > 50)
+            return "Highland"; // no penalty for hills and moutains, high for other elevations
+        const f = pack.features[cells.f[cells[i].haven]]; // opposite feature
+        if (f.type === "lake" && f.cells > 5)
+            return "Lake" // low water cross penalty and high for growth not along coastline
         if (cells[i].harbor
         && f.type !== "lake" && P(.1)
         || (cells[i].harbor === 1 && P(.6))
@@ -163,7 +165,9 @@ export function getDefault(count) {
     const n = cell => Math.ceil(cells[cell].s / sMax * 3) // normalized cell score
     const td = (cell, goal) => { const d = Math.abs(temp[cells.g[cell]] - goal); return d ? d + 1 : 1; } // temperature difference fee
     const bd = (cell, biomes, fee = 4) => biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
-    const sf = (cell, fee = 4) => cells.haven[cell] && pack.features[cells.f[cells.haven[cell]]].type !== "lake" ? 1 : fee; // not on sea coast fee
+    const sf = (cell, fee = 4) => cells[cell].haven && pack.features[cells.f[cells[cell].haven]].type !== "lake"
+        ? 1
+        : fee; // not on sea coast fee
     // https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
 
     if (culturesSet.value === "european") {

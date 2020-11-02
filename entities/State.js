@@ -190,7 +190,7 @@ const ALT_FORMNAMES = {
 
 window.getStateCells = getCells;
 export function getCells(state, cells = pack.cells) {
-    return cells.map((v, k) => k).filter(idx => cells.state[idx] === state.i);
+    return cells.map((v, k) => k).filter(idx => cells[idx].state === state.i);
 }
 
 export function getBurgs(state, burgs = pack.burgs) {
@@ -198,14 +198,13 @@ export function getBurgs(state, burgs = pack.burgs) {
 }
 
 export function setStatistics(state, { cells }) {
-    const { pop, state: inState } = cells;
     let controlled = getCells(state);
     state.cells = controlled.length;
     state.area = controlled.reduce((sum, idx) => sum += cells[idx].area, 0);
-    state.rural = controlled.reduce((sum, idx) => sum += pop[idx], 0);
+    state.rural = controlled.reduce((sum, idx) => sum += cells[idx].pop, 0);
     state.neighbors = controlled.reduce((arr, idx) => [...arr, ...cells[idx].c], [])
-        .filter(x => !!inState[x] && inState[x] !== state.i)
-        .map(x => inState[x])
+        .filter(x => !!cells[x].state && cells[x].state !== state.i)
+        .map(x => cells[x].state)
         .reduce((arr, x) => arr.includes(x) ? arr : [...arr, x], []);
     let myburgs = getBurgs(state);
     state.burgs = myburgs.length;

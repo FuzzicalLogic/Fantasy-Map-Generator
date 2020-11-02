@@ -221,9 +221,10 @@ export function togglePort(burg) {
     const b = pack.burgs[burg];
     if (b.port) { b.port = 0; return; } // not a port anymore
 
-    const haven = pack.cells.haven[b.cell];
+    const haven = pack.cells[b.cell].haven;
     const port = haven ? pack.cells.f[haven] : -1;
-    if (!haven) tip("Port haven is not found, system won't be able to make a searoute", false, "warn");
+    if (!haven)
+        tip("Port haven is not found, system won't be able to make a searoute", false, "warn");
     b.port = port;
 
     const g = b.capital ? "cities" : "towns";
