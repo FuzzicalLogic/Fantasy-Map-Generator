@@ -49,7 +49,7 @@ function placeCapitals(cells, count) {
     console.time('placeCapitals');
     let burgs = [0];
 
-    const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
+    const score = new Int16Array(cells.map(x => x.s * Math.random())); // cell score for capitals placement
     const sorted = cells.map((v, k) => k)
         .filter(i => score[i] > 0 && cells[i].culture)
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
@@ -93,7 +93,7 @@ function placeCapitals(cells, count) {
 // place secondary settlements based on geo and economical evaluation
 function placeTowns(burgs, cells) {
     console.time('placeTowns');
-    const score = new Int16Array(cells.s.map(s => s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
+    const score = new Int16Array(cells.map(x => x.s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
     const sorted = cells.map((v, k) => k)
         .filter(i => !cells.burg[i] && score[i] > 0 && cells[i].culture)
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
@@ -168,7 +168,7 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { haven, g, f, harbor, s, r, fl } = cells;
+    const { haven, g, f, harbor, r, fl } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -183,7 +183,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
         } else b.port = 0;
 
         // define burg population (keep urbanization at about 10% rate)
-        b.population = rn(Math.max((s[i] + cells[i].road / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
+        b.population = rn(Math.max((cells[i].s + cells[i].road / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
         if (b.capital)
             b.population = rn(b.population * 1.3, 3); // increase capital population
 
@@ -312,7 +312,11 @@ export function expandStates({ cells, states, cultures, burgs}) {
             if (cells.state[e] && e === states[cells.state[e]].center) return; // do not overwrite capital cells
 
             const cultureCost = culture === cells[e].culture ? -9 : 100;
-            const populationCost = cells.h[e] < 20 ? 0 : cells.s[e] ? Math.max(20 - cells.s[e], 0) : 5000;
+            const populationCost = cells.h[e] < 20
+                ? 0
+                : cells[e].s
+                    ? Math.max(20 - cells[e].s, 0)
+                    : 5000;
             const biomeCost = getBiomeCost(b, cells[e].biome, type);
             const heightCost = getHeightCost(pack.features[cells.f[e]], cells.h[e], type);
             const riverCost = getRiverCost(cells.r[e], e, type);

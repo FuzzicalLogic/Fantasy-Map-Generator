@@ -16,7 +16,8 @@ export function generate() {
     cells.forEach(v => v.culture = 0);
     let count = Math.min(+culturesInput.value, +culturesSet.selectedOptions[0].dataset.max);
 
-    const populated = cells.map((v,k) => k).filter(i => cells.s[i]); // populated cells
+    const populated = cells.map((v, k) => k)
+        .filter(i => cells[i].s); // populated cells
     if (populated.length < count * 25) {
         count = Math.floor(populated.length / 50);
         if (!count) {
@@ -51,7 +52,7 @@ export function generate() {
     cultures.forEach(function (c, i) {
         const cell = c.center = placeCenter(c.sort
             ? c.sort
-            : i => cells.s[i]);
+            : i => cells[i].s);
         centers.add(cells.p[cell]);
         c.i = i + 1;
         delete c.odd;
@@ -153,8 +154,8 @@ export function add(center) {
 
 export function getDefault(count) {
     // generic sorting functions
-    const cells = pack.cells, s = cells.s, sMax = d3.max(s), t = cells.t, h = cells.h, temp = grid.cells.temp;
-    const n = cell => Math.ceil(s[cell] / sMax * 3) // normalized cell score
+    const cells = pack.cells, sMax = d3.max(cells.map(x => x.s)), t = cells.t, h = cells.h, temp = grid.cells.temp;
+    const n = cell => Math.ceil(cells[cell].s / sMax * 3) // normalized cell score
     const td = (cell, goal) => { const d = Math.abs(temp[cells.g[cell]] - goal); return d ? d + 1 : 1; } // temperature difference fee
     const bd = (cell, biomes, fee = 4) => biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
     const sf = (cell, fee = 4) => cells.haven[cell] && pack.features[cells.f[cells.haven[cell]]].type !== "lake" ? 1 : fee; // not on sea coast fee
@@ -391,18 +392,13 @@ export function expand() {
             if (totalCost > neutral) return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.s[e] > 0)
+                if (cells[e].s > 0)
                     cells[e].culture = c; // assign culture to populated cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, c });
-
-                //debug.append("text").attr("x", (cells.p[n][0]+cells.p[e][0])/2 - 1).attr("y", (cells.p[n][1]+cells.p[e][1])/2 - 1).text(rn(totalCost-p)).attr("font-size", .8);
-                //const points = [cells.p[n][0], cells.p[n][1], (cells.p[n][0]+cells.p[e][0])/2, (cells.p[n][1]+cells.p[e][1])/2, cells.p[e][0], cells.p[e][1]];
-                //debug.append("polyline").attr("points", points.toString()).attr("marker-mid", "url(#arrow)").attr("opacity", .6);
             }
         });
     }
-    //debug.selectAll(".text").data(cost).enter().append("text").attr("x", (d, e) => cells.p[e][0]-1).attr("y", (d, e) => cells.p[e][1]-1).text(d => d ? rn(d) : "").attr("font-size", 2);
     console.timeEnd('expandCultures');
 }
 

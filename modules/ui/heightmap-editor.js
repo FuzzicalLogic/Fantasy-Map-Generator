@@ -271,7 +271,7 @@ export function editHeightmap() {
             pop[g] = pack.cells[i].pop;
             road[g] = pack.cells[i].road;
             crossroad[g] = pack.cells.crossroad[i];
-            s[g] = pack.cells.s[i];
+            s[g] = pack.cells[i].s;
             state[g] = pack.cells.state[i];
             province[g] = pack.cells.province[i];
             burg[g] = pack.cells.burg[i];

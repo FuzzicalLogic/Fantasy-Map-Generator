@@ -149,7 +149,7 @@ export function addBurg(point) {
     const feature = cells.f[cell];
 
     const temple = pack.states[state].form === "Theocracy";
-    const population = Math.max((cells.s[cell] + cells[cell].road) / 3 + i / 1000 + cell % 100 / 1000, .1);
+    const population = Math.max((cells[cell].s + cells[cell].road) / 3 + i / 1000 + cell % 100 / 1000, .1);
 
     pack.burgs.push({ name, cell, x, y, state, i, culture, feature, capital: 0, port: 0, temple, population });
     cells.burg[cell] = i;

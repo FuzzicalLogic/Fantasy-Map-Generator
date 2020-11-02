@@ -93,8 +93,8 @@ export function generate(numReligions, pack) {
     const sorted = burgs.length > +numReligions
         ? burgs.sort((a, b) => b.population - a.population).map(b => b.cell)
         : cells.map((v, k) => k)
-            .filter(i => cells.s[i] > 2)
-            .sort((a, b) => cells.s[b] - cells.s[a]);
+            .filter(i => cells[i].s > 2)
+            .sort((a, b) => cells[b].s - cells[a].s);
     const religionsTree = d3.quadtree();
     const spacing = (graphWidth + graphHeight) / 6 / numReligions; // base min distance between towns
     const cultsCount = Math.floor(rand(10, 40) / 100 * numReligions);

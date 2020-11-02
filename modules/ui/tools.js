@@ -136,7 +136,7 @@ export function recalculatePopulation() {
         if (!b.i || b.removed) return;
         const i = b.cell;
 
-        b.population = rn(Math.max((pack.cells.s[i] + pack.cells.road[i] / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
+        b.population = rn(Math.max((pack.cells[i].s + pack.cells[i].road / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
         if (b.capital) b.population = b.population * 1.3; // increase capital population
         if (b.port) b.population = b.population * 1.3; // increase port population
         b.population = rn(b.population * gauss(2, 3, .6, 20, 3), 3);
@@ -152,7 +152,7 @@ function regenerateBurgs() {
     pack.provinces.filter(p => p.i).forEach(p => p.burg = 0); // clear province capitals
     const burgsTree = d3.quadtree();
 
-    const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
+    const score = new Int16Array(cells.map(x => x.s * Math.random())); // cell score for capitals placement
     const sorted = cells.map((v, k) => k)
         .filter(i => score[i] > 0 && cells[i].culture)
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes

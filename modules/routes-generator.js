@@ -34,7 +34,7 @@ function getRoads(pack) {
         paths = [...paths, ...segments]
     }
 
-    cells.forEach((v, i) => cells.s[i] += cells[i].road / 2); // add roads to suitability score
+    cells.forEach((v, i) => cells[i].s += cells[i].road / 2); // add roads to suitability score
     console.timeEnd("generateMainRoads");
     return paths;
 }

@@ -1176,8 +1176,8 @@ export function getBiomeId(moisture, temperature, height) {
 export function rankCells() {
     console.time('rankCells');
     const { cells, features: f } = pack;
-    cells.s = new Int16Array(cells.length); // cell suitability array
     cells.forEach(v => v.pop = 0);
+    cells.forEach(v => v.s = 0);
 
     const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.conf); // to normalize flux
     const areaMean = d3.mean(cells.map(x => x.area)); // to adjust population by cell area
@@ -1204,10 +1204,10 @@ export function rankCells() {
             }
         }
 
-        cells.s[i] = s / 5; // general population rate
+        cells[i].s = s / 5; // general population rate
         // cell rural population is suitability adjusted by cell area
-        cells[i].pop = cells.s[i] > 0
-            ? cells.s[i] * cells[i].area / areaMean
+        cells[i].pop = cells[i].s > 0
+            ? cells[i].s * cells[i].area / areaMean
             : 0;
     }
 
