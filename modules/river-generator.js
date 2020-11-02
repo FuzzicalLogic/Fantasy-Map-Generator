@@ -23,15 +23,15 @@ export const generate = function (changeHeights = true) {
     // height with added t value to make map less depressed
     const h = Array.from(cells.h)
         .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + cells.t[i] / 100)
-        .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + d3.mean(cells.c[i].map(c => cells.t[c])) / 10000);
+        .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + d3.mean(cells[i].c.map(c => cells.t[c])) / 10000);
 
     resolveDepressions(h);
     features.forEach(f => { delete f.river; delete f.flux; });
 
     const riversData = []; // rivers data
-    cells.fl = new Uint16Array(cells.i.length); // water flux array
-    cells.r = new Uint16Array(cells.i.length); // rivers array
-    cells.conf = new Uint8Array(cells.i.length); // confluences array
+    cells.fl = new Uint16Array(cells.length); // water flux array
+    cells.r = new Uint16Array(cells.length); // rivers array
+    cells.conf = new Uint8Array(cells.length); // confluences array
     let riverNext = 1; // first river id is 1, not 0
 
     riverNext = drainWater(cells, h, features, riverNext, riversData);
@@ -47,25 +47,26 @@ export const generate = function (changeHeights = true) {
 
 // build distance field in cells from water (cells.t)
 function markupLand(cells) {
-    const { i, c, t } = cells;
-    const q = j => i.filter(i => cells.t[i] === j);
+    const { t } = cells;
+    const q = j => cells.map((v,k) => k).filter(i => cells.t[i] === j);
     for (let k = 2, queue = q(k); queue.length; k++ , queue = q(k)) {
-        queue.forEach(i => c[i].forEach(c => {
+        queue.forEach(i => cells[i].c.forEach(c => {
             if (!t[c]) t[c] = k + 1;
         }));
     }
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const { p, fl, g, b, r, c, f } = cells;
-    const land = cells.i.filter(i => h[i] >= 20)
+    const { p, fl, g, r, f } = cells;
+    const land = cells.map((v, k) => k)
+        .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
     land.forEach(function (i) {
         fl[i] += grid.cells.prec[g[i]]; // flux from precipitation
         const x = p[i][0], y = p[i][1];
 
         // near-border cell: pour out of the screen
-        if (b[i]) {
+        if (cells[i].b) {
             if (r[i]) {
                 const to = [];
                 const min = Math.min(y, graphHeight - y, x, graphWidth - x);
@@ -96,7 +97,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
         }
 
         //const min = cells.c[i][d3.scan(cells.c[i], (a, b) => h[a] - h[b])]; // downhill cell
-        let min = c[i][d3.scan(c[i], (a, b) => h[a] - h[b])]; // downhill cell
+        let min = cells[i].c[d3.scan(cells[i].c, (a, b) => h[a] - h[b])]; // downhill cell
 
         // allow only one river can flow through a lake
         const cf = features[f[i]]; // current cell feature
@@ -181,14 +182,15 @@ function defineRivers(pack, riverNext, riversData) {
   // depression filling algorithm (for a correct water flux modeling)
 export function resolveDepressions(h) {
     const cells = pack.cells;
-    const land = cells.i.filter(i => h[i] >= 20 && h[i] < 100 && !cells.b[i]); // exclude near-border cells
+    const land = cells.map((v, k) => k)
+        .filter(i => h[i] >= 20 && h[i] < 100 && !cells[i].b); // exclude near-border cells
     land.sort((a, b) => h[b] - h[a]); // highest cells go first
     let depressed = false;
 
     for (let l = 0, depression = Infinity; depression && l < 100; l++) {
         depression = 0;
         for (const i of land) {
-            const minHeight = d3.min(cells.c[i].map(c => h[c]));
+            const minHeight = d3.min(cells[i].c.map(c => h[c]));
             if (minHeight === 100) continue; // already max height
             if (h[i] <= minHeight) {
                 h[i] = Math.min(minHeight + 1, 100);

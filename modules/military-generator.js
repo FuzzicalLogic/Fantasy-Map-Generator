@@ -68,7 +68,8 @@ export function generate() {
         return "generic";
     }
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (!cells.pop[i]) continue;
         const s = states[cells.state[i]]; // cell state
         if (!s.i || s.removed) continue;

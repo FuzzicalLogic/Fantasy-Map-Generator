@@ -107,8 +107,8 @@ export function generate(numReligions, pack) {
             center = states[state].center;
         if (expansion === "culture" && Math.random() > .5)
             center = cultures[culture].center;
-        if (!cells.burg[center] && cells.c[center].some(c => cells.burg[c]))
-            center = cells.c[center].find(c => cells.burg[c]);
+        if (!cells.burg[center] && cells[center].c.some(c => cells.burg[c]))
+            center = cells[center].c.find(c => cells.burg[c]);
         const x = cells.p[center][0], y = cells.p[center][1];
 
         const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make the placement not uniform
@@ -158,11 +158,11 @@ export function generate(numReligions, pack) {
         if (r.expansionism < 3) return;
         const count = gauss(0, 1, 0, 3);
         for (let i = 0; i < count; i++) {
-            let center = ra(cells.i.filter(i => cells.religion[i] === r.i && cells.c[i].some(c => cells.religion[c] !== r.i)));
+            let center = ra(cells.map((v, k) => k).filter(i => cells.religion[i] === r.i && cells[i].c.some(c => cells.religion[c] !== r.i)));
             if (!center)
                 continue;
-            if (!cells.burg[center] && cells.c[center].some(c => cells.burg[c]))
-                center = cells.c[center].find(c => cells.burg[c]);
+            if (!cells.burg[center] && cells[center].c.some(c => cells.burg[c]))
+                center = cells[center].c.find(c => cells.burg[c]);
             const x = cells.p[center][0], y = cells.p[center][1];
             if (religionsTree.find(x, y, spacing / 10) !== undefined) continue; // to close to other
 
@@ -243,14 +243,14 @@ function expandReligions(pack) {
         cost[r.center] = 1;
     });
 
-    const neutral = cells.i.length / 5000 * 200 * gauss(1, .3, .2, 2, 2) * neutralInput.value; // limit cost for organized religions growth
+    const neutral = cells.length / 5000 * 200 * gauss(1, .3, .2, 2, 2) * neutralInput.value; // limit cost for organized religions growth
     const popCost = d3.max(cells.pop) / 3; // enougth population to spered religion without penalty
 
     while (queue.length) {
         const next = queue.dequeue(), { e: n, p, r, c, s } = next;
         const expansion = religions[r].expansion;
 
-        cells.c[n].forEach(function (e) {
+        cells[n].c.forEach(function (e) {
             if (expansion === "culture" && c !== cells.culture[e]) return;
             if (expansion === "state" && s !== cells.state[e]) return;
 
@@ -285,12 +285,12 @@ function expandHeresies(pack) {
         cost[r.center] = 1;
     });
 
-    const neutral = cells.i.length / 5000 * 500 * neutralInput.value; // limit cost for heresies growth
+    const neutral = cells.length / 5000 * 500 * neutralInput.value; // limit cost for heresies growth
 
     while (queue.length) {
         const next = queue.dequeue(), n = next.e, p = next.p, r = next.r, b = next.b;
 
-        cells.c[n].forEach(function (e) {
+        cells[n].c.forEach(function (e) {
             const religionCost = cells.religion[e] === b ? 0 : 2000;
             const biomeCost = cells.road[e] ? 0 : biomesData.cost[cells.biome[e]];
             const heightCost = Math.max(cells.h[e], 20) - 20;
@@ -317,7 +317,7 @@ function checkCenters(pack) {
 
         // move religion center if it's not within religion area after expansion
         if (cells.religion[r.center] === r.i) return; // in area
-        const religCells = cells.i.filter(i => cells.religion[i] === r.i);
+        const religCells = cells.filter((v, i) => cells.religion[i] === r.i);
         if (!religCells.length) return; // extinct religion
         r.center = religCells.sort((a, b) => b.pop - a.pop)[0];
     });

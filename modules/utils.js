@@ -257,7 +257,7 @@ export function findAll(x, y, radius) {
 
 // get polygon points for packed cells knowing cell id
 export function getPackPolygon(i) {
-    return pack.cells.v[i].map(v => pack.vertices.p[v]);
+    return pack.cells[i].v.map(v => pack.vertices.p[v]);
 }
 
 // get polygon points for initial cells knowing cell id

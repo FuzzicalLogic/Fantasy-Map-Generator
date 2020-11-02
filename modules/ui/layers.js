@@ -234,8 +234,8 @@ export function drawHeightmap() {
     let { terrs } = view;
     terrs.selectAll("*").remove();
     const { cells, vertices } = pack,
-        n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+        n = cells.length;
+    const used = new Uint8Array(n);
     const paths = new Array(101).fill("");
 
     const scheme = getColorScheme();
@@ -250,16 +250,16 @@ export function drawHeightmap() {
     }
 
     let currentLayer = 20;
-    const heights = cells.i.sort((a, b) => cells.h[a] - cells.h[b]);
+    const heights = cells.map((v, k) => k).sort((a, b) => cells.h[a] - cells.h[b]);
     for (const i of heights) {
         const h = cells.h[i];
         if (h > currentLayer) currentLayer += skip;
         if (currentLayer > 100) break; // no layers possible with height > 100
         if (h < currentLayer) continue;
         if (used[i]) continue; // already marked
-        const onborder = cells.c[i].some(n => cells.h[n] < h);
+        const onborder = cells[i].c.some(n => cells.h[n] < h);
         if (!onborder) continue;
-        const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.h[i] < h));
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] < h));
         const chain = connectVertices(vertex, h);
         if (chain.length < 3) continue;
         const points = simplifyLine(chain).map(v => vertices.p[v]);
@@ -400,17 +400,18 @@ export function drawTemp() {
 export function drawBiomes() {
     let { biomes } = view;
     biomes.selectAll("path").remove();
-    const cells = pack.cells, vertices = pack.vertices, n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+    const cells = pack.cells, vertices = pack.vertices, n = cells.length;
+    const used = new Uint8Array(n);
     const paths = new Array(biomesData.i.length).fill("");
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k)
+    for (const i of xs) {
         if (!cells.biome[i]) continue; // no need to mark marine biome (liquid water)
         if (used[i]) continue; // already marked
         const b = cells.biome[i];
-        const onborder = cells.c[i].some(n => cells.biome[n] !== b);
+        const onborder = cells[i].c.some(n => cells.biome[n] !== b);
         if (!onborder) continue;
-        const edgeVerticle = cells.v[i].find(v => vertices.c[v].some(i => cells.biome[i] !== b));
+        const edgeVerticle = cells[i].v.find(v => vertices.c[v].some(i => cells.biome[i] !== b));
         const chain = connectVertices(edgeVerticle, b);
         if (chain.length < 3) continue;
         const points = clipPoly(chain.map(v => vertices.p[v]), 1);
@@ -479,7 +480,7 @@ export function drawPopulation(event) {
 
 function drawCells() {
     view.cells.selectAll("path").remove();
-    const data = customization === 1 ? grid.cells.i : pack.cells.i;
+    const data = customization === 1 ? grid.cells.i : pack.cells.map((v, k) => k);
     const polygon = customization === 1 ? getGridPolygon : getPackPolygon;
     let path = "";
     data.forEach(i => path += "M" + polygon(i));
@@ -555,18 +556,19 @@ export function drawCultures() {
     console.time("drawCultures");
 
     cults.selectAll("path").remove();
-    const cells = pack.cells, vertices = pack.vertices, cultures = pack.cultures, n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+    const cells = pack.cells, vertices = pack.vertices, cultures = pack.cultures, n = cells.length;
+    const used = new Uint8Array(n);
     const paths = new Array(cultures.length).fill("");
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (!cells.culture[i]) continue;
         if (used[i]) continue;
         used[i] = 1;
         const c = cells.culture[i];
-        const onborder = cells.c[i].some(n => cells.culture[n] !== c);
+        const onborder = cells[i].c.some(n => cells.culture[n] !== c);
         if (!onborder) continue;
-        const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.culture[i] !== c));
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.culture[i] !== c));
         const chain = connectVertices(vertex, c);
         if (chain.length < 3) continue;
         const points = chain.map(v => vertices.p[v]);
@@ -603,21 +605,22 @@ export function drawReligions() {
     console.time("drawReligions");
 
     relig.selectAll("path").remove();
-    const cells = pack.cells, vertices = pack.vertices, religions = pack.religions, features = pack.features, n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+    const cells = pack.cells, vertices = pack.vertices, religions = pack.religions, features = pack.features, n = cells.length;
+    const used = new Uint8Array(n);
     const vArray = new Array(religions.length); // store vertices array
     const body = new Array(religions.length).fill(""); // store path around each religion
     const gap = new Array(religions.length).fill(""); // store path along water for each religion to fill the gaps
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (!cells.religion[i]) continue;
         if (used[i]) continue;
         used[i] = 1;
         const r = cells.religion[i];
-        const onborder = cells.c[i].filter(n => cells.religion[n] !== r);
+        const onborder = cells[i].c.filter(n => cells.religion[n] !== r);
         if (!onborder.length) continue;
-        const borderWith = cells.c[i].map(c => cells.religion[c]).find(n => n !== r);
-        const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.religion[i] === borderWith));
+        const borderWith = cells[i].c.map(c => cells.religion[c]).find(n => n !== r);
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.religion[i] === borderWith));
         const chain = connectVertices(vertex, r, borderWith);
         if (chain.length < 3) continue;
         const points = chain.map(v => vertices.p[v[0]]);
@@ -664,20 +667,21 @@ export function drawStates() {
     console.time("drawStates");
     regions.selectAll("path").remove();
 
-    const cells = pack.cells, vertices = pack.vertices, states = pack.states, n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+    const cells = pack.cells, vertices = pack.vertices, states = pack.states, n = cells.length;
+    const used = new Uint8Array(cells.length);
     const vArray = new Array(states.length); // store vertices array
     const body = new Array(states.length).fill(""); // store path around each state
     const gap = new Array(states.length).fill(""); // store path along water for each state to fill the gaps
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (!cells.state[i] || used[i]) continue;
         const s = cells.state[i];
-        const onborder = cells.c[i].some(n => cells.state[n] !== s);
+        const onborder = cells[i].c.some(n => cells.state[n] !== s);
         if (!onborder) continue;
 
-        const borderWith = cells.c[i].map(c => cells.state[c]).find(n => n !== s);
-        const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.state[i] === borderWith));
+        const borderWith = cells[i].c.map(c => cells.state[c]).find(n => n !== s);
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.state[i] === borderWith));
         const chain = connectVertices(vertex, s, borderWith);
         if (chain.length < 3) continue;
         const points = chain.map(v => vertices.p[v[0]]);
@@ -736,22 +740,22 @@ export function drawBorders() {
     console.time("drawBorders");
     view.borders.selectAll("path").remove();
 
-    const cells = pack.cells, vertices = pack.vertices, n = cells.i.length;
+    const cells = pack.cells, vertices = pack.vertices, n = cells.length;
     const sPath = [], pPath = [];
     const sUsed = new Array(pack.states.length).fill("").map(a => []);
     const pUsed = new Array(pack.provinces.length).fill("").map(a => []);
 
-    for (let i = 0; i < cells.i.length; i++) {
+    for (let i = 0; i < cells.length; i++) {
         if (!cells.state[i]) continue;
         const p = cells.province[i];
         const s = cells.state[i];
 
         // if cell is on province border
-        const provToCell = cells.c[i].find(n => cells.state[n] === s && p > cells.province[n] && pUsed[p][n] !== cells.province[n]);
+        const provToCell = cells[i].c.find(n => cells.state[n] === s && p > cells.province[n] && pUsed[p][n] !== cells.province[n]);
         if (provToCell) {
             const provTo = cells.province[provToCell];
             pUsed[p][provToCell] = provTo;
-            const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.province[i] === provTo));
+            const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.province[i] === provTo));
             const chain = connectVertices(vertex, p, cells.province, provTo, pUsed);
 
             if (chain.length > 1) {
@@ -762,11 +766,11 @@ export function drawBorders() {
         }
 
         // if cell is on state border
-        const stateToCell = cells.c[i].find(n => cells.h[n] >= 20 && s > cells.state[n] && sUsed[s][n] !== cells.state[n]);
+        const stateToCell = cells[i].c.find(n => cells.h[n] >= 20 && s > cells.state[n] && sUsed[s][n] !== cells.state[n]);
         if (stateToCell !== undefined) {
             const stateTo = cells.state[stateToCell];
             sUsed[s][stateToCell] = stateTo;
-            const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.h[i] >= 20 && cells.state[i] === stateTo));
+            const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] >= 20 && cells.state[i] === stateTo));
             const chain = connectVertices(vertex, s, cells.state, stateTo, sUsed);
 
             if (chain.length > 1) {
@@ -835,20 +839,21 @@ export function drawProvinces() {
     const labelsOn = provs.attr("data-labels") == 1;
     provs.selectAll("*").remove();
 
-    const cells = pack.cells, vertices = pack.vertices, provinces = pack.provinces, n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+    const cells = pack.cells, vertices = pack.vertices, provinces = pack.provinces, n = cells.length;
+    const used = new Uint8Array(n);
     const vArray = new Array(provinces.length); // store vertices array
     const body = new Array(provinces.length).fill(""); // store path around each province
     const gap = new Array(provinces.length).fill(""); // store path along water for each province to fill the gaps
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (!cells.province[i] || used[i]) continue;
         const p = cells.province[i];
-        const onborder = cells.c[i].some(n => cells.province[n] !== p);
+        const onborder = cells[i].c.some(n => cells.province[n] !== p);
         if (!onborder) continue;
 
-        const borderWith = cells.c[i].map(c => cells.province[c]).find(n => n !== p);
-        const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.province[i] === borderWith));
+        const borderWith = cells[i].c.map(c => cells.province[c]).find(n => n !== p);
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.province[i] === borderWith));
         const chain = connectVertices(vertex, p, borderWith);
         if (chain.length < 3) continue;
         const points = chain.map(v => vertices.p[v[0]]);

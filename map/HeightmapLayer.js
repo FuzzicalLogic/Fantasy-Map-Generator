@@ -9,8 +9,8 @@ export function drawHeightmap({ detail:{ cells, vertices}}) {
     let { terrs } = view;
     terrs.selectAll("*").remove();
 //    const { cells, vertices } = pack,
-        let n = cells.i.length;
-    const used = new Uint8Array(cells.i.length);
+        let n = cells.length;
+    const used = new Uint8Array(cells.length);
     const paths = new Array(101).fill("");
 
     const scheme = getColorScheme();
@@ -25,16 +25,17 @@ export function drawHeightmap({ detail:{ cells, vertices}}) {
     }
 
     let currentLayer = 20;
-    const heights = cells.i.sort((a, b) => cells.h[a] - cells.h[b]);
+    const heights = cells.map((v, k) => k)
+        .sort((a, b) => cells.h[a] - cells.h[b]);
     for (const i of heights) {
         const h = cells.h[i];
         if (h > currentLayer) currentLayer += skip;
         if (currentLayer > 100) break; // no layers possible with height > 100
         if (h < currentLayer) continue;
         if (used[i]) continue; // already marked
-        const onborder = cells.c[i].some(n => cells.h[n] < h);
+        const onborder = cells[i].c.some(n => cells.h[n] < h);
         if (!onborder) continue;
-        const vertex = cells.v[i].find(v => vertices.c[v].some(i => cells.h[i] < h));
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] < h));
         const chain = connectVertices(vertex, h);
         if (chain.length < 3) continue;
         const points = simplifyLine(chain).map(v => vertices.p[v]);

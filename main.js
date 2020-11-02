@@ -121,7 +121,9 @@ view.legend.on("mousemove", () => tip("Drag to change the position. Click to hid
 
 // main data variables
 export let grid = {}; // initial grapg based on jittered square grid and data
+window.grid = grid;
 export let pack = {}; // packed graph and data
+window.pack = pack;
 export let seed, mapId, mapHistory = [], elSelected, modules = {}, notes = [];
 export let customization = 0; // 0 - no; 1 = heightmap draw; 2 - states draw; 3 - add state/burg; 4 - cultures draw
 
@@ -588,7 +590,6 @@ export function generate() {
         randomizeOptions();
         grid = MapData.placePoints(graphWidth, graphHeight);
         calculateVoronoi(grid, grid.points);
-        console.log(grid);
         //console.log(MapData.generate(seed, graphWidth, graphHeight))
         drawScaleBar();
         HeightmapGenerator.generate(grid);
@@ -630,6 +631,8 @@ export function generate() {
         console.warn(`TOTAL: ${rn((performance.now() - timeStart) / 1000, 2)}s`);
         showStatistics();
         console.groupEnd("Generated Map " + seed);
+        console.log(grid);
+        console.log(pack);
     }
     catch (error) {
         console.error(error);
@@ -675,7 +678,7 @@ export function calculateVoronoi(graph, points) {
     console.time("calculateVoronoi");
     const voronoi = Voronoi(delaunay, allPoints, n);
     graph.cells = voronoi.cells;
-    graph.cells.i = n < 65535 ? Uint16Array.from(d3.range(n)) : Uint32Array.from(d3.range(n)); // array of indexes
+    //graph.cells.i = n < 65535 ? Uint16Array.from(d3.range(n)) : Uint32Array.from(d3.range(n)); // array of indexes
     graph.vertices = voronoi.vertices;
     console.timeEnd("calculateVoronoi");
 }
@@ -731,14 +734,14 @@ export function calculateMapCoordinates(size, latShift) {
 // temperature model
 export function calculateTemperatures({ cells, cellsX, points }) {
     console.time('calculateTemperatures');
-    cells.temp = new Int8Array(cells.i.length); // temperature array
+    cells.temp = new Int8Array(cells.length); // temperature array
 
     const tEq = +temperatureEquatorInput.value;
     const tPole = +temperaturePoleInput.value;
     const tDelta = tEq - tPole;
     const int = d3.easePolyInOut.exponent(.5); // interpolation function
 
-    d3.range(0, cells.i.length, cellsX).forEach(function (r) {
+    d3.range(0, cells.length, cellsX).forEach(function (r) {
         const y = points[r][1];
         const lat = Math.abs(mapCoordinates.latN - y / graphHeight * mapCoordinates.latT); // [0; 90]
         const initTemp = tEq - int(lat / 90) * tDelta;
@@ -762,7 +765,7 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
     console.time('generatePrecipitation');
     view.prec.selectAll("*").remove();
-    cells.prec = new Uint8Array(cells.i.length); // precipitation array
+    cells.prec = new Uint8Array(cells.length); // precipitation array
     const modifier = precInput.value / 100; // user's input
     let westerly = [], easterly = [], southerly = 0, northerly = 0;
 
@@ -778,7 +781,7 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
     const lalitudeModifier = [4, 2, 2, 2, 1, 1, 2, 2, 2, 2, 3, 3, 2, 2, 1, 1, 1, 0.5]; // by 5d step
 
     // difine wind directions based on cells latitude and prevailing winds there
-    d3.range(0, cells.i.length, cellsX).forEach(function (c, i) {
+    d3.range(0, cells.length, cellsX).forEach(function (c, i) {
         const lat = mapCoordinates.latN - i / cellsY * mapCoordinates.latT;
         const band = (Math.abs(lat) - 1) / 5 | 0;
         const latMod = lalitudeModifier[band];
@@ -803,7 +806,7 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
         const bandS = (Math.abs(mapCoordinates.latS) - 1) / 5 | 0;
         const latModS = mapCoordinates.latT > 60 ? d3.mean(lalitudeModifier) : lalitudeModifier[bandS];
         const maxPrecS = southerly / vertT * 60 * modifier * latModS;
-        passWind(d3.range(cells.i.length - cellsX, cells.i.length, 1), maxPrecS, -cellsX, cellsY);
+        passWind(d3.range(cells.length - cellsX, cells.length, 1), maxPrecS, -cellsX, cellsY);
     }
 
     function passWind(source, maxPrec, next, steps) {
@@ -878,7 +881,8 @@ export function reGraph({ cells, points, features, spacing }) {
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
     const spacing2 = spacing ** 2;
 
-    for (const i of cells.i) {
+    let xs = cells.map((v, k) => k);
+    for (const i of xs) {
         const height = cells.h[i];
         const type = cells.t[i];
         if (height < 20 && type !== -1 && type !== -2) continue; // exclude all deep ocean points
@@ -888,8 +892,8 @@ export function reGraph({ cells, points, features, spacing }) {
         addNewPoint(x, y); // add point to array
         // add additional points for cells along coast
         if (type === 1 || type === -1) {
-            if (cells.b[i]) continue; // not for near-border cells
-            cells.c[i].forEach(function (e) {
+            if (cells[i].b) continue; // not for near-border cells
+            cells[i].c.forEach(function (e) {
                 if (i > e) return;
                 if (cells.t[e] === type) {
                     const dist2 = (y - points[e][1]) ** 2 + (x - points[e][0]) ** 2;
@@ -911,11 +915,12 @@ export function reGraph({ cells, points, features, spacing }) {
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
     cells.p = newCells.p; // points coordinates [x, y]
-    cells.g = cells.i.length < 65535 ? Uint16Array.from(newCells.g) : Uint32Array.from(newCells.g); // reference to initial grid cell
+    cells.g = cells.length < 65535 ? Uint16Array.from(newCells.g) : Uint32Array.from(newCells.g); // reference to initial grid cell
     cells.q = d3.quadtree(cells.p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
     cells.h = new Uint8Array(newCells.h); // heights
-    cells.area = new Uint16Array(cells.i.length); // cell area
-    cells.i.forEach(i => cells.area[i] = Math.abs(d3.polygonArea(getPackPolygon(i))));
+    cells.area = new Uint16Array(cells.length); // cell area
+    cells.map((v, k) => k)
+        .forEach(i => cells.area[i] = Math.abs(d3.polygonArea(getPackPolygon(i))));
 
     console.timeEnd("reGraph");
 }
@@ -923,14 +928,15 @@ export function reGraph({ cells, points, features, spacing }) {
 // Detect and draw the coasline
 export function drawCoastline({ cells, vertices, features }) {
     console.time('drawCoastline');
-    const n = cells.i.length;
+    const n = cells.length;
     const used = new Uint8Array(features.length); // store conneted features
     const largestLand = d3.scan(features.map(f => f.land ? f.cells : 0), (a, b) => b - a);
     const landMask = view.defs.select("#land");
     const waterMask = view.defs.select("#water");
     lineGen.curve(d3.curveBasisClosed);
 
-    for (const i of cells.i) {
+    let xs = cells.map((v, k) => k);
+    for (const i of xs) {
         const startFromEdge = !i && cells.h[i] >= 20;
         if (!startFromEdge && cells.t[i] !== -1 && cells.t[i] !== 1)
             continue; // non-edge cell
@@ -980,11 +986,11 @@ export function drawCoastline({ cells, vertices, features }) {
 
     // find cell vertex to start path detection
     function findStart(i, t) {
-        if (t === -1 && cells.b[i])
-            return cells.v[i].find(v => vertices.c[v].some(c => c >= n)); // map border cell
-        const filtered = cells.c[i].filter(c => cells.t[c] === t);
-        const index = cells.c[i].indexOf(d3.min(filtered));
-        return index === -1 ? index : cells.v[i][index];
+        if (t === -1 && cells[i].b)
+            return cells[i].v.find(v => vertices.c[v].some(c => c >= n)); // map border cell
+        const filtered = cells[i].c.filter(c => cells.t[c] === t);
+        const index = cells[i].c.indexOf(d3.min(filtered));
+        return index === -1 ? index : cells[i].v[index];
     }
 
     // connect vertices to chain
@@ -1040,10 +1046,10 @@ export function reMarkFeatures({ cells }) {
     console.time("reMarkFeatures");
     const features = [0],
         temp = grid.cells.temp;
-    cells.f = new Uint16Array(cells.i.length); // cell feature number
-    cells.t = new Int16Array(cells.i.length); // cell type: 1 = land along coast; -1 = water along coast;
-    cells.haven = cells.i.length < 65535 ? new Uint16Array(cells.i.length) : new Uint32Array(cells.i.length);// cell haven (opposite water cell);
-    cells.harbor = new Uint8Array(cells.i.length); // cell harbor (number of adjacent water cells);
+    cells.f = new Uint16Array(cells.length); // cell feature number
+    cells.t = new Int16Array(cells.length); // cell type: 1 = land along coast; -1 = water along coast;
+    cells.haven = cells.length < 65535 ? new Uint16Array(cells.length) : new Uint32Array(cells.length);// cell haven (opposite water cell);
+    cells.harbor = new Uint8Array(cells.length); // cell harbor (number of adjacent water cells);
 
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
         const start = queue[0]; // first cell
@@ -1054,8 +1060,8 @@ export function reMarkFeatures({ cells }) {
 
         while (queue.length) {
             const q = queue.pop();
-            if (cells.b[q]) border = true;
-            cells.c[q].forEach(function (e) {
+            if (cells[q].b) border = true;
+            cells[q].c.forEach(function (e) {
                 const eLand = cells.h[e] >= 20;
                 if (land && !eLand) {
                     cells.t[q] = 1;
@@ -1089,22 +1095,22 @@ export function reMarkFeatures({ cells }) {
         if (temp > 31) return "dry";
         if (temp > 24) return "salt";
         if (temp < -3) return "frozen";
-        const height = d3.max(cells.c[cell].map(c => cells.h[c]));
+        const height = d3.max(cells[cell].c.map(c => cells.h[c]));
         if (height > 69 && number < 3 && cell % 5 === 0) return "sinkhole";
         if (height > 69 && number < 10 && cell % 5 === 0) return "lava";
         return "freshwater";
     }
 
     function defineOceanGroup(number) {
-        if (number > grid.cells.i.length / 25) return "ocean";
-        if (number > grid.cells.i.length / 100) return "sea";
+        if (number > grid.cells.length / 25) return "ocean";
+        if (number > grid.cells.length / 100) return "sea";
         return "gulf";
     }
 
     function defineIslandGroup(cell, number) {
         if (cell && features[cells.f[cell - 1]].type === "lake") return "lake_island";
-        if (number > grid.cells.i.length / 10) return "continent";
-        if (number > grid.cells.i.length / 1000) return "island";
+        if (number > grid.cells.length / 10) return "continent";
+        if (number > grid.cells.length / 1000) return "island";
         return "isle";
     }
 
@@ -1115,8 +1121,8 @@ export function reMarkFeatures({ cells }) {
 export function elevateLakes({ cells, features }) {
     if (templateInput.value === "Atoll") return; // no need for Atolls
     console.time('elevateLakes');
-    const maxCells = cells.i.length / 100; // size limit; let big lakes be closed (endorheic)
-    cells.i.forEach(i => {
+    const maxCells = cells.length / 100; // size limit; let big lakes be closed (endorheic)
+    cells.map((v,k) => k).forEach(i => {
         if (cells.h[i] >= 20)
             return;
         if (features[cells.f[i]].group !== "freshwater"
@@ -1133,9 +1139,10 @@ export function elevateLakes({ cells, features }) {
 export function defineBiomes() {
     console.time("defineBiomes");
     const cells = pack.cells, f = pack.features, temp = grid.cells.temp, prec = grid.cells.prec;
-    cells.biome = new Uint8Array(cells.i.length); // biomes array
+    cells.biome = new Uint8Array(cells.length); // biomes array
 
-    for (const i of cells.i) {
+    let xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (f[cells.f[i]].group === "freshwater") cells.h[i] = 19; // de-elevate lakes; here to save some resources
         const t = temp[cells.g[i]]; // cell temperature
         const h = cells.h[i]; // cell height
@@ -1146,7 +1153,9 @@ export function defineBiomes() {
     function calculateMoisture(i) {
         let moist = prec[cells.g[i]];
         if (cells.r[i]) moist += Math.max(cells.fl[i] / 20, 2);
-        const n = cells.c[i].filter(isLand).map(c => prec[cells.g[c]]).concat([moist]);
+        const n = cells[i].c.filter(isLand)
+            .map(c => prec[cells.g[c]])
+            .concat([moist]);
         return rn(4 + d3.mean(n));
     }
 
@@ -1166,14 +1175,15 @@ export function getBiomeId(moisture, temperature, height) {
 // assess cells suitability to calculate population and rand cells for culture center and burgs placement
 export function rankCells() {
     console.time('rankCells');
-    const cells = pack.cells, f = pack.features;
-    cells.s = new Int16Array(cells.i.length); // cell suitability array
-    cells.pop = new Float32Array(cells.i.length); // cell population array
+    const { cells, features: f } = pack;
+    cells.s = new Int16Array(cells.length); // cell suitability array
+    cells.pop = new Float32Array(cells.length); // cell population array
 
     const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.conf); // to normalize flux
     const areaMean = d3.mean(cells.area); // to adjust population by cell area
 
-    for (const i of cells.i) {
+    let xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (cells.h[i] < 20) continue; // no population in water
         let s = +biomesData.habitability[cells.biome[i]]; // base suitability derived from biome habitability
         if (!s) continue; // uninhabitable biomes has 0 suitability
@@ -1209,7 +1219,7 @@ export function addMarkers(number = 1) {
     const cells = pack.cells, states = pack.states;
 
     void function addVolcanoes() {
-        let mounts = Array.from(cells.i).filter(i => cells.h[i] > 70).sort((a, b) => cells.h[b] - cells.h[a]);
+        let mounts = cells.map((v,k) => k).filter(i => cells.h[i] > 70).sort((a, b) => cells.h[b] - cells.h[a]);
         let count = mounts.length < 10 ? 0 : Math.ceil(mounts.length / 300 * number);
         if (count) addMarker("volcano", "🌋", 52, 50, 13);
 
@@ -1225,7 +1235,7 @@ export function addMarkers(number = 1) {
     }()
 
     void function addHotSprings() {
-        let springs = Array.from(cells.i).filter(i => cells.h[i] > 50).sort((a, b) => cells.h[b] - cells.h[a]);
+        let springs = cells.map((v, k) => k).filter(i => cells.h[i] > 50).sort((a, b) => cells.h[b] - cells.h[a]);
         let count = springs.length < 30 ? 0 : Math.ceil(springs.length / 1000 * number);
         if (count) addMarker("hot_springs", "♨️", 50, 52, 12.5);
 
@@ -1240,7 +1250,7 @@ export function addMarkers(number = 1) {
     }()
 
     void function addMines() {
-        let hills = Array.from(cells.i).filter(i => cells.h[i] > 47 && cells.burg[i]);
+        let hills = cells.map((v, k) => k).filter(i => cells.h[i] > 47 && cells.burg[i]);
         let count = !hills.length ? 0 : Math.ceil(hills.length / 7 * number);
         if (!count) return;
 
@@ -1264,7 +1274,7 @@ export function addMarkers(number = 1) {
         const meanRoad = d3.mean(cells.road.filter(r => r));
         const meanFlux = d3.mean(cells.fl.filter(fl => fl));
 
-        let bridges = Array.from(cells.i)
+        let bridges = cells.map((v, k) => k)
             .filter(i => cells.burg[i] && cells.h[i] >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells.road[i] > meanRoad)
             .sort((a, b) => (cells.road[b] + cells.fl[b] / 10) - (cells.road[a] + cells.fl[a] / 10));
 
@@ -1285,7 +1295,7 @@ export function addMarkers(number = 1) {
 
     void function addInns() {
         const maxRoad = d3.max(cells.road) * .9;
-        let taverns = Array.from(cells.i).filter(i => cells.crossroad[i] && cells.h[i] >= 20 && cells.road[i] > maxRoad);
+        let taverns = cells.map((v, k) => k).filter(i => cells.crossroad[i] && cells.h[i] >= 20 && cells.road[i] > maxRoad);
         if (!taverns.length) return;
         const count = Math.ceil(4 * number);
         addMarker("inn", "🍻", 50, 50, 14.5);
@@ -1304,8 +1314,9 @@ export function addMarkers(number = 1) {
     }()
 
     void function addLighthouses() {
-        const lands = cells.i.filter(i => cells.harbor[i] > 6 && cells.c[i].some(c => cells.h[c] < 20 && cells.road[c]));
-        const lighthouses = Array.from(lands).map(i => [i, cells.v[i][cells.c[i].findIndex(c => cells.h[c] < 20 && cells.road[c])]]);
+        const lands = cells.map((v, k) => k)
+            .filter(i => cells.harbor[i] > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells.road[c]));
+        const lighthouses = Array.from(lands).map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells.road[c])]]);
         if (lighthouses.length) addMarker("lighthouse", "🚨", 50, 50, 16);
         const count = Math.ceil(4 * number);
 
@@ -1318,7 +1329,7 @@ export function addMarkers(number = 1) {
     }()
 
     void function addWaterfalls() {
-        const waterfalls = cells.i.filter(i => cells.r[i] && cells.h[i] > 70);
+        const waterfalls = cells.map((v, k) => k).filter(i => cells.r[i] && cells.h[i] > 70);
         if (waterfalls.length) addMarker("waterfall", "⟱", 50, 54, 16.5);
         const count = Math.ceil(3 * number);
 
@@ -1331,7 +1342,7 @@ export function addMarkers(number = 1) {
     }()
 
     void function addBattlefields() {
-        let battlefields = Array.from(cells.i).filter(i => cells.state[i] && cells.pop[i] > 2 && cells.h[i] < 50 && cells.h[i] > 25);
+        let battlefields = cells.map((v, k) => k).filter(i => cells.state[i] && cells.pop[i] > 2 && cells.h[i] < 50 && cells.h[i] > 25);
         let count = battlefields.length < 100 ? 0 : Math.ceil(battlefields.length / 500 * number);
         if (count) addMarker("battlefield", "⚔️", 50, 52, 12);
 
@@ -1378,7 +1389,7 @@ export function addMarkers(number = 1) {
 export function addZones(number = 1) {
     console.time("addZones");
     const data = [], cells = pack.cells, states = pack.states, burgs = pack.burgs;
-    const used = new Uint8Array(cells.i.length); // to store used cells
+    const used = new Uint8Array(cells.length); // to store used cells
 
     for (let i = 0; i < rn(Math.random() * 1.8 * number); i++) addInvasion(); // invasion of enemy lands
     for (let i = 0; i < rn(Math.random() * 1.6 * number); i++) addRebels(); // rebels along a state border
@@ -1399,7 +1410,8 @@ export function addZones(number = 1) {
         const invader = ra(atWar);
         const target = invader.diplomacy.findIndex(d => d === "Enemy");
 
-        const cell = ra(cells.i.filter(i => cells.state[i] === target && cells.c[i].some(c => cells.state[c] === invader.i)));
+        const cell = ra(cells.map((v, k) => k)
+            .filter(i => cells.state[i] === target && cells[i].c.some(c => cells.state[c] === invader.i)));
         if (!cell) return;
 
         const cellsArray = [], queue = [cell], power = rand(5, 30);
@@ -1409,7 +1421,7 @@ export function addZones(number = 1) {
             cellsArray.push(q);
             if (cellsArray.length > power) break;
 
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e]) return;
                 if (cells.state[e] !== target) return;
                 used[e] = 1;
@@ -1430,7 +1442,8 @@ export function addZones(number = 1) {
         if (!state) return;
 
         const neib = ra(state.neighbors.filter(n => n));
-        const cell = cells.i.find(i => cells.state[i] === state.i && cells.c[i].some(c => cells.state[c] === neib));
+        const cell = cells.map((v, k) => k)
+            .find(i => cells.state[i] === state.i && cells[i].c.some(c => cells.state[c] === neib));
         const cellsArray = [], queue = [cell], power = rand(10, 30);
 
         while (queue.length) {
@@ -1438,11 +1451,11 @@ export function addZones(number = 1) {
             cellsArray.push(q);
             if (cellsArray.length > power) break;
 
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e]) return;
                 if (cells.state[e] !== state.i) return;
                 used[e] = 1;
-                if (e % 4 !== 0 && !cells.c[e].some(c => cells.state[c] === neib)) return;
+                if (e % 4 !== 0 && !cells[e].c.some(c => cells.state[c] === neib)) return;
                 queue.push(e);
             });
         }
@@ -1459,7 +1472,8 @@ export function addZones(number = 1) {
         const organized = ra(pack.religions.filter(r => r.type === "Organized"));
         if (!organized) return;
 
-        const cell = ra(cells.i.filter(i => cells.religion[i] && cells.religion[i] !== organized.i && cells.c[i].some(c => cells.religion[c] === organized.i)));
+        const cell = ra(cells.map((v, k) => k)
+            .filter(i => cells.religion[i] && cells.religion[i] !== organized.i && cells[i].c.some(c => cells.religion[c] === organized.i)));
         if (!cell) return;
         const target = cells.religion[cell];
         const cellsArray = [], queue = [cell], power = rand(10, 30);
@@ -1469,7 +1483,7 @@ export function addZones(number = 1) {
             cellsArray.push(q);
             if (cellsArray.length > power) break;
 
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e]) return;
                 if (cells.religion[e] !== target) return;
                 if (cells.h[e] < 20) return;
@@ -1487,7 +1501,7 @@ export function addZones(number = 1) {
         const heresy = ra(pack.religions.filter(r => r.type === "Heresy"));
         if (!heresy) return;
 
-        const cellsArray = cells.i.filter(i => !used[i] && cells.religion[i] === heresy.i);
+        const cellsArray = cells.map((v, k) => k).filter(i => !used[i] && cells.religion[i] === heresy.i);
         if (!cellsArray.length) return;
         cellsArray.forEach(i => used[i] = 1);
 
@@ -1508,7 +1522,7 @@ export function addZones(number = 1) {
             if (cells.burg[next.e] || cells.pop[next.e]) cellsArray.push(next.e);
             used[next.e] = 1;
 
-            cells.c[next.e].forEach(function (e) {
+            cells[next.e].c.forEach(function (e) {
                 const r = cells.road[next.e];
                 const c = r ? Math.max(10 - r, 1) : 100;
                 const p = next.p + c;
@@ -1543,7 +1557,7 @@ export function addZones(number = 1) {
             if (cells.burg[next.e] || cells.pop[next.e]) cellsArray.push(next.e);
             used[next.e] = 1;
 
-            cells.c[next.e].forEach(function (e) {
+            cells[next.e].c.forEach(function (e) {
                 const c = rand(1, 10);
                 const p = next.p + c;
                 if (p > power) return;
@@ -1577,7 +1591,7 @@ export function addZones(number = 1) {
             const q = P(.5) ? queue.shift() : queue.pop();
             cellsArray.push(q);
             if (cellsArray.length > power) break;
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e] || cells.h[e] < 20) return;
                 used[e] = 1;
                 queue.push(e);
@@ -1588,7 +1602,7 @@ export function addZones(number = 1) {
     }
 
     function addAvalanche() {
-        const roads = cells.i.filter(i => !used[i] && cells.road[i] && cells.h[i] >= 70);
+        const roads = cells.map((v, k) => k).filter(i => !used[i] && cells.road[i] && cells.h[i] >= 70);
         if (!roads.length) return;
 
         const cell = +ra(roads);
@@ -1598,7 +1612,7 @@ export function addZones(number = 1) {
             const q = P(.3) ? queue.shift() : queue.pop();
             cellsArray.push(q);
             if (cellsArray.length > power) break;
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e] || cells.h[e] < 65) return;
                 used[e] = 1;
                 queue.push(e);
@@ -1611,7 +1625,7 @@ export function addZones(number = 1) {
     }
 
     function addFault() {
-        const elevated = cells.i.filter(i => !used[i] && cells.h[i] > 50 && cells.h[i] < 70);
+        const elevated = cells.map((v, k) => k).filter(i => !used[i] && cells.h[i] > 50 && cells.h[i] < 70);
         if (!elevated.length) return;
 
         const cell = ra(elevated);
@@ -1621,7 +1635,7 @@ export function addZones(number = 1) {
             const q = queue.pop();
             if (cells.h[q] >= 20) cellsArray.push(q);
             if (cellsArray.length > power) break;
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e] || cells.r[e]) return;
                 used[e] = 1;
                 queue.push(e);
@@ -1635,7 +1649,7 @@ export function addZones(number = 1) {
 
     function addFlood() {
         const fl = cells.fl.filter(fl => fl), meanFlux = d3.mean(fl), maxFlux = d3.max(fl), flux = (maxFlux - meanFlux) / 2 + meanFlux;
-        const rivers = cells.i.filter(i => !used[i] && cells.h[i] < 50 && cells.r[i] && cells.fl[i] > flux && cells.burg[i]);
+        const rivers = cells.map((v, k) => k).filter(i => !used[i] && cells.h[i] < 50 && cells.r[i] && cells.fl[i] > flux && cells.burg[i]);
         if (!rivers.length) return;
 
         const cell = +ra(rivers), river = cells.r[cell];
@@ -1646,7 +1660,7 @@ export function addZones(number = 1) {
             cellsArray.push(q);
             if (cellsArray.length > power) break;
 
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e] || cells.h[e] < 20 || cells.r[e] !== river || cells.h[e] > 50 || cells.fl[e] < meanFlux) return;
                 used[e] = 1;
                 queue.push(e);
@@ -1658,7 +1672,7 @@ export function addZones(number = 1) {
     }
 
     function addTsunami() {
-        const coastal = cells.i.filter(i => !used[i] && cells.t[i] === -1 && pack.features[cells.f[i]].type !== "lake");
+        const coastal = cells.map((v, k) => k).filter(i => !used[i] && cells.t[i] === -1 && pack.features[cells.f[i]].type !== "lake");
         if (!coastal.length) return;
 
         const cell = +ra(coastal);
@@ -1669,7 +1683,7 @@ export function addZones(number = 1) {
             if (cells.t[q] === 1) cellsArray.push(q);
             if (cellsArray.length > power) break;
 
-            cells.c[q].forEach(e => {
+            cells[q].c.forEach(e => {
                 if (used[e]) return;
                 if (cells.t[e] > 2) return;
                 if (pack.features[cells.f[e]].type === "lake") return;
@@ -1702,7 +1716,7 @@ export function showStatistics() {
     Canvas size: ${graphWidth}x${graphHeight}
     Template: ${template} ${templateRandom}
     Points: ${grid.points.length}
-    Cells: ${pack.cells.i.length}
+    Cells: ${pack.cells.length}
     Map size: ${mapSizeOutput.value}%
     States: ${pack.states.length - 1}
     Provinces: ${pack.provinces.length - 1}

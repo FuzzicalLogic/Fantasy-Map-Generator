@@ -98,8 +98,8 @@ export function markFeatures(grid, seed) {
     console.time("markFeatures");
     Math.seedrandom(seed); // restart Math.random() to get the same result on heightmap edit in Erase mode
     const cells = grid.cells, heights = grid.cells.h;
-    cells.f = new Uint16Array(cells.i.length); // cell feature number
-    cells.t = new Int8Array(cells.i.length); // cell type: 1 = land coast; -1 = water near coast;
+    cells.f = new Uint16Array(cells.length); // cell feature number
+    cells.t = new Int8Array(cells.length); // cell type: 1 = land coast; -1 = water near coast;
     grid.features = [0];
 
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
@@ -109,8 +109,8 @@ export function markFeatures(grid, seed) {
 
         while (queue.length) {
             const q = queue.pop();
-            if (cells.b[q]) border = true;
-            cells.c[q].forEach(function (e) {
+            if (cells[q].b) border = true;
+            cells[q].c.forEach(function (e) {
                 const eLand = heights[e] >= 20;
                 //if (eLand) cells.t[e] = 2;
                 if (land === eLand && cells.f[e] === 0) {
@@ -145,15 +145,16 @@ export function openNearSeaLakes(grid) {
     for (let t = 0, removed = true; t < 5 && removed; t++) {
         removed = false;
 
-        for (const i of cells.i) {
+        let xs = cells.map((v, k) => k)
+        for (const i of xs) {
             const lake = cells.f[i];
             if (features[lake].type !== "lake") continue; // not a lake cell
 
             check_neighbours:
-            for (const c of cells.c[i]) {
+            for (const c of cells[i].c) {
                 if (cells.t[c] !== 1 || cells.h[c] > limit) continue; // water cannot brake this
 
-                for (const n of cells.c[c]) {
+                for (const n of cells[c].c) {
                     const ocean = cells.f[n];
                     if (features[ocean].type !== "ocean") continue; // not an ocean
                     removed = removeLake(c, lake, ocean);
@@ -164,11 +165,11 @@ export function openNearSeaLakes(grid) {
 
     }
 
-    function removeLake(treshold, lake, ocean) {
-        cells.h[treshold] = 19;
-        cells.t[treshold] = -1;
-        cells.f[treshold] = ocean;
-        cells.c[treshold].forEach(function (c) {
+    function removeLake(threshold, lake, ocean) {
+        cells.h[threshold] = 19;
+        cells.t[threshold] = -1;
+        cells.f[threshold] = ocean;
+        cells[threshold].c.forEach(function (c) {
             if (cells.h[c] >= 20) cells.t[c] = 1; // mark as coastline
         });
         features[lake].type = "ocean"; // mark former lake as ocean

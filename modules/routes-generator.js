@@ -10,8 +10,8 @@ const generators = {
 };
 export function generate(pack) {
     view.routes.selectAll("path").remove();
-    pack.cells.road = new Uint16Array(pack.cells.i.length);
-    pack.cells.crossroad = new Uint16Array(pack.cells.i.length);
+    pack.cells.road = new Uint16Array(pack.cells.length);
+    pack.cells.crossroad = new Uint16Array(pack.cells.length);
 
     Object.keys(generators).map(x => new CustomEvent('add', {
         detail: { type: x, data: generators[x](pack) }
@@ -34,7 +34,7 @@ function getRoads(pack) {
         paths = [...paths, ...segments]
     }
 
-    cells.i.forEach(i => cells.s[i] += cells.road[i] / 2); // add roads to suitability score
+    cells.forEach((v, i) => cells.s[i] += cells.road[i] / 2); // add roads to suitability score
     console.timeEnd("generateMainRoads");
     return paths;
 }
@@ -123,7 +123,7 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
         const next = queue.dequeue(), n = next.e, p = next.p;
         if (toRoad && cells.road[n]) return [from, n];
 
-        for (const c of cells.c[n]) {
+        for (const c of cells[n].c) {
             let { h, state } = cells;
             if (h[c] < 20) continue; // ignore water cells
             const stateChangeCost = state && state[c] !== state[n] ? 400 : 0; // trails tend to lay within the same state
@@ -198,7 +198,7 @@ function findOceanPath(cells, start, exit = null, toRoute = null) {
         const next = queue.dequeue(), { p, e: n } = next;
         if (toRoute && n !== start && cells.road[n]) return [from, n, true];
 
-        for (const c of cells.c[n]) {
+        for (const c of cells[n].c) {
             if (c === exit) { from[c] = n; return [from, exit, true]; }
             if (cells.h[c] >= 20) continue; // ignore land cells
             if (temp[cells.g[c]] <= -5) continue; // ignore cells with term <= -5

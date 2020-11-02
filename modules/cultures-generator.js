@@ -12,10 +12,10 @@ let cells;
 export function generate() {
     console.time('generateCultures');
     cells = pack.cells;
-    cells.culture = new Uint16Array(cells.i.length); // cell cultures
+    cells.culture = new Uint16Array(cells.length); // cell cultures
     let count = Math.min(+culturesInput.value, +culturesSet.selectedOptions[0].dataset.max);
 
-    const populated = cells.i.filter(i => cells.s[i]); // populated cells
+    const populated = cells.map((v,k) => k).filter(i => cells.s[i]); // populated cells
     if (populated.length < count * 25) {
         count = Math.floor(populated.length / 50);
         if (!count) {
@@ -369,12 +369,12 @@ export function expand() {
         queue.queue({ e: c.center, p: 0, c: c.i });
     });
 
-    const neutral = cells.i.length / 5000 * 3000 * neutralInput.value; // limit cost for culture growth
+    const neutral = cells.length / 5000 * 3000 * neutralInput.value; // limit cost for culture growth
     const cost = [];
     while (queue.length) {
         const next = queue.dequeue(), n = next.e, p = next.p, c = next.c;
         const type = pack.cultures[c].type;
-        cells.c[n].forEach(function (e) {
+        cells[n].c.forEach(function (e) {
             const biome = cells.biome[e];
             const biomeCost = getBiomeCost(c, biome, type);
             const biomeChangeCost = biome === cells.biome[n] ? 0 : 20; // penalty on biome change

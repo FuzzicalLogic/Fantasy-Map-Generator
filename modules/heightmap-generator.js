@@ -4,7 +4,7 @@ import {
 
 import { findGridCell, P, getNumberInRange, lim, rand } from "./utils.js";
 
-let cells, p;
+let cells, vertices, p;
 const BLOB_POWER = {
     1: .98,
     2: .985,
@@ -60,15 +60,12 @@ const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 
 export function generate(map) {
     console.time('generateHeightmap');
-    ({ cells, points: p } = map);
+    ({ cells, vertices, points: p } = map);
     cells.h = new Uint8Array(p.length);
 
     Templates[document.getElementById("templateInput").value]()
     dispatchEvent(new CustomEvent('update', {
-        detail: {
-            cells: cells,
-            vertices: map.vertices
-        }
+        detail: { cells, vertices }
     }))
     console.timeEnd('generateHeightmap');
 }
@@ -240,7 +237,7 @@ export function addHill(count, height, rangeX, rangeY) {
         while (queue.length) {
             const q = queue.shift();
 
-            for (const c of cells.c[q]) {
+            for (const c of cells[q].c) {
                 if (change[c]) continue;
                 change[c] = change[q] ** power * (Math.random() * .2 + .9);
                 if (change[c] > 1) queue.push(c);
@@ -275,7 +272,7 @@ export function addPit(count, height, rangeX, rangeY) {
             h = h ** power * (Math.random() * .2 + .9);
             if (h < 1) return;
 
-            cells.c[q].forEach(function (c, i) {
+            cells[q].c.forEach(function (c, i) {
                 if (used[c]) return;
                 cells.h[c] = lim(cells.h[c] - h * (Math.random() * .2 + .9));
                 used[c] = 1;
@@ -315,7 +312,7 @@ export function addRange(count, height, rangeX, rangeY) {
 
             while (cur !== end) {
                 let min = Infinity;
-                cells.c[cur].forEach(function (e) {
+                cells[cur].c.forEach(function (e) {
                     if (used[e]) return;
                     let diff = (p[end][0] - p[e][0]) ** 2 + (p[end][1] - p[e][1]) ** 2;
                     if (Math.random() > .85) diff = diff / 2;
@@ -340,7 +337,7 @@ export function addRange(count, height, rangeX, rangeY) {
             h = h ** power - 1;
             if (h < 2) break;
             frontier.forEach(f => {
-                cells.c[f].forEach(i => {
+                cells[f].c.forEach(i => {
                     if (!used[i]) { queue.push(i); used[i] = 1; }
                 });
             });
@@ -350,7 +347,7 @@ export function addRange(count, height, rangeX, rangeY) {
         range.forEach((cur, d) => {
             if (d % 6 !== 0) return;
             for (const l of d3.range(i)) {
-                const min = cells.c[cur][d3.scan(cells.c[cur], (a, b) => cells.h[a] - cells.h[b])]; // downhill cell
+                const min = cells[cur].c[d3.scan(cells[cur].c, (a, b) => cells.h[a] - cells.h[b])]; // downhill cell
                 //debug.append("circle").attr("cx", p[min][0]).attr("cy", p[min][1]).attr("r", 1);
                 cells.h[min] = (cells.h[cur] * 2 + cells.h[min]) / 3;
                 cur = min;
@@ -395,7 +392,7 @@ export function addTrough(count, height, rangeX, rangeY) {
 
             while (cur !== end) {
                 let min = Infinity;
-                cells.c[cur].forEach(function (e) {
+                cells[cur].c.forEach(function (e) {
                     if (used[e]) return;
                     let diff = (p[end][0] - p[e][0]) ** 2 + (p[end][1] - p[e][1]) ** 2;
                     if (Math.random() > .8) diff = diff / 2;
@@ -420,7 +417,7 @@ export function addTrough(count, height, rangeX, rangeY) {
             h = h ** power - 1;
             if (h < 2) break;
             frontier.forEach(f => {
-                cells.c[f].forEach(i => {
+                cells[f].c.forEach(i => {
                     if (!used[i]) { queue.push(i); used[i] = 1; }
                 });
             });
@@ -430,7 +427,7 @@ export function addTrough(count, height, rangeX, rangeY) {
         range.forEach((cur, d) => {
             if (d % 6 !== 0) return;
             for (const l of d3.range(i)) {
-                const min = cells.c[cur][d3.scan(cells.c[cur], (a, b) => cells.h[a] - cells.h[b])]; // downhill cell
+                const min = cells[cur].c[d3.scan(cells[cur].c, (a, b) => cells.h[a] - cells.h[b])]; // downhill cell
                 //debug.append("circle").attr("cx", p[min][0]).attr("cy", p[min][1]).attr("r", 1);
                 cells.h[min] = (cells.h[cur] * 2 + cells.h[min]) / 3;
                 cur = min;
@@ -459,7 +456,7 @@ export function addStrait(width, direction = "vertical") {
 
         while (cur !== end) {
             let min = Infinity;
-            cells.c[cur].forEach(function (e) {
+            cells[cur].c.forEach(function (e) {
                 let diff = (p[end][0] - p[e][0]) ** 2 + (p[end][1] - p[e][1]) ** 2;
                 if (Math.random() > 0.8) diff = diff / 2;
                 if (diff < min) { min = diff; cur = e; }
@@ -475,7 +472,7 @@ export function addStrait(width, direction = "vertical") {
     while (width > 0) {
         const exp = .9 - step * width;
         range.forEach(function (r) {
-            cells.c[r].forEach(function (e) {
+            cells[r].c.forEach(function (e) {
                 if (used[e]) return;
                 used[e] = 1;
                 query.push(e);
@@ -516,7 +513,7 @@ export function modify(range, add, mult, power) {
 export function smooth(fr = 2, add = 0) {
     cells.h = cells.h.map((h, i) => {
         const a = [h];
-        cells.c[i].forEach(c => a.push(cells.h[c]));
+        cells[i].c.forEach(c => a.push(cells.h[c]));
         return lim((h * (fr - 1) + d3.mean(a) + add) / fr);
     });
 }

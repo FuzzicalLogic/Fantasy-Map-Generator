@@ -13,7 +13,7 @@ export function OceanLayers(grid) {
 
     lineGen.curve(d3.curveBasisClosed);
     ({ cells, vertices } = grid);
-    pointsN = cells.i.length;
+    pointsN = cells.length;
 
     const limits = outline === "random"
         ? randomizeOutline()
@@ -24,7 +24,8 @@ export function OceanLayers(grid) {
     const opacity = rn(0.4 / limits.length, 2);
     used = new Uint8Array(pointsN); // to detect already passed cells
 
-    for (const i of cells.i) {
+    let xs = cells.map((v, k) => k);
+    for (const i of xs) {
         const t = cells.t[i];
         if (t > 0) continue;
         if (used[i] || !limits.includes(t)) continue;
@@ -52,8 +53,8 @@ export function OceanLayers(grid) {
 
     // find eligible cell vertex to start path detection
     function findStart(i, t) {
-        if (cells.b[i]) return cells.v[i].find(v => vertices.c[v].some(c => c >= pointsN)); // map border cell
-        return cells.v[i][cells.c[i].findIndex(c => cells.t[c] < t || !cells.t[c])];
+        if (cells[i].b) return cells[i].v.find(v => vertices.c[v].some(c => c >= pointsN)); // map border cell
+        return cells[i].v[cells[i].c.findIndex(c => cells.t[c] < t || !cells.t[c])];
     }
 
     console.timeEnd("drawOceanLayers");
@@ -71,13 +72,13 @@ function randomizeOutline() {
 
   // Define grid ocean cells type based on distance form land
 function markupOcean(cells, limits) {
-    let { c, t } = cells,
-        nCells = cells.i.length;
+    let { t } = cells,
+        nCells = cells.length;
     for (let j = -2; j >= limits[0] - 1; j--) {
         for (let i = 0; i < nCells; i++) {
             if (t[i] !== j + 1)
                 continue;
-            c[i].forEach(e => {
+            cells[i].c.forEach(e => {
                 if (!t[e]) t[e] = j;
             });
         }

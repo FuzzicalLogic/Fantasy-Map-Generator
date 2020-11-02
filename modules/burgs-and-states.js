@@ -19,7 +19,7 @@ import { toggleLabels, layerIsOn } from "./ui/layers.js";
 
 export function generate(howMany) {
     const { cells, cultures } = pack,
-        n = cells.i.length;
+        n = cells.length;
 
     cells.burg = new Uint16Array(n); // cell burg
     cells.road = new Uint16Array(n); // cell road power
@@ -50,7 +50,9 @@ function placeCapitals(cells, count) {
     let burgs = [0];
 
     const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
-    const sorted = cells.i.filter(i => score[i] > 0 && cells.culture[i]).sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
+    const sorted = cells.map((v, k) => k)
+        .filter(i => score[i] > 0 && cells.culture[i])
+        .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
 
     if (sorted.length < count * 10) {
         count = Math.floor(sorted.length / 10);
@@ -85,7 +87,8 @@ function placeCapitals(cells, count) {
 function placeTowns(burgs, cells) {
     console.time('placeTowns');
     const score = new Int16Array(cells.s.map(s => s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
-    const sorted = cells.i.filter(i => !cells.burg[i] && score[i] > 0 && cells.culture[i])
+    const sorted = cells.map((v, k) => k)
+        .filter(i => !cells.burg[i] && score[i] > 0 && cells.culture[i])
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
 
     const desiredNumber = manorsInput.value == 1000
@@ -155,9 +158,10 @@ function createStates(capitals, cells, cultures) {
 }
 
 // define burg coordinates, port status and define details
-export function specifyBurgs({ burgs, cells: { haven, g, f, harbor, v, s, road, r, fl }, vertices, features }, { cells: { temp } }) {
+export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
-    
+
+    const { haven, g, f, harbor, v, s, road, r, fl } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -178,7 +182,7 @@ export function specifyBurgs({ burgs, cells: { haven, g, f, harbor, v, s, road, 
 
         if (b.port) {
             b.population = b.population * 1.3; // increase port population
-            const e = v[i].filter(v => vertices.c[v].some(c => c === haven[i])); // vertices of common edge
+            const e = cells[i].v.filter(cell => vertices.c[cell].some(c => c === haven[i])); // vertices of common edge
             b.x = rn((vertices.p[e[0]][0] + vertices.p[e[1]][0]) / 2, 2);
             b.y = rn((vertices.p[e[0]][1] + vertices.p[e[1]][1]) / 2, 2);
         }
@@ -280,7 +284,7 @@ export function drawBurgs() {
 export function expandStates({ cells, states, cultures, burgs}) {
     console.time("expandStates");
 
-    cells.state = new Uint16Array(cells.i.length); // cell state
+    cells.state = new Uint16Array(cells.length); // cell state
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
     states.filter(s => s.i && !s.removed).forEach(function (s) {
@@ -289,7 +293,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
         queue.queue({ e: s.center, p: 0, s: s.i, b });
         cost[s.center] = 1;
     });
-    const neutral = cells.i.length / 5000 * 2500 * neutralInput.value * statesNeutral.value; // limit cost for state growth
+    const neutral = cells.length / 5000 * 2500 * neutralInput.value * statesNeutral.value; // limit cost for state growth
 
     while (queue.length) {
         const next = queue.dequeue(),
@@ -297,7 +301,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
         const type = states[s].type;
         const culture = states[s].culture;
 
-        cells.c[n].forEach(function (e) {
+        cells[n].c.forEach(function (e) {
             if (cells.state[e] && e === states[cells.state[e]].center) return; // do not overwrite capital cells
 
             const cultureCost = culture === cells.culture[e] ? -9 : 100;
@@ -357,24 +361,25 @@ export function expandStates({ cells, states, cultures, burgs}) {
     console.timeEnd("expandStates");
 }
 
-export function normalizeStates({ cells: { i, h, burg, c, state}, burgs }) {
+export function normalizeStates({ cells, burgs }) {
     console.time("normalizeStates");
-
-    for (const idx of i) {
-        if (h[idx] < 20 || burg[idx])
+    let { h, burg, state } = cells;
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
+        if (h[i] < 20 || burg[i])
             continue; // do not overwrite burgs
-        if (c[idx].some(c => burgs[burg[c]].capital))
+        if (cells[i].c.some(c => burgs[burg[c]].capital))
             continue; // do not overwrite near capital
-        const neibs = c[idx].filter(c => h[c] >= 20);
-        const adversaries = neibs.filter(c => state[c] !== state[idx]);
+        const neibs = cells[i].c.filter(c => h[c] >= 20);
+        const adversaries = neibs.filter(c => state[c] !== state[i]);
         if (adversaries.length < 2)
             continue;
-        const buddies = neibs.filter(c => state[c] === state[idx]);
+        const buddies = neibs.filter(c => state[c] === state[i]);
         if (buddies.length > 2)
             continue;
         if (adversaries.length <= buddies.length)
             continue;
-        state[idx] = state[adversaries[0]];
+        state[i] = state[adversaries[0]];
         //debug.append("circle").attr("cx", cells.p[i][0]).attr("cy", cells.p[i][1]).attr("r", .5).attr("fill", "red");
     }
     console.timeEnd("normalizeStates");
@@ -429,14 +434,14 @@ export function drawStateLabels(list) {
 
             while (queue.length) {
                 const q = queue.pop();
-                const nQ = cells.c[q].filter(c => cells.state[c] === state);
+                const nQ = cells[q].c.filter(c => cells.state[c] === state);
 
-                cells.c[q].forEach(function (c, d) {
+                cells[q].c.forEach(function (c, d) {
                     const passableLake = features[cells.f[c]].type === "lake" && features[cells.f[c]].cells < maxLake;
-                    if (cells.b[c] || (cells.state[c] !== state && !passableLake)) { hull.add(cells.v[q][d]); return; }
-                    const nC = cells.c[c].filter(n => cells.state[n] === state);
+                    if (cells[c].b || (cells.state[c] !== state && !passableLake)) { hull.add(cells[q].v[d]); return; }
+                    const nC = cells[c].c.filter(n => cells.state[n] === state);
                     const intersected = common(nQ, nC).length
-                    if (hull.size > 20 && !intersected && !passableLake) { hull.add(cells.v[q][d]); return; }
+                    if (hull.size > 20 && !intersected && !passableLake) { hull.add(cells[q].v[d]); return; }
                     if (used[c]) return;
                     used[c] = 1;
                     queue.push(c);
@@ -843,7 +848,7 @@ export function generateProvinces(regenerate) {
 
     const cells = pack.cells, states = pack.states, burgs = pack.burgs;
     const provinces = pack.provinces = [0];
-    cells.province = new Uint16Array(cells.i.length); // cell state
+    cells.province = new Uint16Array(cells.length); // cell state
     const percentage = +provincesInput.value;
     if (states.length < 2 || !percentage) {
         states.forEach(s => s.provinces = []);
@@ -895,7 +900,7 @@ export function generateProvinces(regenerate) {
     while (queue.length) {
         const next = queue.dequeue(),
             { e: n, p, province, state } = next;
-        cells.c[n].forEach(function (e) {
+        cells[n].c.forEach(function (e) {
             const land = cells.h[e] >= 20;
             if (!land && !cells.t[e])
                 return; // cannot pass deep ocean
@@ -920,10 +925,11 @@ export function generateProvinces(regenerate) {
     }
 
     // justify provinces shapes a bit
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (cells.burg[i])
             continue; // do not overwrite burgs
-        const neibs = cells.c[i].filter(c => cells.state[c] === cells.state[i])
+        const neibs = cells[i].c.filter(c => cells.state[c] === cells.state[i])
             .map(c => cells.province[c]);
         const adversaries = neibs.filter(c => c !== cells.province[i]);
         if (adversaries.length < 2)
@@ -939,7 +945,7 @@ export function generateProvinces(regenerate) {
     }
 
     // add "wild" provinces if some cells don't have a province assigned
-    const noProvince = Array.from(cells.i).filter(i => cells.state[i] && !cells.province[i]); // cells without province assigned
+    const noProvince = Array.from(xs).filter(i => cells.state[i] && !cells.province[i]); // cells without province assigned
     states.forEach(s => {
         if (!s.provinces.length)
             return;
@@ -962,7 +968,7 @@ export function generateProvinces(regenerate) {
             while (queue.length) {
                 const next = queue.dequeue(), n = next.e, p = next.p;
 
-                cells.c[n].forEach(function (e) {
+                cells[n].c.forEach(function (e) {
                     if (cells.province[e])
                         return;
                     const land = cells.h[e] >= 20;
@@ -1011,11 +1017,11 @@ export function generateProvinces(regenerate) {
             // check if there is a land way within the same state between two cells
             function isPassable(from, to) {
                 if (cells.f[from] !== cells.f[to]) return false; // on different islands
-                const queue = [from], used = new Uint8Array(cells.i.length), state = cells.state[from];
+                const queue = [from], used = new Uint8Array(cells.length), state = cells.state[from];
                 while (queue.length) {
                     const current = queue.pop();
                     if (current === to) return true; // way is found
-                    cells.c[current].forEach(c => {
+                    cells[current].c.forEach(c => {
                         if (used[c] || cells.h[c] < 20 || cells.state[c] !== state) return;
                         queue.push(c);
                         used[c] = 1;

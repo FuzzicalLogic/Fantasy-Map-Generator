@@ -15,7 +15,8 @@ export function ReliefIcons() {
     const relief = []; // t: type, c: cell, x: centerX, y: centerY, s: size;
     const cells = pack.cells;
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k)
+    for (const i of xs) {
         const height = cells.h[i];
         if (height < 20) continue; // no icons on water
         if (cells.r[i]) continue; // no icons on rivers
