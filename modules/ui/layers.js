@@ -312,14 +312,16 @@ export function drawTemp() {
     const scheme = d3.scaleSequential(d3.interpolateSpectral);
     const tMax = +temperatureEquatorOutput.max, tMin = +temperatureEquatorOutput.min, delta = tMax - tMin;
 
-    const cells = grid.cells, vertices = grid.vertices, n = cells.i.length;
+    const { cells, vertices } = grid, n = cells.length;
     const used = new Uint8Array(n); // to detect already passed cells
-    const min = d3.min(cells.temp), max = d3.max(cells.temp);
+    const min = d3.min(cells.temp),
+        max = d3.max(cells.temp);
     const step = Math.max(Math.round(Math.abs(min - max) / 5), 1);
     const isolines = d3.range(min + step, max, step);
     const chains = [], labels = []; // store label coordinates
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         const t = cells.temp[i];
         if (used[i] || !isolines.includes(t)) continue;
         const start = findStart(i, t);
@@ -350,8 +352,8 @@ export function drawTemp() {
 
     // find cell with temp < isotherm and find vertex to start path detection
     function findStart(i, t) {
-        if (cells.b[i]) return cells.v[i].find(v => vertices.c[v].some(c => c >= n)); // map border cell
-        return cells.v[i][cells.c[i].findIndex(c => cells.temp[c] < t || !cells.temp[c])];
+        if (cells[i].b) return cells[i].v.find(v => vertices.c[v].some(c => c >= n)); // map border cell
+        return cells[i].v[cells[i].c.findIndex(c => cells.temp[c] < t || !cells.temp[c])];
     }
 
     function addLabel(points, t) {
@@ -389,7 +391,10 @@ export function drawTemp() {
             if (v[0] !== prev && c0 !== c1) current = v[0];
             else if (v[1] !== prev && c1 !== c2) current = v[1];
             else if (v[2] !== prev && c0 !== c2) current = v[2];
-            if (current === chain[chain.length - 1]) { console.error("Next vertex is not found"); break; }
+            if (current === chain[chain.length - 1]) {
+                console.error("Next vertex is not found");
+                break;
+            }
         }
         chain.push(start);
         return chain;
@@ -453,7 +458,7 @@ export function drawPrec() {
     const show = d3.transition().duration(800).ease(d3.easeSinIn);
     prec.selectAll("text").attr("opacity", 0).transition(show).attr("opacity", 1);
 
-    const data = cells.i.filter(i => cells.h[i] >= 20 && cells.prec[i]);
+    const data = cells.map((v,k)=>k).filter(i => cells.h[i] >= 20 && cells.prec[i]);
     prec.selectAll("circle").data(data).enter().append("circle")
         .attr("cx", d => p[d][0]).attr("cy", d => p[d][1]).attr("r", 0)
         .transition(show).attr("r", d => rn(Math.max(Math.sqrt(cells.prec[d] * .5), .8), 2));
@@ -465,7 +470,7 @@ export function drawPopulation(event) {
     const cells = pack.cells, p = cells.p, burgs = pack.burgs;
     const show = d3.transition().duration(2000).ease(d3.easeSinIn);
 
-    const rural = Array.from(cells.i.filter(i => cells.pop[i] > 0), i => [p[i][0], p[i][1], p[i][1] - cells.pop[i] / 8]);
+    const rural = Array.from(cells.map((v, k) => k).filter(i => cells.pop[i] > 0), i => [p[i][0], p[i][1], p[i][1] - cells.pop[i] / 8]);
     population.select("#rural").selectAll("line").data(rural).enter().append("line")
         .attr("x1", d => d[0]).attr("y1", d => d[1])
         .attr("x2", d => d[0]).attr("y2", d => d[1])
@@ -489,15 +494,16 @@ function drawCells() {
 
 export function drawIce() {
     const cells = grid.cells, vertices = grid.vertices,
-        n = cells.i.length, temp = cells.temp, h = cells.h;
-    const used = new Uint8Array(cells.i.length);
+        n = cells.length, temp = cells.temp, h = cells.h;
+    const used = new Uint8Array(cells.length);
     Math.seedrandom(seed);
 
     const shieldMin = -6; // max temp to form ice shield (glacier)
     const icebergMax = 2; // max temp to form an iceberg
 
     let { ice } = view;
-    for (const i of grid.cells.i) {
+    const xs = grid.cells.map((v, k) => k);
+    for (const i of xs) {
         const t = temp[i];
         if (t > icebergMax) continue; // too warm: no ice
         if (t > shieldMin && h[i] >= 20) continue; // non-glacier land: no ice
@@ -505,9 +511,9 @@ export function drawIce() {
         if (t <= shieldMin) {
             // very cold: ice shield
             if (used[i]) continue; // already rendered
-            const onborder = cells.c[i].some(n => temp[n] > shieldMin);
+            const onborder = cells[i].c.some(n => temp[n] > shieldMin);
             if (!onborder) continue; // need to start from onborder cell
-            const vertex = cells.v[i].find(v => vertices.c[v].some(i => temp[i] > shieldMin));
+            const vertex = cells[i].v.find(v => vertices.c[v].some(i => temp[i] > shieldMin));
             const chain = connectVertices(vertex);
             if (chain.length < 3) continue;
             const points = clipPoly(chain.map(v => vertices.p[v]));

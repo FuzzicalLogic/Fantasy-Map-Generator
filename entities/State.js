@@ -1,5 +1,5 @@
 import { pack } from "../main.js";
-import { toAdjective, rw, P, rand } from "../modules/utils.js";
+import { toAdjective, rw, P, rand, trimVowels } from "../modules/utils.js";
 
 export const State = v => ({ ...v, ...STATE_DEFAULTS, neighbors: new Set() });
 
@@ -198,10 +198,10 @@ export function getBurgs(state, burgs = pack.burgs) {
 }
 
 export function setStatistics(state, { cells }) {
-    const { area, pop, state: inState } = cells;
+    const { pop, state: inState } = cells;
     let controlled = getCells(state);
     state.cells = controlled.length;
-    state.area = controlled.reduce((sum, idx) => sum += area[idx], 0);
+    state.area = controlled.reduce((sum, idx) => sum += cells[idx].area, 0);
     state.rural = controlled.reduce((sum, idx) => sum += pop[idx], 0);
     state.neighbors = controlled.reduce((arr, idx) => [...arr, ...cells[idx].c], [])
         .filter(x => !!inState[x] && inState[x] !== state.i)

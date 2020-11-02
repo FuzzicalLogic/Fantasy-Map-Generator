@@ -121,7 +121,8 @@ function processFeatureRegeneration(event, button) {
 function regenerateRivers() {
     elevateLakes(pack);
     Rivers.generate();
-    for (const i of pack.cells.i) {
+    const xs = pack.cells.map((v, k) => k);
+    for (const i of xs) {
         const f = pack.features[pack.cells.f[i]]; // feature
         if (f.group === "freshwater") pack.cells.h[i] = 19; // de-elevate lakes
     }

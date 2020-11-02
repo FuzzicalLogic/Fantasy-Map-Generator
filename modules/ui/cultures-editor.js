@@ -60,7 +60,8 @@ function culturesCollectStatistics() {
     const cells = pack.cells, cultures = pack.cultures;
     cultures.forEach(c => c.cells = c.area = c.rural = c.urban = 0);
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (cells.h[i] < 20) continue;
         const c = cells.culture[i];
         cultures[c].cells += 1;

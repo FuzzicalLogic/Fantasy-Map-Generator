@@ -67,7 +67,7 @@ function zonesEditorAddLines() {
         const c = this.dataset.cells ? this.dataset.cells.split(",").map(c => +c) : [];
         const description = this.dataset.description;
         const fill = this.getAttribute("fill");
-        const area = d3.sum(c.map(i => pack.cells.area[i])) * (distanceScaleInput.value ** 2);
+        const area = d3.sum(c.map(i => pack.cells[i].area)) * (distanceScaleInput.value ** 2);
         const rural = d3.sum(c.map(i => pack.cells.pop[i])) * populationRate.value;
         const urban = d3.sum(c.map(i => pack.cells.burg[i]).map(b => pack.burgs[b].population)) * populationRate.value * urbanization.value;
         const population = rural + urban;

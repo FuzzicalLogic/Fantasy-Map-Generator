@@ -918,9 +918,9 @@ export function reGraph({ cells, points, features, spacing }) {
     cells.g = cells.length < 65535 ? Uint16Array.from(newCells.g) : Uint32Array.from(newCells.g); // reference to initial grid cell
     cells.q = d3.quadtree(cells.p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
     cells.h = new Uint8Array(newCells.h); // heights
-    cells.area = new Uint16Array(cells.length); // cell area
+//    cells.area = new Uint16Array(cells.length); // cell area
     cells.map((v, k) => k)
-        .forEach(i => cells.area[i] = Math.abs(d3.polygonArea(getPackPolygon(i))));
+        .forEach(i => cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
 
     console.timeEnd("reGraph");
 }
@@ -1180,7 +1180,7 @@ export function rankCells() {
     cells.pop = new Float32Array(cells.length); // cell population array
 
     const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.conf); // to normalize flux
-    const areaMean = d3.mean(cells.area); // to adjust population by cell area
+    const areaMean = d3.mean(cells.map(x => x.area)); // to adjust population by cell area
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
@@ -1206,7 +1206,7 @@ export function rankCells() {
 
         cells.s[i] = s / 5; // general population rate
         // cell rural population is suitability adjusted by cell area
-        cells.pop[i] = cells.s[i] > 0 ? cells.s[i] * cells.area[i] / areaMean : 0;
+        cells.pop[i] = cells.s[i] > 0 ? cells.s[i] * cells[i].area / areaMean : 0;
     }
 
     console.timeEnd('rankCells');

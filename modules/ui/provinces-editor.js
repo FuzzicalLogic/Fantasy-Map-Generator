@@ -97,11 +97,12 @@ function collectStatistics() {
         if (p.burg && !burgs[p.burg] || burgs[p.burg].removed) p.burg = 0;
     });
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         const p = cells.province[i];
         if (!p) continue;
 
-        provinces[p].area += cells.area[i];
+        provinces[p].area += cells[i].area;
         provinces[p].rural += cells.pop[i];
         if (!cells.burg[i]) continue;
         provinces[p].urban += burgs[cells.burg[i]].population;

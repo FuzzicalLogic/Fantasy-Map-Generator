@@ -408,7 +408,7 @@ function getBiomeCost(c, biome, type) {
 }
 
 function getHeightCost(i, h, type) {
-    const f = pack.features[cells.f[i]], a = cells.area[i];
+    const f = pack.features[cells.f[i]], a = cells[i].area;
     if (type === "Lake" && f.type === "lake") return 10; // no lake crossing penalty for Lake cultures
     if (type === "Naval" && h < 20) return a * 2; // low sea/lake crossing penalty for Naval cultures
     if (type === "Nomadic" && h < 20) return a * 50; // giant sea/lake crossing penalty for Nomads

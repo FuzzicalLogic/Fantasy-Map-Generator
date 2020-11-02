@@ -1,4 +1,4 @@
-import { modules, options, pack, customization } from "../../main.js";
+import { view, modules, options, pack, customization } from "../../main.js";
 
 import { closeDialogs, fitContent, sortLines, applySorting, getFileName, downloadFile, selectIcon } from "./editors.js";
 

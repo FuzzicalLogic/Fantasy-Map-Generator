@@ -262,7 +262,7 @@ export function getPackPolygon(i) {
 
 // get polygon points for initial cells knowing cell id
 export function getGridPolygon(i) {
-    return grid.cells.v[i].map(v => grid.vertices.p[v]);
+    return grid.cells[i].v.map(v => grid.vertices.p[v]);
 }
 
 // mbostock's poissonDiscSampler

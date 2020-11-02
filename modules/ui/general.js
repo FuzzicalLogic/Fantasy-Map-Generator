@@ -303,7 +303,9 @@ function updateCellInfo(point, i, g) {
 
     infoCell.innerHTML = i;
     const unit = areaUnit.value === "square" ? " " + distanceUnitInput.value + "²" : " " + areaUnit.value;
-    infoArea.innerHTML = cells.area[i] ? si(cells.area[i] * distanceScaleInput.value ** 2) + unit : "n/a";
+    infoArea.innerHTML = cells[i].area
+        ? si(cells[i].area * distanceScaleInput.value ** 2) + unit
+        : "n/a";
     infoEvelation.innerHTML = getElevation(pack.features[f], pack.cells.h[i]);
     infoDepth.innerHTML = getDepth(pack.features[f], pack.cells.h[i], point);
     infoTemp.innerHTML = convertTemperature(grid.cells.temp[g]);
