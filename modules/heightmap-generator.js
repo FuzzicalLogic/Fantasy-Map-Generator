@@ -61,6 +61,7 @@ const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 export function generate(map) {
     console.time('generateHeightmap');
     ({ cells, vertices, points: p } = map);
+    cells.forEach(x => x.h = 0);
     cells.h = new Uint8Array(p.length);
 
     Templates[document.getElementById("templateInput").value]()

@@ -474,7 +474,7 @@ export function editHeightmap() {
 
     function updateStatistics() {
         const landCells = grid.cells.h.reduce((s, h) => h >= 20 ? s + 1 : s);
-        landmassCounter.innerHTML = `${landCells} (${rn(landCells / grid.cells.i.length * 100)}%)`;
+        landmassCounter.innerHTML = `${landCells} (${rn(landCells / grid.cells.length * 100)}%)`;
         landmassAverage.innerHTML = rn(d3.mean(grid.cells.h));
     }
 

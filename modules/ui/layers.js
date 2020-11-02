@@ -250,27 +250,36 @@ export function drawHeightmap() {
     }
 
     let currentLayer = 20;
-    const heights = cells.map((v, k) => k).sort((a, b) => cells.h[a] - cells.h[b]);
-    for (const i of heights) {
-        const h = cells.h[i];
-        if (h > currentLayer) currentLayer += skip;
-        if (currentLayer > 100) break; // no layers possible with height > 100
-        if (h < currentLayer) continue;
-        if (used[i]) continue; // already marked
-        const onborder = cells[i].c.some(n => cells.h[n] < h);
-        if (!onborder) continue;
-        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] < h));
+    let layers = [];
+    for (let x = currentLayer; x < 101; x += skip) 
+        layers.push(x);
+    
+    const heights = cells.map((x, i) => ({ ...x, h: Math.round(x.h), i: i }))
+        .filter(({ h }) => h >= 20 && h <= 100 && layers.includes(h))
+        .sort(({ h: h1 }, { h: h2 }) => h1 - h2)
+
+    for (const { i, h, c, v } of heights) {
+        if (used[i]) 
+            continue; // already marked
+        const onborder = c.some(n => cells[n].h < h);
+        if (!onborder)
+            continue;
+        const vertex = v.find(v => vertices.c[v].some(i => cells[i].h < h));
+        
         const chain = connectVertices(vertex, h);
-        if (chain.length < 3) continue;
+        if (chain.length < 3)
+            continue;
         const points = simplifyLine(chain).map(v => vertices.p[v]);
         paths[h] += round(lineGen(points));
     }
 
     terrs.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", scheme(.8)); // draw base layer
     for (const i of d3.range(20, 101)) {
-        if (paths[i].length < 10) continue;
+        if (paths[i].length < 10)
+            continue;
         const color = getColor(i, scheme);
-        if (terracing) terrs.append("path").attr("d", paths[i]).attr("transform", "translate(.7,1.4)").attr("fill", d3.color(color).darker(terracing)).attr("data-height", i);
+        if (terracing)
+            terrs.append("path").attr("d", paths[i]).attr("transform", "translate(.7,1.4)").attr("fill", d3.color(color).darker(terracing)).attr("data-height", i);
         terrs.append("path").attr("d", paths[i]).attr("fill", color).attr("data-height", i);
     }
 
@@ -281,15 +290,22 @@ export function drawHeightmap() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells.h[c] === h).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || cells.h[c[0]] < h;
-            const c1 = c[1] >= n || cells.h[c[1]] < h;
-            const c2 = c[2] >= n || cells.h[c[2]] < h;
+            c.filter(c => Math.round(cells[c].h) === h)
+                .forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].h < h;
+            const c1 = c[1] >= n || cells[c[1]].h < h;
+            const c2 = c[2] >= n || cells[c[2]].h < h;
             const v = vertices.v[current]; // neighboring vertices
-            if (v[0] !== prev && c0 !== c1) current = v[0];
-            else if (v[1] !== prev && c1 !== c2) current = v[1];
-            else if (v[2] !== prev && c0 !== c2) current = v[2];
-            if (current === chain[chain.length - 1]) { console.error("Next vertex is not found"); break; }
+            if (v[0] !== prev && c0 !== c1)
+                current = v[0];
+            else if (v[1] !== prev && c1 !== c2)
+                current = v[1];
+            else if (v[2] !== prev && c0 !== c2)
+                current = v[2];
+            if (current === chain[chain.length - 1]) {
+                console.error("Next vertex is not found");
+                break;
+            }
         }
         return chain;
     }
@@ -594,7 +610,7 @@ export function drawCultures() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells[c].culture === t)
+            c.filter(c => cells[c] && cells[c].culture === t)
                 .forEach(c => used[c] = 1);
             const c0 = c[0] >= n || cells[c[0]].culture !== t;
             const c1 = c[1] >= n || cells[c[1]].culture !== t;
@@ -752,10 +768,10 @@ export function drawStates() {
     // connect vertices to chain
     function connectVertices(start, t, state) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c] && cells[c].state !== t);
+        let land = vertices.c[start].some(c => cells[c].h >= 20 && cells[c] && cells[c].state !== t);
         function check(i) {
             state = cells[i].state;
-            land = cells.h[i] >= 20;
+            land = cells[i].h >= 20;
         }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
@@ -826,11 +842,11 @@ export function drawBorders() {
         }
 
         // if cell is on state border
-        const stateToCell = cells[i].c.find(n => cells.h[n] >= 20 && s > cells[n].state && sUsed[s][n] !== cells[n].state);
+        const stateToCell = cells[i].c.find(n => cells[n].h >= 20 && s > cells[n].state && sUsed[s][n] !== cells[n].state);
         if (stateToCell !== undefined) {
             const stateTo = cells[stateToCell].state;
             sUsed[s][stateToCell] = stateTo;
-            const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.h[i] >= 20 && cells[i].state === stateTo));
+            const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells[i].h >= 20 && cells[i].state === stateTo));
             const chain = connectVertices(vertex, s, cells.map(x => x.state), stateTo, sUsed);
 
             if (chain.length > 1) {
@@ -848,7 +864,7 @@ export function drawBorders() {
     function connectVertices(current, f, array, t, used) {
         let chain = [];
         const checkCell = c => c >= n || array[c] !== f;
-        const checkVertex = v => vertices.c[v].some(c => array[c] === f) && vertices.c[v].some(c => array[c] === t && cells.h[c] >= 20);
+        const checkVertex = v => vertices.c[v].some(c => array[c] === f) && vertices.c[v].some(c => array[c] === t && cells[c].h >= 20);
 
         // find starting vertex
         for (let i = 0; i < 1000; i++) {

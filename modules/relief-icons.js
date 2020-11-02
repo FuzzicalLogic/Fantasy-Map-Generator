@@ -77,8 +77,9 @@ export function ReliefIcons() {
 
 function getBiomeIcon(i, b) {
     let type = b[Math.floor(Math.random() * b.length)];
-    const temp = grid.cells.temp[pack.cells.g[i]];
-    if (type === "conifer" && temp < 0) type = "coniferSnow";
+    const temp = grid.cells.temp[pack.cells[i].g];
+    if (type === "conifer" && temp < 0)
+        type = "coniferSnow";
     return getIcon(type);
 }
 

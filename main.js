@@ -915,11 +915,12 @@ export function reGraph({ cells, points, features, spacing }) {
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
     cells.forEach((v, k) => {
-        v.g = newCells.g[k]
+        v.g = newCells.g[k];
+        v.h = newCells.h[k];
     })
     cells.p = newCells.p; // points coordinates [x, y]
     cells.q = d3.quadtree(cells.p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
-    cells.h = new Uint8Array(newCells.h); // heights
+    //cells.h = new Uint8Array(newCells.h); // heights
     cells.map((v, k) => k)
         .forEach(i => cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
 
@@ -938,7 +939,7 @@ export function drawCoastline({ cells, vertices, features }) {
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        const startFromEdge = !i && cells.h[i] >= 20;
+        const startFromEdge = !i && cells[i].h >= 20;
         if (!startFromEdge && cells.t[i] !== -1 && cells.t[i] !== 1)
             continue; // non-edge cell
         const f = cells.f[i];
@@ -1055,7 +1056,7 @@ export function reMarkFeatures({ cells }) {
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
         const start = queue[0]; // first cell
         cells.f[start] = i; // assign feature number
-        const land = cells.h[start] >= 20;
+        const land = cells[start].h >= 20;
         let border = false; // true if feature touches map border
         let cellNumber = 1; // to count cells number in a feature
 
@@ -1063,7 +1064,7 @@ export function reMarkFeatures({ cells }) {
             const q = queue.pop();
             if (cells[q].b) border = true;
             cells[q].c.forEach(function (e) {
-                const eLand = cells.h[e] >= 20;
+                const eLand = cells[e].h >= 20;
                 if (land && !eLand) {
                     cells.t[q] = 1;
                     cells.t[e] = -1;
@@ -1097,12 +1098,17 @@ export function reMarkFeatures({ cells }) {
     return features;
 
     function defineLakeGroup(cell, number, temp) {
-        if (temp > 31) return "dry";
-        if (temp > 24) return "salt";
-        if (temp < -3) return "frozen";
-        const height = d3.max(cells[cell].c.map(c => cells.h[c]));
-        if (height > 69 && number < 3 && cell % 5 === 0) return "sinkhole";
-        if (height > 69 && number < 10 && cell % 5 === 0) return "lava";
+        if (temp > 31)
+            return "dry";
+        if (temp > 24)
+            return "salt";
+        if (temp < -3)
+            return "frozen";
+        const height = d3.max(cells[cell].c.map(c => cells[c].h));
+        if (height > 69 && number < 3 && cell % 5 === 0)
+            return "sinkhole";
+        if (height > 69 && number < 10 && cell % 5 === 0)
+            return "lava";
         return "freshwater";
     }
 
@@ -1128,12 +1134,12 @@ export function elevateLakes({ cells, features }) {
     console.time('elevateLakes');
     const maxCells = cells.length / 100; // size limit; let big lakes be closed (endorheic)
     cells.map((v,k) => k).forEach(i => {
-        if (cells.h[i] >= 20)
+        if (cells[i].h >= 20)
             return;
         if (features[cells.f[i]].group !== "freshwater"
         || features[cells.f[i]].cells > maxCells)
             return;
-        cells.h[i] = 20;
+        cells[i].h = 20;
         //debug.append("circle").attr("cx", cells.p[i][0]).attr("cy", cells.p[i][1]).attr("r", .5).attr("fill", "blue");
     });
 
@@ -1148,9 +1154,9 @@ export function defineBiomes() {
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (f[cells.f[i]].group === "freshwater") cells.h[i] = 19; // de-elevate lakes; here to save some resources
+        if (f[cells.f[i]].group === "freshwater") cells[i].h = 19; // de-elevate lakes; here to save some resources
         const t = temp[cells[i].g]; // cell temperature
-        const h = cells.h[i]; // cell height
+        const h = cells[i].h; // cell height
         const m = h < 20 ? 0 : calculateMoisture(i); // cell moisture
         cells[i].biome = getBiomeId(m, t, h);
     }
@@ -1189,14 +1195,14 @@ export function rankCells() {
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (cells.h[i] < 20)
+        if (cells[i].h < 20)
             continue; // no population in water
         let s = +biomesData.habitability[cells[i].biome]; // base suitability derived from biome habitability
         if (!s)
             continue; // uninhabitable biomes has 0 suitability
         if (flMean)
             s += normalize(cells.fl[i] + cells[i].conf, flMean, flMax) * 250; // big rivers and confluences are valued
-        s -= (cells.h[i] - 50) / 5; // low elevation is valued, high is not;
+        s -= (cells[i].h - 50) / 5; // low elevation is valued, high is not;
 
         if (cells.t[i] === 1) {
             if (cells.r[i])
@@ -1233,9 +1239,12 @@ export function addMarkers(number = 1) {
     const cells = pack.cells, states = pack.states;
 
     void function addVolcanoes() {
-        let mounts = cells.map((v,k) => k).filter(i => cells.h[i] > 70).sort((a, b) => cells.h[b] - cells.h[a]);
-        let count = mounts.length < 10 ? 0 : Math.ceil(mounts.length / 300 * number);
-        if (count) addMarker("volcano", "🌋", 52, 50, 13);
+        let mounts = cells.map((v, k) => k).filter(i => cells[i].h > 70).sort((a, b) => cells[b].h - cells[a].h);
+        let count = mounts.length < 10
+            ? 0
+            : Math.ceil(mounts.length / 300 * number);
+        if (count)
+            addMarker("volcano", "🌋", 52, 50, 13);
 
         while (count && mounts.length) {
             const cell = mounts.splice(biased(0, mounts.length - 1, 5), 1);
@@ -1249,9 +1258,12 @@ export function addMarkers(number = 1) {
     }()
 
     void function addHotSprings() {
-        let springs = cells.map((v, k) => k).filter(i => cells.h[i] > 50).sort((a, b) => cells.h[b] - cells.h[a]);
-        let count = springs.length < 30 ? 0 : Math.ceil(springs.length / 1000 * number);
-        if (count) addMarker("hot_springs", "♨️", 50, 52, 12.5);
+        let springs = cells.map((v, k) => k).filter(i => cells[i].h > 50).sort((a, b) => cells[b].h - cells[a].h);
+        let count = springs.length < 30
+            ? 0
+            : Math.ceil(springs.length / 1000 * number);
+        if (count)
+            addMarker("hot_springs", "♨️", 50, 52, 12.5);
 
         while (count && springs.length) {
             const cell = springs.splice(biased(1, springs.length - 1, 3), 1);
@@ -1264,9 +1276,12 @@ export function addMarkers(number = 1) {
     }()
 
     void function addMines() {
-        let hills = cells.map((v, k) => k).filter(i => cells.h[i] > 47 && cells[i].burg);
-        let count = !hills.length ? 0 : Math.ceil(hills.length / 7 * number);
-        if (!count) return;
+        let hills = cells.map((v, k) => k).filter(i => cells[i].h > 47 && cells[i].burg);
+        let count = !hills.length
+            ? 0
+            : Math.ceil(hills.length / 7 * number);
+        if (!count)
+            return;
 
         addMarker("mine", "⛏️", 48, 50, 13.5);
         const resources = { "salt": 5, "gold": 2, "silver": 4, "copper": 2, "iron": 3, "lead": 1, "tin": 1 };
@@ -1289,13 +1304,14 @@ export function addMarkers(number = 1) {
         const meanFlux = d3.mean(cells.fl.filter(fl => fl));
 
         let bridges = cells.map((v, k) => k)
-            .filter(i => cells[i].burg && cells.h[i] >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells[i].road > meanRoad)
+            .filter(i => cells[i].burg && cells[i].h >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells[i].road > meanRoad)
             .sort((a, b) => (cells[b].road + cells.fl[b] / 10) - (cells[a].road + cells.fl[a] / 10));
 
         let count = !bridges.length
             ? 0
             : Math.ceil(bridges.length / 12 * number);
-        if (count) addMarker("bridge", "🌉", 50, 50, 14);
+        if (count)
+            addMarker("bridge", "🌉", 50, 50, 14);
 
         while (count && bridges.length) {
             const cell = bridges.splice(0, 1);
@@ -1312,7 +1328,7 @@ export function addMarkers(number = 1) {
     void function addInns() {
         const maxRoad = d3.max(cells.map(x => x.road)) * .9;
         let taverns = cells.map((v, k) => k)
-            .filter(i => cells[i].crossroad && cells.h[i] >= 20 && cells[i].road > maxRoad);
+            .filter(i => cells[i].crossroad && cells[i].h >= 20 && cells[i].road > maxRoad);
         if (!taverns.length)
             return;
         const count = Math.ceil(4 * number);
@@ -1333,9 +1349,9 @@ export function addMarkers(number = 1) {
 
     void function addLighthouses() {
         const lands = cells.map((v, k) => k)
-            .filter(i => cells[i].harbor > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells[c].road));
+            .filter(i => cells[i].harbor > 6 && cells[i].c.some(c => cells[c].h < 20 && cells[c].road));
         const lighthouses = Array.from(lands)
-            .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells[c].road)]]);
+            .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells[c].h < 20 && cells[c].road)]]);
         if (lighthouses.length)
             addMarker("lighthouse", "🚨", 50, 50, 16);
         const count = Math.ceil(4 * number);
@@ -1352,8 +1368,9 @@ export function addMarkers(number = 1) {
 
     void function addWaterfalls() {
         const waterfalls = cells.map((v, k) => k)
-            .filter(i => cells.r[i] && cells.h[i] > 70);
-        if (waterfalls.length) addMarker("waterfall", "⟱", 50, 54, 16.5);
+            .filter(i => cells.r[i] && cells[i].h > 70);
+        if (waterfalls.length)
+            addMarker("waterfall", "⟱", 50, 54, 16.5);
         const count = Math.ceil(3 * number);
 
         for (let i = 0; i < waterfalls.length && i < count; i++) {
@@ -1368,9 +1385,12 @@ export function addMarkers(number = 1) {
 
     void function addBattlefields() {
         let battlefields = cells.map((v, k) => k)
-            .filter(i => cells[i].state && cells[i].pop > 2 && cells.h[i] < 50 && cells.h[i] > 25);
-        let count = battlefields.length < 100 ? 0 : Math.ceil(battlefields.length / 500 * number);
-        if (count) addMarker("battlefield", "⚔️", 50, 52, 12);
+            .filter(i => cells[i].state && cells[i].pop > 2 && cells[i].h < 50 && cells[i].h > 25);
+        let count = battlefields.length < 100
+            ? 0
+            : Math.ceil(battlefields.length / 500 * number);
+        if (count)
+            addMarker("battlefield", "⚔️", 50, 52, 12);
 
         while (count && battlefields.length) {
             const cell = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
@@ -1519,7 +1539,7 @@ export function addZones(number = 1) {
                     return;
                 if (cells[e].religion !== target)
                     return;
-                if (cells.h[e] < 20)
+                if (cells[e].h < 20)
                     return;
                 used[e] = 1;
                 queue.push(e);
@@ -1630,7 +1650,7 @@ export function addZones(number = 1) {
             cellsArray.push(q);
             if (cellsArray.length > power) break;
             cells[q].c.forEach(e => {
-                if (used[e] || cells.h[e] < 20) return;
+                if (used[e] || cells[e].h < 20) return;
                 used[e] = 1;
                 queue.push(e);
             });
@@ -1640,8 +1660,10 @@ export function addZones(number = 1) {
     }
 
     function addAvalanche() {
-        const roads = cells.map((v, k) => k).filter(i => !used[i] && cells[i].road && cells.h[i] >= 70);
-        if (!roads.length) return;
+        const roads = cells.map((v, k) => k)
+            .filter(i => !used[i] && cells[i].road && cells[i].h >= 70);
+        if (!roads.length)
+            return;
 
         const cell = +ra(roads);
         const cellsArray = [], queue = [cell], power = rand(3, 15);
@@ -1651,7 +1673,8 @@ export function addZones(number = 1) {
             cellsArray.push(q);
             if (cellsArray.length > power) break;
             cells[q].c.forEach(e => {
-                if (used[e] || cells.h[e] < 65) return;
+                if (used[e] || cells[e].h < 65)
+                    return;
                 used[e] = 1;
                 queue.push(e);
             });
@@ -1663,18 +1686,23 @@ export function addZones(number = 1) {
     }
 
     function addFault() {
-        const elevated = cells.map((v, k) => k).filter(i => !used[i] && cells.h[i] > 50 && cells.h[i] < 70);
-        if (!elevated.length) return;
+        const elevated = cells.map((v, k) => k)
+            .filter(i => !used[i] && cells[i].h > 50 && cells[i].h < 70);
+        if (!elevated.length)
+            return;
 
         const cell = ra(elevated);
         const cellsArray = [], queue = [cell], power = rand(3, 15);
 
         while (queue.length) {
             const q = queue.pop();
-            if (cells.h[q] >= 20) cellsArray.push(q);
-            if (cellsArray.length > power) break;
+            if (cells[q].h >= 20)
+                cellsArray.push(q);
+            if (cellsArray.length > power)
+                break;
             cells[q].c.forEach(e => {
-                if (used[e] || cells.r[e]) return;
+                if (used[e] || cells.r[e])
+                    return;
                 used[e] = 1;
                 queue.push(e);
             });
@@ -1691,20 +1719,25 @@ export function addZones(number = 1) {
             maxFlux = d3.max(fl),
             flux = (maxFlux - meanFlux) / 2 + meanFlux;
         const rivers = cells.map((v, k) => k)
-            .filter(i => !used[i] && cells.h[i] < 50 && cells.r[i] && cells.fl[i] > flux && cells[i].burg);
-        if (!rivers.length) return;
+            .filter(i => !used[i] && cells[i].h < 50 && cells.r[i] && cells.fl[i] > flux && cells[i].burg);
+        if (!rivers.length)
+            return;
 
         const cell = +ra(rivers),
             river = cells.r[cell];
-        const cellsArray = [], queue = [cell], power = rand(5, 30);
+        const cellsArray = [],
+            queue = [cell],
+            power = rand(5, 30);
 
         while (queue.length) {
             const q = queue.pop();
             cellsArray.push(q);
-            if (cellsArray.length > power) break;
+            if (cellsArray.length > power)
+                break;
 
             cells[q].c.forEach(e => {
-                if (used[e] || cells.h[e] < 20 || cells.r[e] !== river || cells.h[e] > 50 || cells.fl[e] < meanFlux) return;
+                if (used[e] || cells[e].h < 20 || cells.r[e] !== river || cells[e].h > 50 || cells.fl[e] < meanFlux)
+                    return;
                 used[e] = 1;
                 queue.push(e);
             });

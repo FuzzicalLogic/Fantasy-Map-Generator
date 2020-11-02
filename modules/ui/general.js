@@ -244,10 +244,13 @@ function showMapTooltip(point, e, i, g) {
     if (!path[path.length - 8]) return;
     const group = path[path.length - 7].id;
     const subgroup = path[path.length - 8].id;
-    const land = pack.cells.h[i] >= 20;
+    const land = pack.cells[i].h >= 20;
 
     // specific elements
-    if (group === "armies") { tip(e.target.parentNode.dataset.name + ". Click to edit"); return; }
+    if (group === "armies") {
+        tip(e.target.parentNode.dataset.name + ". Click to edit");
+        return;
+    }
     if (group === "rivers") { tip(getRiverName(e.target.id) + "Click to edit"); return; }
     if (group === "routes") { tip("Click to edit the Route"); return; }
     if (group === "terrain") { tip("Click to edit the Relief Icon"); return; }
@@ -284,12 +287,15 @@ function showMapTooltip(point, e, i, g) {
     else if (pack.cells[i].state && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
         const state = pack.states[pack.cells[i].state].fullName;
         const province = pack.cells[i].province;
-        const prov = province ? pack.provinces[province].fullName + ", " : "";
+        const prov = province
+            ? pack.provinces[province].fullName + ", "
+            : "";
         tip(prov + state);
     }
     else if (layerIsOn("toggleCultures") && pack.cells[i].culture)
         tip("Culture: " + pack.cultures[pack.cells[i].culture].name);
-    else if (layerIsOn("toggleHeight")) tip("Height: " + getFriendlyHeight(point));
+    else if (layerIsOn("toggleHeight"))
+        tip("Height: " + getFriendlyHeight(point));
 }
 
 function getRiverName(id) {
@@ -362,8 +368,8 @@ function getDepth(f, h, p) {
 
 // get user-friendly (real-world) height value from map data
 export function getFriendlyHeight(p) {
-    const packH = pack.cells.h[findCell(p[0], p[1])];
-    const gridH = grid.cells.h[findGridCell(p[0], p[1])];
+    const packH = pack.cells[findCell(p[0], p[1])].h;
+    const gridH = grid.cells[findGridCell(p[0], p[1])].h;
     const h = packH < 20 ? gridH : packH;
     return getHeight(h);
 }
@@ -384,7 +390,7 @@ export function getHeight(h, abs) {
 
 // get user-friendly (real-world) precipitation value from map data
 function getFriendlyPrecipitation(i) {
-    const prec = grid.cells.prec[pack.cells.g[i]];
+    const prec = grid.cells.prec[pack.cells[i].g];
     return prec * 100 + " mm";
 }
 

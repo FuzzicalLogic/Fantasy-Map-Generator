@@ -128,14 +128,13 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
         if (toRoad && cells[n].road) return [from, n];
 
         for (const c of cells[n].c) {
-            let { h, state } = cells;
-            if (h[c] < 20)
+            if (cells[c].h < 20)
                 continue; // ignore water cells
-            const stateChangeCost = state && state[c] !== state[n] ? 400 : 0; // trails tend to lay within the same state
+            const stateChangeCost = cells[c].state !== cells[n].state ? 400 : 0; // trails tend to lay within the same state
             const habitability = biomesData.habitability[cells[c].biome];
             const habitedCost = habitability ? Math.max(100 - habitability, 0) : 400; // routes tend to lay within populated areas
-            const heightChangeCost = Math.abs(h[c] - h[n]) * 10; // routes tend to avoid elevation changes
-            const heightCost = h[c] > 80 ? h[c] : 0; // routes tend to avoid mountainous areas
+            const heightChangeCost = Math.abs(cells[c].h - cells[n].h) * 10; // routes tend to avoid elevation changes
+            const heightCost = cells[c].h > 80 ? cells[c].h : 0; // routes tend to avoid mountainous areas
             const cellCoast = 10 + stateChangeCost + habitedCost + heightChangeCost + heightCost;
             const totalCost = p + (cells[c].road || cells[c].burg ? cellCoast / 3 : cellCoast);
 
@@ -215,7 +214,7 @@ function findOceanPath(cells, start, exit = null, toRoute = null) {
                 from[c] = n;
                 return [from, exit, true];
             }
-            if (cells.h[c] >= 20)
+            if (cells[c].h >= 20)
                 continue; // ignore land cells
             if (temp[cells[c].g] <= -5)
                 continue; // ignore cells with term <= -5

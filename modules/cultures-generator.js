@@ -96,9 +96,9 @@ export function generate() {
 
     // set culture type based on culture center position
     function defineCultureType(i) {
-        if (cells.h[i] < 70 && [1, 2, 4].includes(cells[i].biome))
+        if (cells[i].h < 70 && [1, 2, 4].includes(cells[i].biome))
             return "Nomadic"; // high penalty in forest biomes and near coastline
-        if (cells.h[i] > 50)
+        if (cells[i].h > 50)
             return "Highland"; // no penalty for hills and moutains, high for other elevations
         const f = pack.features[cells.f[cells[i].haven]]; // opposite feature
         if (f.type === "lake" && f.cells > 5)
@@ -161,7 +161,9 @@ export function add(center) {
 
 export function getDefault(count) {
     // generic sorting functions
-    const cells = pack.cells, sMax = d3.max(cells.map(x => x.s)), t = cells.t, h = cells.h, temp = grid.cells.temp;
+    const cells = pack.cells,
+        sMax = d3.max(cells.map(x => x.s)), t = cells.t,
+        h = cells.map(x => x.h), temp = grid.cells.temp;
     const n = cell => Math.ceil(cells[cell].s / sMax * 3) // normalized cell score
     const td = (cell, goal) => {
         const d = Math.abs(temp[cells[cell].g] - goal);
@@ -396,7 +398,7 @@ export function expand() {
             const biome = cells[e].biome;
             const biomeCost = getBiomeCost(c, biome, type);
             const biomeChangeCost = biome === cells[n].biome ? 0 : 20; // penalty on biome change
-            const heightCost = getHeightCost(e, cells.h[e], type);
+            const heightCost = getHeightCost(e, cells[e].h, type);
             const riverCost = getRiverCost(cells.r[e], e, type);
             const typeCost = getTypeCost(cells.t[e], type);
             const totalCost = p + (biomeCost + biomeChangeCost + heightCost + riverCost + typeCost) / pack.cultures[c].expansionism;

@@ -276,8 +276,8 @@ function expandReligions(pack) {
                 ? 1
                 : biomesData.cost[cells[e].biome];
             const populationCost = Math.max(rn(popCost - cells[e].pop), 0);
-            const heightCost = Math.max(cells.h[e], 20) - 20;
-            const waterCost = cells.h[e] < 20
+            const heightCost = Math.max(cells[e].h, 20) - 20;
+            const waterCost = cells[e].h < 20
                 ? cells[e].road
                     ? 50
                     : 1000
@@ -287,7 +287,7 @@ function expandReligions(pack) {
                 return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.h[e] >= 20 && cells[e].culture)
+                if (cells[e].h >= 20 && cells[e].culture)
                     cells[e].religion = r; // assign religion to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, r, c, s });
@@ -319,8 +319,8 @@ function expandHeresies(pack) {
             const biomeCost = cells[e].road
                 ? 0
                 : biomesData.cost[cells[e].biome];
-            const heightCost = Math.max(cells.h[e], 20) - 20;
-            const waterCost = cells.h[e] < 20
+            const heightCost = Math.max(cells[e].h, 20) - 20;
+            const waterCost = cells[e].h < 20
                 ? cells[e].road
                     ? 50
                     : 1000
@@ -330,7 +330,7 @@ function expandHeresies(pack) {
             if (totalCost > neutral) return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.h[e] >= 20 && cells[e].culture)
+                if (cells[e].h >= 20 && cells[e].culture)
                     cells[e].religion = r; // assign religion to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, r });

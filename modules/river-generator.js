@@ -21,7 +21,7 @@ export const generate = function (changeHeights = true) {
     markupLand(cells);
 
     // height with added t value to make map less depressed
-    const h = Array.from(cells.h)
+    const h = Array.from(cells.map(x => x.h))
         .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + cells.t[i] / 100)
         .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + d3.mean(cells[i].c.map(c => cells.t[c])) / 10000);
 
@@ -40,7 +40,8 @@ export const generate = function (changeHeights = true) {
     }));
 
     // apply change heights as basic one
-    if (changeHeights) cells.h = Uint8Array.from(h);
+    if (changeHeights)
+        h.forEach((x, i) => cells[i].h = x);
 
     console.timeEnd('generateRivers');
 }

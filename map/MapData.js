@@ -152,7 +152,7 @@ export function openNearSeaLakes(grid) {
 
             check_neighbours:
             for (const c of cells[i].c) {
-                if (cells.t[c] !== 1 || cells.h[c] > limit) continue; // water cannot brake this
+                if (cells.t[c] !== 1 || cells[c].h > limit) continue; // water cannot brake this
 
                 for (const n of cells[c].c) {
                     const ocean = cells.f[n];
