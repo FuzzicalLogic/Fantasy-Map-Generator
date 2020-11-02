@@ -168,7 +168,7 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { haven, g, f, harbor, r, fl } = cells;
+    const { haven, g, f, r, fl } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -178,7 +178,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
         if (isHaven && temp[g[i]] > 0) {
             const idxF = f[isHaven]; // water body id
             // port is a capital with any harbor OR town with good harbor
-            const port = features[idxF].cells > 1 && ((b.capital && harbor[i]) || harbor[i] === 1);
+            const port = features[idxF].cells > 1 && ((b.capital && cells[i].harbor) || cells[i].harbor === 1);
             b.port = port ? idxF : 0; // port is defined by water body id it lays on
         } else b.port = 0;
 

@@ -1049,7 +1049,8 @@ export function reMarkFeatures({ cells }) {
     cells.f = new Uint16Array(cells.length); // cell feature number
     cells.t = new Int16Array(cells.length); // cell type: 1 = land along coast; -1 = water along coast;
     cells.haven = cells.length < 65535 ? new Uint16Array(cells.length) : new Uint32Array(cells.length);// cell haven (opposite water cell);
-    cells.harbor = new Uint8Array(cells.length); // cell harbor (number of adjacent water cells);
+    //cells.harbor = new Uint8Array(cells.length); // cell harbor (number of adjacent water cells);
+    cells.forEach(x => x.harbor = 0);
 
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
         const start = queue[0]; // first cell
@@ -1066,7 +1067,7 @@ export function reMarkFeatures({ cells }) {
                 if (land && !eLand) {
                     cells.t[q] = 1;
                     cells.t[e] = -1;
-                    cells.harbor[q]++;
+                    cells[q].harbor++;
                     if (!cells.haven[q]) cells.haven[q] = e;
                 } else if (land && eLand) {
                     if (!cells.t[e] && cells.t[q] === 1) cells.t[e] = 2;
@@ -1200,7 +1201,7 @@ export function rankCells() {
                 else if (group !== "lava" && group !== "dry") s += 10;
             } else {
                 s += 5; // ocean coast is valued
-                if (cells.harbor[i] === 1) s += 20; // safe sea harbor is valued
+                if (cells[i].harbor === 1) s += 20; // safe sea harbor is valued
             }
         }
 
@@ -1321,7 +1322,7 @@ export function addMarkers(number = 1) {
 
     void function addLighthouses() {
         const lands = cells.map((v, k) => k)
-            .filter(i => cells.harbor[i] > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells[c].road));
+            .filter(i => cells[i].harbor > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells[c].road));
         const lighthouses = Array.from(lands)
             .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells[c].road)]]);
         if (lighthouses.length)

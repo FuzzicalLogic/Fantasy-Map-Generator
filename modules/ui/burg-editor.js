@@ -1,7 +1,7 @@
 import {
     modules, pack, seed,
     view,
-    burgIcons, burgLabels, anchors
+    burgIcons, burgLabels, anchors, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
