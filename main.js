@@ -914,11 +914,12 @@ export function reGraph({ cells, points, features, spacing }) {
 
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
+    cells.forEach((v, k) => {
+        v.g = newCells.g[k]
+    })
     cells.p = newCells.p; // points coordinates [x, y]
-    cells.g = cells.length < 65535 ? Uint16Array.from(newCells.g) : Uint32Array.from(newCells.g); // reference to initial grid cell
     cells.q = d3.quadtree(cells.p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
     cells.h = new Uint8Array(newCells.h); // heights
-//    cells.area = new Uint16Array(cells.length); // cell area
     cells.map((v, k) => k)
         .forEach(i => cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
 
@@ -1085,7 +1086,8 @@ export function reMarkFeatures({ cells }) {
 
         const type = land ? "island" : border ? "ocean" : "lake";
         let group;
-        if (type === "lake") group = defineLakeGroup(start, cellNumber, temp[cells.g[start]]);
+        if (type === "lake")
+            group = defineLakeGroup(start, cellNumber, temp[cells[start].g]);
         else if (type === "ocean") group = defineOceanGroup(cellNumber);
         else if (type === "island") group = defineIslandGroup(start, cellNumber);
         features.push({ i, land, border, type, cells: cellNumber, firstCell: start, group });
@@ -1147,17 +1149,17 @@ export function defineBiomes() {
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
         if (f[cells.f[i]].group === "freshwater") cells.h[i] = 19; // de-elevate lakes; here to save some resources
-        const t = temp[cells.g[i]]; // cell temperature
+        const t = temp[cells[i].g]; // cell temperature
         const h = cells.h[i]; // cell height
         const m = h < 20 ? 0 : calculateMoisture(i); // cell moisture
         cells[i].biome = getBiomeId(m, t, h);
     }
 
     function calculateMoisture(i) {
-        let moist = prec[cells.g[i]];
+        let moist = prec[cells[i].g];
         if (cells.r[i]) moist += Math.max(cells.fl[i] / 20, 2);
         const n = cells[i].c.filter(isLand)
-            .map(c => prec[cells.g[c]])
+            .map(c => prec[cells[c].g])
             .concat([moist]);
         return rn(4 + d3.mean(n));
     }
@@ -1182,28 +1184,35 @@ export function rankCells() {
     cells.forEach(v => v.pop = 0);
     cells.forEach(v => v.s = 0);
 
-    const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.conf); // to normalize flux
+    const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.map(x => x.conf)); // to normalize flux
     const areaMean = d3.mean(cells.map(x => x.area)); // to adjust population by cell area
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (cells.h[i] < 20) continue; // no population in water
+        if (cells.h[i] < 20)
+            continue; // no population in water
         let s = +biomesData.habitability[cells[i].biome]; // base suitability derived from biome habitability
-        if (!s) continue; // uninhabitable biomes has 0 suitability
-        if (flMean) s += normalize(cells.fl[i] + cells.conf[i], flMean, flMax) * 250; // big rivers and confluences are valued
+        if (!s)
+            continue; // uninhabitable biomes has 0 suitability
+        if (flMean)
+            s += normalize(cells.fl[i] + cells[i].conf, flMean, flMax) * 250; // big rivers and confluences are valued
         s -= (cells.h[i] - 50) / 5; // low elevation is valued, high is not;
 
         if (cells.t[i] === 1) {
-            if (cells.r[i]) s += 15; // estuary is valued
+            if (cells.r[i])
+                s += 15; // estuary is valued
             const type = f[cells.f[cells[i].haven]].type;
             const group = f[cells.f[cells[i].haven]].group;
             if (type === "lake") {
                 // lake coast is valued
-                if (group === "freshwater") s += 30;
-                else if (group !== "lava" && group !== "dry") s += 10;
+                if (group === "freshwater")
+                    s += 30;
+                else if (group !== "lava" && group !== "dry")
+                    s += 10;
             } else {
                 s += 5; // ocean coast is valued
-                if (cells[i].harbor === 1) s += 20; // safe sea harbor is valued
+                if (cells[i].harbor === 1)
+                    s += 20; // safe sea harbor is valued
             }
         }
 
@@ -1303,7 +1312,7 @@ export function addMarkers(number = 1) {
     void function addInns() {
         const maxRoad = d3.max(cells.map(x => x.road)) * .9;
         let taverns = cells.map((v, k) => k)
-            .filter(i => cells.crossroad[i] && cells.h[i] >= 20 && cells[i].road > maxRoad);
+            .filter(i => cells[i].crossroad && cells.h[i] >= 20 && cells[i].road > maxRoad);
         if (!taverns.length)
             return;
         const count = Math.ceil(4 * number);

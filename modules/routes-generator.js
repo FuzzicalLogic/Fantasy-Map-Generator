@@ -11,7 +11,7 @@ const generators = {
 export function generate(pack) {
     view.routes.selectAll("path").remove();
     //pack.cells.road = new Uint16Array(pack.cells.length);
-    pack.cells.crossroad = new Uint16Array(pack.cells.length);
+    //pack.cells.crossroad = new Uint16Array(pack.cells.length);
 
     Object.keys(generators).map(x => new CustomEvent('add', {
         detail: { type: x, data: generators[x](pack) }
@@ -152,10 +152,13 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
 
 function restorePath(cells, start, end, type, from) {
     const path = []; // to store all segments;
-    let segment = [], current = end, prev = end;
+    let segment = [],
+        current = end,
+        prev = end;
     const score = type === "main" ? 5 : 1; // to incrade road score at cell
 
-    if (type === "ocean" || !cells[prev].road) segment.push(end);
+    if (type === "ocean" || !cells[prev].road)
+        segment.push(end);
     if (!cells[prev].road)
         cells[prev].road = score;
 
@@ -169,26 +172,29 @@ function restorePath(cells, start, end, type, from) {
                 path.push(segment);
                 if (segment[0] !== end) {
                     cells[segment[0]].road += score;
-                    cells.crossroad[segment[0]] += score;
+                    cells[segment[0]].crossroad += score;
                 }
                 if (current !== start) {
                     cells[current].road += score;
-                    cells.crossroad[current] += score;
+                    cells[current].crossroad += score;
                 }
             }
             segment = [];
             prev = current;
         } else {
-            if (prev) segment.push(prev);
+            if (prev)
+                segment.push(prev);
             prev = null;
             segment.push(current);
         }
 
         cells[current].road += score;
-        if (current === start) break;
+        if (current === start)
+            break;
     }
 
-    if (segment.length > 1) path.push(segment);
+    if (segment.length > 1)
+        path.push(segment);
     return path;
 }
 
@@ -211,7 +217,7 @@ function findOceanPath(cells, start, exit = null, toRoute = null) {
             }
             if (cells.h[c] >= 20)
                 continue; // ignore land cells
-            if (temp[cells.g[c]] <= -5)
+            if (temp[cells[c].g] <= -5)
                 continue; // ignore cells with term <= -5
             const dist2 = (cells.p[c][1] - cells.p[n][1]) ** 2 + (cells.p[c][0] - cells.p[n][0]) ** 2;
             const totalCost = p + (cells[c].road ? 1 + dist2 / 2 : dist2 + (cells.t[c] ? 1 : 100));

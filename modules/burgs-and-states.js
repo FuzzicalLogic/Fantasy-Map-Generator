@@ -23,7 +23,7 @@ export function generate(howMany) {
 
     cells.forEach(x => x.burg = 0);
     cells.forEach(x => x.road = 0)
-    cells.crossroad = new Uint16Array(n); // cell crossroad power
+    cells.forEach(x => x.crossroad = 0)
 
     const burgs = pack.burgs = placeCapitals(cells, howMany);
     pack.states = createStates(burgs, cells, cultures);
@@ -169,14 +169,14 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { g, f, r, fl } = cells;
+    const { f, r, fl } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
 
         // asign port status to some coastline burgs with temp > 0 °C
         const isHaven = cells[i].haven;
-        if (isHaven && temp[g[i]] > 0) {
+        if (isHaven && temp[cells[i].g] > 0) {
             const idxF = f[isHaven]; // water body id
             // port is a capital with any harbor OR town with good harbor
             const port = features[idxF].cells > 1 && ((b.capital && cells[i].harbor) || cells[i].harbor === 1);

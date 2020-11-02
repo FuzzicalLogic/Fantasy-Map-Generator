@@ -163,7 +163,10 @@ export function getDefault(count) {
     // generic sorting functions
     const cells = pack.cells, sMax = d3.max(cells.map(x => x.s)), t = cells.t, h = cells.h, temp = grid.cells.temp;
     const n = cell => Math.ceil(cells[cell].s / sMax * 3) // normalized cell score
-    const td = (cell, goal) => { const d = Math.abs(temp[cells.g[cell]] - goal); return d ? d + 1 : 1; } // temperature difference fee
+    const td = (cell, goal) => {
+        const d = Math.abs(temp[cells[cell].g] - goal);
+        return d ? d + 1 : 1;
+    } // temperature difference fee
     const bd = (cell, biomes, fee = 4) => biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
     const sf = (cell, fee = 4) => cells[cell].haven && pack.features[cells.f[cells[cell].haven]].type !== "lake"
         ? 1

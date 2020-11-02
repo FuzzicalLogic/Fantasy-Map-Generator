@@ -16,7 +16,7 @@ export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 export const generate = function (changeHeights = true) {
     console.time('generateRivers');
     Math.seedrandom(seed);
-    const cells = pack.cells, features = pack.features;
+    const { cells, features } = pack;
 
     markupLand(cells);
 
@@ -31,7 +31,7 @@ export const generate = function (changeHeights = true) {
     const riversData = []; // rivers data
     cells.fl = new Uint16Array(cells.length); // water flux array
     cells.r = new Uint16Array(cells.length); // rivers array
-    cells.conf = new Uint8Array(cells.length); // confluences array
+    cells.forEach(x => x.conf = 0);
     let riverNext = 1; // first river id is 1, not 0
 
     riverNext = drainWater(cells, h, features, riverNext, riversData);
@@ -57,12 +57,12 @@ function markupLand(cells) {
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const { p, fl, g, r, f } = cells;
+    const { p, fl, r, f } = cells;
     const land = cells.map((v, k) => k)
         .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
     land.forEach(function (i) {
-        fl[i] += grid.cells.prec[g[i]]; // flux from precipitation
+        fl[i] += grid.cells.prec[cells[i].g]; // flux from precipitation
         const x = p[i][0], y = p[i][1];
 
         // near-border cell: pour out of the screen
@@ -120,12 +120,12 @@ function drainWater(cells, h, features, riverNext, riversData) {
 
         if (r[min]) { // downhill cell already has river assigned
             if (fl[min] < fl[i]) {
-                cells.conf[min] = fl[min]; // mark confluence
+                cells[min].conf = fl[min]; // mark confluence
                 if (h[min] >= 20)
                     riversData.find(d => d.river === r[min]).parent = r[i]; // min river is a tributary of current river
                 r[min] = r[i]; // re-assign river if downhill part has less flux
             } else {
-                cells.conf[min] += fl[i]; // mark confluence
+                cells[min].conf += fl[i]; // mark confluence
                 if (h[min] >= 20)
                     riversData.find(d => d.river === r[i]).parent = r[min]; // current river is a tributary of min river
             }
@@ -210,7 +210,7 @@ export function addMeandring(segments, rndFactor = 0.3) {
 
     for (let s = 0; s < segments.length; s++) {
         const sX = segments[s].x, sY = segments[s].y; // segment start coordinates
-        const c = pack.cells.conf[segments[s].cell] || 0; // if segment is river confluence
+        const c = pack.cells[segments[s].cell].conf || 0; // if segment is river confluence
         riverEnhanced.push([sX, sY, c]);
 
         if (s + 1 === segments.length) break; // do not enhance last segment
@@ -324,7 +324,7 @@ export function remove(id) {
         if (!r || !riversToRemove.includes(r)) return;
         cells.r[i] = 0;
         cells.fl[i] = grid.cells.prec[cells.g[i]];
-        cells.conf[i] = 0;
+        cells[i].conf = 0;
     });
     pack.rivers = pack.rivers.filter(r => !riversToRemove.includes(r.i));
 }
