@@ -22,7 +22,7 @@ export function generate(howMany) {
         n = cells.length;
 
     cells.burg = new Uint16Array(n); // cell burg
-    cells.road = new Uint16Array(n); // cell road power
+    //cells.road = new Uint16Array(n); // cell road power
     cells.crossroad = new Uint16Array(n); // cell crossroad power
 
     const burgs = pack.burgs = placeCapitals(cells, howMany);
@@ -168,7 +168,7 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { haven, g, f, harbor, v, s, road, r, fl } = cells;
+    const { haven, g, f, harbor, s, r, fl } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -183,7 +183,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
         } else b.port = 0;
 
         // define burg population (keep urbanization at about 10% rate)
-        b.population = rn(Math.max((s[i] + road[i] / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
+        b.population = rn(Math.max((s[i] + cells[i].road / 2) / 8 + b.i / 1000 + i % 100 / 1000, .1), 3);
         if (b.capital)
             b.population = rn(b.population * 1.3, 3); // increase capital population
 

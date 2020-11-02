@@ -1271,14 +1271,16 @@ export function addMarkers(number = 1) {
     }()
 
     void function addBridges() {
-        const meanRoad = d3.mean(cells.road.filter(r => r));
+        const meanRoad = d3.mean(cells.filter(x => x.road).map(x => x.road));
         const meanFlux = d3.mean(cells.fl.filter(fl => fl));
 
         let bridges = cells.map((v, k) => k)
-            .filter(i => cells.burg[i] && cells.h[i] >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells.road[i] > meanRoad)
-            .sort((a, b) => (cells.road[b] + cells.fl[b] / 10) - (cells.road[a] + cells.fl[a] / 10));
+            .filter(i => cells.burg[i] && cells.h[i] >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells[i].road > meanRoad)
+            .sort((a, b) => (cells[b].road + cells.fl[b] / 10) - (cells[a].road + cells.fl[a] / 10));
 
-        let count = !bridges.length ? 0 : Math.ceil(bridges.length / 12 * number);
+        let count = !bridges.length
+            ? 0
+            : Math.ceil(bridges.length / 12 * number);
         if (count) addMarker("bridge", "🌉", 50, 50, 14);
 
         while (count && bridges.length) {
@@ -1294,9 +1296,11 @@ export function addMarkers(number = 1) {
     }()
 
     void function addInns() {
-        const maxRoad = d3.max(cells.road) * .9;
-        let taverns = cells.map((v, k) => k).filter(i => cells.crossroad[i] && cells.h[i] >= 20 && cells.road[i] > maxRoad);
-        if (!taverns.length) return;
+        const maxRoad = d3.max(cells.map(x => x.road)) * .9;
+        let taverns = cells.map((v, k) => k)
+            .filter(i => cells.crossroad[i] && cells.h[i] >= 20 && cells[i].road > maxRoad);
+        if (!taverns.length)
+            return;
         const count = Math.ceil(4 * number);
         addMarker("inn", "🍻", 50, 50, 14.5);
 
@@ -1315,10 +1319,11 @@ export function addMarkers(number = 1) {
 
     void function addLighthouses() {
         const lands = cells.map((v, k) => k)
-            .filter(i => cells.harbor[i] > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells.road[c]));
+            .filter(i => cells.harbor[i] > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells[c].road));
         const lighthouses = Array.from(lands)
-            .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells.road[c])]]);
-        if (lighthouses.length) addMarker("lighthouse", "🚨", 50, 50, 16);
+            .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells[c].road)]]);
+        if (lighthouses.length)
+            addMarker("lighthouse", "🚨", 50, 50, 16);
         const count = Math.ceil(4 * number);
 
         for (let i = 0; i < lighthouses.length && i < count; i++) {
@@ -1332,7 +1337,8 @@ export function addMarkers(number = 1) {
     }()
 
     void function addWaterfalls() {
-        const waterfalls = cells.map((v, k) => k).filter(i => cells.r[i] && cells.h[i] > 70);
+        const waterfalls = cells.map((v, k) => k)
+            .filter(i => cells.r[i] && cells.h[i] > 70);
         if (waterfalls.length) addMarker("waterfall", "⟱", 50, 54, 16.5);
         const count = Math.ceil(3 * number);
 
@@ -1524,14 +1530,16 @@ export function addZones(number = 1) {
 
         while (queue.length) {
             const next = queue.dequeue();
-            if (cells.burg[next.e] || cells.pop[next.e]) cellsArray.push(next.e);
+            if (cells.burg[next.e] || cells.pop[next.e])
+                cellsArray.push(next.e);
             used[next.e] = 1;
 
             cells[next.e].c.forEach(function (e) {
-                const r = cells.road[next.e];
+                const r = cells[next.e].road;
                 const c = r ? Math.max(10 - r, 1) : 100;
                 const p = next.p + c;
-                if (p > power) return;
+                if (p > power)
+                    return;
 
                 if (!cost[e] || p < cost[e]) {
                     cost[e] = p;
@@ -1607,7 +1615,7 @@ export function addZones(number = 1) {
     }
 
     function addAvalanche() {
-        const roads = cells.map((v, k) => k).filter(i => !used[i] && cells.road[i] && cells.h[i] >= 70);
+        const roads = cells.map((v, k) => k).filter(i => !used[i] && cells[i].road && cells.h[i] >= 70);
         if (!roads.length) return;
 
         const cell = +ra(roads);

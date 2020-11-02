@@ -10,7 +10,7 @@ const generators = {
 };
 export function generate(pack) {
     view.routes.selectAll("path").remove();
-    pack.cells.road = new Uint16Array(pack.cells.length);
+    //pack.cells.road = new Uint16Array(pack.cells.length);
     pack.cells.crossroad = new Uint16Array(pack.cells.length);
 
     Object.keys(generators).map(x => new CustomEvent('add', {
@@ -34,7 +34,7 @@ function getRoads(pack) {
         paths = [...paths, ...segments]
     }
 
-    cells.forEach((v, i) => cells.s[i] += cells.road[i] / 2); // add roads to suitability score
+    cells.forEach((v, i) => cells.s[i] += cells[i].road / 2); // add roads to suitability score
     console.timeEnd("generateMainRoads");
     return paths;
 }
@@ -47,7 +47,8 @@ function getTrails(pack) {
     let paths = []; // array to store path segments
     for (const f of pack.features.filter(f => f.land)) {
         const isle = burgs.filter(b => b.feature === f.i); // burgs on island
-        if (isle.length < 2) continue;
+        if (isle.length < 2)
+            continue;
 
         isle.forEach(function (b, i) {
             let path = [];
@@ -55,14 +56,17 @@ function getTrails(pack) {
                 // build trail from the first burg on island to the farthest one on the same island
                 const farthest = d3.scan(isle, (a, c) => ((c.y - b.y) ** 2 + (c.x - b.x) ** 2) - ((a.y - b.y) ** 2 + (a.x - b.x) ** 2));
                 const to = isle[farthest].cell;
-                if (cells.road[to]) return;
+                if (cells[to].road)
+                    return;
                 const [from, exit] = findLandPath(cells, b.cell, to, null);
                 path = restorePath(cells, b.cell, exit, "small", from);
             } else {
                 // build trail from all other burgs to the closest road on the same island
-                if (cells.road[b.cell]) return;
+                if (cells[b.cell].road)
+                    return;
                 const [from, exit] = findLandPath(cells, b.cell, null, true);
-                if (exit === null) return;
+                if (exit === null)
+                    return;
                 path = restorePath(cells, b.cell, exit, "small", from);
             }
             if (path) paths = paths.concat(path);
@@ -121,7 +125,7 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
 
     while (queue.length) {
         const next = queue.dequeue(), n = next.e, p = next.p;
-        if (toRoad && cells.road[n]) return [from, n];
+        if (toRoad && cells[n].road) return [from, n];
 
         for (const c of cells[n].c) {
             let { h, state } = cells;
@@ -132,7 +136,7 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
             const heightChangeCost = Math.abs(h[c] - h[n]) * 10; // routes tend to avoid elevation changes
             const heightCost = h[c] > 80 ? h[c] : 0; // routes tend to avoid mountainous areas
             const cellCoast = 10 + stateChangeCost + habitedCost + heightChangeCost + heightCost;
-            const totalCost = p + (cells.road[c] || cells.burg[c] ? cellCoast / 3 : cellCoast);
+            const totalCost = p + (cells[c].road || cells.burg[c] ? cellCoast / 3 : cellCoast);
 
             if (from[c] || totalCost >= cost[c]) continue;
             from[c] = n;
@@ -150,24 +154,24 @@ function restorePath(cells, start, end, type, from) {
     let segment = [], current = end, prev = end;
     const score = type === "main" ? 5 : 1; // to incrade road score at cell
 
-    if (type === "ocean" || !cells.road[prev]) segment.push(end);
-    if (!cells.road[prev])
-        cells.road[prev] = score;
+    if (type === "ocean" || !cells[prev].road) segment.push(end);
+    if (!cells[prev].road)
+        cells[prev].road = score;
 
     for (let i = 0, limit = 1000; i < limit; i++) {
         if (!from[current]) break;
         current = from[current];
 
-        if (cells.road[current]) {
+        if (cells[current].road) {
             if (segment.length) {
                 segment.push(current);
                 path.push(segment);
                 if (segment[0] !== end) {
-                    cells.road[segment[0]] += score;
+                    cells[segment[0]].road += score;
                     cells.crossroad[segment[0]] += score;
                 }
                 if (current !== start) {
-                    cells.road[current] += score;
+                    cells[current].road += score;
                     cells.crossroad[current] += score;
                 }
             }
@@ -179,7 +183,7 @@ function restorePath(cells, start, end, type, from) {
             segment.push(current);
         }
 
-        cells.road[current] += score;
+        cells[current].road += score;
         if (current === start) break;
     }
 
@@ -196,16 +200,23 @@ function findOceanPath(cells, start, exit = null, toRoute = null) {
 
     while (queue.length) {
         const next = queue.dequeue(), { p, e: n } = next;
-        if (toRoute && n !== start && cells.road[n]) return [from, n, true];
+        if (toRoute && n !== start && cells[n].road)
+            return [from, n, true];
 
         for (const c of cells[n].c) {
-            if (c === exit) { from[c] = n; return [from, exit, true]; }
-            if (cells.h[c] >= 20) continue; // ignore land cells
-            if (temp[cells.g[c]] <= -5) continue; // ignore cells with term <= -5
+            if (c === exit) {
+                from[c] = n;
+                return [from, exit, true];
+            }
+            if (cells.h[c] >= 20)
+                continue; // ignore land cells
+            if (temp[cells.g[c]] <= -5)
+                continue; // ignore cells with term <= -5
             const dist2 = (cells.p[c][1] - cells.p[n][1]) ** 2 + (cells.p[c][0] - cells.p[n][0]) ** 2;
-            const totalCost = p + (cells.road[c] ? 1 + dist2 / 2 : dist2 + (cells.t[c] ? 1 : 100));
+            const totalCost = p + (cells[c].road ? 1 + dist2 / 2 : dist2 + (cells.t[c] ? 1 : 100));
 
-            if (from[c] || totalCost >= cost[c]) continue;
+            if (from[c] || totalCost >= cost[c])
+                continue;
             from[c] = n, cost[c] = totalCost;
             queue.queue({ e: c, p: totalCost });
         }
