@@ -146,14 +146,16 @@ export function recalculatePopulation() {
 function regenerateBurgs() {
     const cells = pack.cells, states = pack.states;
     rankCells();
-    cells.burg = new Uint16Array(cells.i.length);
+    cells.burg = new Uint16Array(cells.length);
     const burgs = pack.burgs = [0]; // clear burgs array
     states.filter(s => s.i).forEach(s => s.capital = 0); // clear state capitals
     pack.provinces.filter(p => p.i).forEach(p => p.burg = 0); // clear province capitals
     const burgsTree = d3.quadtree();
 
     const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
-    const sorted = cells.i.filter(i => score[i] > 0 && cells.culture[i]).sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
+    const sorted = cells.map((v, k) => k)
+        .filter(i => score[i] > 0 && cells[i].culture)
+        .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
     const burgsCount = manorsInput.value == 1000 ? rn(sorted.length / 5 / (grid.points.length / 10000) ** .8) + states.length : +manorsInput.value + states.length;
     const spacing = (graphWidth + graphHeight) / 150 / (burgsCount ** .7 / 66); // base min distance between towns
 
@@ -169,7 +171,7 @@ function regenerateBurgs() {
         const capital = state && !states[state].capital; // if state doesn't have capital, make this burg a capital, no capital for neutral lands
         if (capital) { states[state].capital = id; states[state].center = cell; }
 
-        const culture = cells.culture[cell];
+        const culture = cells[cell].culture;
         const name = Names.getCulture(culture);
         burgs.push({ cell, x, y, state, i: id, culture, name, capital, feature: cells.f[cell] });
         burgsTree.add([x, y]);
@@ -265,7 +267,7 @@ function regenerateStates() {
 
     BurgsAndStates.expandStates(pack);
     BurgsAndStates.normalizeStates(pack);
-    BurgsAndStates.collectStatistics();
+    BurgsAndStates.collectStatistics(pack);
     BurgsAndStates.assignColors();
     BurgsAndStates.generateCampaigns();
     BurgsAndStates.generateDiplomacy();

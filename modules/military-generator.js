@@ -75,7 +75,7 @@ export function generate() {
         if (!s.i || s.removed) continue;
 
         let m = cells.pop[i] / 100; // basic rural army in percentages
-        if (cells.culture[i] !== s.culture) m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
+        if (cells[i].culture !== s.culture) m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
         if (cells.religion[i] !== cells.religion[s.center]) m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
         if (cells.f[i] !== cells.f[s.center]) m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
         const type = getType(i);

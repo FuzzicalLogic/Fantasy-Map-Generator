@@ -63,7 +63,7 @@ function culturesCollectStatistics() {
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
         if (cells.h[i] < 20) continue;
-        const c = cells.culture[i];
+        const c = cells[i].culture;
         cultures[c].cells += 1;
         cultures[c].area += cells[i].area;
         cultures[c].rural += cells.pop[i];

@@ -1138,8 +1138,8 @@ export function elevateLakes({ cells, features }) {
 // assign biome id for each cell
 export function defineBiomes() {
     console.time("defineBiomes");
-    const cells = pack.cells, f = pack.features, temp = grid.cells.temp, prec = grid.cells.prec;
-    //cells.biome = new Uint8Array(cells.length); // biomes array
+    const { cells, features: f } = pack,
+        { temp, prec } = grid.cells;
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
@@ -1227,7 +1227,7 @@ export function addMarkers(number = 1) {
             const cell = mounts.splice(biased(0, mounts.length - 1, 5), 1);
             const x = cells.p[cell][0], y = cells.p[cell][1];
             const id = appendMarker(cell, "volcano");
-            const proper = Names.getCulture(cells.culture[cell]);
+            const proper = Names.getCulture(cells[cell].culture);
             const name = P(.3) ? "Mount " + proper : Math.random() > .3 ? proper + " Volcano" : proper;
             notes.push({ id, name, legend: `Active volcano. Height: ${getFriendlyHeight([x, y])}` });
             count--;
@@ -1242,7 +1242,7 @@ export function addMarkers(number = 1) {
         while (count && springs.length) {
             const cell = springs.splice(biased(1, springs.length - 1, 3), 1);
             const id = appendMarker(cell, "hot_springs");
-            const proper = Names.getCulture(cells.culture[cell]);
+            const proper = Names.getCulture(cells[cell].culture);
             const temp = convertTemperature(gauss(30, 15, 20, 100));
             notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
             count--;
@@ -1316,14 +1316,17 @@ export function addMarkers(number = 1) {
     void function addLighthouses() {
         const lands = cells.map((v, k) => k)
             .filter(i => cells.harbor[i] > 6 && cells[i].c.some(c => cells.h[c] < 20 && cells.road[c]));
-        const lighthouses = Array.from(lands).map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells.road[c])]]);
+        const lighthouses = Array.from(lands)
+            .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells.h[c] < 20 && cells.road[c])]]);
         if (lighthouses.length) addMarker("lighthouse", "🚨", 50, 50, 16);
         const count = Math.ceil(4 * number);
 
         for (let i = 0; i < lighthouses.length && i < count; i++) {
             const cell = lighthouses[i][0], vertex = lighthouses[i][1];
             const id = appendMarker(cell, "lighthouse");
-            const proper = cells.burg[cell] ? pack.burgs[cells.burg[cell]].name : Names.getCulture(cells.culture[cell]);
+            const proper = cells.burg[cell]
+                ? pack.burgs[cells.burg[cell]].name
+                : Names.getCulture(cells[cell].culture);
             notes.push({ id, name: toAdjective(proper) + " Lighthouse" + name, legend: `A lighthouse to keep the navigation safe` });
         }
     }()
@@ -1336,7 +1339,9 @@ export function addMarkers(number = 1) {
         for (let i = 0; i < waterfalls.length && i < count; i++) {
             const cell = waterfalls[i];
             const id = appendMarker(cell, "waterfall");
-            const proper = cells.burg[cell] ? pack.burgs[cells.burg[cell]].name : Names.getCulture(cells.culture[cell]);
+            const proper = cells.burg[cell]
+                ? pack.burgs[cells.burg[cell]].name
+                : Names.getCulture(cells[cell].culture);
             notes.push({ id, name: toAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
         }
     }()
@@ -1351,7 +1356,7 @@ export function addMarkers(number = 1) {
             const id = appendMarker(cell, "battlefield");
             const campaign = ra(states[cells.state[cell]].campaigns);
             const date = generateDate(campaign.start, campaign.end);
-            const name = Names.getCulture(cells.culture[cell]) + " Battlefield";
+            const name = Names.getCulture(cells[cell].culture) + " Battlefield";
             const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
             notes.push({ id, name, legend });
             count--;
@@ -1619,7 +1624,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const proper = toAdjective(Names.getCultureShort(cells.culture[cell]));
+        const proper = toAdjective(Names.getCultureShort(cells[cell].culture));
         const name = proper + " Avalanche";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch5)" });
     }
@@ -1642,7 +1647,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const proper = toAdjective(Names.getCultureShort(cells.culture[cell]));
+        const proper = toAdjective(Names.getCultureShort(cells[cell].culture));
         const name = proper + " Fault";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch2)" });
     }
@@ -1692,7 +1697,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const proper = toAdjective(Names.getCultureShort(cells.culture[cell]));
+        const proper = toAdjective(Names.getCultureShort(cells[cell].culture));
         const name = proper + " Tsunami";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch13)" });
     }

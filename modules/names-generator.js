@@ -116,7 +116,10 @@ export const getBase = function (base, min, max, dupl) {
 
   // generate name for culture
 export function getCulture(culture, min, max, dupl) {
-    if (culture === undefined) { console.error("Please define a culture"); return; }
+    if (culture === undefined) {
+        console.error("Please define a culture");
+        return;
+    }
     const base = pack.cultures[culture].base;
     return getBase(base, min, max, dupl);
 }

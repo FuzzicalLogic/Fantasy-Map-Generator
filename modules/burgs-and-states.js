@@ -51,20 +51,27 @@ function placeCapitals(cells, count) {
 
     const score = new Int16Array(cells.s.map(s => s * Math.random())); // cell score for capitals placement
     const sorted = cells.map((v, k) => k)
-        .filter(i => score[i] > 0 && cells.culture[i])
+        .filter(i => score[i] > 0 && cells[i].culture)
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
 
     if (sorted.length < count * 10) {
         count = Math.floor(sorted.length / 10);
-        if (!count) { console.warn(`There is no populated cells. Cannot generate states`); return burgs; }
-        else { console.warn(`Not enough populated cells (${sorted.length}). Will generate only ${count} states`); }
+        if (!count) {
+            console.warn(`There is no populated cells. Cannot generate states`);
+            return burgs;
+        }
+        else {
+            console.warn(`Not enough populated cells (${sorted.length}). Will generate only ${count} states`);
+        }
     }
 
     let burgsTree = d3.quadtree();
     let spacing = (graphWidth + graphHeight) / 2 / count; // min distance between capitals
 
     for (let i = 0; burgs.length <= count; i++) {
-        const cell = sorted[i], x = cells.p[cell][0], y = cells.p[cell][1];
+        const cell = sorted[i],
+            x = cells.p[cell][0],
+            y = cells.p[cell][1];
 
         if (burgsTree.find(x, y, spacing) === undefined) {
             burgs.push({ cell, x, y });
@@ -88,7 +95,7 @@ function placeTowns(burgs, cells) {
     console.time('placeTowns');
     const score = new Int16Array(cells.s.map(s => s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
     const sorted = cells.map((v, k) => k)
-        .filter(i => !cells.burg[i] && score[i] > 0 && cells.culture[i])
+        .filter(i => !cells.burg[i] && score[i] > 0 && cells[i].culture)
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
 
     const desiredNumber = manorsInput.value == 1000
@@ -109,7 +116,7 @@ function placeTowns(burgs, cells) {
             const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make placement not uniform
             if (burgsTree.find(x, y, s) !== undefined) continue; // to close to existing burg
             const burg = burgs.length;
-            const culture = cells.culture[cell];
+            const culture = cells[cell].culture;
             const name = Names.getCulture(culture);
             burgs.push({ cell, x, y, state: 0, i: burg, culture, name, capital: 0, feature: cells.f[cell] });
             burgsTree.add([x, y]);
@@ -138,7 +145,7 @@ function createStates(capitals, cells, cultures) {
 
         // burgs data
         b.i = b.state = i;
-        b.culture = cells.culture[b.cell];
+        b.culture = cells[b.cell].culture;
         b.name = Names.getCultureShort(b.culture);
         b.feature = cells.f[b.cell];
         b.capital = 1;
@@ -304,7 +311,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
         cells[n].c.forEach(function (e) {
             if (cells.state[e] && e === states[cells.state[e]].center) return; // do not overwrite capital cells
 
-            const cultureCost = culture === cells.culture[e] ? -9 : 100;
+            const cultureCost = culture === cells[e].culture ? -9 : 100;
             const populationCost = cells.h[e] < 20 ? 0 : cells.s[e] ? Math.max(20 - cells.s[e], 0) : 5000;
             const biomeCost = getBiomeCost(b, cells[e].biome, type);
             const heightCost = getHeightCost(pack.features[cells.f[e]], cells.h[e], type);
@@ -387,17 +394,17 @@ export function normalizeStates({ cells, burgs }) {
 
 // Resets the cultures of all burgs and states to their
 // cell or center cell's (respectively) culture.
-export function updateCultures({ cells: { culture }, burgs, states }) {
+export function updateCultures({ cells, burgs, states }) {
     console.time('updateCulturesForBurgsAndStates');
 
     // Assign the culture associated with the burgs cell.
     pack.burgs = burgs.map((burg, index) =>
-        index === 0 ? burg : { ...burg, culture: culture[burg.cell] }
+        index === 0 ? burg : { ...burg, culture: cells[burg.cell].culture }
     );
 
     // Assign the culture associated with the states' center cell.
     pack.states = states.map((state, index) =>
-        index === 0 ? state : { ...state, culture: culture[state.center] }
+        index === 0 ? state : { ...state, culture: cells[state.center].culture }
     );
 
     console.timeEnd('updateCulturesForBurgsAndStates');
@@ -995,7 +1002,7 @@ export function generateProvinces(regenerate) {
             }
 
             // generate "wild" province name
-            const c = cells.culture[center];
+            const c = cells[center].culture;
             const name = burgCell && P(.5) ? burgs[burg].name : Names.getState(Names.getCultureShort(c), c);
             const f = pack.features[cells.f[center]];
             const provCells = stateNoProvince.filter(i => cells.province[i] === province);

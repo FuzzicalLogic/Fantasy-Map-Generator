@@ -283,7 +283,8 @@ function showMapTooltip(point, e, i, g) {
         const prov = province ? pack.provinces[province].fullName + ", " : "";
         tip(prov + state);
     }
-    else if (layerIsOn("toggleCultures") && pack.cells.culture[i]) tip("Culture: " + pack.cultures[pack.cells.culture[i]].name);
+    else if (layerIsOn("toggleCultures") && pack.cells[i].culture)
+        tip("Culture: " + pack.cultures[pack.cells[i].culture].name);
     else if (layerIsOn("toggleHeight")) tip("Height: " + getFriendlyHeight(point));
 }
 

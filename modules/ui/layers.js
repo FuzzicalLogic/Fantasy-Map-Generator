@@ -562,19 +562,20 @@ export function drawCultures() {
     console.time("drawCultures");
 
     cults.selectAll("path").remove();
-    const cells = pack.cells, vertices = pack.vertices, cultures = pack.cultures, n = cells.length;
+    const { cells, vertices, cultures } = pack,
+        n = cells.length;
     const used = new Uint8Array(n);
     const paths = new Array(cultures.length).fill("");
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (!cells.culture[i]) continue;
+        if (!cells[i].culture) continue;
         if (used[i]) continue;
         used[i] = 1;
-        const c = cells.culture[i];
-        const onborder = cells[i].c.some(n => cells.culture[n] !== c);
+        const c = cells[i].culture;
+        const onborder = cells[i].c.some(n => cells[n].culture !== c);
         if (!onborder) continue;
-        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.culture[i] !== c));
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells[i].culture !== c));
         const chain = connectVertices(vertex, c);
         if (chain.length < 3) continue;
         const points = chain.map(v => vertices.p[v]);
@@ -591,15 +592,22 @@ export function drawCultures() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells.culture[c] === t).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || cells.culture[c[0]] !== t;
-            const c1 = c[1] >= n || cells.culture[c[1]] !== t;
-            const c2 = c[2] >= n || cells.culture[c[2]] !== t;
+            c.filter(c => cells[c].culture === t)
+                .forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].culture !== t;
+            const c1 = c[1] >= n || cells[c[1]].culture !== t;
+            const c2 = c[2] >= n || cells[c[2]].culture !== t;
             const v = vertices.v[current]; // neighboring vertices
-            if (v[0] !== prev && c0 !== c1) current = v[0];
-            else if (v[1] !== prev && c1 !== c2) current = v[1];
-            else if (v[2] !== prev && c0 !== c2) current = v[2];
-            if (current === chain[chain.length - 1]) { console.error("Next vertex is not found"); break; }
+            if (v[0] !== prev && c0 !== c1)
+                current = v[0];
+            else if (v[1] !== prev && c1 !== c2)
+                current = v[1];
+            else if (v[2] !== prev && c0 !== c2)
+                current = v[2];
+            if (current === chain[chain.length - 1]) {
+                console.error("Next vertex is not found");
+                break;
+            }
         }
         return chain;
     }

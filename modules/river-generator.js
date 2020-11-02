@@ -312,7 +312,7 @@ export function specify() {
 }
 
 export function getName(cell) {
-    return Names.getCulture(pack.cells.culture[cell]);
+    return Names.getCulture(pack.cells[cell].culture);
 }
 
   // remove river and all its tributaries

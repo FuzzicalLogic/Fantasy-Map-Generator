@@ -12,7 +12,8 @@ let cells;
 export function generate() {
     console.time('generateCultures');
     cells = pack.cells;
-    cells.culture = new Uint16Array(cells.length); // cell cultures
+//    cells.culture = new Uint16Array(cells.length); // cell cultures
+    cells.forEach(v => v.culture = 0);
     let count = Math.min(+culturesInput.value, +culturesSet.selectedOptions[0].dataset.max);
 
     const populated = cells.map((v,k) => k).filter(i => cells.s[i]); // populated cells
@@ -48,7 +49,9 @@ export function generate() {
     const colors = getColors(count);
 
     cultures.forEach(function (c, i) {
-        const cell = c.center = placeCenter(c.sort ? c.sort : (i) => cells.s[i]);
+        const cell = c.center = placeCenter(c.sort
+            ? c.sort
+            : i => cells.s[i]);
         centers.add(cells.p[cell]);
         c.i = i + 1;
         delete c.odd;
@@ -58,7 +61,7 @@ export function generate() {
         c.expansionism = defineCultureExpansionism(c.type);
         c.origin = 0;
         c.code = getCode(c.name);
-        cells.culture[cell] = i + 1;
+        cells[cell].culture = i + 1;
     });
 
     function placeCenter(v) {
@@ -388,7 +391,8 @@ export function expand() {
             if (totalCost > neutral) return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.s[e] > 0) cells.culture[e] = c; // assign culture to populated cell
+                if (cells.s[e] > 0)
+                    cells[e].culture = c; // assign culture to populated cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, c });
 

@@ -64,12 +64,18 @@ export function generate(numReligions, pack) {
     const { cells, states, cultures } = pack;
     const religions = pack.religions = [];
 
-    cells.religion = new Uint16Array(cells.culture); // cell religion; initially based on culture
+    cells.religion = new Uint16Array(cells.length); // cell religion; initially based on culture
 
     // add folk religions
     cultures.forEach(c => {
-        if (!c.i) { religions.push({ i: 0, name: "No religion" }); return; }
-        if (c.removed) { religions.push({ i: c.i, name: "Extinct religion for " + c.name, color: getMixedColor(c.color, .1, 0), removed: true }); return; }
+        if (!c.i) {
+            religions.push({ i: 0, name: "No religion" });
+            return;
+        }
+        if (c.removed) {
+            religions.push({ i: c.i, name: "Extinct religion for " + c.name, color: getMixedColor(c.color, .1, 0), removed: true });
+            return;
+        }
         const form = rw(forms.Folk);
         const name = c.name + " " + rw(types[form]);
         const deity = form === "Animism" ? null : getDeityName(c.i);
@@ -78,14 +84,17 @@ export function generate(numReligions, pack) {
     });
 
     if (+numReligions == 0 || cultures.length < 2) {
-        religions.filter(r => r.i).forEach(r => r.code = getCode(r.name, religions));
+        religions.filter(r => r.i)
+            .forEach(r => r.code = getCode(r.name, religions));
         return;
     }
 
     const burgs = pack.burgs.filter(b => b.i && !b.removed);
     const sorted = burgs.length > +numReligions
         ? burgs.sort((a, b) => b.population - a.population).map(b => b.cell)
-        : cells.i.filter(i => cells.s[i] > 2).sort((a, b) => cells.s[b] - cells.s[a]);
+        : cells.map((v, k) => k)
+            .filter(i => cells.s[i] > 2)
+            .sort((a, b) => cells.s[b] - cells.s[a]);
     const religionsTree = d3.quadtree();
     const spacing = (graphWidth + graphHeight) / 6 / numReligions; // base min distance between towns
     const cultsCount = Math.floor(rand(10, 40) / 100 * numReligions);
@@ -96,7 +105,7 @@ export function generate(numReligions, pack) {
         let center = sorted[biased(0, sorted.length - 1, 5)]; // religion center
         const form = rw(forms.Organized);
         const state = cells.state[center];
-        const culture = cells.culture[center];
+        const culture = cells[center].culture;
 
         const deity = form === "Non-theism" ? null : getDeityName(culture);
         let [name, expansion] = getReligionName(form, deity, center, pack);
@@ -139,7 +148,7 @@ export function generate(numReligions, pack) {
         if (religionsTree.find(x, y, s) !== undefined)
             continue; // to close to existing religion
 
-        const culture = cells.culture[center];
+        const culture = cells[center].culture;
         const folk = religions.find(r => r.culture === culture && r.type === "Folk");
         const origin = folk ? folk.i : 0;
         const deity = getDeityName(culture);
@@ -166,7 +175,7 @@ export function generate(numReligions, pack) {
             const x = cells.p[center][0], y = cells.p[center][1];
             if (religionsTree.find(x, y, spacing / 10) !== undefined) continue; // to close to other
 
-            const culture = cells.culture[center];
+            const culture = cells[center].culture;
             const name = getCultName("Heresy", center, pack);
             const expansionism = gauss(1.2, .5, 0, 5);
             const color = getMixedColor(r.color, .4, .2); // "url(#hatch6)";
@@ -251,10 +260,10 @@ function expandReligions(pack) {
         const expansion = religions[r].expansion;
 
         cells[n].c.forEach(function (e) {
-            if (expansion === "culture" && c !== cells.culture[e]) return;
+            if (expansion === "culture" && c !== cells[e].culture) return;
             if (expansion === "state" && s !== cells.state[e]) return;
 
-            const cultureCost = c !== cells.culture[e] ? 10 : 0;
+            const cultureCost = c !== cells[e].culture ? 10 : 0;
             const stateCost = s !== cells.state[e] ? 10 : 0;
             const biomeCost = cells.road[e] ? 1 : biomesData.cost[cells[e].biome];
             const populationCost = Math.max(rn(popCost - cells.pop[e]), 0);
@@ -264,7 +273,7 @@ function expandReligions(pack) {
             if (totalCost > neutral) return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.h[e] >= 20 && cells.culture[e]) cells.religion[e] = r; // assign religion to cell
+                if (cells.h[e] >= 20 && cells[e].culture) cells.religion[e] = r; // assign religion to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, r, c, s });
             }
@@ -300,7 +309,8 @@ function expandHeresies(pack) {
             if (totalCost > neutral) return;
 
             if (!cost[e] || totalCost < cost[e]) {
-                if (cells.h[e] >= 20 && cells.culture[e]) cells.religion[e] = r; // assign religion to cell
+                if (cells.h[e] >= 20 && cells[e].culture)
+                    cells.religion[e] = r; // assign religion to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, r });
             }
@@ -329,7 +339,7 @@ export function updateCultures(pack) {
         if (index === 0) {
             return religion;
         }
-        return { ...religion, culture: pack.cells.culture[religion.center] };
+        return { ...religion, culture: pack.cells[religion.center].culture };
     });
     console.timeEnd('updateCulturesForReligions');
 }
@@ -378,7 +388,7 @@ function generateMeaning() {
 
 function getReligionName(form, deity, center, pack) {
     const cells = pack.cells;
-    const random = function () { return Names.getCulture(cells.culture[center], null, null, "", 0); }
+    const random = () => Names.getCulture(cells[center].culture, null, null, "", 0);
     const type = function () { return rw(types[form]); }
     const supreme = function () { return deity.split(/[ ,]+/)[0]; }
     const place = function (adj) {
@@ -386,7 +396,7 @@ function getReligionName(form, deity, center, pack) {
         let name = trimVowels(base.split(/[ ,]+/)[0]);
         return adj ? toAdjective(name) : name;
     }
-    const culture = function () { return pack.cultures[cells.culture[center]].name; }
+    const culture = () => pack.cultures[cells[center].culture].name;
 
     const m = rw(methods);
     if (m === "Random + type") return [random() + " " + type(), "global"];
@@ -406,7 +416,7 @@ function getCultName(form, center, pack) {
         return rw(types[form]);
     }
     const random = function () {
-        return trimVowels(Names.getCulture(cells.culture[center], null, null, "", 0).split(/[ ,]+/)[0]);
+        return trimVowels(Names.getCulture(cells[center].culture, null, null, "", 0).split(/[ ,]+/)[0]);
     }
     const burg = function () {
         return trimVowels(pack.burgs[cells.burg[center]].name.split(/[ ,]+/)[0]);
