@@ -316,14 +316,14 @@ function updateCellInfo(point, i, g) {
     infoTemp.innerHTML = convertTemperature(grid.cells.temp[g]);
     infoPrec.innerHTML = cells.h[i] >= 20 ? getFriendlyPrecipitation(i) : "n/a";
     infoRiver.innerHTML = cells.h[i] >= 20 && cells.r[i] ? getRiverInfo(cells.r[i]) : "no";
-    infoState.innerHTML = cells.h[i] >= 20 ? cells.state[i] ? `${pack.states[cells.state[i]].fullName} (${cells.state[i]})` : "neutral lands (0)" : "no";
-    infoProvince.innerHTML = cells.province[i] ? `${pack.provinces[cells.province[i]].fullName} (${cells.province[i]})` : "no";
+    infoState.innerHTML = cells.h[i] >= 20 ? cells[i].state ? `${pack.states[cells[i].state].fullName} (${cells[i].state})` : "neutral lands (0)" : "no";
+    infoProvince.innerHTML = cells[i].province ? `${pack.provinces[cells[i].province].fullName} (${cells[i].province})` : "no";
     infoCulture.innerHTML = cells[i].culture
         ? `${pack.cultures[cells[i].culture].name} (${cells[i].culture})`
         : "no";
-    infoReligion.innerHTML = cells.religion[i] ? `${pack.religions[cells.religion[i]].name} (${cells.religion[i]})` : "no";
+    infoReligion.innerHTML = cells[i].religion ? `${pack.religions[cells[i].religion].name} (${cells[i].religion})` : "no";
     infoPopulation.innerHTML = getFriendlyPopulation(i);
-    infoBurg.innerHTML = cells.burg[i] ? pack.burgs[cells.burg[i]].name + " (" + cells.burg[i] + ")" : "no";
+    infoBurg.innerHTML = cells[i].burg ? pack.burgs[cells[i].burg].name + " (" + cells[i].burg + ")" : "no";
     infoFeature.innerHTML = f ? pack.features[f].group + " (" + f + ")" : "n/a";
     infoBiome.innerHTML = biomesData.name[cells[i].biome];
 }
@@ -395,8 +395,8 @@ function getRiverInfo(id) {
 
 export function getCellPopulation(i) {
     const rural = pack.cells[i].pop * populationRate.value;
-    const urban = pack.cells.burg[i]
-        ? pack.burgs[pack.cells.burg[i]].population * populationRate.value * urbanization.value
+    const urban = pack.cells[i].burg
+        ? pack.burgs[pack.cells[i].burg].population * populationRate.value * urbanization.value
         : 0;
     return [rural, urban];
 }

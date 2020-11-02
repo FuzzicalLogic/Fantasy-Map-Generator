@@ -129,14 +129,15 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
 
         for (const c of cells[n].c) {
             let { h, state } = cells;
-            if (h[c] < 20) continue; // ignore water cells
+            if (h[c] < 20)
+                continue; // ignore water cells
             const stateChangeCost = state && state[c] !== state[n] ? 400 : 0; // trails tend to lay within the same state
             const habitability = biomesData.habitability[cells[c].biome];
             const habitedCost = habitability ? Math.max(100 - habitability, 0) : 400; // routes tend to lay within populated areas
             const heightChangeCost = Math.abs(h[c] - h[n]) * 10; // routes tend to avoid elevation changes
             const heightCost = h[c] > 80 ? h[c] : 0; // routes tend to avoid mountainous areas
             const cellCoast = 10 + stateChangeCost + habitedCost + heightChangeCost + heightCost;
-            const totalCost = p + (cells[c].road || cells.burg[c] ? cellCoast / 3 : cellCoast);
+            const totalCost = p + (cells[c].road || cells[c].burg ? cellCoast / 3 : cellCoast);
 
             if (from[c] || totalCost >= cost[c]) continue;
             from[c] = n;

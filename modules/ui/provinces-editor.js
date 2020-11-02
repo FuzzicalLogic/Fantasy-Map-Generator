@@ -104,9 +104,9 @@ function collectStatistics() {
 
         provinces[p].area += cells[i].area;
         provinces[p].rural += cells[i].pop;
-        if (!cells.burg[i]) continue;
-        provinces[p].urban += burgs[cells.burg[i]].population;
-        provinces[p].burgs.push(cells.burg[i]);
+        if (!cells[i].burg) continue;
+        provinces[p].urban += burgs[cells[i].burg].population;
+        provinces[p].burgs.push(cells[i].burg);
     }
 
     provinces.forEach(p => {

@@ -1255,7 +1255,7 @@ export function addMarkers(number = 1) {
     }()
 
     void function addMines() {
-        let hills = cells.map((v, k) => k).filter(i => cells.h[i] > 47 && cells.burg[i]);
+        let hills = cells.map((v, k) => k).filter(i => cells.h[i] > 47 && cells[i].burg);
         let count = !hills.length ? 0 : Math.ceil(hills.length / 7 * number);
         if (!count) return;
 
@@ -1266,7 +1266,7 @@ export function addMarkers(number = 1) {
             const cell = hills.splice(Math.floor(Math.random() * hills.length), 1);
             const id = appendMarker(cell, "mine");
             const resource = rw(resources);
-            const burg = pack.burgs[cells.burg[cell]];
+            const burg = pack.burgs[cells[cell].burg];
             const name = `${burg.name} — ${resource} mining town`;
             const population = rn(burg.population * populationRate.value * urbanization.value);
             const legend = `${burg.name} is a mining town of ${population} people just nearby the ${resource} mine`;
@@ -1280,7 +1280,7 @@ export function addMarkers(number = 1) {
         const meanFlux = d3.mean(cells.fl.filter(fl => fl));
 
         let bridges = cells.map((v, k) => k)
-            .filter(i => cells.burg[i] && cells.h[i] >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells[i].road > meanRoad)
+            .filter(i => cells[i].burg && cells.h[i] >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells[i].road > meanRoad)
             .sort((a, b) => (cells[b].road + cells.fl[b] / 10) - (cells[a].road + cells.fl[a] / 10));
 
         let count = !bridges.length
@@ -1291,7 +1291,7 @@ export function addMarkers(number = 1) {
         while (count && bridges.length) {
             const cell = bridges.splice(0, 1);
             const id = appendMarker(cell, "bridge");
-            const burg = pack.burgs[cells.burg[cell]];
+            const burg = pack.burgs[cells[cell].burg];
             const river = pack.rivers.find(r => r.i === pack.cells.r[cell]);
             const riverName = river ? `${river.name} ${river.type}` : "river";
             const name = river && P(.2) ? river.name : burg.name;
@@ -1334,8 +1334,8 @@ export function addMarkers(number = 1) {
         for (let i = 0; i < lighthouses.length && i < count; i++) {
             const cell = lighthouses[i][0], vertex = lighthouses[i][1];
             const id = appendMarker(cell, "lighthouse");
-            const proper = cells.burg[cell]
-                ? pack.burgs[cells.burg[cell]].name
+            const proper = cells[cell].burg
+                ? pack.burgs[cells[cell].burg].name
                 : Names.getCulture(cells[cell].culture);
             notes.push({ id, name: toAdjective(proper) + " Lighthouse" + name, legend: `A lighthouse to keep the navigation safe` });
         }
@@ -1350,8 +1350,8 @@ export function addMarkers(number = 1) {
         for (let i = 0; i < waterfalls.length && i < count; i++) {
             const cell = waterfalls[i];
             const id = appendMarker(cell, "waterfall");
-            const proper = cells.burg[cell]
-                ? pack.burgs[cells.burg[cell]].name
+            const proper = cells[cell].burg
+                ? pack.burgs[cells[cell].burg].name
                 : Names.getCulture(cells[cell].culture);
             notes.push({ id, name: toAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
         }
@@ -1545,7 +1545,7 @@ export function addZones(number = 1) {
 
         while (queue.length) {
             const next = queue.dequeue();
-            if (cells.burg[next.e] || cells[next.e].pop)
+            if (cells[next.e].burg || cells[next.e].pop)
                 cellsArray.push(next.e);
             used[next.e] = 1;
 
@@ -1582,7 +1582,7 @@ export function addZones(number = 1) {
 
         while (queue.length) {
             const next = queue.dequeue();
-            if (cells.burg[next.e] || cells[next.e].pop)
+            if (cells[next.e].burg || cells[next.e].pop)
                 cellsArray.push(next.e);
             used[next.e] = 1;
 
@@ -1677,11 +1677,16 @@ export function addZones(number = 1) {
     }
 
     function addFlood() {
-        const fl = cells.fl.filter(fl => fl), meanFlux = d3.mean(fl), maxFlux = d3.max(fl), flux = (maxFlux - meanFlux) / 2 + meanFlux;
-        const rivers = cells.map((v, k) => k).filter(i => !used[i] && cells.h[i] < 50 && cells.r[i] && cells.fl[i] > flux && cells.burg[i]);
+        const fl = cells.fl.filter(fl => fl),
+            meanFlux = d3.mean(fl),
+            maxFlux = d3.max(fl),
+            flux = (maxFlux - meanFlux) / 2 + meanFlux;
+        const rivers = cells.map((v, k) => k)
+            .filter(i => !used[i] && cells.h[i] < 50 && cells.r[i] && cells.fl[i] > flux && cells[i].burg);
         if (!rivers.length) return;
 
-        const cell = +ra(rivers), river = cells.r[cell];
+        const cell = +ra(rivers),
+            river = cells.r[cell];
         const cellsArray = [], queue = [cell], power = rand(5, 30);
 
         while (queue.length) {
@@ -1696,7 +1701,7 @@ export function addZones(number = 1) {
             });
         }
 
-        const name = toAdjective(burgs[cells.burg[cell]].name) + " Flood";
+        const name = toAdjective(burgs[cells[cell].burg].name) + " Flood";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch13)" });
     }
 

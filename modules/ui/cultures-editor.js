@@ -57,7 +57,7 @@ function refreshCulturesEditor() {
 }
 
 function culturesCollectStatistics() {
-    const cells = pack.cells, cultures = pack.cultures;
+    const { cells, cultures } = pack;
     cultures.forEach(c => c.cells = c.area = c.rural = c.urban = 0);
 
     const xs = cells.map((v, k) => k);
@@ -67,8 +67,8 @@ function culturesCollectStatistics() {
         cultures[c].cells += 1;
         cultures[c].area += cells[i].area;
         cultures[c].rural += cells[i].pop;
-        if (cells.burg[i])
-            cultures[c].urban += pack.burgs[cells.burg[i]].population;
+        if (cells[i].burg)
+            cultures[c].urban += pack.burgs[cells[i].burg].population;
     }
 }
 

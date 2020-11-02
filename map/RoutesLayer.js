@@ -18,7 +18,7 @@ function drawRoutes({ detail: data }) {
 
     const { cells, burgs } = pack;
     const toXY = c => {
-        const b = cells.burg[c];
+        const b = cells[c].burg;
         const x = b ? burgs[b].x : cells.p[c][0];
         const y = b ? burgs[b].y : cells.p[c][1];
         return [x, y];

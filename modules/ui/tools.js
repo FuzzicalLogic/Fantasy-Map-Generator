@@ -167,15 +167,18 @@ function regenerateBurgs() {
         const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make the placement not uniform
         if (burgsTree.find(x, y, s) !== undefined) continue; // to close to existing burg
 
-        const state = cells.state[cell];
+        const state = cells[cell].state;
         const capital = state && !states[state].capital; // if state doesn't have capital, make this burg a capital, no capital for neutral lands
-        if (capital) { states[state].capital = id; states[state].center = cell; }
+        if (capital) {
+            states[state].capital = id;
+            states[state].center = cell;
+        }
 
         const culture = cells[cell].culture;
         const name = Names.getCulture(culture);
         burgs.push({ cell, x, y, state, i: id, culture, name, capital, feature: cells.f[cell] });
         burgsTree.add([x, y]);
-        cells.burg[cell] = id;
+        cells[cell].burg = id;
     }
 
     // add a capital at former place for states without added capitals

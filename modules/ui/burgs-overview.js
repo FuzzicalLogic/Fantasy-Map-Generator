@@ -105,7 +105,7 @@ function burgsOverviewAddLines() {
         totalPopulation += population;
         const type = b.capital && b.port ? "a-capital-port" : b.capital ? "c-capital" : b.port ? "p-port" : "z-burg";
         const state = pack.states[b.state].name;
-        const prov = pack.cells.province[b.cell];
+        const prov = pack.cells[b.cell].province;
         const province = prov ? pack.provinces[prov].name : "";
         const culture = pack.cultures[b.culture].name;
 

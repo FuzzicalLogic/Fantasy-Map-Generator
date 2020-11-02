@@ -21,7 +21,7 @@ export function generate(howMany) {
     const { cells, cultures } = pack,
         n = cells.length;
 
-    cells.burg = new Uint16Array(n); // cell burg
+    cells.forEach(x => x.burg = 0);
     cells.forEach(x => x.road = 0)
     cells.crossroad = new Uint16Array(n); // cell crossroad power
 
@@ -95,7 +95,7 @@ function placeTowns(burgs, cells) {
     console.time('placeTowns');
     const score = new Int16Array(cells.map(x => x.s * gauss(1, 3, 0, 20, 3))); // a bit randomized cell score for towns placement
     const sorted = cells.map((v, k) => k)
-        .filter(i => !cells.burg[i] && score[i] > 0 && cells[i].culture)
+        .filter(i => !cells[i].burg && score[i] > 0 && cells[i].culture)
         .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
 
     const desiredNumber = manorsInput.value == 1000
@@ -109,7 +109,8 @@ function placeTowns(burgs, cells) {
 
     while (burgsAdded < burgsNumber && spacing > 1) {
         for (let i = 0; burgsAdded < burgsNumber && i < sorted.length; i++) {
-            if (cells.burg[sorted[i]]) continue;
+            if (cells[sorted[i]].burg)
+                continue;
             const cell = sorted[i],
                 x = cells.p[cell][0],
                 y = cells.p[cell][1];
@@ -120,7 +121,7 @@ function placeTowns(burgs, cells) {
             const name = Names.getCulture(culture);
             burgs.push({ cell, x, y, state: 0, i: burg, culture, name, capital: 0, feature: cells.f[cell] });
             burgsTree.add([x, y]);
-            cells.burg[cell] = burg;
+            cells[cell].burg = burg;
             burgsAdded++;
         }
         spacing *= .5;
@@ -157,7 +158,7 @@ function createStates(capitals, cells, cultures) {
         const nomadic = [1, 2, 3, 4].includes(cells[b.cell].biome);
         const type = nomadic ? "Nomadic" : cultures[b.culture].type === "Nomadic" ? "Generic" : cultures[b.culture].type;
         states.push({ i, color: colors[i - 1], name, expansionism, capital: i, type, center: b.cell, culture: b.culture });
-        cells.burg[b.cell] = i;
+        cells[b.cell].burg = i;
     });
 
     console.timeEnd('createStates');
@@ -381,12 +382,12 @@ export function expandStates({ cells, states, cultures, burgs}) {
 
 export function normalizeStates({ cells, burgs }) {
     console.time("normalizeStates");
-    let { h, burg } = cells;
+    let { h } = cells;
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (h[i] < 20 || burg[i])
+        if (h[i] < 20 || cells[i].burg)
             continue; // do not overwrite burgs
-        if (cells[i].c.some(c => burgs[burg[c]].capital))
+        if (cells[i].c.some(c => burgs[cells[c].burg].capital))
             continue; // do not overwrite near capital
         const neibs = cells[i].c.filter(c => h[c] >= 20);
         const adversaries = neibs.filter(c => cells[c].state !== cells[i].state);
@@ -955,7 +956,7 @@ export function generateProvinces(regenerate) {
     // justify provinces shapes a bit
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (cells.burg[i])
+        if (cells[i].burg)
             continue; // do not overwrite burgs
         const neibs = cells[i].c.filter(c => cells[c].state === cells[i].state)
             .map(c => cells[c].province);
@@ -981,12 +982,12 @@ export function generateProvinces(regenerate) {
         while (stateNoProvince.length) {
             // add new province
             const province = provinces.length;
-            const burgCell = stateNoProvince.find(i => cells.burg[i]);
+            const burgCell = stateNoProvince.find(i => cells[i].burg);
             const center = burgCell
                 ? burgCell
                 : stateNoProvince[0];
             const burg = burgCell
-                ? cells.burg[burgCell]
+                ? cells[burgCell].burg
                 : 0;
             cells[center].province = province;
 
@@ -994,7 +995,7 @@ export function generateProvinces(regenerate) {
             const cost = []; cost[center] = 1;
             queue.queue({ e: center, p: 0 });
             while (queue.length) {
-                const next = queue.dequeue(), n = next.e, p = next.p;
+                const next = queue.dequeue(), { e: n, p } = next;
 
                 cells[n].c.forEach(function (e) {
                     if (cells[e].province)
@@ -1024,7 +1025,9 @@ export function generateProvinces(regenerate) {
 
             // generate "wild" province name
             const c = cells[center].culture;
-            const name = burgCell && P(.5) ? burgs[burg].name : Names.getState(Names.getCultureShort(c), c);
+            const name = burgCell && P(.5)
+                ? burgs[burg].name
+                : Names.getState(Names.getCultureShort(c), c);
             const f = pack.features[cells.f[center]];
             const provCells = stateNoProvince.filter(i => cells[i].province === province);
             const singleIsle = provCells.length === f.cells && !provCells.find(i => cells.f[i] !== f.i);

@@ -286,8 +286,8 @@ export function getName(r, regiments) {
         ? null
         : cells[r.cell].province && pack.provinces[cells[r.cell].province]
             ? pack.provinces[cells[r.cell].province].name
-            : cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]]
-                ? pack.burgs[cells.burg[r.cell]].name
+            : cells[r.cell].burg && pack.burgs[cells[r.cell].burg]
+                ? pack.burgs[cells[r.cell].burg].name
                 : null;
     const number = nth(regiments.filter(reg => reg.n === r.n && reg.i < r.i).length + 1);
     const form = r.n ? "Fleet" : "Regiment";
@@ -296,16 +296,20 @@ export function getName(r, regiments) {
 
 // get default regiment emblem
 export function getEmblem(r) {
-    if (!r.n && !Object.values(r.u).length) return "🔰"; // "Newbie" regiment without troops
-    if (!r.n && pack.states[r.state].form === "Monarchy" && cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]].capital) return "👑"; // "Royal" regiment based in capital
+    if (!r.n && !Object.values(r.u).length)
+        return "🔰"; // "Newbie" regiment without troops
+    if (!r.n && pack.states[r.state].form === "Monarchy"
+    && cells[r.cell].burg
+    && pack.burgs[cells[r.cell].burg].capital)
+        return "👑"; // "Royal" regiment based in capital
     const mainUnit = Object.entries(r.u).sort((a, b) => b[1] - a[1])[0][0]; // unit with more troops in regiment
     const unit = options.military.find(u => u.name === mainUnit);
     return unit.icon;
 }
 
 export function generateNote(r, s) {
-    const base = cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]]
-        ? pack.burgs[cells.burg[r.cell]].name
+    const base = cells[r.cell].burg && pack.burgs[cells[r.cell].burg]
+        ? pack.burgs[cells[r.cell].burg].name
         : cells[r.cell].province && pack.provinces[cells[r.cell].province]
             ? pack.provinces[cells[r.cell].province].fullName
             : null;

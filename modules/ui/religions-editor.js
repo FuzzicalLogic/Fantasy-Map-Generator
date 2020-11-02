@@ -67,8 +67,8 @@ function religionsCollectStatistics() {
         religions[r].cells += 1;
         religions[r].area += cells[i].area;
         religions[r].rural += cells[i].pop;
-        if (cells.burg[i])
-            religions[r].urban += pack.burgs[cells.burg[i]].population;
+        if (cells[i].burg)
+            religions[r].urban += pack.burgs[cells[i].burg].population;
     }
 }
 
