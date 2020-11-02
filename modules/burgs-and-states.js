@@ -22,7 +22,7 @@ export function generate(howMany) {
         n = cells.length;
 
     cells.burg = new Uint16Array(n); // cell burg
-    //cells.road = new Uint16Array(n); // cell road power
+    cells.forEach(x => x.road = 0)
     cells.crossroad = new Uint16Array(n); // cell crossroad power
 
     const burgs = pack.burgs = placeCapitals(cells, howMany);

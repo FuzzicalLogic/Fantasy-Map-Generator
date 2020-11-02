@@ -1177,7 +1177,7 @@ export function rankCells() {
     console.time('rankCells');
     const { cells, features: f } = pack;
     cells.s = new Int16Array(cells.length); // cell suitability array
-    cells.pop = new Float32Array(cells.length); // cell population array
+    cells.forEach(v => v.pop = 0);
 
     const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.conf); // to normalize flux
     const areaMean = d3.mean(cells.map(x => x.area)); // to adjust population by cell area
@@ -1206,7 +1206,9 @@ export function rankCells() {
 
         cells.s[i] = s / 5; // general population rate
         // cell rural population is suitability adjusted by cell area
-        cells.pop[i] = cells.s[i] > 0 ? cells.s[i] * cells[i].area / areaMean : 0;
+        cells[i].pop = cells.s[i] > 0
+            ? cells.s[i] * cells[i].area / areaMean
+            : 0;
     }
 
     console.timeEnd('rankCells');
@@ -1353,7 +1355,8 @@ export function addMarkers(number = 1) {
     }()
 
     void function addBattlefields() {
-        let battlefields = cells.map((v, k) => k).filter(i => cells.state[i] && cells.pop[i] > 2 && cells.h[i] < 50 && cells.h[i] > 25);
+        let battlefields = cells.map((v, k) => k)
+            .filter(i => cells.state[i] && cells[i].pop > 2 && cells.h[i] < 50 && cells.h[i] > 25);
         let count = battlefields.length < 100 ? 0 : Math.ceil(battlefields.length / 500 * number);
         if (count) addMarker("battlefield", "⚔️", 50, 52, 12);
 
@@ -1530,7 +1533,7 @@ export function addZones(number = 1) {
 
         while (queue.length) {
             const next = queue.dequeue();
-            if (cells.burg[next.e] || cells.pop[next.e])
+            if (cells.burg[next.e] || cells[next.e].pop)
                 cellsArray.push(next.e);
             used[next.e] = 1;
 
@@ -1567,7 +1570,8 @@ export function addZones(number = 1) {
 
         while (queue.length) {
             const next = queue.dequeue();
-            if (cells.burg[next.e] || cells.pop[next.e]) cellsArray.push(next.e);
+            if (cells.burg[next.e] || cells[next.e].pop)
+                cellsArray.push(next.e);
             used[next.e] = 1;
 
             cells[next.e].c.forEach(function (e) {

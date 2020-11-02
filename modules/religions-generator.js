@@ -253,7 +253,7 @@ function expandReligions(pack) {
     });
 
     const neutral = cells.length / 5000 * 200 * gauss(1, .3, .2, 2, 2) * neutralInput.value; // limit cost for organized religions growth
-    const popCost = d3.max(cells.pop) / 3; // enougth population to spered religion without penalty
+    const popCost = d3.max(cells.map(x => x.pop)) / 3; // enougth population to spered religion without penalty
 
     while (queue.length) {
         const next = queue.dequeue(), { e: n, p, r, c, s } = next;
@@ -270,7 +270,7 @@ function expandReligions(pack) {
             const biomeCost = cells[e].road
                 ? 1
                 : biomesData.cost[cells[e].biome];
-            const populationCost = Math.max(rn(popCost - cells.pop[e]), 0);
+            const populationCost = Math.max(rn(popCost - cells[e].pop), 0);
             const heightCost = Math.max(cells.h[e], 20) - 20;
             const waterCost = cells.h[e] < 20
                 ? cells[e].road

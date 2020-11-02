@@ -314,7 +314,9 @@ function updateCellInfo(point, i, g) {
     infoRiver.innerHTML = cells.h[i] >= 20 && cells.r[i] ? getRiverInfo(cells.r[i]) : "no";
     infoState.innerHTML = cells.h[i] >= 20 ? cells.state[i] ? `${pack.states[cells.state[i]].fullName} (${cells.state[i]})` : "neutral lands (0)" : "no";
     infoProvince.innerHTML = cells.province[i] ? `${pack.provinces[cells.province[i]].fullName} (${cells.province[i]})` : "no";
-    infoCulture.innerHTML = cells.culture[i] ? `${pack.cultures[cells.culture[i]].name} (${cells.culture[i]})` : "no";
+    infoCulture.innerHTML = cells[i].culture
+        ? `${pack.cultures[cells[i].culture].name} (${cells[i].culture})`
+        : "no";
     infoReligion.innerHTML = cells.religion[i] ? `${pack.religions[cells.religion[i]].name} (${cells.religion[i]})` : "no";
     infoPopulation.innerHTML = getFriendlyPopulation(i);
     infoBurg.innerHTML = cells.burg[i] ? pack.burgs[cells.burg[i]].name + " (" + cells.burg[i] + ")" : "no";
@@ -388,8 +390,10 @@ function getRiverInfo(id) {
 }
 
 export function getCellPopulation(i) {
-    const rural = pack.cells.pop[i] * populationRate.value;
-    const urban = pack.cells.burg[i] ? pack.burgs[pack.cells.burg[i]].population * populationRate.value * urbanization.value : 0;
+    const rural = pack.cells[i].pop * populationRate.value;
+    const urban = pack.cells.burg[i]
+        ? pack.burgs[pack.cells.burg[i]].population * populationRate.value * urbanization.value
+        : 0;
     return [rural, urban];
 }
 

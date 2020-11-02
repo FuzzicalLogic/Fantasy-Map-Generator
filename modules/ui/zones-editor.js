@@ -68,7 +68,7 @@ function zonesEditorAddLines() {
         const description = this.dataset.description;
         const fill = this.getAttribute("fill");
         const area = d3.sum(c.map(i => pack.cells[i].area)) * (distanceScaleInput.value ** 2);
-        const rural = d3.sum(c.map(i => pack.cells.pop[i])) * populationRate.value;
+        const rural = d3.sum(c.map(i => pack.cells[i].pop)) * populationRate.value;
         const urban = d3.sum(c.map(i => pack.cells.burg[i]).map(b => pack.burgs[b].population)) * populationRate.value * urbanization.value;
         const population = rural + urban;
         const populationTip = `Total population: ${si(population)}; Rural population: ${si(rural)}; Urban population: ${si(urban)}. Click to change`;
@@ -96,7 +96,7 @@ function zonesEditorAddLines() {
 
     // update footer
     const totalArea = zonesFooterArea.dataset.area = graphWidth * graphHeight * (distanceScaleInput.value ** 2);
-    const totalPop = (d3.sum(pack.cells.pop) + d3.sum(pack.burgs.filter(b => !b.removed).map(b => b.population)) * urbanization.value) * populationRate.value;
+    const totalPop = (d3.sum(pack.cells.map(x => x.pop)) + d3.sum(pack.burgs.filter(b => !b.removed).map(b => b.population)) * urbanization.value) * populationRate.value;
     zonesFooterPopulation.dataset.population = totalPop;
     zonesFooterNumber.innerHTML = zones.selectAll("g").size();
     zonesFooterCells.innerHTML = pack.cells.length;
@@ -373,8 +373,15 @@ function toggleEraseMode() {
 function changePopulation(zone) {
     let { zones } = view;
     const dataCells = zones.select("#" + zone).attr("data-cells");
-    const cells = dataCells ? dataCells.split(",").map(i => +i).filter(i => pack.cells.h[i] >= 20) : [];
-    if (!cells.length) { tip("Zone does not have any land cells, cannot change population", false, "error"); return; }
+    const cells = dataCells
+        ? dataCells.split(",")
+            .map(i => +i)
+            .filter(i => pack.cells.h[i] >= 20)
+        : [];
+    if (!cells.length) {
+        tip("Zone does not have any land cells, cannot change population", false, "error");
+        return;
+    }
     const burgs = pack.burgs.filter(b => !b.removed && cells.includes(b.cell));
 
     const rural = rn(d3.sum(cells.map(i => pack.cells.pop[i])) * populationRate.value);
@@ -407,12 +414,12 @@ function changePopulation(zone) {
     function applyPopulationChange() {
         const ruralChange = ruralPop.value / rural;
         if (isFinite(ruralChange) && ruralChange !== 1) {
-            cells.forEach(i => pack.cells.pop[i] *= ruralChange);
+            cells.forEach(i => pack.cells[i].pop *= ruralChange);
         }
         if (!isFinite(ruralChange) && +ruralPop.value > 0) {
             const points = ruralPop.value / populationRate.value;
             const pop = rn(points / cells.length);
-            cells.forEach(i => pack.cells.pop[i] = pop);
+            cells.forEach(i => pack.cells[i].pop = pop);
         }
 
         const urbanChange = urbanPop.value / urban;

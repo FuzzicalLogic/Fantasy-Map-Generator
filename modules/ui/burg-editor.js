@@ -443,7 +443,7 @@ function openInMFCG(event) {
 
         const s = burg.MFCG || defSeed;
         const cell = burg.cell;
-        const hub = +cells.road[cell] > 50;
+        const hub = +cells[cell].road > 50;
         const river = cells.r[cell] ? 1 : 0;
 
         const coast = +burg.port;

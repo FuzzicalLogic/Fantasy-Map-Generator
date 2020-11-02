@@ -84,7 +84,7 @@ function biomesCollectStatistics() {
         const b = cells[i].biome;
         biomesData.cells[b] += 1;
         biomesData.area[b] += cells[i].area;
-        biomesData.rural[b] += cells.pop[i];
+        biomesData.rural[b] += cells[i].pop;
         if (cells.burg[i])
             biomesData.urban[b] += pack.burgs[cells.burg[i]].population;
     }

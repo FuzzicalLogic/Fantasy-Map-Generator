@@ -101,12 +101,12 @@ export function showElevationProfile(data, routeLen, isRiver) {
         for (let k = 0; k < chartData.points.length; k++) {
             let cell = chartData.cell[k];
             let burg = pack.cells.burg[cell];
-            let biome = pack.cells.biome[cell];
-            let culture = pack.cells.culture[cell];
+            let biome = pack.cells[cell].biome;
+            let culture = pack.cells[cell].culture;
             let religion = pack.cells.religion[cell];
             let province = pack.cells.province[cell];
             let state = pack.cells.state[cell];
-            let pop = pack.cells.pop[cell];
+            let pop = pack.cells[cell].pop;
             let h = pack.cells.h[cell];
 
             data += k + 1 + ",";
@@ -207,7 +207,7 @@ export function showElevationProfile(data, routeLen, isRiver) {
             const religion = pack.cells.religion[cell];
             const province = pack.cells.province[cell];
             const state = pack.cells.state[cell];
-            let pop = pack.cells.pop[cell];
+            let pop = pack.cells[cell].pop;
             if (chartData.burg[k]) {
                 pop += pack.burgs[chartData.burg[k]].population * urbanization.value;
             }

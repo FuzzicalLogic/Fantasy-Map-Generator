@@ -70,19 +70,25 @@ export function generate() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (!cells.pop[i]) continue;
+        if (!cells[i].pop)
+            continue;
         const s = states[cells.state[i]]; // cell state
-        if (!s.i || s.removed) continue;
+        if (!s.i || s.removed)
+            continue;
 
-        let m = cells.pop[i] / 100; // basic rural army in percentages
-        if (cells[i].culture !== s.culture) m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
-        if (cells.religion[i] !== cells.religion[s.center]) m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
-        if (cells.f[i] !== cells.f[s.center]) m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
+        let m = cells[i].pop / 100; // basic rural army in percentages
+        if (cells[i].culture !== s.culture)
+            m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
+        if (cells.religion[i] !== cells.religion[s.center])
+            m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
+        if (cells.f[i] !== cells.f[s.center])
+            m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
         const type = getType(i);
 
         for (const u of options.military) {
             const perc = +u.rural;
-            if (isNaN(perc) || perc <= 0 || !s.temp[u.name]) continue;
+            if (isNaN(perc) || perc <= 0 || !s.temp[u.name])
+                continue;
 
             const mod = type === "generic" ? 1 : cellTypeModifier[type][u.type] // cell specific modifier
             const army = m * perc * mod; // rural cell army

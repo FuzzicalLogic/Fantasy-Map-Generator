@@ -414,13 +414,13 @@ function changePopulation(state) {
         const ruralChange = ruralPop.value / rural;
         if (isFinite(ruralChange) && ruralChange !== 1) {
             const cells = pack.cells.i.filter(i => pack.cells.state[i] === state);
-            cells.forEach(i => pack.cells.pop[i] *= ruralChange);
+            cells.forEach(i => pack.cells[i].pop *= ruralChange);
         }
         if (!isFinite(ruralChange) && +ruralPop.value > 0) {
             const points = ruralPop.value / populationRate.value;
             const cells = pack.cells.i.filter(i => pack.cells.state[i] === state);
             const pop = points / cells.length;
-            cells.forEach(i => pack.cells.pop[i] = pop);
+            cells.forEach(i => pack.cells[i].pop = pop);
         }
 
         const urbanChange = urbanPop.value / urban;

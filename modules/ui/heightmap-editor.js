@@ -266,10 +266,10 @@ export function editHeightmap() {
 
         for (const i of pack.cells.i) {
             const g = pack.cells.g[i];
-            biome[g] = pack.cells.biome[i];
-            culture[g] = pack.cells.culture[i];
-            pop[g] = pack.cells.pop[i];
-            road[g] = pack.cells.road[i];
+            biome[g] = pack.cells[i].biome;
+            culture[g] = pack.cells[i].culture;
+            pop[g] = pack.cells[i].pop;
+            road[g] = pack.cells[i].road;
             crossroad[g] = pack.cells.crossroad[i];
             s[g] = pack.cells.s[i];
             state[g] = pack.cells.state[i];
