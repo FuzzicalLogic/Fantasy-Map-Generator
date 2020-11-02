@@ -230,7 +230,7 @@ export function defineBurgFeatures(newburg) {
             b.plaza = pop > 50 || pop > 30 && P(.75) || pop > 10 && P(.5) || P(.25) ? 1 : 0;
             b.walls = b.capital || pop > 30 || pop > 20 && P(.75) || pop > 10 && P(.5) || P(.2) ? 1 : 0;
             b.shanty = pop > 30 || pop > 20 && P(.75) || b.walls && P(.75) ? 1 : 0;
-            const religion = pack.cells.religion[b.cell];
+            const religion = pack.cells[b.cell].religion;
             const theocracy = pack.states[b.state].form === "Theocracy";
             b.temple = religion && theocracy || pop > 50 || pop > 35 && P(.75) || pop > 20 && P(.5) ? 1 : 0;
         });
@@ -850,7 +850,7 @@ export function defineStateForms(list) {
             continue;
         }
 
-        const religion = pack.cells.religion[s.center];
+        const religion = pack.cells[s.center].religion;
         const theocracy = religion
             && pack.religions[religion].expansion === "state"
             || (P(.1) && pack.religions[religion].type === "Organized");

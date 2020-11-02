@@ -629,16 +629,20 @@ export function drawReligions() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (!cells.religion[i]) continue;
-        if (used[i]) continue;
+        if (!cells[i].religion)
+            continue;
+        if (used[i])
+            continue;
         used[i] = 1;
-        const r = cells.religion[i];
-        const onborder = cells[i].c.filter(n => cells.religion[n] !== r);
-        if (!onborder.length) continue;
-        const borderWith = cells[i].c.map(c => cells.religion[c]).find(n => n !== r);
-        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells.religion[i] === borderWith));
+        const r = cells[i].religion;
+        const onborder = cells[i].c.filter(n => cells[n].religion !== r);
+        if (!onborder.length)
+            continue;
+        const borderWith = cells[i].c.map(c => cells[c].religion).find(n => n !== r);
+        const vertex = cells[i].v.find(v => vertices.c[v].some(i => cells[i].religion === borderWith));
         const chain = connectVertices(vertex, r, borderWith);
-        if (chain.length < 3) continue;
+        if (chain.length < 3)
+            continue;
         const points = chain.map(v => vertices.p[v[0]]);
         if (!vArray[r]) vArray[r] = [];
         vArray[r].push(points);
@@ -654,22 +658,38 @@ export function drawReligions() {
     // connect vertices to chain
     function connectVertices(start, t, religion) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells.religion[c] !== t);
-        function check(i) { religion = cells.religion[i]; land = cells.h[i] >= 20; }
+        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c].religion !== t);
+        function check(i) {
+            religion = cells[i].religion;
+            land = cells.h[i] >= 20;
+        }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
             const prev = chain[chain.length - 1] ? chain[chain.length - 1][0] : -1; // previous vertex in chain
             chain.push([current, religion, land]); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells.religion[c] === t).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || cells.religion[c[0]] !== t;
-            const c1 = c[1] >= n || cells.religion[c[1]] !== t;
-            const c2 = c[2] >= n || cells.religion[c[2]] !== t;
+            c.filter(c => cells[c].religion === t)
+                .forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].religion !== t;
+            const c1 = c[1] >= n || cells[c[1]].religion !== t;
+            const c2 = c[2] >= n || cells[c[2]].religion !== t;
             const v = vertices.v[current]; // neighboring vertices
-            if (v[0] !== prev && c0 !== c1) { current = v[0]; check(c0 ? c[0] : c[1]); } else
-                if (v[1] !== prev && c1 !== c2) { current = v[1]; check(c1 ? c[1] : c[2]); } else
-                    if (v[2] !== prev && c0 !== c2) { current = v[2]; check(c2 ? c[2] : c[0]); }
-            if (current === chain[chain.length - 1][0]) { console.error("Next vertex is not found"); break; }
+            if (v[0] !== prev && c0 !== c1) {
+                current = v[0];
+                check(c0 ? c[0] : c[1]);
+            }
+            else if (v[1] !== prev && c1 !== c2) {
+                current = v[1];
+                check(c1 ? c[1] : c[2]);
+            }
+            else if (v[2] !== prev && c0 !== c2) {
+                current = v[2];
+                check(c2 ? c[2] : c[0]);
+            }
+            if (current === chain[chain.length - 1][0]) {
+                console.error("Next vertex is not found");
+                break;
+            }
 
         }
         return chain;
@@ -732,7 +752,7 @@ export function drawStates() {
     // connect vertices to chain
     function connectVertices(start, t, state) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c].state !== t);
+        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c] && cells[c].state !== t);
         function check(i) {
             state = cells[i].state;
             land = cells.h[i] >= 20;

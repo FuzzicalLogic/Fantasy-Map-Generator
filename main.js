@@ -1495,9 +1495,9 @@ export function addZones(number = 1) {
         if (!organized) return;
 
         const cell = ra(cells.map((v, k) => k)
-            .filter(i => cells.religion[i] && cells.religion[i] !== organized.i && cells[i].c.some(c => cells.religion[c] === organized.i)));
+            .filter(i => cells[i].religion && cells[i].religion !== organized.i && cells[i].c.some(c => cells[c].religion === organized.i)));
         if (!cell) return;
-        const target = cells.religion[cell];
+        const target = cells[cell].religion;
         const cellsArray = [], queue = [cell], power = rand(10, 30);
 
         while (queue.length) {
@@ -1506,11 +1506,13 @@ export function addZones(number = 1) {
             if (cellsArray.length > power) break;
 
             cells[q].c.forEach(e => {
-                if (used[e]) return;
-                if (cells.religion[e] !== target) return;
-                if (cells.h[e] < 20) return;
+                if (used[e])
+                    return;
+                if (cells[e].religion !== target)
+                    return;
+                if (cells.h[e] < 20)
+                    return;
                 used[e] = 1;
-                //if (e%2 !== 0 && !cells.c[e].some(c => cells.state[c] === neib)) return;
                 queue.push(e);
             });
         }
@@ -1521,10 +1523,12 @@ export function addZones(number = 1) {
 
     function addCrusade() {
         const heresy = ra(pack.religions.filter(r => r.type === "Heresy"));
-        if (!heresy) return;
+        if (!heresy)
+            return;
 
-        const cellsArray = cells.map((v, k) => k).filter(i => !used[i] && cells.religion[i] === heresy.i);
-        if (!cellsArray.length) return;
+        const cellsArray = cells.map((v, k) => k).filter(i => !used[i] && cells[i].religion === heresy.i);
+        if (!cellsArray.length)
+            return;
         cellsArray.forEach(i => used[i] = 1);
 
         const name = toAdjective(heresy.name.split(" ")[0]) + " Crusade";

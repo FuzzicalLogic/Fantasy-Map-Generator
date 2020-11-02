@@ -64,7 +64,7 @@ export function generate(numReligions, pack) {
     const { cells, states, cultures } = pack;
     const religions = pack.religions = [];
 
-    cells.religion = new Uint16Array(cells.length); // cell religion; initially based on culture
+    cells.forEach(x => x.religion = 0);
 
     // add folk religions
     cultures.forEach(c => {
@@ -169,13 +169,17 @@ export function generate(numReligions, pack) {
         if (r.expansionism < 3) return;
         const count = gauss(0, 1, 0, 3);
         for (let i = 0; i < count; i++) {
-            let center = ra(cells.map((v, k) => k).filter(i => cells.religion[i] === r.i && cells[i].c.some(c => cells.religion[c] !== r.i)));
+            let center = ra(
+                cells.map((v, k) => k)
+                    .filter(i => cells[i].religion === r.i && cells[i].c.some(c => cells[c].religion !== r.i))
+            );
             if (!center)
                 continue;
             if (!cells.burg[center] && cells[center].c.some(c => cells.burg[c]))
                 center = cells[center].c.find(c => cells.burg[c]);
             const x = cells.p[center][0], y = cells.p[center][1];
-            if (religionsTree.find(x, y, spacing / 10) !== undefined) continue; // to close to other
+            if (religionsTree.find(x, y, spacing / 10) !== undefined)
+                continue; // to close to other
 
             const culture = cells[center].culture;
             const name = getCultName("Heresy", center, pack);
@@ -250,7 +254,7 @@ function expandReligions(pack) {
 
     religions.filter(r => r.type === "Organized" || r.type === "Cult")
         .forEach(r => {
-            cells.religion[r.center] = r.i;
+            cells[r.center].religion = r.i;
             queue.queue({ e: r.center, p: 0, r: r.i, s: cells[r.center].state, c: r.culture });
             cost[r.center] = 1;
         });
@@ -286,7 +290,7 @@ function expandReligions(pack) {
 
             if (!cost[e] || totalCost < cost[e]) {
                 if (cells.h[e] >= 20 && cells[e].culture)
-                    cells.religion[e] = r; // assign religion to cell
+                    cells[e].religion = r; // assign religion to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, r, c, s });
             }
@@ -301,8 +305,8 @@ function expandHeresies(pack) {
     const cost = [];
 
     religions.filter(r => r.type === "Heresy").forEach(r => {
-        const b = cells.religion[r.center]; // "base" religion id
-        cells.religion[r.center] = r.i; // heresy id
+        const b = cells[r.center].religion; // "base" religion id
+        cells[r.center].religion = r.i; // heresy id
         queue.queue({ e: r.center, p: 0, r: r.i, b });
         cost[r.center] = 1;
     });
@@ -310,10 +314,10 @@ function expandHeresies(pack) {
     const neutral = cells.length / 5000 * 500 * neutralInput.value; // limit cost for heresies growth
 
     while (queue.length) {
-        const next = queue.dequeue(), n = next.e, p = next.p, r = next.r, b = next.b;
+        const next = queue.dequeue(), { e: n, p, r, b } = next;
 
         cells[n].c.forEach(function (e) {
-            const religionCost = cells.religion[e] === b ? 0 : 2000;
+            const religionCost = cells[e].religion === b ? 0 : 2000;
             const biomeCost = cells[e].road
                 ? 0
                 : biomesData.cost[cells[e].biome];
@@ -329,7 +333,7 @@ function expandHeresies(pack) {
 
             if (!cost[e] || totalCost < cost[e]) {
                 if (cells.h[e] >= 20 && cells[e].culture)
-                    cells.religion[e] = r; // assign religion to cell
+                    cells[e].religion = r; // assign religion to cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, r });
             }
@@ -345,9 +349,11 @@ function checkCenters(pack) {
         r.code = getCode(r.name, religions);
 
         // move religion center if it's not within religion area after expansion
-        if (cells.religion[r.center] === r.i) return; // in area
-        const religCells = cells.filter((v, i) => cells.religion[i] === r.i);
-        if (!religCells.length) return; // extinct religion
+        if (cells[r.center].religion === r.i)
+            return; // in area
+        const religCells = cells.filter(x => x.religion === r.i);
+        if (!religCells.length)
+            return; // extinct religion
         r.center = religCells.sort((a, b) => b.pop - a.pop)[0];
     });
 }

@@ -57,17 +57,18 @@ function refreshReligionsEditor() {
 }
 
 function religionsCollectStatistics() {
-    const cells = pack.cells, religions = pack.religions;
+    const { cells, religions } = pack;
     religions.forEach(r => r.cells = r.area = r.rural = r.urban = 0);
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
         if (cells.h[i] < 20) continue;
-        const r = cells.religion[i];
+        const r = cells[i].religion;
         religions[r].cells += 1;
         religions[r].area += cells[i].area;
         religions[r].rural += cells[i].pop;
-        if (cells.burg[i]) religions[r].urban += pack.burgs[cells.burg[i]].population;
+        if (cells.burg[i])
+            religions[r].urban += pack.burgs[cells.burg[i]].population;
     }
 }
 

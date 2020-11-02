@@ -79,7 +79,7 @@ export function generate() {
         let m = cells[i].pop / 100; // basic rural army in percentages
         if (cells[i].culture !== s.culture)
             m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
-        if (cells.religion[i] !== cells.religion[s.center])
+        if (cells[i].religion !== cells[s.center].religion)
             m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
         if (cells.f[i] !== cells.f[s.center])
             m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
@@ -106,7 +106,8 @@ export function generate() {
     }
 
     for (const b of pack.burgs) {
-        if (!b.i || b.removed || !b.state || !b.population) continue;
+        if (!b.i || b.removed || !b.state || !b.population)
+            continue;
         const s = states[b.state]; // burg state
 
         let m = b.population * urbanization.value / 100; // basic urban army in percentages
@@ -114,21 +115,24 @@ export function generate() {
             m *= 1.2; // capital has household troops
         if (b.culture !== s.culture)
             m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
-        if (cells.religion[b.cell] !== cells.religion[s.center])
+        if (cells[b.cell].religion !== cells[s.center].religion)
             m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
         if (cells.f[b.cell] !== cells.f[s.center])
             m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
         const type = getType(b.cell);
 
         for (const u of options.military) {
-            if (u.type === "naval" && !b.port) continue; // only ports produce naval units
+            if (u.type === "naval" && !b.port)
+                continue; // only ports produce naval units
             const perc = +u.urban;
-            if (isNaN(perc) || perc <= 0 || !s.temp[u.name]) continue;
+            if (isNaN(perc) || perc <= 0 || !s.temp[u.name])
+                continue;
 
             const mod = type === "generic" ? 1 : burgTypeModifier[type][u.type] // cell specific modifier
             const army = m * perc * mod; // urban cell army
             const t = rn(army * s.temp[u.name] * populationRate.value); // total troops
-            if (!t) continue;
+            if (!t)
+                continue;
             let x = p[b.cell][0], y = p[b.cell][1], n = 0;
             if (u.type === "naval") {
                 let haven = cells[b.cell].haven;

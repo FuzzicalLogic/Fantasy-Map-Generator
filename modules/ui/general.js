@@ -268,12 +268,16 @@ function showMapTooltip(point, e, i, g) {
     if (group === "ice") { tip("Click to edit the Ice"); return; }
 
     // covering elements
-    if (layerIsOn("togglePrec") && land) tip("Annual Precipitation: " + getFriendlyPrecipitation(i));
-    else if (layerIsOn("togglePopulation")) tip(getPopulationTip(i));
-    else if (layerIsOn("toggleTemp")) tip("Temperature: " + convertTemperature(grid.cells.temp[g]));
-    else if (layerIsOn("toggleBiomes") && pack.cells[i].biome) tip("Biome: " + biomesData.name[pack.cells[i].biome]);
-    else if (layerIsOn("toggleReligions") && pack.cells.religion[i]) {
-        const religion = pack.religions[pack.cells.religion[i]];
+    if (layerIsOn("togglePrec") && land)
+        tip("Annual Precipitation: " + getFriendlyPrecipitation(i));
+    else if (layerIsOn("togglePopulation"))
+        tip(getPopulationTip(i));
+    else if (layerIsOn("toggleTemp"))
+        tip("Temperature: " + convertTemperature(grid.cells.temp[g]));
+    else if (layerIsOn("toggleBiomes") && pack.cells[i].biome)
+        tip("Biome: " + biomesData.name[pack.cells[i].biome]);
+    else if (layerIsOn("toggleReligions") && pack.cells[i].religion) {
+        const religion = pack.religions[pack.cells[i].religion];
         const type = religion.type === "Cult" || religion.type == "Heresy" ? religion.type : religion.type + " religion";
         tip(type + ": " + religion.name);
     }
