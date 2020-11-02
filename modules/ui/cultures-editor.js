@@ -65,9 +65,10 @@ function culturesCollectStatistics() {
         if (cells.h[i] < 20) continue;
         const c = cells.culture[i];
         cultures[c].cells += 1;
-        cultures[c].area += cells.area[i];
+        cultures[c].area += cells[i].area;
         cultures[c].rural += cells.pop[i];
-        if (cells.burg[i]) cultures[c].urban += pack.burgs[cells.burg[i]].population;
+        if (cells.burg[i])
+            cultures[c].urban += pack.burgs[cells.burg[i]].population;
     }
 }
 
@@ -353,8 +354,16 @@ function drawCultureCenters() {
         .attr("id", d => "cultureCenter" + d.i).attr("data-id", d => d.i)
         .attr("r", 6).attr("fill", d => d.color)
         .attr("cx", d => pack.cells.p[d.center][0]).attr("cy", d => pack.cells.p[d.center][1])
-        .on("mouseenter", d => { tip(tooltip, true); body.querySelector(`div[data-id='${d.i}']`).classList.add("selected"); cultureHighlightOn(event); })
-        .on("mouseleave", d => { tip('', true); body.querySelector(`div[data-id='${d.i}']`).classList.remove("selected"); cultureHighlightOff(event); })
+        .on("mouseenter", d => {
+            tip(tooltip, true);
+            body.querySelector(`div[data-id='${d.i}']`).classList.add("selected");
+            cultureHighlightOn(event);
+        })
+        .on("mouseleave", d => {
+            tip('', true);
+            body.querySelector(`div[data-id='${d.i}']`).classList.remove("selected");
+            cultureHighlightOff(event);
+        })
         .call(d3.drag().on("start", cultureCenterDrag));
 }
 

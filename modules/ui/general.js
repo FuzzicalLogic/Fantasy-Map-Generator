@@ -268,23 +268,23 @@ function showMapTooltip(point, e, i, g) {
     if (group === "ice") { tip("Click to edit the Ice"); return; }
 
     // covering elements
-    if (layerIsOn("togglePrec") && land) tip("Annual Precipitation: " + getFriendlyPrecipitation(i)); else
-        if (layerIsOn("togglePopulation")) tip(getPopulationTip(i)); else
-            if (layerIsOn("toggleTemp")) tip("Temperature: " + convertTemperature(grid.cells.temp[g])); else
-                if (layerIsOn("toggleBiomes") && pack.cells.biome[i]) tip("Biome: " + biomesData.name[pack.cells.biome[i]]); else
-                    if (layerIsOn("toggleReligions") && pack.cells.religion[i]) {
-                        const religion = pack.religions[pack.cells.religion[i]];
-                        const type = religion.type === "Cult" || religion.type == "Heresy" ? religion.type : religion.type + " religion";
-                        tip(type + ": " + religion.name);
-                    } else
-                        if (pack.cells.state[i] && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
-                            const state = pack.states[pack.cells.state[i]].fullName;
-                            const province = pack.cells.province[i];
-                            const prov = province ? pack.provinces[province].fullName + ", " : "";
-                            tip(prov + state);
-                        } else
-                            if (layerIsOn("toggleCultures") && pack.cells.culture[i]) tip("Culture: " + pack.cultures[pack.cells.culture[i]].name); else
-                                if (layerIsOn("toggleHeight")) tip("Height: " + getFriendlyHeight(point));
+    if (layerIsOn("togglePrec") && land) tip("Annual Precipitation: " + getFriendlyPrecipitation(i));
+    else if (layerIsOn("togglePopulation")) tip(getPopulationTip(i));
+    else if (layerIsOn("toggleTemp")) tip("Temperature: " + convertTemperature(grid.cells.temp[g]));
+    else if (layerIsOn("toggleBiomes") && pack.cells[i].biome) tip("Biome: " + biomesData.name[pack.cells[i].biome]);
+    else if (layerIsOn("toggleReligions") && pack.cells.religion[i]) {
+        const religion = pack.religions[pack.cells.religion[i]];
+        const type = religion.type === "Cult" || religion.type == "Heresy" ? religion.type : religion.type + " religion";
+        tip(type + ": " + religion.name);
+    }
+    else if (pack.cells.state[i] && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
+        const state = pack.states[pack.cells.state[i]].fullName;
+        const province = pack.cells.province[i];
+        const prov = province ? pack.provinces[province].fullName + ", " : "";
+        tip(prov + state);
+    }
+    else if (layerIsOn("toggleCultures") && pack.cells.culture[i]) tip("Culture: " + pack.cultures[pack.cells.culture[i]].name);
+    else if (layerIsOn("toggleHeight")) tip("Height: " + getFriendlyHeight(point));
 }
 
 function getRiverName(id) {
@@ -318,7 +318,7 @@ function updateCellInfo(point, i, g) {
     infoPopulation.innerHTML = getFriendlyPopulation(i);
     infoBurg.innerHTML = cells.burg[i] ? pack.burgs[cells.burg[i]].name + " (" + cells.burg[i] + ")" : "no";
     infoFeature.innerHTML = f ? pack.features[f].group + " (" + f + ")" : "n/a";
-    infoBiome.innerHTML = biomesData.name[cells.biome[i]];
+    infoBiome.innerHTML = biomesData.name[cells[i].biome];
 }
 
 // convert coordinate to DMS format
@@ -337,8 +337,10 @@ function getElevation(f, h) {
     if (f.border) return "0 " + heightUnit.value; // ocean: 0
 
     // lake: lowest coast height - 1
-    const lakeCells = Array.from(pack.cells.i.filter(i => pack.cells.f[i] === f.i));
-    const heights = lakeCells.map(i => pack.cells.c[i].map(c => pack.cells.h[c])).flat().filter(h => h > 19);
+    const lakeCells = Array.from(pack.cells.map((v, k) => k)
+        .filter(i => pack.cells.f[i] === f.i)
+    );
+    const heights = lakeCells.map(i => pack.cells[i].c.map(c => pack.cells.h[c])).flat().filter(h => h > 19);
     const elevation = (d3.min(heights) || 20) - 1;
     return getHeight(elevation) + " (" + elevation + ")";
 }

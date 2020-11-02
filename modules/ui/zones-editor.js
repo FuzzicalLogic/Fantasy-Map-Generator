@@ -99,7 +99,7 @@ function zonesEditorAddLines() {
     const totalPop = (d3.sum(pack.cells.pop) + d3.sum(pack.burgs.filter(b => !b.removed).map(b => b.population)) * urbanization.value) * populationRate.value;
     zonesFooterPopulation.dataset.population = totalPop;
     zonesFooterNumber.innerHTML = zones.selectAll("g").size();
-    zonesFooterCells.innerHTML = pack.cells.i.length;
+    zonesFooterCells.innerHTML = pack.cells.length;
     zonesFooterArea.innerHTML = si(totalArea) + unit;
     zonesFooterPopulation.innerHTML = si(totalPop);
 
@@ -107,7 +107,10 @@ function zonesEditorAddLines() {
     body.querySelectorAll("div.states").forEach(el => el.addEventListener("mouseenter", ev => zoneHighlightOn(ev)));
     body.querySelectorAll("div.states").forEach(el => el.addEventListener("mouseleave", ev => zoneHighlightOff(ev)));
 
-    if (body.dataset.type === "percentage") { body.dataset.type = "absolute"; togglePercentageMode(); }
+    if (body.dataset.type === "percentage") {
+        body.dataset.type = "absolute";
+        togglePercentageMode();
+    }
     $("#zonesEditor").dialog({ width: fitContent() });
 }
 

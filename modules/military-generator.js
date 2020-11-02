@@ -62,8 +62,8 @@ export function generate() {
     });
 
     const getType = cell => {
-        if ([1, 2, 3, 4].includes(cells.biome[cell])) return "nomadic";
-        if ([7, 8, 9, 12].includes(cells.biome[cell])) return "wetland";
+        if ([1, 2, 3, 4].includes(cells[cell].biome)) return "nomadic";
+        if ([7, 8, 9, 12].includes(cells[cell].biome)) return "wetland";
         if (cells.h[cell] >= 70) return "highland";
         return "generic";
     }

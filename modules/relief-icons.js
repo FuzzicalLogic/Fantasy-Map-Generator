@@ -20,7 +20,7 @@ export function ReliefIcons() {
         const height = cells.h[i];
         if (height < 20) continue; // no icons on water
         if (cells.r[i]) continue; // no icons on rivers
-        const b = cells.biome[i];
+        const b = cells[i].biome;
         if (height < 50 && biomesData.iconsDensity[b] === 0) continue; // no icons for this biome
         const polygon = getPackPolygon(i);
         const x = d3.extent(polygon, p => p[0]), y = d3.extent(polygon, p => p[1]);

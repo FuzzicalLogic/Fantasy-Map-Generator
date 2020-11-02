@@ -127,7 +127,7 @@ function findLandPath(cells, start, exit = null, toRoad = null) {
             let { h, state } = cells;
             if (h[c] < 20) continue; // ignore water cells
             const stateChangeCost = state && state[c] !== state[n] ? 400 : 0; // trails tend to lay within the same state
-            const habitability = biomesData.habitability[cells.biome[c]];
+            const habitability = biomesData.habitability[cells[c].biome];
             const habitedCost = habitability ? Math.max(100 - habitability, 0) : 400; // routes tend to lay within populated areas
             const heightChangeCost = Math.abs(h[c] - h[n]) * 10; // routes tend to avoid elevation changes
             const heightCost = h[c] > 80 ? h[c] : 0; // routes tend to avoid mountainous areas

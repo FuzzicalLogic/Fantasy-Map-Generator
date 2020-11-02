@@ -1139,7 +1139,7 @@ export function elevateLakes({ cells, features }) {
 export function defineBiomes() {
     console.time("defineBiomes");
     const cells = pack.cells, f = pack.features, temp = grid.cells.temp, prec = grid.cells.prec;
-    cells.biome = new Uint8Array(cells.length); // biomes array
+    //cells.biome = new Uint8Array(cells.length); // biomes array
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
@@ -1147,7 +1147,7 @@ export function defineBiomes() {
         const t = temp[cells.g[i]]; // cell temperature
         const h = cells.h[i]; // cell height
         const m = h < 20 ? 0 : calculateMoisture(i); // cell moisture
-        cells.biome[i] = getBiomeId(m, t, h);
+        cells[i].biome = getBiomeId(m, t, h);
     }
 
     function calculateMoisture(i) {
@@ -1185,7 +1185,7 @@ export function rankCells() {
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
         if (cells.h[i] < 20) continue; // no population in water
-        let s = +biomesData.habitability[cells.biome[i]]; // base suitability derived from biome habitability
+        let s = +biomesData.habitability[cells[i].biome]; // base suitability derived from biome habitability
         if (!s) continue; // uninhabitable biomes has 0 suitability
         if (flMean) s += normalize(cells.fl[i] + cells.conf[i], flMean, flMax) * 250; // big rivers and confluences are valued
         s -= (cells.h[i] - 50) / 5; // low elevation is valued, high is not;

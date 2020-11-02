@@ -257,7 +257,7 @@ function regenerateStates() {
         const culture = capital.culture;
         const basename = capital.name.length < 9 && capital.cell % 5 === 0 ? capital.name : Names.getCulture(culture, 3, 6, "", 0);
         const name = Names.getState(basename, culture);
-        const nomadic = [1, 2, 3, 4].includes(pack.cells.biome[capital.cell]);
+        const nomadic = [1, 2, 3, 4].includes(pack.cells[capital.cell].biome);
         const type = nomadic ? "Nomadic" : pack.cultures[culture].type === "Nomadic" ? "Generic" : pack.cultures[culture].type;
         const expansionism = rn(Math.random() * powerInput.value + 1, 1);
         return { i, name, type, capital: capital.i, center: capital.cell, culture, expansionism };

@@ -405,18 +405,18 @@ export function drawTemp() {
 export function drawBiomes() {
     let { biomes } = view;
     biomes.selectAll("path").remove();
-    const cells = pack.cells, vertices = pack.vertices, n = cells.length;
+    const { cells, vertices } = pack, n = cells.length;
     const used = new Uint8Array(n);
     const paths = new Array(biomesData.i.length).fill("");
 
     const xs = cells.map((v, k) => k)
     for (const i of xs) {
-        if (!cells.biome[i]) continue; // no need to mark marine biome (liquid water)
+        if (!cells[i].biome) continue; // no need to mark marine biome (liquid water)
         if (used[i]) continue; // already marked
-        const b = cells.biome[i];
-        const onborder = cells[i].c.some(n => cells.biome[n] !== b);
+        const b = cells[i].biome;
+        const onborder = cells[i].c.some(n => cells[n].biome !== b);
         if (!onborder) continue;
-        const edgeVerticle = cells[i].v.find(v => vertices.c[v].some(i => cells.biome[i] !== b));
+        const edgeVerticle = cells[i].v.find(v => vertices.c[v].some(i => cells[i].biome !== b));
         const chain = connectVertices(edgeVerticle, b);
         if (chain.length < 3) continue;
         const points = clipPoly(chain.map(v => vertices.p[v]), 1);
@@ -435,10 +435,10 @@ export function drawBiomes() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells.biome[c] === b).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || cells.biome[c[0]] !== b;
-            const c1 = c[1] >= n || cells.biome[c[1]] !== b;
-            const c2 = c[2] >= n || cells.biome[c[2]] !== b;
+            c.filter(c => cells[c].biome === b).forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].biome !== b;
+            const c1 = c[1] >= n || cells[c[1]].biome !== b;
+            const c2 = c[2] >= n || cells[c[2]].biome !== b;
             const v = vertices.v[current]; // neighboring vertices
             if (v[0] !== prev && c0 !== c1) current = v[0];
             else if (v[1] !== prev && c1 !== c2) current = v[1];

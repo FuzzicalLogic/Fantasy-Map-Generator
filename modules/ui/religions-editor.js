@@ -60,11 +60,12 @@ function religionsCollectStatistics() {
     const cells = pack.cells, religions = pack.religions;
     religions.forEach(r => r.cells = r.area = r.rural = r.urban = 0);
 
-    for (const i of cells.i) {
+    const xs = cells.map((v, k) => k);
+    for (const i of xs) {
         if (cells.h[i] < 20) continue;
         const r = cells.religion[i];
         religions[r].cells += 1;
-        religions[r].area += cells.area[i];
+        religions[r].area += cells[i].area;
         religions[r].rural += cells.pop[i];
         if (cells.burg[i]) religions[r].urban += pack.burgs[cells.burg[i]].population;
     }

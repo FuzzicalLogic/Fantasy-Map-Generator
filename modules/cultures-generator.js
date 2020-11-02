@@ -92,13 +92,15 @@ export function generate() {
 
     // set culture type based on culture center position
     function defineCultureType(i) {
-        if (cells.h[i] < 70 && [1, 2, 4].includes(cells.biome[i])) return "Nomadic"; // high penalty in forest biomes and near coastline
+        if (cells.h[i] < 70 && [1, 2, 4].includes(cells[i].biome))
+            return "Nomadic"; // high penalty in forest biomes and near coastline
         if (cells.h[i] > 50) return "Highland"; // no penalty for hills and moutains, high for other elevations
         const f = pack.features[cells.f[cells.haven[i]]]; // opposite feature
         if (f.type === "lake" && f.cells > 5) return "Lake" // low water cross penalty and high for growth not along coastline
         if (cells.harbor[i] && f.type !== "lake" && P(.1) || (cells.harbor[i] === 1 && P(.6)) || (pack.features[cells.f[i]].group === "isle" && P(.4))) return "Naval"; // low water cross penalty and high for non-along-coastline growth
         if (cells.r[i] && cells.fl[i] > 100) return "River"; // no River cross penalty, penalty for non-River growth
-        if (cells.t[i] > 2 && [3, 7, 8, 9, 10, 12].includes(cells.biome[i])) return "Hunting"; // high penalty in non-native biomes
+        if (cells.t[i] > 2 && [3, 7, 8, 9, 10, 12].includes(cells[i].biome))
+            return "Hunting"; // high penalty in non-native biomes
         return "Generic";
     }
 
@@ -151,7 +153,7 @@ export function getDefault(count) {
     const cells = pack.cells, s = cells.s, sMax = d3.max(s), t = cells.t, h = cells.h, temp = grid.cells.temp;
     const n = cell => Math.ceil(s[cell] / sMax * 3) // normalized cell score
     const td = (cell, goal) => { const d = Math.abs(temp[cells.g[cell]] - goal); return d ? d + 1 : 1; } // temperature difference fee
-    const bd = (cell, biomes, fee = 4) => biomes.includes(cells.biome[cell]) ? 1 : fee; // biome difference fee
+    const bd = (cell, biomes, fee = 4) => biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
     const sf = (cell, fee = 4) => cells.haven[cell] && pack.features[cells.f[cells.haven[cell]]].type !== "lake" ? 1 : fee; // not on sea coast fee
     // https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
 
@@ -375,9 +377,9 @@ export function expand() {
         const next = queue.dequeue(), n = next.e, p = next.p, c = next.c;
         const type = pack.cultures[c].type;
         cells[n].c.forEach(function (e) {
-            const biome = cells.biome[e];
+            const biome = cells[e].biome;
             const biomeCost = getBiomeCost(c, biome, type);
-            const biomeChangeCost = biome === cells.biome[n] ? 0 : 20; // penalty on biome change
+            const biomeChangeCost = biome === cells[n].biome ? 0 : 20; // penalty on biome change
             const heightCost = getHeightCost(e, cells.h[e], type);
             const riverCost = getRiverCost(cells.r[e], e, type);
             const typeCost = getTypeCost(cells.t[e], type);
@@ -401,9 +403,12 @@ export function expand() {
 }
 
 function getBiomeCost(c, biome, type) {
-    if (cells.biome[pack.cultures[c].center] === biome) return 10; // tiny penalty for native biome
-    if (type === "Hunting") return biomesData.cost[biome] * 5; // non-native biome penalty for hunters
-    if (type === "Nomadic" && biome > 4 && biome < 10) return biomesData.cost[biome] * 10; // forest biome penalty for nomads
+    if (cells[pack.cultures[c].center].biome === biome)
+        return 10; // tiny penalty for native biome
+    if (type === "Hunting")
+        return biomesData.cost[biome] * 5; // non-native biome penalty for hunters
+    if (type === "Nomadic" && biome > 4 && biome < 10)
+        return biomesData.cost[biome] * 10; // forest biome penalty for nomads
     return biomesData.cost[biome] * 2; // general non-native biome penalty
 }
 

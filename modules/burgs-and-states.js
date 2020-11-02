@@ -147,7 +147,7 @@ function createStates(capitals, cells, cultures) {
         const expansionism = rn(Math.random() * powerInput.value + 1, 1);
         const basename = b.name.length < 9 && b.cell % 5 === 0 ? b.name : Names.getCultureShort(b.culture);
         const name = Names.getState(basename, b.culture);
-        const nomadic = [1, 2, 3, 4].includes(cells.biome[b.cell]);
+        const nomadic = [1, 2, 3, 4].includes(cells[b.cell].biome);
         const type = nomadic ? "Nomadic" : cultures[b.culture].type === "Nomadic" ? "Generic" : cultures[b.culture].type;
         states.push({ i, color: colors[i - 1], name, expansionism, capital: i, type, center: b.cell, culture: b.culture });
         cells.burg[b.cell] = i;
@@ -289,7 +289,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
     const cost = [];
     states.filter(s => s.i && !s.removed).forEach(function (s) {
         cells.state[burgs[s.capital].cell] = s.i;
-        const b = cells.biome[cultures[s.culture].center]; // native biome
+        const b = cells[cultures[s.culture].center].biome; // native biome
         queue.queue({ e: s.center, p: 0, s: s.i, b });
         cost[s.center] = 1;
     });
@@ -306,7 +306,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
 
             const cultureCost = culture === cells.culture[e] ? -9 : 100;
             const populationCost = cells.h[e] < 20 ? 0 : cells.s[e] ? Math.max(20 - cells.s[e], 0) : 5000;
-            const biomeCost = getBiomeCost(b, cells.biome[e], type);
+            const biomeCost = getBiomeCost(b, cells[e].biome, type);
             const heightCost = getHeightCost(pack.features[cells.f[e]], cells.h[e], type);
             const riverCost = getRiverCost(cells.r[e], e, type);
             const typeCost = getTypeCost(cells.t[e], type);
