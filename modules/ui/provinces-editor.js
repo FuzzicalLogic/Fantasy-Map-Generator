@@ -99,7 +99,7 @@ function collectStatistics() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        const p = cells.province[i];
+        const p = cells[i].province;
         if (!p) continue;
 
         provinces[p].area += cells[i].area;

@@ -1422,25 +1422,30 @@ export function addZones(number = 1) {
 
     function addInvasion() {
         const atWar = states.filter(s => s.diplomacy && s.diplomacy.some(d => d === "Enemy"));
-        if (!atWar.length) return;
+        if (!atWar.length)
+            return;
 
         const invader = ra(atWar);
         const target = invader.diplomacy.findIndex(d => d === "Enemy");
 
         const cell = ra(cells.map((v, k) => k)
-            .filter(i => cells.state[i] === target && cells[i].c.some(c => cells.state[c] === invader.i)));
-        if (!cell) return;
+            .filter(i => cells[i].state === target && cells[i].c.some(c => cells[c].state === invader.i)));
+        if (!cell)
+            return;
 
-        const cellsArray = [], queue = [cell], power = rand(5, 30);
+        const cellsArray = [],
+            queue = [cell],
+            power = rand(5, 30);
 
         while (queue.length) {
             const q = P(.4) ? queue.shift() : queue.pop();
             cellsArray.push(q);
-            if (cellsArray.length > power) break;
+            if (cellsArray.length > power)
+                break;
 
             cells[q].c.forEach(e => {
                 if (used[e]) return;
-                if (cells.state[e] !== target) return;
+                if (cells[e].state !== target) return;
                 used[e] = 1;
                 queue.push(e);
             });

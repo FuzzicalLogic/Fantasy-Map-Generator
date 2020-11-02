@@ -279,7 +279,7 @@ function showMapTooltip(point, e, i, g) {
     }
     else if (pack.cells[i].state && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
         const state = pack.states[pack.cells[i].state].fullName;
-        const province = pack.cells.province[i];
+        const province = pack.cells[i].province;
         const prov = province ? pack.provinces[province].fullName + ", " : "";
         tip(prov + state);
     }

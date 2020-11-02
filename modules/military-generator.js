@@ -278,9 +278,13 @@ export function moveRegiment(reg, x, y) {
 export function getTotal(reg) { return reg.a > (reg.n ? 999 : 99999) ? si(reg.a) : reg.a; }
 
 export function getName(r, regiments) {
-    const proper = r.n ? null :
-        cells.province[r.cell] && pack.provinces[cells.province[r.cell]] ? pack.provinces[cells.province[r.cell]].name :
-            cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]] ? pack.burgs[cells.burg[r.cell]].name : null
+    const proper = r.n
+        ? null
+        : cells[r.cell].province && pack.provinces[cells[r.cell].province]
+            ? pack.provinces[cells[r.cell].province].name
+            : cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]]
+                ? pack.burgs[cells.burg[r.cell]].name
+                : null;
     const number = nth(regiments.filter(reg => reg.n === r.n && reg.i < r.i).length + 1);
     const form = r.n ? "Fleet" : "Regiment";
     return `${number}${proper ? ` (${proper}) ` : ` `}${form}`;
@@ -296,16 +300,31 @@ export function getEmblem(r) {
 }
 
 export function generateNote(r, s) {
-    const base = cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]] ? pack.burgs[cells.burg[r.cell]].name :
-        cells.province[r.cell] && pack.provinces[cells.province[r.cell]] ? pack.provinces[cells.province[r.cell]].fullName : null;
-    const station = base ? `${r.name} is ${r.n ? "based" : "stationed"} in ${base}. ` : "";
+    const base = cells.burg[r.cell] && pack.burgs[cells.burg[r.cell]]
+        ? pack.burgs[cells.burg[r.cell]].name
+        : cells[r.cell].province && pack.provinces[cells[r.cell].province]
+            ? pack.provinces[cells[r.cell].province].fullName
+            : null;
+    const station = base
+        ? `${r.name} is ${r.n ? "based" : "stationed"} in ${base}. `
+        : "";
 
-    const composition = r.a ? Object.keys(r.u).map(t => `— ${t}: ${r.u[t]}`).join("\r\n") : null;
-    const troops = composition ? `\r\n\r\nRegiment composition in ${options.year} ${options.eraShort}:\r\n${composition}.` : "";
+    const composition = r.a
+        ? Object.keys(r.u).map(t => `— ${t}: ${r.u[t]}`).join("\r\n")
+        : null;
+    const troops = composition
+        ? `\r\n\r\nRegiment composition in ${options.year} ${options.eraShort}:\r\n${composition}.`
+        : "";
 
-    const campaign = s.campaigns ? ra(s.campaigns) : null;
-    const year = campaign ? rand(campaign.start, campaign.end) : gauss(options.year - 100, 150, 1, options.year - 6);
-    const conflict = campaign ? ` during the ${campaign.name}` : "";
+    const campaign = s.campaigns
+        ? ra(s.campaigns)
+        : null;
+    const year = campaign
+        ? rand(campaign.start, campaign.end)
+        : gauss(options.year - 100, 150, 1, options.year - 6);
+    const conflict = campaign
+        ? ` during the ${campaign.name}`
+        : "";
     const legend = `Regiment was formed in ${year} ${options.era}${conflict}. ${station}${troops}`;
     notes.push({ id: `regiment${s.i}-${r.i}`, name: `${r.icon} ${r.name}`, legend });
 }

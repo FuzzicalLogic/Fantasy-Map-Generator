@@ -874,7 +874,7 @@ export function generateProvinces(regenerate) {
 
     const cells = pack.cells, states = pack.states, burgs = pack.burgs;
     const provinces = pack.provinces = [0];
-    cells.province = new Uint16Array(cells.length); // cell state
+    cells.forEach(x => x.province = 0);
     const percentage = +provincesInput.value;
     if (states.length < 2 || !percentage) {
         states.forEach(s => s.provinces = []);
@@ -916,12 +916,12 @@ export function generateProvinces(regenerate) {
     const queue = new PriorityQueue({ comparator: (a, b) => a.p - b.p });
     const cost = [];
     provinces.filter(({ i, removed }) => !!i && !removed)
-        .forEach(function ({ i, center, state}) {
-        cells.province[center] = i;
-        queue.queue({ e: center, p: 0, province: i, state: state });
-        cost[center] = 1;
-        //debug.append("circle").attr("cx", cells.p[p.center][0]).attr("cy", cells.p[p.center][1]).attr("r", .3).attr("fill", "red");
-    });
+        .forEach(function ({ i, center, state }) {
+            cells[center].province = i;
+            queue.queue({ e: center, p: 0, province: i, state: state });
+            cost[center] = 1;
+            //debug.append("circle").attr("cx", cells.p[p.center][0]).attr("cy", cells.p[p.center][1]).attr("r", .3).attr("fill", "red");
+        });
 
     while (queue.length) {
         const next = queue.dequeue(),
@@ -944,7 +944,8 @@ export function generateProvinces(regenerate) {
             if (totalCost > max)
                 return;
             if (!cost[e] || totalCost < cost[e]) {
-                if (land) cells.province[e] = province; // assign province to a cell
+                if (land)
+                    cells[e].province = province; // assign province to a cell
                 cost[e] = totalCost;
                 queue.queue({ e, p: totalCost, province, state });
             }
@@ -957,26 +958,26 @@ export function generateProvinces(regenerate) {
         if (cells.burg[i])
             continue; // do not overwrite burgs
         const neibs = cells[i].c.filter(c => cells[c].state === cells[i].state)
-            .map(c => cells.province[c]);
-        const adversaries = neibs.filter(c => c !== cells.province[i]);
+            .map(c => cells[c].province);
+        const adversaries = neibs.filter(c => c !== cells[i].province);
         if (adversaries.length < 2)
             continue;
-        const buddies = neibs.filter(c => c === cells.province[i]).length;
+        const buddies = neibs.filter(c => c === cells[i].province).length;
         if (buddies.length > 2)
             continue;
         const competitors = adversaries.map(p => adversaries.reduce((s, v) => v === p ? s + 1 : s, 0));
         const max = d3.max(competitors);
         if (buddies >= max)
             continue;
-        cells.province[i] = adversaries[competitors.indexOf(max)];
+        cells[i].province = adversaries[competitors.indexOf(max)];
     }
 
     // add "wild" provinces if some cells don't have a province assigned
-    const noProvince = Array.from(xs).filter(i => cells[i].state && !cells.province[i]); // cells without province assigned
+    const noProvince = Array.from(xs).filter(i => cells[i].state && !cells[i].province); // cells without province assigned
     states.forEach(s => {
         if (!s.provinces.length)
             return;
-        let stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells.province[i]);
+        let stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells[i].province);
         while (stateNoProvince.length) {
             // add new province
             const province = provinces.length;
@@ -987,7 +988,7 @@ export function generateProvinces(regenerate) {
             const burg = burgCell
                 ? cells.burg[burgCell]
                 : 0;
-            cells.province[center] = province;
+            cells[center].province = province;
 
             // expand province
             const cost = []; cost[center] = 1;
@@ -996,7 +997,7 @@ export function generateProvinces(regenerate) {
                 const next = queue.dequeue(), n = next.e, p = next.p;
 
                 cells[n].c.forEach(function (e) {
-                    if (cells.province[e])
+                    if (cells[e].province)
                         return;
                     const land = cells.h[e] >= 20;
                     if (cells[e].state && cells[e].state !== s.i)
@@ -1014,7 +1015,7 @@ export function generateProvinces(regenerate) {
                         return;
                     if (!cost[e] || totalCost < cost[e]) {
                         if (land && cells[e].state === s.i)
-                            cells.province[e] = province; // assign province to a cell
+                            cells[e].province = province; // assign province to a cell
                         cost[e] = totalCost;
                         queue.queue({ e, p: totalCost });
                     }
@@ -1025,7 +1026,7 @@ export function generateProvinces(regenerate) {
             const c = cells[center].culture;
             const name = burgCell && P(.5) ? burgs[burg].name : Names.getState(Names.getCultureShort(c), c);
             const f = pack.features[cells.f[center]];
-            const provCells = stateNoProvince.filter(i => cells.province[i] === province);
+            const provCells = stateNoProvince.filter(i => cells[i].province === province);
             const singleIsle = provCells.length === f.cells && !provCells.find(i => cells.f[i] !== f.i);
             const isleGroup = !singleIsle && !provCells.find(i => pack.features[cells.f[i]].group !== "isle");
             const colony = !singleIsle && !isleGroup && P(.5) && !isPassable(s.center, center);
@@ -1062,7 +1063,7 @@ export function generateProvinces(regenerate) {
             }
 
             // re-check
-            stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells.province[i]);
+            stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells[i].province);
         }
     });
 
