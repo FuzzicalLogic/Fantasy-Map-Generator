@@ -111,7 +111,7 @@ export function editStates() {
 
 
 function refreshStatesEditor() {
-    BurgsAndStates.collectStatistics();
+    BurgsAndStates.collectStatistics(pack);
     statesEditorAddLines();
 }
 
