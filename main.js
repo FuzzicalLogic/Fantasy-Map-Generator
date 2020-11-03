@@ -1764,42 +1764,46 @@ export function addZones(number = 1) {
     }
 
     function addTsunami() {
-        const coastal = cells.map((v, k) => k)
-            .filter(i => !used[i] && cells[i].t === -1 && pack.features[cells[i].f].type !== "lake");
-        if (!coastal.length) return;
+        const coastal = cells
+            .map((x, i) => ({ ...x, i: i }))
+            .filter(({ i, t, f }) => !used[i] && t === -1 && pack.features[f].type !== "lake")
+            .map(({ i }) => i);
+        if (!coastal.length)
+            return;
 
-        const cell = +ra(coastal);
-        const cellsArray = [], queue = [cell], power = rand(10, 30);
+        const eye = +ra(coastal), queue = [eye],
+            cellsArray = [],
+            power = rand(10, 30);
 
-        while (queue.length) {
+        while (queue.length && cellsArray.length <= power) {
             const q = queue.shift();
             if (cells[q].t === 1)
                 cellsArray.push(q);
-            if (cellsArray.length > power)
-                break;
 
-            cells[q].c.forEach(e => {
-                if (used[e])
-                    return;
-                if (cells[e].t > 2)
-                    return;
-                if (pack.features[cells[e].f].type === "lake")
-                    return;
-                used[e] = 1;
-                queue.push(e);
-            });
+            cells[q].c
+                .filter(x => (!used[x])
+                    && cells[x].t <= 2
+                    && pack.features[cells[x].f].type !== "lake")
+                .forEach(x => {
+                    used[x] = 1;
+                    queue.push(x);
+                });
         }
 
-        const proper = toAdjective(Names.getCultureShort(cells[cell].culture));
+        const proper = toAdjective(Names.getCultureShort(cells[eye].culture));
         const name = proper + " Tsunami";
         data.push({ name, type: "Disaster", cells: cellsArray, fill: "url(#hatch13)" });
     }
 
     void function drawZones() {
         view.zones.selectAll("g").data(data).enter().append("g")
-            .attr("id", (d, i) => "zone" + i).attr("data-description", d => d.name).attr("data-type", d => d.type)
-            .attr("data-cells", d => d.cells.join(",")).attr("fill", d => d.fill)
-            .selectAll("polygon").data(d => d.cells).enter().append("polygon")
+            .attr("id", (d, i) => "zone" + i)
+            .attr("data-description", d => d.name)
+            .attr("data-type", d => d.type)
+            .attr("data-cells", d => d.cells.join(","))
+            .attr("fill", d => d.fill)
+            .selectAll("polygon")
+            .data(d => d.cells).enter().append("polygon")
             .attr("points", d => getPackPolygon(d)).attr("id", function (d) { return this.parentNode.id + "_" + d });
     }()
 
