@@ -1165,22 +1165,19 @@ export function defineBiomes() {
     const { cells, features } = pack,
         { temp, prec } = grid.cells;
 
-    let xs = cells.map((v, k) => k);
-    for (const i of xs) {
+    for (const i of cells) {
         // de-elevate lakes; here to save some resources
-        if (features[cells[i].f].group === "freshwater")
-            cells[i].h = 19; 
-        const t = temp[cells[i].g]; // cell temperature
-        const h = cells[i].h; // cell height
-        const m = h < 20 ? 0 : calculateMoisture(i); // cell moisture
-        cells[i].biome = getBiomeId(m, t, h);
+        if (features[i.f].group === "freshwater")
+            i.h = 19;
+        const m = i.h < 20 ? 0 : calculateMoisture(i); // cell moisture
+        i.biome = getBiomeId(m, temp[i.g], i.h);
     }
 
-    function calculateMoisture(i) {
-        let moist = prec[cells[i].g];
-        if (cells[i].r) moist += Math.max(cells[i].fl / 20, 2);
-        const n = cells[i].c.filter(isLand)
-            .map(c => prec[cells[c].g])
+    function calculateMoisture(forCell) {
+        let moist = prec[forCell.g];
+        if (forCell.r) moist += Math.max(forCell.fl / 20, 2);
+        const n = forCell.c.filter(isLand)
+            .map(c => prec[forCell.g])
             .concat([moist]);
         return rn(4 + d3.mean(n));
     }
