@@ -29,7 +29,7 @@ export const generate = function (changeHeights = true) {
     features.forEach(f => { delete f.river; delete f.flux; });
 
     const riversData = []; // rivers data
-    cells.fl = new Uint16Array(cells.length); // water flux array
+    cells.forEach(x => x.fl = 0);
     cells.r = new Uint16Array(cells.length); // rivers array
     cells.forEach(x => x.conf = 0);
     let riverNext = 1; // first river id is 1, not 0
@@ -59,12 +59,12 @@ function markupLand(cells) {
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const { p, fl, r, f } = cells;
+    const { p, r, f } = cells;
     const land = cells.map((v, k) => k)
         .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
     land.forEach(function (i) {
-        fl[i] += grid.cells.prec[cells[i].g]; // flux from precipitation
+        cells[i].fl += grid.cells.prec[cells[i].g]; // flux from precipitation
         const x = p[i][0], y = p[i][1];
 
         // near-border cell: pour out of the screen
@@ -104,12 +104,12 @@ function drainWater(cells, h, features, riverNext, riversData) {
         // allow only one river can flow through a lake
         const cf = features[f[i]]; // current cell feature
         if (cf.river && cf.river !== r[i]) {
-            fl[i] = 0;
+            cells[i].fl = 0;
         }
 
-        if (fl[i] < 30) {
+        if (cells[i].fl < 30) {
             if (h[min] >= 20)
-                fl[min] += fl[i];
+                cells[min].fl += cells[i].fl;
             return; // flux is too small to operate as river
         }
 
@@ -121,13 +121,13 @@ function drainWater(cells, h, features, riverNext, riversData) {
         }
 
         if (r[min]) { // downhill cell already has river assigned
-            if (fl[min] < fl[i]) {
-                cells[min].conf = fl[min]; // mark confluence
+            if (cells[min].fl < cells[i].fl) {
+                cells[min].conf = cells[min].fl; // mark confluence
                 if (h[min] >= 20)
                     riversData.find(d => d.river === r[min]).parent = r[i]; // min river is a tributary of current river
                 r[min] = r[i]; // re-assign river if downhill part has less flux
             } else {
-                cells[min].conf += fl[i]; // mark confluence
+                cells[min].conf += cells[i].fl; // mark confluence
                 if (h[min] >= 20)
                     riversData.find(d => d.river === r[i]).parent = r[min]; // current river is a tributary of min river
             }
@@ -142,12 +142,12 @@ function drainWater(cells, h, features, riverNext, riversData) {
         else {
             const mf = features[cells.f[min]]; // feature of min cell
             if (mf.type === "lake") {
-                if (!mf.river || fl[i] > mf.flux) {
+                if (!mf.river || cells[i].fl > mf.flux) {
                     mf.river = r[i]; // pour water to temporaly elevated lake
-                    mf.flux = fl[i]; // entering flux
+                    mf.flux = cells[i].fl; // entering flux
                 }
             }
-            fl[min] += fl[i]; // propagate flux
+            cells[min].fl += cells[i].fl; // propagate flux
             riversData.push({ river: r[i], cell: min, x: nx, y: ny }); // add next River segment
         }
 

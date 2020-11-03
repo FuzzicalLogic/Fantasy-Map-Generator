@@ -169,7 +169,7 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { f, r, fl } = cells;
+    const { f, r } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -200,7 +200,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
 
         // shift burgs on rivers semi-randomly and just a bit
         if (!b.port && r[i]) {
-            const shift = Math.min(fl[i] / 150, 1);
+            const shift = Math.min(cells[i].fl / 150, 1);
             if (i % 2)
                 b.x = rn(b.x + shift, 2);
             else b.x = rn(b.x - shift, 2);
@@ -377,7 +377,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
             return r ? 0 : 100; // penalty for river cultures
         if (!r)
             return 0; // no penalty for others if there is no river
-        return Math.min(Math.max(cells.fl[i] / 10, 20), 100) // river penalty from 20 to 100 based on flux
+        return Math.min(Math.max(cells[i].fl / 10, 20), 100) // river penalty from 20 to 100 based on flux
     }
 
     function getTypeCost(t, type) {

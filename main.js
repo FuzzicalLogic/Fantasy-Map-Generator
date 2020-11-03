@@ -1167,7 +1167,7 @@ export function defineBiomes() {
 
     function calculateMoisture(i) {
         let moist = prec[cells[i].g];
-        if (cells.r[i]) moist += Math.max(cells.fl[i] / 20, 2);
+        if (cells.r[i]) moist += Math.max(cells[i].fl / 20, 2);
         const n = cells[i].c.filter(isLand)
             .map(c => prec[cells[c].g])
             .concat([moist]);
@@ -1194,7 +1194,8 @@ export function rankCells() {
     cells.forEach(v => v.pop = 0);
     cells.forEach(v => v.s = 0);
 
-    const flMean = d3.median(cells.fl.filter(f => f)) || 0, flMax = d3.max(cells.fl) + d3.max(cells.map(x => x.conf)); // to normalize flux
+    const flMean = d3.median(cells.map(x => x.fl).filter(x => x)) || 0,
+        flMax = d3.max(cells.map(x => x.fl)) + d3.max(cells.map(x => x.conf)); // to normalize flux
     const areaMean = d3.mean(cells.map(x => x.area)); // to adjust population by cell area
 
     let xs = cells.map((v, k) => k);
@@ -1205,7 +1206,7 @@ export function rankCells() {
         if (!s)
             continue; // uninhabitable biomes has 0 suitability
         if (flMean)
-            s += normalize(cells.fl[i] + cells[i].conf, flMean, flMax) * 250; // big rivers and confluences are valued
+            s += normalize(cells[i].fl + cells[i].conf, flMean, flMax) * 250; // big rivers and confluences are valued
         s -= (cells[i].h - 50) / 5; // low elevation is valued, high is not;
 
         if (cells[i].t === 1) {
@@ -1305,11 +1306,11 @@ export function addMarkers(number = 1) {
 
     void function addBridges() {
         const meanRoad = d3.mean(cells.filter(x => x.road).map(x => x.road));
-        const meanFlux = d3.mean(cells.fl.filter(fl => fl));
+        const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => x));
 
         let bridges = cells.map((v, k) => k)
-            .filter(i => cells[i].burg && cells[i].h >= 20 && cells.r[i] && cells.fl[i] > meanFlux && cells[i].road > meanRoad)
-            .sort((a, b) => (cells[b].road + cells.fl[b] / 10) - (cells[a].road + cells.fl[a] / 10));
+            .filter(i => cells[i].burg && cells[i].h >= 20 && cells.r[i] && cells[i].fl > meanFlux && cells[i].road > meanRoad)
+            .sort((a, b) => (cells[b].road + cells[b].fl / 10) - (cells[a].road + cells[a].fl / 10));
 
         let count = !bridges.length
             ? 0
@@ -1718,12 +1719,12 @@ export function addZones(number = 1) {
     }
 
     function addFlood() {
-        const fl = cells.fl.filter(fl => fl),
+        const fl = cells.map(x => x.fl).filter(x => x),
             meanFlux = d3.mean(fl),
             maxFlux = d3.max(fl),
             flux = (maxFlux - meanFlux) / 2 + meanFlux;
         const rivers = cells.map((v, k) => k)
-            .filter(i => !used[i] && cells[i].h < 50 && cells.r[i] && cells.fl[i] > flux && cells[i].burg);
+            .filter(i => !used[i] && cells[i].h < 50 && cells.r[i] && cells[i].fl > flux && cells[i].burg);
         if (!rivers.length)
             return;
 
@@ -1740,7 +1741,7 @@ export function addZones(number = 1) {
                 break;
 
             cells[q].c.forEach(e => {
-                if (used[e] || cells[e].h < 20 || cells.r[e] !== river || cells[e].h > 50 || cells.fl[e] < meanFlux)
+                if (used[e] || cells[e].h < 20 || cells.r[e] !== river || cells[e].h > 50 || cells[e].fl < meanFlux)
                     return;
                 used[e] = 1;
                 queue.push(e);

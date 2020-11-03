@@ -108,7 +108,7 @@ export function generate() {
         || (cells[i].harbor === 1 && P(.6))
         || (pack.features[cells.f[i]].group === "isle" && P(.4)))
             return "Naval"; // low water cross penalty and high for non-along-coastline growth
-        if (cells.r[i] && cells.fl[i] > 100)
+        if (cells.r[i] && cells[i].fl > 100)
             return "River"; // no River cross penalty, penalty for non-River growth
         if (cells[i].t > 2 && [3, 7, 8, 9, 10, 12].includes(cells[i].biome))
             return "Hunting"; // high penalty in non-native biomes
@@ -447,7 +447,7 @@ function getHeightCost(i, h, type) {
 function getRiverCost(r, i, type) {
     if (type === "River") return r ? 0 : 100; // penalty for river cultures
     if (!r) return 0; // no penalty for others if there is no river
-    return Math.min(Math.max(cells.fl[i] / 10, 20), 100) // river penalty from 20 to 100 based on flux
+    return Math.min(Math.max(cells[i].fl / 10, 20), 100) // river penalty from 20 to 100 based on flux
 }
 
 function getTypeCost(t, type) {
