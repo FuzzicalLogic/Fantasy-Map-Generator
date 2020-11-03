@@ -22,8 +22,8 @@ export const generate = function (changeHeights = true) {
 
     // height with added t value to make map less depressed
     const h = Array.from(cells.map(x => x.h))
-        .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + cells.t[i] / 100)
-        .map((h, i) => h < 20 || cells.t[i] < 1 ? h : h + d3.mean(cells[i].c.map(c => cells.t[c])) / 10000);
+        .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + cells[i].t / 100)
+        .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + d3.mean(cells[i].c.map(c => cells[c].t)) / 10000);
 
     resolveDepressions(h);
     features.forEach(f => { delete f.river; delete f.flux; });
@@ -48,11 +48,12 @@ export const generate = function (changeHeights = true) {
 
 // build distance field in cells from water (cells.t)
 function markupLand(cells) {
-    const { t } = cells;
-    const q = j => cells.map((v,k) => k).filter(i => cells.t[i] === j);
+    const q = j => cells.map((v, k) => k)
+        .filter(i => cells[i].t === j);
     for (let k = 2, queue = q(k); queue.length; k++ , queue = q(k)) {
         queue.forEach(i => cells[i].c.forEach(c => {
-            if (!t[c]) t[c] = k + 1;
+            if (!cells[c].t)
+                cells[c].t = k + 1;
         }));
     }
 }

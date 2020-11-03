@@ -412,7 +412,7 @@ export function rn(v, d = 0) {
 
 // round string to d decimals
 export function round(s, d = 1) {
-    return s.replace(/[\d\.-][\d\.e-]*/g, function (n) { return rn(n, d); })
+    return s.replace(/[\d\.-][\d\.e-]*/g, n => rn(n, d))
 }
 
 // corvent number to short string with SI postfix

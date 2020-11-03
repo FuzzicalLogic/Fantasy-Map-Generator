@@ -325,7 +325,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
             const biomeCost = getBiomeCost(b, cells[e].biome, type);
             const heightCost = getHeightCost(pack.features[cells.f[e]], cells[e].h, type);
             const riverCost = getRiverCost(cells.r[e], e, type);
-            const typeCost = getTypeCost(cells.t[e], type);
+            const typeCost = getTypeCost(cells[e].t, type);
             const cellCost = Math.max(cultureCost + populationCost + biomeCost + heightCost + riverCost + typeCost, 0);
             const totalCost = p + 10 + cellCost / states[s].expansionism;
 
@@ -353,27 +353,40 @@ export function expandStates({ cells, states, cultures, burgs}) {
     }
 
     function getHeightCost(f, h, type) {
-        if (type === "Lake" && f.type === "lake") return 10; // low lake crossing penalty for Lake cultures
-        if (type === "Naval" && h < 20) return 300; // low sea crossing penalty for Navals
-        if (type === "Nomadic" && h < 20) return 10000; // giant sea crossing penalty for Nomads
-        if (h < 20) return 1000; // general sea crossing penalty
-        if (type === "Highland" && h < 62) return 1100; // penalty for highlanders on lowlands
-        if (type === "Highland") return 0; // no penalty for highlanders on highlands
-        if (h >= 67) return 2200; // general mountains crossing penalty
-        if (h >= 44) return 300; // general hills crossing penalty
+        if (type === "Lake" && f.type === "lake")
+            return 10; // low lake crossing penalty for Lake cultures
+        if (type === "Naval" && h < 20)
+            return 300; // low sea crossing penalty for Navals
+        if (type === "Nomadic" && h < 20)
+            return 10000; // giant sea crossing penalty for Nomads
+        if (h < 20)
+            return 1000; // general sea crossing penalty
+        if (type === "Highland" && h < 62)
+            return 1100; // penalty for highlanders on lowlands
+        if (type === "Highland")
+            return 0; // no penalty for highlanders on highlands
+        if (h >= 67)
+            return 2200; // general mountains crossing penalty
+        if (h >= 44)
+            return 300; // general hills crossing penalty
         return 0;
     }
 
     function getRiverCost(r, i, type) {
-        if (type === "River") return r ? 0 : 100; // penalty for river cultures
-        if (!r) return 0; // no penalty for others if there is no river
+        if (type === "River")
+            return r ? 0 : 100; // penalty for river cultures
+        if (!r)
+            return 0; // no penalty for others if there is no river
         return Math.min(Math.max(cells.fl[i] / 10, 20), 100) // river penalty from 20 to 100 based on flux
     }
 
     function getTypeCost(t, type) {
-        if (t === 1) return type === "Naval" || type === "Lake" ? 0 : type === "Nomadic" ? 60 : 20; // penalty for coastline
-        if (t === 2) return type === "Naval" || type === "Nomadic" ? 30 : 0; // low penalty for land level 2 for Navals and nomads
-        if (t !== -1) return type === "Naval" || type === "Lake" ? 100 : 0; // penalty for mainland for navals
+        if (t === 1)
+            return type === "Naval" || type === "Lake" ? 0 : type === "Nomadic" ? 60 : 20; // penalty for coastline
+        if (t === 2)
+            return type === "Naval" || type === "Nomadic" ? 30 : 0; // low penalty for land level 2 for Navals and nomads
+        if (t !== -1)
+            return type === "Naval" || type === "Lake" ? 100 : 0; // penalty for mainland for navals
         return 0;
     }
 
@@ -928,7 +941,7 @@ export function generateProvinces(regenerate) {
             { e: n, p, province, state } = next;
         cells[n].c.forEach(function (e) {
             const land = cells[e].h >= 20;
-            if (!land && !cells.t[e])
+            if (!land && !cells[e].t)
                 return; // cannot pass deep ocean
             if (land && cells[e].state !== state)
                 return;
@@ -965,7 +978,10 @@ export function generateProvinces(regenerate) {
         const buddies = neibs.filter(c => c === cells[i].province).length;
         if (buddies.length > 2)
             continue;
-        const competitors = adversaries.map(p => adversaries.reduce((s, v) => v === p ? s + 1 : s, 0));
+        const competitors = adversaries.map(p =>
+            adversaries.reduce((s, v) =>
+                v === p ? s + 1 : s, 0
+            ));
         const max = d3.max(competitors);
         if (buddies >= max)
             continue;
@@ -973,11 +989,13 @@ export function generateProvinces(regenerate) {
     }
 
     // add "wild" provinces if some cells don't have a province assigned
-    const noProvince = Array.from(xs).filter(i => cells[i].state && !cells[i].province); // cells without province assigned
+    const noProvince = Array.from(xs).filter(i =>
+        cells[i].state && !cells[i].province); // cells without province assigned
     states.forEach(s => {
         if (!s.provinces.length)
             return;
-        let stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells[i].province);
+        let stateNoProvince = noProvince.filter(i =>
+            cells[i].state === s.i && !cells[i].province);
         while (stateNoProvince.length) {
             // add new province
             const province = provinces.length;
@@ -1006,7 +1024,7 @@ export function generateProvinces(regenerate) {
                         ? cells[e].state === s.i
                             ? 3
                             : 20
-                        : cells.t[e]
+                        : cells[e].t
                             ? 10
                             : 30;
                     const totalCost = p + ter;
@@ -1028,9 +1046,12 @@ export function generateProvinces(regenerate) {
                 ? burgs[burg].name
                 : Names.getState(Names.getCultureShort(c), c);
             const f = pack.features[cells.f[center]];
-            const provCells = stateNoProvince.filter(i => cells[i].province === province);
-            const singleIsle = provCells.length === f.cells && !provCells.find(i => cells.f[i] !== f.i);
-            const isleGroup = !singleIsle && !provCells.find(i => pack.features[cells.f[i]].group !== "isle");
+            const provCells = stateNoProvince.filter(i =>
+                cells[i].province === province);
+            const singleIsle = provCells.length === f.cells
+                && !provCells.find(i => cells.f[i] !== f.i);
+            const isleGroup = !singleIsle && !provCells.find(i =>
+                pack.features[cells.f[i]].group !== "isle");
             const colony = !singleIsle && !isleGroup && P(.5) && !isPassable(s.center, center);
             const formName = singleIsle
                 ? "Island"
@@ -1065,7 +1086,8 @@ export function generateProvinces(regenerate) {
             }
 
             // re-check
-            stateNoProvince = noProvince.filter(i => cells[i].state === s.i && !cells[i].province);
+            stateNoProvince = noProvince.filter(i =>
+                cells[i].state === s.i && !cells[i].province);
         }
     });
 

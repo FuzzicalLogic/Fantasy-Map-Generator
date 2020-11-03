@@ -17,7 +17,7 @@ export function ReliefIcons() {
 
     const xs = cells.map((v, k) => k)
     for (const i of xs) {
-        const height = cells.h[i];
+        const height = cells[i].h;
         if (height < 20) continue; // no icons on water
         if (cells.r[i]) continue; // no icons on rivers
         const b = cells[i].biome;
@@ -26,7 +26,9 @@ export function ReliefIcons() {
         const x = d3.extent(polygon, p => p[0]), y = d3.extent(polygon, p => p[1]);
         const e = [Math.ceil(x[0]), Math.ceil(y[0]), Math.floor(x[1]), Math.floor(y[1])]; // polygon box
 
-        if (height < 50) placeBiomeIcons(i, b); else placeReliefIcons(i);
+        if (height < 50)
+            placeBiomeIcons(i, b);
+        else placeReliefIcons(i);
 
         function placeBiomeIcons() {
             const iconsDensity = biomesData.iconsDensity[b] / 100;
@@ -53,9 +55,15 @@ export function ReliefIcons() {
         }
 
         function getReliefIcon(i, h) {
-            const temp = grid.cells.temp[pack.cells.g[i]];
-            const type = h > 70 && temp < 0 ? "mountSnow" : h > 70 ? "mount" : "hill";
-            const size = h > 70 ? (h - 45) * mod : Math.min(Math.max((h - 40) * mod, 3), 6);
+            const temp = grid.cells.temp[pack.cells[i].g];
+            const type = h > 70 && temp < 0
+                ? "mountSnow"
+                : h > 70
+                    ? "mount"
+                    : "hill";
+            const size = h > 70
+                ? (h - 45) * mod
+                : Math.min(Math.max((h - 40) * mod, 3), 6);
             return [getIcon(type), size];
         }
     }

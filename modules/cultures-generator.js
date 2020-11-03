@@ -110,7 +110,7 @@ export function generate() {
             return "Naval"; // low water cross penalty and high for non-along-coastline growth
         if (cells.r[i] && cells.fl[i] > 100)
             return "River"; // no River cross penalty, penalty for non-River growth
-        if (cells.t[i] > 2 && [3, 7, 8, 9, 10, 12].includes(cells[i].biome))
+        if (cells[i].t > 2 && [3, 7, 8, 9, 10, 12].includes(cells[i].biome))
             return "Hunting"; // high penalty in non-native biomes
         return "Generic";
     }
@@ -162,17 +162,21 @@ export function add(center) {
 export function getDefault(count) {
     // generic sorting functions
     const cells = pack.cells,
-        sMax = d3.max(cells.map(x => x.s)), t = cells.t,
-        h = cells.map(x => x.h), temp = grid.cells.temp;
+        sMax = d3.max(cells.map(x => x.s)),
+        t = cells.map(x => x.t),
+        h = cells.map(x => x.h),
+        temp = grid.cells.temp;
     const n = cell => Math.ceil(cells[cell].s / sMax * 3) // normalized cell score
     const td = (cell, goal) => {
         const d = Math.abs(temp[cells[cell].g] - goal);
         return d ? d + 1 : 1;
     } // temperature difference fee
-    const bd = (cell, biomes, fee = 4) => biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
-    const sf = (cell, fee = 4) => cells[cell].haven && pack.features[cells.f[cells[cell].haven]].type !== "lake"
-        ? 1
-        : fee; // not on sea coast fee
+    const bd = (cell, biomes, fee = 4) =>
+        biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
+    const sf = (cell, fee = 4) =>
+        cells[cell].haven && pack.features[cells.f[cells[cell].haven]].type !== "lake"
+            ? 1
+            : fee; // not on sea coast fee
     // https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
 
     if (culturesSet.value === "european") {
@@ -400,7 +404,7 @@ export function expand() {
             const biomeChangeCost = biome === cells[n].biome ? 0 : 20; // penalty on biome change
             const heightCost = getHeightCost(e, cells[e].h, type);
             const riverCost = getRiverCost(cells.r[e], e, type);
-            const typeCost = getTypeCost(cells.t[e], type);
+            const typeCost = getTypeCost(cells[e].t, type);
             const totalCost = p + (biomeCost + biomeChangeCost + heightCost + riverCost + typeCost) / pack.cultures[c].expansionism;
 
             if (totalCost > neutral) return;

@@ -254,7 +254,7 @@ export function drawHeightmap() {
     for (let x = currentLayer; x < 101; x += skip) 
         layers.push(x);
     
-    const heights = cells.map((x, i) => ({ ...x, h: Math.round(x.h), i: i }))
+    const heights = cells.map((x, i) => ({ ...x, h: ~~(x.h), i: i }))
         .filter(({ h }) => h >= 20 && h <= 100 && layers.includes(h))
         .sort(({ h: h1 }, { h: h2 }) => h1 - h2)
 
@@ -290,7 +290,7 @@ export function drawHeightmap() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => Math.round(cells[c].h) === h)
+            c.filter(c => ~~(cells[c].h) === h)
                 .forEach(c => used[c] = 1);
             const c0 = c[0] >= n || cells[c[0]].h < h;
             const c1 = c[1] >= n || cells[c[1]].h < h;
@@ -637,7 +637,7 @@ export function drawReligions() {
     console.time("drawReligions");
 
     relig.selectAll("path").remove();
-    const cells = pack.cells, vertices = pack.vertices, religions = pack.religions, features = pack.features, n = cells.length;
+    const { cells, vertices, religions, features } = pack, n = cells.length;
     const used = new Uint8Array(n);
     const vArray = new Array(religions.length); // store vertices array
     const body = new Array(religions.length).fill(""); // store path around each religion
@@ -666,18 +666,25 @@ export function drawReligions() {
         gap[r] += "M" + vertices.p[chain[0][0]] + chain.reduce((r2, v, i, d) => !i ? r2 : !v[2] ? r2 + "L" + vertices.p[v[0]] : d[i + 1] && !d[i + 1][2] ? r2 + "M" + vertices.p[v[0]] : r2, "");
     }
 
-    const bodyData = body.map((p, i) => [p.length > 10 ? p : null, i, religions[i].color]).filter(d => d[0]);
-    relig.selectAll("path").data(bodyData).enter().append("path").attr("d", d => d[0]).attr("fill", d => d[2]).attr("stroke", "none").attr("id", d => "religion" + d[1]);
-    const gapData = gap.map((p, i) => [p.length > 10 ? p : null, i, religions[i].color]).filter(d => d[0]);
+    const bodyData = body.map((p, i) => [p.length > 10 ? p : null, i, religions[i].color])
+        .filter(d => d[0]);
+    relig.selectAll("path").data(bodyData).enter().append("path")
+        .attr("d", d => d[0])
+        .attr("fill", d => d[2])
+        .attr("stroke", "none")
+        .attr("id", d => "religion" + d[1]);
+    const gapData = gap.map((p, i) => [p.length > 10 ? p : null, i, religions[i].color])
+        .filter(d => d[0]);
     relig.selectAll(".path").data(gapData).enter().append("path").attr("d", d => d[0]).attr("fill", "none").attr("stroke", d => d[2]).attr("id", d => "religion-gap" + d[1]).attr("stroke-width", "10px");
 
     // connect vertices to chain
     function connectVertices(start, t, religion) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c].religion !== t);
+        let land = vertices.c[start].some(c =>
+            cells[c].h >= 20 && cells[c].religion !== t);
         function check(i) {
             religion = cells[i].religion;
-            land = cells.h[i] >= 20;
+            land = cells[i].h >= 20;
         }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
@@ -980,10 +987,11 @@ export function drawProvinces() {
     // connect vertices to chain
     function connectVertices(start, t, province) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells.h[c] >= 20 && cells[c].province !== t);
+        let land = vertices.c[start].some(c =>
+            cells[c].h >= 20 && cells[c].province !== t);
         function check(i) {
             province = cells[i].province;
-            land = cells.h[i] >= 20;
+            land = cells[i].h >= 20;
         }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {

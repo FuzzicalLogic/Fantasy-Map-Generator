@@ -940,7 +940,7 @@ export function drawCoastline({ cells, vertices, features }) {
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
         const startFromEdge = !i && cells[i].h >= 20;
-        if (!startFromEdge && cells.t[i] !== -1 && cells.t[i] !== 1)
+        if (!startFromEdge && cells[i].t !== -1 && cells[i].t !== 1)
             continue; // non-edge cell
         const f = cells.f[i];
         if (used[f])
@@ -969,9 +969,9 @@ export function drawCoastline({ cells, vertices, features }) {
         const path = round(lineGen(points));
         if (features[f].type === "lake") {
             landMask.append("path").attr("d", path).attr("fill", "black").attr("id", "land_" + f);
-            // waterMask.append("path").attr("d", path).attr("fill", "white").attr("id", "water_"+id); // uncomment to show over lakes
             lakes.select("#" + features[f].group).append("path").attr("d", path).attr("id", "lake_" + f).attr("data-f", f); // draw the lake
-        } else {
+        }
+        else {
             landMask.append("path").attr("d", path).attr("fill", "white").attr("id", "land_" + f);
             waterMask.append("path").attr("d", path).attr("fill", "black").attr("id", "water_" + f);
             const g = features[f].group === "lake_island" ? "lake_island" : "sea_island";
@@ -990,9 +990,11 @@ export function drawCoastline({ cells, vertices, features }) {
     function findStart(i, t) {
         if (t === -1 && cells[i].b)
             return cells[i].v.find(v => vertices.c[v].some(c => c >= n)); // map border cell
-        const filtered = cells[i].c.filter(c => cells.t[c] === t);
+        const filtered = cells[i].c.filter(c => cells[c].t === t);
         const index = cells[i].c.indexOf(d3.min(filtered));
-        return index === -1 ? index : cells[i].v[index];
+        return index === -1
+            ? index
+            : cells[i].v[index];
     }
 
     // connect vertices to chain
@@ -1004,9 +1006,9 @@ export function drawCoastline({ cells, vertices, features }) {
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current] // cells adjacent to vertex
             const v = vertices.v[current] // neighboring vertices
-            const c0 = c[0] >= n || cells.t[c[0]] === t;
-            const c1 = c[1] >= n || cells.t[c[1]] === t;
-            const c2 = c[2] >= n || cells.t[c[2]] === t;
+            const c0 = c[0] >= n || cells[c[0]].t === t;
+            const c1 = c[1] >= n || cells[c[1]].t === t;
+            const c2 = c[2] >= n || cells[c[2]].t === t;
             if (v[0] !== prev && c0 !== c1)
                 current = v[0];
             else if (v[1] !== prev && c1 !== c2)
@@ -1049,7 +1051,7 @@ export function reMarkFeatures({ cells }) {
     const features = [0],
         temp = grid.cells.temp;
     cells.f = new Uint16Array(cells.length); // cell feature number
-    cells.t = new Int16Array(cells.length); // cell type: 1 = land along coast; -1 = water along coast;
+    cells.forEach(x => x.t = 0);
     cells.forEach(x => x.haven = 0);
     cells.forEach(x => x.harbor = 0);
 
@@ -1066,16 +1068,16 @@ export function reMarkFeatures({ cells }) {
             cells[q].c.forEach(function (e) {
                 const eLand = cells[e].h >= 20;
                 if (land && !eLand) {
-                    cells.t[q] = 1;
-                    cells.t[e] = -1;
+                    cells[q].t = 1;
+                    cells[e].t = -1;
                     cells[q].harbor++;
                     if (!cells[q].haven)
                         cells[q].haven = e;
                 } else if (land && eLand) {
-                    if (!cells.t[e] && cells.t[q] === 1)
-                        cells.t[e] = 2;
-                    else if (!cells.t[q] && cells.t[e] === 1)
-                        cells.t[q] = 2;
+                    if (!cells[e].t && cells[q].t === 1)
+                        cells[e].t = 2;
+                    else if (!cells[q].t && cells[e].t === 1)
+                        cells[q].t = 2;
                 }
                 if (!cells.f[e] && land === eLand) {
                     queue.push(e);
@@ -1089,8 +1091,10 @@ export function reMarkFeatures({ cells }) {
         let group;
         if (type === "lake")
             group = defineLakeGroup(start, cellNumber, temp[cells[start].g]);
-        else if (type === "ocean") group = defineOceanGroup(cellNumber);
-        else if (type === "island") group = defineIslandGroup(start, cellNumber);
+        else if (type === "ocean")
+            group = defineOceanGroup(cellNumber);
+        else if (type === "island")
+            group = defineIslandGroup(start, cellNumber);
         features.push({ i, land, border, type, cells: cellNumber, firstCell: start, group });
         queue[0] = cells.f.findIndex(f => !f); // find unmarked cell
     }
@@ -1204,7 +1208,7 @@ export function rankCells() {
             s += normalize(cells.fl[i] + cells[i].conf, flMean, flMax) * 250; // big rivers and confluences are valued
         s -= (cells[i].h - 50) / 5; // low elevation is valued, high is not;
 
-        if (cells.t[i] === 1) {
+        if (cells[i].t === 1) {
             if (cells.r[i])
                 s += 15; // estuary is valued
             const type = f[cells.f[cells[i].haven]].type;
@@ -1748,7 +1752,8 @@ export function addZones(number = 1) {
     }
 
     function addTsunami() {
-        const coastal = cells.map((v, k) => k).filter(i => !used[i] && cells.t[i] === -1 && pack.features[cells.f[i]].type !== "lake");
+        const coastal = cells.map((v, k) => k)
+            .filter(i => !used[i] && cells[i].t === -1 && pack.features[cells.f[i]].type !== "lake");
         if (!coastal.length) return;
 
         const cell = +ra(coastal);
@@ -1756,13 +1761,18 @@ export function addZones(number = 1) {
 
         while (queue.length) {
             const q = queue.shift();
-            if (cells.t[q] === 1) cellsArray.push(q);
-            if (cellsArray.length > power) break;
+            if (cells[q].t === 1)
+                cellsArray.push(q);
+            if (cellsArray.length > power)
+                break;
 
             cells[q].c.forEach(e => {
-                if (used[e]) return;
-                if (cells.t[e] > 2) return;
-                if (pack.features[cells.f[e]].type === "lake") return;
+                if (used[e])
+                    return;
+                if (cells[e].t > 2)
+                    return;
+                if (pack.features[cells.f[e]].type === "lake")
+                    return;
                 used[e] = 1;
                 queue.push(e);
             });
