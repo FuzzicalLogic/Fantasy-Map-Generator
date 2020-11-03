@@ -451,15 +451,22 @@ export function drawBiomes() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells[c].biome === b).forEach(c => used[c] = 1);
+            c.filter(c => cells[c] && cells[c].biome === b)
+                .forEach(c => used[c] = 1);
             const c0 = c[0] >= n || cells[c[0]].biome !== b;
             const c1 = c[1] >= n || cells[c[1]].biome !== b;
             const c2 = c[2] >= n || cells[c[2]].biome !== b;
             const v = vertices.v[current]; // neighboring vertices
-            if (v[0] !== prev && c0 !== c1) current = v[0];
-            else if (v[1] !== prev && c1 !== c2) current = v[1];
-            else if (v[2] !== prev && c0 !== c2) current = v[2];
-            if (current === chain[chain.length - 1]) { console.error("Next vertex is not found"); break; }
+            if (v[0] !== prev && c0 !== c1)
+                current = v[0];
+            else if (v[1] !== prev && c1 !== c2)
+                current = v[1];
+            else if (v[2] !== prev && c0 !== c2)
+                current = v[2];
+            if (current === chain[chain.length - 1]) {
+                console.error("Next vertex is not found");
+                break;
+            }
         }
         return chain;
     }
@@ -486,8 +493,8 @@ export function drawPopulation(event) {
     const cells = pack.cells, p = cells.p, burgs = pack.burgs;
     const show = d3.transition().duration(2000).ease(d3.easeSinIn);
 
-    const rural = cells.map((x, i) => ({ i: i, pop: x.pop }))
-        .map(x => [p[x.i][0], p[x.i][1], p[x.i][1] - x.pop / 8]);
+    const rural = cells.map((x, i) => ({ i: i, pop: x.pop, p: x.p }))
+        .map(x => [x.p[0], x.p[1], x.p[1] - x.pop / 8]);
     population.select("#rural").selectAll("line").data(rural).enter().append("line")
         .attr("x1", d => d[0]).attr("y1", d => d[1])
         .attr("x2", d => d[0]).attr("y2", d => d[1])
