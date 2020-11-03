@@ -59,13 +59,12 @@ function markupLand(cells) {
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const { p } = cells;
     const land = cells.map((v, k) => k)
         .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
     land.forEach(function (i) {
         cells[i].fl += grid.cells.prec[cells[i].g]; // flux from precipitation
-        const x = p[i][0], y = p[i][1];
+        const x = cells[i].p[0], y = cells[i].p[1];
 
         // near-border cell: pour out of the screen
         if (cells[i].b) {
@@ -134,7 +133,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
         }
         else cells[min].r = cells[i].r; // assign the river to the downhill cell
 
-        const nx = p[min][0], ny = p[min][1];
+        const nx = cells[min].p[0], ny = cells[min].p[1];
         if (h[min] < 20) {
             // pour water to the sea haven
             riversData.push({ river: cells[i].r, cell: cells[i].haven, x: nx, y: ny });

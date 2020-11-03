@@ -53,7 +53,7 @@ export function generate() {
         const cell = c.center = placeCenter(c.sort
             ? c.sort
             : i => cells[i].s);
-        centers.add(cells.p[cell]);
+        centers.add(cells[cell].p);
         c.i = i + 1;
         delete c.odd;
         delete c.sort;
@@ -69,7 +69,7 @@ export function generate() {
         let c, spacing = (graphWidth + graphHeight) / 2 / count;
         const sorted = [...populated].sort((a, b) => v(b) - v(a)), max = Math.floor(sorted.length / 2);
         do { c = sorted[biased(0, max, 5)]; spacing *= .9; }
-        while (centers.find(cells.p[c][0], cells.p[c][1], spacing) !== undefined);
+        while (centers.find(cells[c].p[0], cells[c].p[1], spacing) !== undefined);
         return c;
     }
 

@@ -70,8 +70,8 @@ function placeCapitals(cells, count) {
 
     for (let i = 0; burgs.length <= count; i++) {
         const cell = sorted[i],
-            x = cells.p[cell][0],
-            y = cells.p[cell][1];
+            x = cells[cell].p[0],
+            y = cells[cell].p[1];
 
         if (burgsTree.find(x, y, spacing) === undefined) {
             burgs.push({ cell, x, y });
@@ -112,8 +112,8 @@ function placeTowns(burgs, cells) {
             if (cells[sorted[i]].burg)
                 continue;
             const cell = sorted[i],
-                x = cells.p[cell][0],
-                y = cells.p[cell][1];
+                x = cells[cell].p[0],
+                y = cells[cell].p[1];
             const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make placement not uniform
             if (burgsTree.find(x, y, s) !== undefined) continue; // to close to existing burg
             const burg = burgs.length;

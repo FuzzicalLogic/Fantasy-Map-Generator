@@ -19,7 +19,7 @@ export function ReliefIcons() {
     for (const i of xs) {
         const height = cells[i].h;
         if (height < 20) continue; // no icons on water
-        if (cells.r[i]) continue; // no icons on rivers
+        if (cells[i].r) continue; // no icons on rivers
         const b = cells[i].biome;
         if (height < 50 && biomesData.iconsDensity[b] === 0) continue; // no icons for this biome
         const polygon = getPackPolygon(i);

@@ -120,7 +120,7 @@ export function generate(numReligions, pack) {
             center = cultures[culture].center;
         if (!cells[center].burg && cells[center].c.some(c => cells[c].burg))
             center = cells[center].c.find(c => cells[c].burg);
-        const x = cells.p[center][0], y = cells.p[center][1];
+        const x = cells[center].p[0], y = cells[center].p[1];
 
         const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make the placement not uniform
         if (religionsTree.find(x, y, s) !== undefined)
@@ -144,7 +144,7 @@ export function generate(numReligions, pack) {
         let center = sorted[biased(0, sorted.length - 1, 1)]; // religion center
         if (!cells[center].burg && cells.c[center].some(c => cells[c].burg))
             center = cells.c[center].find(c => cells[c].burg);
-        const x = cells.p[center][0], y = cells.p[center][1];
+        const x = cells[center].p[0], y = cells[center].p[1];
 
         const s = spacing * gauss(2, .3, 1, 3, 2); // randomize to make the placement not uniform
         if (religionsTree.find(x, y, s) !== undefined)
@@ -176,7 +176,7 @@ export function generate(numReligions, pack) {
                 continue;
             if (!cells[center].burg && cells[center].c.some(c => cells[c].burg))
                 center = cells[center].c.find(c => cells[c].burg);
-            const x = cells.p[center][0], y = cells.p[center][1];
+            const x = cells[center].p[0], y = cells[center].p[1];
             if (religionsTree.find(x, y, spacing / 10) !== undefined)
                 continue; // to close to other
 

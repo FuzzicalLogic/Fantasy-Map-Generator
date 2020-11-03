@@ -678,7 +678,6 @@ export function calculateVoronoi(graph, points) {
     console.time("calculateVoronoi");
     const voronoi = Voronoi(delaunay, allPoints, n);
     graph.cells = voronoi.cells;
-    //graph.cells.i = n < 65535 ? Uint16Array.from(d3.range(n)) : Uint32Array.from(d3.range(n)); // array of indexes
     graph.vertices = voronoi.vertices;
     console.timeEnd("calculateVoronoi");
 }
@@ -914,12 +913,13 @@ export function reGraph({ cells, points, features, spacing }) {
 
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
-    cells.forEach((v, k) => {
-        v.g = newCells.g[k];
-        v.h = newCells.h[k];
+    cells.forEach((x, i) => {
+        x.g = newCells.g[i];
+        x.h = newCells.h[i];
+        x.p = newCells.p[i];
     })
-    cells.p = newCells.p; // points coordinates [x, y]
-    cells.q = d3.quadtree(cells.p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
+    let { p } = newCells; // points coordinates [x, y]
+    cells.q = d3.quadtree(p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
     //cells.h = new Uint8Array(newCells.h); // heights
     cells.map((v, k) => k)
         .forEach(i => cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
@@ -1264,7 +1264,7 @@ export function addMarkers(number = 1) {
 
         while (count && mounts.length) {
             const cell = mounts.splice(biased(0, mounts.length - 1, 5), 1);
-            const x = cells.p[cell][0], y = cells.p[cell][1];
+            const [x, y] = cells[cell].p;
             const id = appendMarker(cell, "volcano");
             const proper = Names.getCulture(cells[cell].culture);
             const name = P(.3) ? "Mount " + proper : Math.random() > .3 ? proper + " Volcano" : proper;
@@ -1432,7 +1432,7 @@ export function addMarkers(number = 1) {
     }
 
     function appendMarker(cell, type) {
-        const x = cells.p[cell][0], y = cells.p[cell][1];
+        const [x, y] = cells[cell].p;
         const id = getNextId("markerElement");
         const name = "#marker_" + type;
 
@@ -1765,7 +1765,7 @@ export function addZones(number = 1) {
 
     function addTsunami() {
         const coastal = cells.map((v, k) => k)
-            .filter(i => !used[i] && cells[i].t === -1 && pack.features[cells.f[i]].type !== "lake");
+            .filter(i => !used[i] && cells[i].t === -1 && pack.features[cells[i].f].type !== "lake");
         if (!coastal.length) return;
 
         const cell = +ra(coastal);
@@ -1783,7 +1783,7 @@ export function addZones(number = 1) {
                     return;
                 if (cells[e].t > 2)
                     return;
-                if (pack.features[cells.f[e]].type === "lake")
+                if (pack.features[cells[e].f].type === "lake")
                     return;
                 used[e] = 1;
                 queue.push(e);

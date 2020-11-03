@@ -46,7 +46,14 @@ export function generate() {
         const temp = s.temp = {}, d = s.diplomacy;
         const expansionRate = Math.min(Math.max((s.expansionism / expn) / (s.area / area), .25), 4); // how much state expansionism is realized
         const diplomacyRate = d.some(d => d === "Enemy") ? 1 : d.some(d => d === "Rival") ? .8 : d.some(d => d === "Suspicion") ? .5 : .1; // peacefulness
-        const neighborsRate = Math.min(Math.max(s.neighbors.map(n => n ? pack.states[n].diplomacy[s.i] : "Suspicion").reduce((s, r) => s += rate[r], .5), .3), 3); // neighbors rate
+        const neighborsRate = Math.min(
+            Math.max(
+                s.neighbors.map(n => n ? pack.states[n].diplomacy[s.i] : "Suspicion")
+                    .reduce((s, r) => s += rate[r], .5),
+                .3
+            ),
+            3
+        ); // neighbors rate
         s.alert = Math.min(Math.max(rn(expansionRate * diplomacyRate * neighborsRate, 2), .1), 5); // war alert rate (army modifier)
         temp.platoons = [];
 
@@ -95,10 +102,10 @@ export function generate() {
             const t = rn(army * s.temp[u.name] * populationRate.value); // total troops
             if (!t)
                 continue;
-            let x = p[i][0], y = p[i][1], n = 0;
+            let [x, y] = cells[i].p, n = 0;
             if (u.type === "naval") {
                 let haven = cells[i].haven;
-                x = p[haven][0], y = p[haven][1];
+                ([x, y] = cells[haven].p);
                 n = 1;
             }; // place naval to sea
             s.temp.platoons.push({ cell: i, a: t, t, x, y, u: u.name, n, s: u.separate, type: u.type });
@@ -133,10 +140,10 @@ export function generate() {
             const t = rn(army * s.temp[u.name] * populationRate.value); // total troops
             if (!t)
                 continue;
-            let x = p[b.cell][0], y = p[b.cell][1], n = 0;
+            let [x, y] = cells[b.cell].p, n = 0;
             if (u.type === "naval") {
                 let haven = cells[b.cell].haven;
-                x = p[haven][0], y = p[haven][1];
+                ([x, y] = cells[haven].p);
                 n = 1;
             }; // place naval in sea cell
             s.temp.platoons.push({ cell: b.cell, a: t, t, x, y, u: u.name, n, s: u.separate, type: u.type });
