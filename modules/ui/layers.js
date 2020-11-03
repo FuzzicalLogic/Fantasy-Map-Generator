@@ -777,8 +777,14 @@ export function drawStates() {
         const chain = []; // vertices chain to form a path
         let land = vertices.c[start].some(c => cells[c] && cells[c].h >= 20 && cells[c].state !== t);
         function check(i) {
-            state = cells[i].state;
-            land = cells[i].h >= 20;
+            try {
+                state = cells[i].state;
+                land = cells[i].h >= 20;
+            }
+            catch (e) {
+                console.log(cells);
+                console.log(i);
+            }
         }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
