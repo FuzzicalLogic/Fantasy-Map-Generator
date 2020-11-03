@@ -100,13 +100,13 @@ export function generate() {
             return "Nomadic"; // high penalty in forest biomes and near coastline
         if (cells[i].h > 50)
             return "Highland"; // no penalty for hills and moutains, high for other elevations
-        const f = pack.features[cells.f[cells[i].haven]]; // opposite feature
+        const f = pack.features[cells[cells[i].haven].f]; // opposite feature
         if (f.type === "lake" && f.cells > 5)
             return "Lake" // low water cross penalty and high for growth not along coastline
         if (cells[i].harbor
         && f.type !== "lake" && P(.1)
         || (cells[i].harbor === 1 && P(.6))
-        || (pack.features[cells.f[i]].group === "isle" && P(.4)))
+            || (pack.features[cells[i].f].group === "isle" && P(.4)))
             return "Naval"; // low water cross penalty and high for non-along-coastline growth
         if (cells.r[i] && cells[i].fl > 100)
             return "River"; // no River cross penalty, penalty for non-River growth
@@ -117,12 +117,12 @@ export function generate() {
 
     function defineCultureExpansionism(type) {
         let base = 1; // Generic
-        if (type === "Lake") base = .8; else
-            if (type === "Naval") base = 1.5; else
-                if (type === "River") base = .9; else
-                    if (type === "Nomadic") base = 1.5; else
-                        if (type === "Hunting") base = .7; else
-                            if (type === "Highland") base = 1.2;
+        if (type === "Lake") base = .8;
+        else if (type === "Naval") base = 1.5;
+        else if (type === "River") base = .9;
+        else if (type === "Nomadic") base = 1.5;
+        else if (type === "Hunting") base = .7;
+        else if (type === "Highland") base = 1.2;
         return rn((Math.random() * powerInput.value / 2 + 1) * base, 1);
     }
 
@@ -174,7 +174,7 @@ export function getDefault(count) {
     const bd = (cell, biomes, fee = 4) =>
         biomes.includes(cells[cell].biome) ? 1 : fee; // biome difference fee
     const sf = (cell, fee = 4) =>
-        cells[cell].haven && pack.features[cells.f[cells[cell].haven]].type !== "lake"
+        cells[cell].haven && pack.features[cells[cells[cell].haven].f].type !== "lake"
             ? 1
             : fee; // not on sea coast fee
     // https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
@@ -431,16 +431,25 @@ function getBiomeCost(c, biome, type) {
 }
 
 function getHeightCost(i, h, type) {
-    const f = pack.features[cells.f[i]], a = cells[i].area;
-    if (type === "Lake" && f.type === "lake") return 10; // no lake crossing penalty for Lake cultures
-    if (type === "Naval" && h < 20) return a * 2; // low sea/lake crossing penalty for Naval cultures
-    if (type === "Nomadic" && h < 20) return a * 50; // giant sea/lake crossing penalty for Nomads
-    if (h < 20) return a * 6; // general sea/lake crossing penalty
-    if (type === "Highland" && h < 44) return 3000; // giant penalty for highlanders on lowlands
-    if (type === "Highland" && h < 62) return 200; // giant penalty for highlanders on lowhills
-    if (type === "Highland") return 0; // no penalty for highlanders on highlands
-    if (h >= 67) return 200; // general mountains crossing penalty
-    if (h >= 44) return 30; // general hills crossing penalty
+    const f = pack.features[cells[i].f], a = cells[i].area;
+    if (type === "Lake" && f.type === "lake")
+        return 10; // no lake crossing penalty for Lake cultures
+    if (type === "Naval" && h < 20)
+        return a * 2; // low sea/lake crossing penalty for Naval cultures
+    if (type === "Nomadic" && h < 20)
+        return a * 50; // giant sea/lake crossing penalty for Nomads
+    if (h < 20)
+        return a * 6; // general sea/lake crossing penalty
+    if (type === "Highland" && h < 44)
+        return 3000; // giant penalty for highlanders on lowlands
+    if (type === "Highland" && h < 62)
+        return 200; // giant penalty for highlanders on lowhills
+    if (type === "Highland")
+        return 0; // no penalty for highlanders on highlands
+    if (h >= 67)
+        return 200; // general mountains crossing penalty
+    if (h >= 44)
+        return 30; // general hills crossing penalty
     return 0;
 }
 

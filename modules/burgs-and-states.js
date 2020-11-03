@@ -119,7 +119,11 @@ function placeTowns(burgs, cells) {
             const burg = burgs.length;
             const culture = cells[cell].culture;
             const name = Names.getCulture(culture);
-            burgs.push({ cell, x, y, state: 0, i: burg, culture, name, capital: 0, feature: cells.f[cell] });
+            burgs.push({
+                cell, x, y,
+                state: 0, i: burg, culture,
+                name, capital: 0, feature: cells[cell].f
+            });
             burgsTree.add([x, y]);
             cells[cell].burg = burg;
             burgsAdded++;
@@ -148,7 +152,7 @@ function createStates(capitals, cells, cultures) {
         b.i = b.state = i;
         b.culture = cells[b.cell].culture;
         b.name = Names.getCultureShort(b.culture);
-        b.feature = cells.f[b.cell];
+        b.feature = cells[b.cell].f;
         b.capital = 1;
 
         // states data
@@ -156,7 +160,11 @@ function createStates(capitals, cells, cultures) {
         const basename = b.name.length < 9 && b.cell % 5 === 0 ? b.name : Names.getCultureShort(b.culture);
         const name = Names.getState(basename, b.culture);
         const nomadic = [1, 2, 3, 4].includes(cells[b.cell].biome);
-        const type = nomadic ? "Nomadic" : cultures[b.culture].type === "Nomadic" ? "Generic" : cultures[b.culture].type;
+        const type = nomadic
+            ? "Nomadic"
+            : cultures[b.culture].type === "Nomadic"
+                ? "Generic"
+                : cultures[b.culture].type;
         states.push({ i, color: colors[i - 1], name, expansionism, capital: i, type, center: b.cell, culture: b.culture });
         cells[b.cell].burg = i;
     });
@@ -169,7 +177,7 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { f, r } = cells;
+    const { r } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -177,7 +185,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
         // asign port status to some coastline burgs with temp > 0 °C
         const isHaven = cells[i].haven;
         if (isHaven && temp[cells[i].g] > 0) {
-            const idxF = f[isHaven]; // water body id
+            const idxF = cells[isHaven].f; // water body id
             // port is a capital with any harbor OR town with good harbor
             const port = features[idxF].cells > 1 && ((b.capital && cells[i].harbor) || cells[i].harbor === 1);
             b.port = port ? idxF : 0; // port is defined by water body id it lays on
@@ -323,7 +331,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
                     ? Math.max(20 - cells[e].s, 0)
                     : 5000;
             const biomeCost = getBiomeCost(b, cells[e].biome, type);
-            const heightCost = getHeightCost(pack.features[cells.f[e]], cells[e].h, type);
+            const heightCost = getHeightCost(pack.features[cells[e].f], cells[e].h, type);
             const riverCost = getRiverCost(cells.r[e], e, type);
             const typeCost = getTypeCost(cells[e].t, type);
             const cellCost = Math.max(cultureCost + populationCost + biomeCost + heightCost + riverCost + typeCost, 0);
@@ -469,7 +477,7 @@ export function drawStateLabels(list) {
                 const nQ = cells[q].c.filter(c => cells[c].state === state);
 
                 cells[q].c.forEach(function (c, d) {
-                    const passableLake = features[cells.f[c]].type === "lake" && features[cells.f[c]].cells < maxLake;
+                    const passableLake = features[cells[c].f].type === "lake" && features[cells[c].f].cells < maxLake;
                     if (cells[c].b || (cells[c].state !== state && !passableLake)) {
                         hull.add(cells[q].v[d]);
                         return;
@@ -727,7 +735,7 @@ export function generateDiplomacy() {
                 continue;
             };
 
-            const naval = states[f].type === "Naval" && states[t].type === "Naval" && cells.f[states[f].center] !== cells.f[states[t].center];
+            const naval = states[f].type === "Naval" && states[t].type === "Naval" && cells[states[f].center].f !== cells[states[t].center].f;
             const neib = naval ? false : states[f].neighbors.includes(t);
             const neibOfNeib = naval || neib ? false : states[f].neighbors.map(n => states[n].neighbors).join("").includes(t);
 
@@ -1045,13 +1053,13 @@ export function generateProvinces(regenerate) {
             const name = burgCell && P(.5)
                 ? burgs[burg].name
                 : Names.getState(Names.getCultureShort(c), c);
-            const f = pack.features[cells.f[center]];
+            const f = pack.features[cells[center].f];
             const provCells = stateNoProvince.filter(i =>
                 cells[i].province === province);
             const singleIsle = provCells.length === f.cells
-                && !provCells.find(i => cells.f[i] !== f.i);
+                && !provCells.find(i => cells[i].f !== f.i);
             const isleGroup = !singleIsle && !provCells.find(i =>
-                pack.features[cells.f[i]].group !== "isle");
+                pack.features[cells[i].f].group !== "isle");
             const colony = !singleIsle && !isleGroup && P(.5) && !isPassable(s.center, center);
             const formName = singleIsle
                 ? "Island"
@@ -1067,7 +1075,7 @@ export function generateProvinces(regenerate) {
 
             // check if there is a land way within the same state between two cells
             function isPassable(from, to) {
-                if (cells.f[from] !== cells.f[to])
+                if (cells[from].f !== cells[to].f)
                     return false; // on different islands
                 const queue = [from],
                     used = new Uint8Array(cells.length),

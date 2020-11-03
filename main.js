@@ -942,7 +942,7 @@ export function drawCoastline({ cells, vertices, features }) {
         const startFromEdge = !i && cells[i].h >= 20;
         if (!startFromEdge && cells[i].t !== -1 && cells[i].t !== 1)
             continue; // non-edge cell
-        const f = cells.f[i];
+        const f = cells[i].f;
         if (used[f])
             continue; // already connected
         if (features[f].type === "ocean")
@@ -1050,14 +1050,14 @@ export function reMarkFeatures({ cells }) {
     console.time("reMarkFeatures");
     const features = [0],
         temp = grid.cells.temp;
-    cells.f = new Uint16Array(cells.length); // cell feature number
+    cells.forEach(x => x.f = 0);
     cells.forEach(x => x.t = 0);
     cells.forEach(x => x.haven = 0);
     cells.forEach(x => x.harbor = 0);
 
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
         const start = queue[0]; // first cell
-        cells.f[start] = i; // assign feature number
+        cells[start].f = i; // assign feature number
         const land = cells[start].h >= 20;
         let border = false; // true if feature touches map border
         let cellNumber = 1; // to count cells number in a feature
@@ -1079,9 +1079,9 @@ export function reMarkFeatures({ cells }) {
                     else if (!cells[q].t && cells[e].t === 1)
                         cells[q].t = 2;
                 }
-                if (!cells.f[e] && land === eLand) {
+                if (!cells[e].f && land === eLand) {
                     queue.push(e);
-                    cells.f[e] = i;
+                    cells[e].f = i;
                     cellNumber++;
                 }
             });
@@ -1096,7 +1096,7 @@ export function reMarkFeatures({ cells }) {
         else if (type === "island")
             group = defineIslandGroup(start, cellNumber);
         features.push({ i, land, border, type, cells: cellNumber, firstCell: start, group });
-        queue[0] = cells.f.findIndex(f => !f); // find unmarked cell
+        queue[0] = cells.findIndex(x => !!!x.f); // find unmarked cell
     }
 
     return features;
@@ -1123,9 +1123,12 @@ export function reMarkFeatures({ cells }) {
     }
 
     function defineIslandGroup(cell, number) {
-        if (cell && features[cells.f[cell - 1]].type === "lake") return "lake_island";
-        if (number > grid.cells.length / 10) return "continent";
-        if (number > grid.cells.length / 1000) return "island";
+        if (cell && features[cells[cell - 1].f].type === "lake")
+            return "lake_island";
+        if (number > grid.cells.length / 10)
+            return "continent";
+        if (number > grid.cells.length / 1000)
+            return "island";
         return "isle";
     }
 
@@ -1134,18 +1137,24 @@ export function reMarkFeatures({ cells }) {
 
 // temporary elevate some lakes to resolve depressions and flux the water to form an open (exorheic) lake
 export function elevateLakes({ cells, features }) {
-    if (templateInput.value === "Atoll") return; // no need for Atolls
+    if (templateInput.value === "Atoll")
+        return; // no need for Atolls
     console.time('elevateLakes');
     const maxCells = cells.length / 100; // size limit; let big lakes be closed (endorheic)
-    cells.map((v,k) => k).forEach(i => {
+    cells.filter(x => x.h < 20)
+        .filter(x => features[x.f].group === "freshwater")
+        .filter(x => features[x.f].cells <= maxCells)
+        .forEach(x => {
+            x.h = 20
+        });
+    /*cells.map((v,k) => k).forEach(i => {
         if (cells[i].h >= 20)
             return;
-        if (features[cells.f[i]].group !== "freshwater"
-        || features[cells.f[i]].cells > maxCells)
+        if (features[cells[i].f].group !== "freshwater"
+            || features[cells[i].f].cells > maxCells)
             return;
         cells[i].h = 20;
-        //debug.append("circle").attr("cx", cells.p[i][0]).attr("cy", cells.p[i][1]).attr("r", .5).attr("fill", "blue");
-    });
+    });*/
 
     console.timeEnd('elevateLakes');
 }
@@ -1153,12 +1162,14 @@ export function elevateLakes({ cells, features }) {
 // assign biome id for each cell
 export function defineBiomes() {
     console.time("defineBiomes");
-    const { cells, features: f } = pack,
+    const { cells, features } = pack,
         { temp, prec } = grid.cells;
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (f[cells.f[i]].group === "freshwater") cells[i].h = 19; // de-elevate lakes; here to save some resources
+        // de-elevate lakes; here to save some resources
+        if (features[cells[i].f].group === "freshwater")
+            cells[i].h = 19; 
         const t = temp[cells[i].g]; // cell temperature
         const h = cells[i].h; // cell height
         const m = h < 20 ? 0 : calculateMoisture(i); // cell moisture
@@ -1190,7 +1201,7 @@ export function getBiomeId(moisture, temperature, height) {
 // assess cells suitability to calculate population and rand cells for culture center and burgs placement
 export function rankCells() {
     console.time('rankCells');
-    const { cells, features: f } = pack;
+    const { cells, features } = pack;
     cells.forEach(v => v.pop = 0);
     cells.forEach(v => v.s = 0);
 
@@ -1212,8 +1223,8 @@ export function rankCells() {
         if (cells[i].t === 1) {
             if (cells.r[i])
                 s += 15; // estuary is valued
-            const type = f[cells.f[cells[i].haven]].type;
-            const group = f[cells.f[cells[i].haven]].group;
+            const type = features[cells[cells[i].haven].f].type;
+            const group = features[cells[cells[i].haven].f].group;
             if (type === "lake") {
                 // lake coast is valued
                 if (group === "freshwater")

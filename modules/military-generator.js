@@ -81,7 +81,7 @@ export function generate() {
             m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
         if (cells[i].religion !== cells[s.center].religion)
             m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
-        if (cells.f[i] !== cells.f[s.center])
+        if (cells[i].f !== cells[s.center].f)
             m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
         const type = getType(i);
 
@@ -117,7 +117,7 @@ export function generate() {
             m = s.form === "Union" ? m / 1.2 : m / 2; // non-dominant culture
         if (cells[b.cell].religion !== cells[s.center].religion)
             m = s.form === "Theocracy" ? m / 2.2 : m / 1.4; // non-dominant religion
-        if (cells.f[b.cell] !== cells.f[s.center])
+        if (cells[b.cell].f !== cells[s.center].f)
             m = s.type === "Naval" ? m / 1.2 : m / 1.8; // different landmass
         const type = getType(b.cell);
 

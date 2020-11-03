@@ -59,7 +59,7 @@ function markupLand(cells) {
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const { p, r, f } = cells;
+    const { p, r } = cells;
     const land = cells.map((v, k) => k)
         .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
@@ -98,11 +98,11 @@ function drainWater(cells, h, features, riverNext, riversData) {
             return;
         }
 
-        //const min = cells.c[i][d3.scan(cells.c[i], (a, b) => h[a] - h[b])]; // downhill cell
-        let min = cells[i].c[d3.scan(cells[i].c, (a, b) => h[a] - h[b])]; // downhill cell
+        // downhill cell
+        let min = cells[i].c[d3.scan(cells[i].c, (a, b) => h[a] - h[b])]; 
 
         // allow only one river can flow through a lake
-        const cf = features[f[i]]; // current cell feature
+        const cf = features[cells[i].f]; // current cell feature
         if (cf.river && cf.river !== r[i]) {
             cells[i].fl = 0;
         }
@@ -140,7 +140,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
             riversData.push({ river: r[i], cell: cells[i].haven, x: nx, y: ny });
         }
         else {
-            const mf = features[cells.f[min]]; // feature of min cell
+            const mf = features[cells[min].f]; // feature of min cell
             if (mf.type === "lake") {
                 if (!mf.river || cells[i].fl > mf.flux) {
                     mf.river = r[i]; // pour water to temporaly elevated lake
@@ -153,7 +153,6 @@ function drainWater(cells, h, features, riverNext, riversData) {
 
     });
     return riverNext;
-
 }
 
 function defineRivers(pack, riverNext, riversData) {
