@@ -108,7 +108,7 @@ export function generate() {
         || (cells[i].harbor === 1 && P(.6))
             || (pack.features[cells[i].f].group === "isle" && P(.4)))
             return "Naval"; // low water cross penalty and high for non-along-coastline growth
-        if (cells.r[i] && cells[i].fl > 100)
+        if (cells[i].r && cells[i].fl > 100)
             return "River"; // no River cross penalty, penalty for non-River growth
         if (cells[i].t > 2 && [3, 7, 8, 9, 10, 12].includes(cells[i].biome))
             return "Hunting"; // high penalty in non-native biomes
@@ -403,7 +403,7 @@ export function expand() {
             const biomeCost = getBiomeCost(c, biome, type);
             const biomeChangeCost = biome === cells[n].biome ? 0 : 20; // penalty on biome change
             const heightCost = getHeightCost(e, cells[e].h, type);
-            const riverCost = getRiverCost(cells.r[e], e, type);
+            const riverCost = getRiverCost(cells[e].r, e, type);
             const typeCost = getTypeCost(cells[e].t, type);
             const totalCost = p + (biomeCost + biomeChangeCost + heightCost + riverCost + typeCost) / pack.cultures[c].expansionism;
 

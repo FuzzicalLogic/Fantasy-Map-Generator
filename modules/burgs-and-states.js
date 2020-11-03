@@ -177,7 +177,6 @@ function createStates(capitals, cells, cultures) {
 export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { temp } }) {
     console.time("specifyBurgs");
 
-    const { r } = cells;
     for (const b of burgs) {
         if (!b.i) continue;
         const i = b.cell;
@@ -207,12 +206,12 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
         b.population = rn(b.population * gauss(2, 3, .6, 20, 3), 3);
 
         // shift burgs on rivers semi-randomly and just a bit
-        if (!b.port && r[i]) {
+        if (!b.port && cells[i].r) {
             const shift = Math.min(cells[i].fl / 150, 1);
             if (i % 2)
                 b.x = rn(b.x + shift, 2);
             else b.x = rn(b.x - shift, 2);
-            if (r[i] % 2)
+            if (cells[i].r % 2)
                 b.y = rn(b.y + shift, 2);
             else b.y = rn(b.y - shift, 2);
         }
@@ -332,7 +331,7 @@ export function expandStates({ cells, states, cultures, burgs}) {
                     : 5000;
             const biomeCost = getBiomeCost(b, cells[e].biome, type);
             const heightCost = getHeightCost(pack.features[cells[e].f], cells[e].h, type);
-            const riverCost = getRiverCost(cells.r[e], e, type);
+            const riverCost = getRiverCost(cells[e].r, e, type);
             const typeCost = getTypeCost(cells[e].t, type);
             const cellCost = Math.max(cultureCost + populationCost + biomeCost + heightCost + riverCost + typeCost, 0);
             const totalCost = p + 10 + cellCost / states[s].expansionism;

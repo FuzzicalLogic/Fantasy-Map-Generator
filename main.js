@@ -1178,7 +1178,7 @@ export function defineBiomes() {
 
     function calculateMoisture(i) {
         let moist = prec[cells[i].g];
-        if (cells.r[i]) moist += Math.max(cells[i].fl / 20, 2);
+        if (cells[i].r) moist += Math.max(cells[i].fl / 20, 2);
         const n = cells[i].c.filter(isLand)
             .map(c => prec[cells[c].g])
             .concat([moist]);
@@ -1221,7 +1221,7 @@ export function rankCells() {
         s -= (cells[i].h - 50) / 5; // low elevation is valued, high is not;
 
         if (cells[i].t === 1) {
-            if (cells.r[i])
+            if (cells[i].r)
                 s += 15; // estuary is valued
             const type = features[cells[cells[i].haven].f].type;
             const group = features[cells[cells[i].haven].f].group;
@@ -1320,7 +1320,7 @@ export function addMarkers(number = 1) {
         const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => x));
 
         let bridges = cells.map((v, k) => k)
-            .filter(i => cells[i].burg && cells[i].h >= 20 && cells.r[i] && cells[i].fl > meanFlux && cells[i].road > meanRoad)
+            .filter(i => cells[i].burg && cells[i].h >= 20 && cells[i].r && cells[i].fl > meanFlux && cells[i].road > meanRoad)
             .sort((a, b) => (cells[b].road + cells[b].fl / 10) - (cells[a].road + cells[a].fl / 10));
 
         let count = !bridges.length
@@ -1333,7 +1333,7 @@ export function addMarkers(number = 1) {
             const cell = bridges.splice(0, 1);
             const id = appendMarker(cell, "bridge");
             const burg = pack.burgs[cells[cell].burg];
-            const river = pack.rivers.find(r => r.i === pack.cells.r[cell]);
+            const river = pack.rivers.find(r => r.i === pack.cells[cell].r);
             const riverName = river ? `${river.name} ${river.type}` : "river";
             const name = river && P(.2) ? river.name : burg.name;
             notes.push({ id, name: `${name} Bridge`, legend: `A stone bridge over the ${riverName} near ${burg.name}` });
@@ -1384,7 +1384,7 @@ export function addMarkers(number = 1) {
 
     void function addWaterfalls() {
         const waterfalls = cells.map((v, k) => k)
-            .filter(i => cells.r[i] && cells[i].h > 70);
+            .filter(i => cells[i].r && cells[i].h > 70);
         if (waterfalls.length)
             addMarker("waterfall", "⟱", 50, 54, 16.5);
         const count = Math.ceil(3 * number);
@@ -1717,7 +1717,7 @@ export function addZones(number = 1) {
             if (cellsArray.length > power)
                 break;
             cells[q].c.forEach(e => {
-                if (used[e] || cells.r[e])
+                if (used[e] || cells[e].r)
                     return;
                 used[e] = 1;
                 queue.push(e);
@@ -1735,12 +1735,12 @@ export function addZones(number = 1) {
             maxFlux = d3.max(fl),
             flux = (maxFlux - meanFlux) / 2 + meanFlux;
         const rivers = cells.map((v, k) => k)
-            .filter(i => !used[i] && cells[i].h < 50 && cells.r[i] && cells[i].fl > flux && cells[i].burg);
+            .filter(i => !used[i] && cells[i].h < 50 && cells[i].r && cells[i].fl > flux && cells[i].burg);
         if (!rivers.length)
             return;
 
         const cell = +ra(rivers),
-            river = cells.r[cell];
+            river = cells[cell].r;
         const cellsArray = [],
             queue = [cell],
             power = rand(5, 30);
@@ -1752,7 +1752,7 @@ export function addZones(number = 1) {
                 break;
 
             cells[q].c.forEach(e => {
-                if (used[e] || cells[e].h < 20 || cells.r[e] !== river || cells[e].h > 50 || cells[e].fl < meanFlux)
+                if (used[e] || cells[e].h < 20 || cells[e].r !== river || cells[e].h > 50 || cells[e].fl < meanFlux)
                     return;
                 used[e] = 1;
                 queue.push(e);

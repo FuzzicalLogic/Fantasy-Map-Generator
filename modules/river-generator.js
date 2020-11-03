@@ -30,7 +30,7 @@ export const generate = function (changeHeights = true) {
 
     const riversData = []; // rivers data
     cells.forEach(x => x.fl = 0);
-    cells.r = new Uint16Array(cells.length); // rivers array
+    cells.forEach(x => x.r = 0);
     cells.forEach(x => x.conf = 0);
     let riverNext = 1; // first river id is 1, not 0
 
@@ -59,7 +59,7 @@ function markupLand(cells) {
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const { p, r } = cells;
+    const { p } = cells;
     const land = cells.map((v, k) => k)
         .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
@@ -69,7 +69,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
 
         // near-border cell: pour out of the screen
         if (cells[i].b) {
-            if (r[i]) {
+            if (cells[i].r) {
                 const to = [];
                 const min = Math.min(y, graphHeight - y, x, graphWidth - x);
                 if (min === y) {
@@ -89,7 +89,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
                     to[1] = y;
                 }
                 riversData.push({
-                    river: r[i],
+                    river: cells[i].r,
                     cell: i,
                     x: to[0],
                     y: to[1]
@@ -103,7 +103,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
 
         // allow only one river can flow through a lake
         const cf = features[cells[i].f]; // current cell feature
-        if (cf.river && cf.river !== r[i]) {
+        if (cf.river && cf.river !== cells[i].r) {
             cells[i].fl = 0;
         }
 
@@ -114,41 +114,41 @@ function drainWater(cells, h, features, riverNext, riversData) {
         }
 
         // Proclaim a new river
-        if (!r[i]) {
-            r[i] = riverNext;
+        if (!cells[i].r) {
+            cells[i].r = riverNext;
             riversData.push({ river: riverNext, cell: i, x, y });
             riverNext++;
         }
 
-        if (r[min]) { // downhill cell already has river assigned
+        if (cells[min].r) { // downhill cell already has river assigned
             if (cells[min].fl < cells[i].fl) {
                 cells[min].conf = cells[min].fl; // mark confluence
                 if (h[min] >= 20)
-                    riversData.find(d => d.river === r[min]).parent = r[i]; // min river is a tributary of current river
-                r[min] = r[i]; // re-assign river if downhill part has less flux
+                    riversData.find(d => d.river === cells[min].r).parent = cells[i].r; // min river is a tributary of current river
+                cells[min].r = cells[i].r; // re-assign river if downhill part has less flux
             } else {
                 cells[min].conf += cells[i].fl; // mark confluence
                 if (h[min] >= 20)
-                    riversData.find(d => d.river === r[i]).parent = r[min]; // current river is a tributary of min river
+                    riversData.find(d => d.river === cells[i].r).parent = cells[min].r; // current river is a tributary of min river
             }
         }
-        else r[min] = r[i]; // assign the river to the downhill cell
+        else cells[min].r = cells[i].r; // assign the river to the downhill cell
 
         const nx = p[min][0], ny = p[min][1];
         if (h[min] < 20) {
             // pour water to the sea haven
-            riversData.push({ river: r[i], cell: cells[i].haven, x: nx, y: ny });
+            riversData.push({ river: cells[i].r, cell: cells[i].haven, x: nx, y: ny });
         }
         else {
             const mf = features[cells[min].f]; // feature of min cell
             if (mf.type === "lake") {
                 if (!mf.river || cells[i].fl > mf.flux) {
-                    mf.river = r[i]; // pour water to temporaly elevated lake
+                    mf.river = cells[i].r; // pour water to temporaly elevated lake
                     mf.flux = cells[i].fl; // entering flux
                 }
             }
             cells[min].fl += cells[i].fl; // propagate flux
-            riversData.push({ river: r[i], cell: min, x: nx, y: ny }); // add next River segment
+            riversData.push({ river: cells[i].r, cell: min, x: nx, y: ny }); // add next River segment
         }
 
     });
@@ -173,8 +173,8 @@ function defineRivers(pack, riverNext, riversData) {
             pack.rivers.push({ i: r, parent, length, source: source.cell, mouth: mouth.cell });
         } else {
             // remove too short rivers
-            riverSegments.filter(s => cells.r[s.cell] === r)
-                .forEach(s => cells.r[s.cell] = 0);
+            riverSegments.filter(s => cells[s.cell].r === r)
+                .forEach(s => cells[s.cell].r = 0);
         }
     }
     return riverPaths;

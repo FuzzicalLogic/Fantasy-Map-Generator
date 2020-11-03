@@ -775,7 +775,7 @@ export function drawStates() {
     // connect vertices to chain
     function connectVertices(start, t, state) {
         const chain = []; // vertices chain to form a path
-        let land = vertices.c[start].some(c => cells[c].h >= 20 && cells[c] && cells[c].state !== t);
+        let land = vertices.c[start].some(c => cells[c] && cells[c].h >= 20 && cells[c].state !== t);
         function check(i) {
             state = cells[i].state;
             land = cells[i].h >= 20;
