@@ -115,26 +115,7 @@ export function addMarkers(number = 1) {
     }()
 
     addWaterfalls(cells, number)
-
-    void function addBattlefields() {
-        let battlefields = cells.filter(x => x.state && x.pop > 2 && x.h < 50 && x.h > 25);
-        let count = battlefields.length < 100
-            ? 0
-            : Math.ceil(battlefields.length / 500 * number);
-        if (count)
-            addMarker("battlefield", "⚔️", 50, 52, 12);
-
-        while (count && battlefields.length) {
-            const [cell] = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
-            const id = appendMarker2(cell, "battlefield");
-            const campaign = ra(states[cell.state].campaigns);
-            const date = generateDate(campaign.start, campaign.end);
-            const name = Names.getCulture(cell.culture) + " Battlefield";
-            const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
-            notes.push({ id, name, legend });
-            count--;
-        }
-    }()
+    addBattlefields(cells, number);
 
     console.timeEnd("addMarkers");
 }
@@ -265,5 +246,25 @@ function addWaterfalls(cells, number = 1) {
             ? pack.burgs[cell.burg].name
             : Names.getCulture(cell.culture);
         notes.push({ id, name: toAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
+    }
+}
+
+function addBattlefields(cells, number = 1) {
+    let battlefields = cells.filter(x => x.state && x.pop > 2 && x.h < 50 && x.h > 25);
+    let count = battlefields.length < 100
+        ? 0
+        : Math.ceil(battlefields.length / 500 * number);
+    if (count)
+        addMarker("battlefield", "⚔️", 50, 52, 12);
+
+    while (count && battlefields.length) {
+        const [cell] = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
+        const id = appendMarker2(cell, "battlefield");
+        const campaign = ra(states[cell.state].campaigns);
+        const date = generateDate(campaign.start, campaign.end);
+        const name = Names.getCulture(cell.culture) + " Battlefield";
+        const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
+        notes.push({ id, name, legend });
+        count--;
     }
 }
