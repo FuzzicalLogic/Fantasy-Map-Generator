@@ -81,7 +81,6 @@ export function drawCoastline({ cells, vertices, features }) {
         const chain = []; // vertices chain to form a path
         for (let i = 0, current = start; i === 0 || current !== start && i < 50000; i++) {
             const prev = chain[chain.length - 1]; // previous vertex in chain
-            //d3.select("#labels").append("text").attr("x", vertices.p[current][0]).attr("y", vertices.p[current][1]).text(i).attr("font-size", "1px");
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current] // cells adjacent to vertex
             const v = vertices.v[current] // neighboring vertices
@@ -99,7 +98,7 @@ export function drawCoastline({ cells, vertices, features }) {
                 break;
             }
         }
-        //chain.push(chain[0]); // push first vertex as the last one
+
         return chain;
     }
 
