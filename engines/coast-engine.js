@@ -16,16 +16,16 @@ export function drawCoastline({ cells, vertices, features }) {
     const waterMask = view.defs.select("#water");
     lineGen.curve(d3.curveBasisClosed);
 
-    let xs = cells.map((v, k) => k);
+    let xs = cells.map((x, i) => ({ ...x, i: i }))
+        .filter(x => x.f !== "ocean" )
+        .filter(x => !!x.i && x.h >= 20)
+        .filter(x => x.t === 1 || x.t === -1)
+        .map(x => x.i);
+
     for (const i of xs) {
-        const startFromEdge = !i && cells[i].h >= 20;
-        if (!startFromEdge && cells[i].t !== -1 && cells[i].t !== 1)
-            continue; // non-edge cell
         const f = cells[i].f;
         if (used[f])
             continue; // already connected
-        if (features[f].type === "ocean")
-            continue; // ocean cell
 
         const type = features[f].type === "lake" ? 1 : -1; // type value to search for
         const start = findStart(i, type);
