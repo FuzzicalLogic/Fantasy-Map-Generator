@@ -24,26 +24,7 @@ export function addMarkers(number = 1) {
     addMines(cells, number)
     addBridges(cells, number)
     addInns(cells, number);
-
-    void function addLighthouses() {
-        const lands = cells.map((v, k) => k)
-            .filter(i => cells[i].harbor > 6 && cells[i].c.some(c => cells[c].h < 20 && cells[c].road));
-        const lighthouses = Array.from(lands)
-            .map(i => [i, cells[i].v[cells[i].c.findIndex(c => cells[c].h < 20 && cells[c].road)]]);
-        if (lighthouses.length)
-            addMarker("lighthouse", "🚨", 50, 50, 16);
-        const count = Math.ceil(4 * number);
-
-        for (let i = 0; i < lighthouses.length && i < count; i++) {
-            const cell = lighthouses[i][0], vertex = lighthouses[i][1];
-            const id = appendMarker(cell, "lighthouse");
-            const proper = cells[cell].burg
-                ? pack.burgs[cells[cell].burg].name
-                : Names.getCulture(cells[cell].culture);
-            notes.push({ id, name: toAdjective(proper) + " Lighthouse" + name, legend: `A lighthouse to keep the navigation safe` });
-        }
-    }()
-
+    addLighthouses(cells, number);
     addWaterfalls(cells, number)
     addBattlefields(cells, states, number);
 
@@ -230,6 +211,26 @@ function addInns(cells, number) {
         const type = P(.3) ? "inn" : "tavern";
         const name = P(.5) ? ra(color) + " " + ra(animal) : P(.6) ? ra(adj) + " " + ra(animal) : ra(adj) + " " + capitalize(type);
         notes.push({ id, name: "The " + name, legend: `A big and famous roadside ${type}` });
+    }
+}
+
+function addLighthouses(cells, number = 1) {
+    const lands = cells.map((x, i) => i)
+        .filter(x => cells[x].harbor > 6 && cells[x].c.some(y => cells[y].h < 20 && cells[y].road));
+    const lighthouses = Array.from(lands)
+        .map(x => [x, cells[x].v[cells[x].c.findIndex(y => cells[y].h < 20 && cells[y].road)]]);
+    if (lighthouses.length)
+        addMarker("lighthouse", "🚨", 50, 50, 16);
+    const count = Math.ceil(4 * number);
+
+    for (let i = 0; i < lighthouses.length && i < count; i++) {
+        const idx = lighthouses[i][0], vertex = lighthouses[i][1];
+        const cell = cells[idx];
+        const id = appendMarker2(cell, "lighthouse");
+        const proper = cell.burg
+            ? pack.burgs[cell.burg].name
+            : Names.getCulture(cell.culture);
+        notes.push({ id, name: toAdjective(proper) + " Lighthouse" + name, legend: `A lighthouse to keep the navigation safe` });
     }
 }
 
