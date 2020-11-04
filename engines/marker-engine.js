@@ -60,27 +60,7 @@ function addMarker(id, icon, x, y, size) {
         .text(icon);
 }
 
-function appendMarker(toCell, type) {
-    const [x, y] = pack.cells[toCell].p;
-    const id = getNextId("markerElement");
-    const name = "#marker_" + type;
-
-    view.markers.append("use")
-        .attr("id", id)
-        .attr("xlink:href", name)
-        .attr("data-id", name)
-        .attr("data-x", x)
-        .attr("data-y", y)
-        .attr("x", x - 15)
-        .attr("y", y - 30)
-        .attr("data-size", 1)
-        .attr("width", 30)
-        .attr("height", 30);
-
-    return id;
-}
-
-function appendMarker2(cell, type) {
+function appendMarker(cell, type) {
     const [x, y] = cell.p;
     const id = getNextId("markerElement");
     const name = "#marker_" + type;
@@ -112,7 +92,7 @@ function addVolcanoes(cells, number = 1) {
     while (count && mounts.length) {
         const start = biased(0, mounts.length - 1, 5);
         const cell = mounts[start];
-        const id = appendMarker2(cell, "volcano");
+        const id = appendMarker(cell, "volcano");
         const proper = Names.getCulture(cell.culture);
         const name = P(.3)
             ? "Mount " + proper
@@ -136,7 +116,7 @@ function addHotSprings(cells, number = 1) {
     while (count && springs.length) {
         const where = biased(1, springs.length - 1, 3);
         const cell = springs[where];
-        const id = appendMarker2(cell, "hot_springs");
+        const id = appendMarker(cell, "hot_springs");
         const proper = Names.getCulture(cell.culture);
         const temp = convertTemperature(gauss(30, 15, 20, 100));
         notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
@@ -157,7 +137,7 @@ function addMines(cells, number) {
 
     while (count && hills.length) {
         const [cell] = hills.splice(Math.floor(Math.random() * hills.length), 1);
-        const id = appendMarker2(cell, "mine");
+        const id = appendMarker(cell, "mine");
         const resource = rw(resources);
         const burg = pack.burgs[cell.burg];
         const name = `${burg.name} — ${resource} mining town`;
@@ -183,7 +163,7 @@ function addBridges(cells, number = 1) {
 
     while (count && bridges.length) {
         const [cell] = bridges.splice(0, 1);
-        const id = appendMarker2(cell, "bridge");
+        const id = appendMarker(cell, "bridge");
         const burg = pack.burgs[cell.burg];
         const river = pack.rivers.find(x => x.i === cell.r);
         const riverName = river ? `${river.name} ${river.type}` : "river";
@@ -207,7 +187,7 @@ function addInns(cells, number) {
 
     for (let i = 0; i < taverns.length && i < count; i++) {
         const [cell] = taverns.splice(Math.floor(Math.random() * taverns.length), 1);
-        const id = appendMarker2(cell, "inn");
+        const id = appendMarker(cell, "inn");
         const type = P(.3) ? "inn" : "tavern";
         const name = P(.5) ? ra(color) + " " + ra(animal) : P(.6) ? ra(adj) + " " + ra(animal) : ra(adj) + " " + capitalize(type);
         notes.push({ id, name: "The " + name, legend: `A big and famous roadside ${type}` });
@@ -226,7 +206,7 @@ function addLighthouses(cells, number = 1) {
     for (let i = 0; i < lighthouses.length && i < count; i++) {
         const idx = lighthouses[i][0], vertex = lighthouses[i][1];
         const cell = cells[idx];
-        const id = appendMarker2(cell, "lighthouse");
+        const id = appendMarker(cell, "lighthouse");
         const proper = cell.burg
             ? pack.burgs[cell.burg].name
             : Names.getCulture(cell.culture);
@@ -242,7 +222,7 @@ function addWaterfalls(cells, number = 1) {
 
     for (let i = 0; i < waterfalls.length && i < count; i++) {
         const cell = waterfalls[i];
-        const id = appendMarker2(cell, "waterfall");
+        const id = appendMarker(cell, "waterfall");
         const proper = cell.burg
             ? pack.burgs[cell.burg].name
             : Names.getCulture(cell.culture);
@@ -260,7 +240,7 @@ function addBattlefields(cells, states, number = 1) {
 
     while (count && battlefields.length) {
         const [cell] = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
-        const id = appendMarker2(cell, "battlefield");
+        const id = appendMarker(cell, "battlefield");
         const campaign = ra(states[cell.state].campaigns);
         const date = generateDate(campaign.start, campaign.end);
         const name = Names.getCulture(cell.culture) + " Battlefield";
