@@ -22,32 +22,7 @@ export function addMarkers(number = 1) {
     addVolcanoes(cells, number);
     addHotSprings(cells, number);
     addMines(cells, number)
-
-    void function addBridges() {
-        const meanRoad = d3.mean(cells.map(x => x.road).filter(x => !!x));
-        const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => !!x));
-
-        let bridges = cells.filter(x => !!x.burg && !!x.r && x.h >= 20 && x.fl > meanFlux && x.road > meanRoad)
-            .sort((a, b) => (b.road + b.fl / 10) - (a.road + a.fl / 10));
-
-        let count = !!bridges.length
-            ? Math.ceil(bridges.length / 12 * number)
-            : 0;
-        if (count)
-            addMarker("bridge", "🌉", 50, 50, 14);
-
-        while (count && bridges.length) {
-            const [cell] = bridges.splice(0, 1);
-            const id = appendMarker2(cell, "bridge");
-            const burg = pack.burgs[cell.burg];
-            const river = pack.rivers.find(x => x.i === cell.r);
-            const riverName = river ? `${river.name} ${river.type}` : "river";
-            const name = river && P(.2) ? river.name : burg.name;
-            notes.push({ id, name: `${name} Bridge`, legend: `A stone bridge over the ${riverName} near ${burg.name}` });
-            count--;
-        }
-    }()
-
+    addBridges(cells, number)
     addInns(cells, number);
 
     void function addLighthouses() {
@@ -70,7 +45,7 @@ export function addMarkers(number = 1) {
     }()
 
     addWaterfalls(cells, number)
-    addBattlefields(cells, number);
+    addBattlefields(cells, states, number);
 
     console.timeEnd("addMarkers");
 }
@@ -212,6 +187,31 @@ function addMines(cells, number) {
     }
 }
 
+function addBridges(cells, number = 1) {
+    const meanRoad = d3.mean(cells.map(x => x.road).filter(x => !!x));
+    const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => !!x));
+
+    let bridges = cells.filter(x => !!x.burg && !!x.r && x.h >= 20 && x.fl > meanFlux && x.road > meanRoad)
+        .sort((a, b) => (b.road + b.fl / 10) - (a.road + a.fl / 10));
+
+    let count = !!bridges.length
+        ? Math.ceil(bridges.length / 12 * number)
+        : 0;
+    if (count)
+        addMarker("bridge", "🌉", 50, 50, 14);
+
+    while (count && bridges.length) {
+        const [cell] = bridges.splice(0, 1);
+        const id = appendMarker2(cell, "bridge");
+        const burg = pack.burgs[cell.burg];
+        const river = pack.rivers.find(x => x.i === cell.r);
+        const riverName = river ? `${river.name} ${river.type}` : "river";
+        const name = river && P(.2) ? river.name : burg.name;
+        notes.push({ id, name: `${name} Bridge`, legend: `A stone bridge over the ${riverName} near ${burg.name}` });
+        count--;
+    }
+}
+
 function addInns(cells, number) {
     const maxRoad = d3.max(cells.map(x => x.road)) * .9;
     let taverns = cells.filter(x => x.crossroad && x.h >= 20 && x.road > maxRoad);
@@ -249,7 +249,7 @@ function addWaterfalls(cells, number = 1) {
     }
 }
 
-function addBattlefields(cells, number = 1) {
+function addBattlefields(cells, states, number = 1) {
     let battlefields = cells.filter(x => x.state && x.pop > 2 && x.h < 50 && x.h > 25);
     let count = battlefields.length < 100
         ? 0
@@ -260,7 +260,7 @@ function addBattlefields(cells, number = 1) {
     while (count && battlefields.length) {
         const [cell] = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
         const id = appendMarker2(cell, "battlefield");
-        const campaign = ra(pack.states[cell.state].campaigns);
+        const campaign = ra(states[cell.state].campaigns);
         const date = generateDate(campaign.start, campaign.end);
         const name = Names.getCulture(cell.culture) + " Battlefield";
         const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
