@@ -1,5 +1,5 @@
 ﻿import {
-    pack, notes,
+    pack, notes, options,
     svg, view
 } from "../main.js";
 import * as Names from "../modules/names-generator.js";
@@ -48,7 +48,7 @@ export function addMarkers(number = 1) {
     }()
 
     void function addBridges() {
-        const meanRoad = d3.mean(cells.map(x => x.road).filter(x => x.road));
+        const meanRoad = d3.mean(cells.map(x => x.road).filter(x => x));
         const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => x));
 
         let bridges = cells.map((v, k) => k)
@@ -117,8 +117,7 @@ export function addMarkers(number = 1) {
     addWaterfalls(cells, number)
 
     void function addBattlefields() {
-        let battlefields = cells.map((v, k) => k)
-            .filter(i => cells[i].state && cells[i].pop > 2 && cells[i].h < 50 && cells[i].h > 25);
+        let battlefields = cells.filter(x => x.state && x.pop > 2 && x.h < 50 && x.h > 25);
         let count = battlefields.length < 100
             ? 0
             : Math.ceil(battlefields.length / 500 * number);
@@ -126,11 +125,11 @@ export function addMarkers(number = 1) {
             addMarker("battlefield", "⚔️", 50, 52, 12);
 
         while (count && battlefields.length) {
-            const cell = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
-            const id = appendMarker(cell, "battlefield");
-            const campaign = ra(states[cells[cell].state].campaigns);
+            const [cell] = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
+            const id = appendMarker2(cell, "battlefield");
+            const campaign = ra(states[cell.state].campaigns);
             const date = generateDate(campaign.start, campaign.end);
-            const name = Names.getCulture(cells[cell].culture) + " Battlefield";
+            const name = Names.getCulture(cell.culture) + " Battlefield";
             const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
             notes.push({ id, name, legend });
             count--;
