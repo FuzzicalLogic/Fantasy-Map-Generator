@@ -20,6 +20,8 @@ import * as ThreeD from "./modules/ui/3d.js";
 import * as HeightmapGenerator from "./modules/heightmap-generator.js";
 import { OceanLayers } from "./modules/ocean-layers.js";
 import * as Rivers from "./modules/river-generator.js";
+import * as Biomes from "./engines/biome-engine.js";
+export const defineBiomes = Biomes.defineBiomes;
 
 import * as Cultures from "./modules/cultures-generator.js";
 import * as BurgsAndStates from "./modules/burgs-and-states.js";
@@ -1159,31 +1161,6 @@ export function elevateLakes({ cells, features }) {
     console.timeEnd('elevateLakes');
 }
 
-// assign biome id for each cell
-export function defineBiomes() {
-    console.time("defineBiomes");
-    const { cells, features } = pack,
-        { temp, prec } = grid.cells;
-
-    for (const i of cells) {
-        // de-elevate lakes; here to save some resources
-        if (features[i.f].group === "freshwater")
-            i.h = 19;
-        const m = i.h < 20 ? 0 : calculateMoisture(i); // cell moisture
-        i.biome = getBiomeId(m, temp[i.g], i.h);
-    }
-
-    function calculateMoisture(forCell) {
-        let moist = prec[forCell.g];
-        if (forCell.r) moist += Math.max(forCell.fl / 20, 2);
-        const n = forCell.c.filter(isLand)
-            .map(c => prec[forCell.g])
-            .concat([moist]);
-        return rn(4 + d3.mean(n));
-    }
-
-    console.timeEnd("defineBiomes");
-}
 
 // assign biome id to a cell
 export function getBiomeId(moisture, temperature, height) {
