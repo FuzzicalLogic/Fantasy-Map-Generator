@@ -11,7 +11,6 @@ export function drawCoastline({ cells, vertices, features }) {
     console.time('drawCoastline');
     const n = cells.length;
     const used = new Uint8Array(features.length); // store conneted features
-    const largestLand = d3.scan(features.map(f => f.land ? f.cells : 0), (a, b) => b - a);
     const landMask = view.defs.select("#land");
     const waterMask = view.defs.select("#water");
     lineGen.curve(d3.curveBasisClosed);
@@ -55,13 +54,6 @@ export function drawCoastline({ cells, vertices, features }) {
             waterMask.append("path").attr("d", path).attr("fill", "black").attr("id", "water_" + f);
             const g = features[f].group === "lake_island" ? "lake_island" : "sea_island";
             coastline.select("#" + g).append("path").attr("d", path).attr("id", "island_" + f).attr("data-f", f); // draw the coastline
-        }
-
-        // draw ruler to cover the biggest land piece
-        if (f === largestLand) {
-            const from = points[d3.scan(points, (a, b) => a[0] - b[0])];
-            const to = points[d3.scan(points, (a, b) => b[0] - a[0])];
-            addRuler(from[0], from[1], to[0], to[1]);
         }
     }
 
