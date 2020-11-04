@@ -114,21 +114,7 @@ export function addMarkers(number = 1) {
         }
     }()
 
-    void function addWaterfalls() {
-        const waterfalls = cells.filter(x => !!x.r && x.h > 70);
-        if (waterfalls.length)
-            addMarker("waterfall", "⟱", 50, 54, 16.5);
-        const count = Math.ceil(3 * number);
-
-        for (let i = 0; i < waterfalls.length && i < count; i++) {
-            const cell = waterfalls[i];
-            const id = appendMarker2(cell, "waterfall");
-            const proper = cell.burg
-                ? pack.burgs[cell.burg].name
-                : Names.getCulture(cell.culture);
-            notes.push({ id, name: toAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
-        }
-    }()
+    addWaterfalls(cells, number)
 
     void function addBattlefields() {
         let battlefields = cells.map((v, k) => k)
@@ -264,5 +250,21 @@ function addHotSprings(cells, number = 1) {
         const temp = convertTemperature(gauss(30, 15, 20, 100));
         notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
         count--;
+    }
+}
+
+function addWaterfalls(cells, number = 1) {
+    const waterfalls = cells.filter(x => !!x.r && x.h > 70);
+    if (waterfalls.length)
+        addMarker("waterfall", "⟱", 50, 54, 16.5);
+    const count = Math.ceil(3 * number);
+
+    for (let i = 0; i < waterfalls.length && i < count; i++) {
+        const cell = waterfalls[i];
+        const id = appendMarker2(cell, "waterfall");
+        const proper = cell.burg
+            ? pack.burgs[cell.burg].name
+            : Names.getCulture(cell.culture);
+        notes.push({ id, name: toAdjective(proper) + " Waterfall" + name, legend: `An extremely beautiful waterfall` });
     }
 }
