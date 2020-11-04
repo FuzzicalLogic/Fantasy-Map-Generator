@@ -20,26 +20,7 @@ export function addMarkers(number = 1) {
     const { cells, states } = pack;
 
     addVolcanoes(cells, number);
-
-    void function addHotSprings() {
-        let springs = cells.map((v, k) => k)
-            .filter(i => cells[i].h > 50)
-            .sort((a, b) => cells[b].h - cells[a].h);
-        let count = springs.length < 30
-            ? 0
-            : Math.ceil(springs.length / 1000 * number);
-        if (count)
-            addMarker("hot_springs", "♨️", 50, 52, 12.5);
-
-        while (count && springs.length) {
-            const cell = springs.splice(biased(1, springs.length - 1, 3), 1);
-            const id = appendMarker(cell, "hot_springs");
-            const proper = Names.getCulture(cells[cell].culture);
-            const temp = convertTemperature(gauss(30, 15, 20, 100));
-            notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
-            count--;
-        }
-    }()
+    addHotSprings(cells, number);
 
     void function addMines() {
         let hills = cells.map((v, k) => k)
@@ -174,27 +155,33 @@ export function addMarkers(number = 1) {
     console.timeEnd("addMarkers");
 }
 
-function addVolcanoes(cells, number) {
-    let mounts = cells.filter(x => x.h > 70)
-        .sort((a, b) => b.h - a.h);
-    let count = mounts.length < 10
-        ? 0
-        : Math.ceil(mounts.length / 300 * number);
-    if (count)
-        addMarker("volcano", "🌋", 52, 50, 13);
+function addMarker(id, icon, x, y, size) {
+    const markers = svg.select("#defs-markers");
+    if (markers.select("#marker_" + id).size()) return;
 
-    while (count && mounts.length) {
-        const cell = mounts.splice(biased(0, mounts.length - 1, 5), 1);
-        const id = appendMarker2(cell, "volcano");
-        const proper = Names.getCulture(cell.culture);
-        const name = P(.3)
-            ? "Mount " + proper
-            : Math.random() > .3
-                ? proper + " Volcano"
-                : proper;
-        notes.push({ id, name, legend: `Active volcano. Height: ${getFriendlyHeight(cell.p)}` });
-        count--;
-    }
+    const symbol = markers.append("symbol")
+        .attr("id", "marker_" + id)
+        .attr("viewBox", "0 0 30 30");
+    symbol.append("path")
+        .attr("d", "M6,19 l9,10 L24,19")
+        .attr("fill", "#000000")
+        .attr("stroke", "none");
+    symbol.append("circle")
+        .attr("cx", 15)
+        .attr("cy", 15)
+        .attr("r", 10)
+        .attr("fill", "#ffffff")
+        .attr("stroke", "#000000")
+        .attr("stroke-width", 1);
+    symbol.append("text")
+        .attr("x", x + "%")
+        .attr("y", y + "%")
+        .attr("fill", "#000000")
+        .attr("stroke", "#3200ff")
+        .attr("stroke-width", 0)
+        .attr("font-size", size + "px")
+        .attr("dominant-baseline", "central")
+        .text(icon);
 }
 
 function appendMarker(toCell, type) {
@@ -235,4 +222,48 @@ function appendMarker2(cell, type) {
         .attr("height", 30);
 
     return id;
+}
+
+function addVolcanoes(cells, number = 1) {
+    let mounts = cells.filter(x => x.h > 70)
+        .sort((a, b) => b.h - a.h);
+    let count = mounts.length < 10
+        ? 0
+        : Math.ceil(mounts.length / 300 * number);
+    if (count)
+        addMarker("volcano", "🌋", 52, 50, 13);
+
+    while (count && mounts.length) {
+        const start = biased(0, mounts.length - 1, 5);
+        const cell = mounts[start];
+        const id = appendMarker2(cell, "volcano");
+        const proper = Names.getCulture(cell.culture);
+        const name = P(.3)
+            ? "Mount " + proper
+            : Math.random() > .3
+                ? proper + " Volcano"
+                : proper;
+        notes.push({ id, name, legend: `Active volcano. Height: ${getFriendlyHeight(cell.p)}` });
+        count--;
+    }
+}
+
+function addHotSprings(cells, number = 1) {
+    let springs = cells.filter(x => x.h > 50)
+        .sort((a, b) => b.h - a.h);
+    let count = springs.length < 30
+        ? 0
+        : Math.ceil(springs.length / 1000 * number);
+    if (count)
+        addMarker("hot_springs", "♨️", 50, 52, 12.5);
+
+    while (count && springs.length) {
+        const where = biased(1, springs.length - 1, 3);
+        const cell = springs[where];
+        const id = appendMarker2(cell, "hot_springs");
+        const proper = Names.getCulture(cell.culture);
+        const temp = convertTemperature(gauss(30, 15, 20, 100));
+        notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
+        count--;
+    }
 }
