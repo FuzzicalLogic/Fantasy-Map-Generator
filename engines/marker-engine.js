@@ -24,24 +24,23 @@ export function addMarkers(number = 1) {
     addMines(cells, number)
 
     void function addBridges() {
-        const meanRoad = d3.mean(cells.map(x => x.road).filter(x => x));
-        const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => x));
+        const meanRoad = d3.mean(cells.map(x => x.road).filter(x => !!x));
+        const meanFlux = d3.mean(cells.map(x => x.fl).filter(x => !!x));
 
-        let bridges = cells.map((v, k) => k)
-            .filter(i => cells[i].burg && cells[i].h >= 20 && cells[i].r && cells[i].fl > meanFlux && cells[i].road > meanRoad)
-            .sort((a, b) => (cells[b].road + cells[b].fl / 10) - (cells[a].road + cells[a].fl / 10));
+        let bridges = cells.filter(x => !!x.burg && !!x.r && x.h >= 20 && x.fl > meanFlux && x.road > meanRoad)
+            .sort((a, b) => (b.road + b.fl / 10) - (a.road + a.fl / 10));
 
-        let count = !bridges.length
-            ? 0
-            : Math.ceil(bridges.length / 12 * number);
+        let count = !!bridges.length
+            ? Math.ceil(bridges.length / 12 * number)
+            : 0;
         if (count)
             addMarker("bridge", "🌉", 50, 50, 14);
 
         while (count && bridges.length) {
-            const cell = bridges.splice(0, 1);
-            const id = appendMarker(cell, "bridge");
-            const burg = pack.burgs[cells[cell].burg];
-            const river = pack.rivers.find(r => r.i === pack.cells[cell].r);
+            const [cell] = bridges.splice(0, 1);
+            const id = appendMarker2(cell, "bridge");
+            const burg = pack.burgs[cell.burg];
+            const river = pack.rivers.find(x => x.i === cell.r);
             const riverName = river ? `${river.name} ${river.type}` : "river";
             const name = river && P(.2) ? river.name : burg.name;
             notes.push({ id, name: `${name} Bridge`, legend: `A stone bridge over the ${riverName} near ${burg.name}` });
