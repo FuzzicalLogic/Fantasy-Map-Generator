@@ -75,8 +75,7 @@ export function addMarkers(number = 1) {
 
     void function addInns() {
         const maxRoad = d3.max(cells.map(x => x.road)) * .9;
-        let taverns = cells.map((v, k) => k)
-            .filter(i => cells[i].crossroad && cells[i].h >= 20 && cells[i].road > maxRoad);
+        let taverns = cells.filter(x => x.crossroad && x.h >= 20 && x.road > maxRoad);
         if (!taverns.length)
             return;
         const count = Math.ceil(4 * number);
@@ -87,8 +86,8 @@ export function addMarkers(number = 1) {
         const adj = ["New", "Good", "High", "Old", "Great", "Big", "Major", "Happy", "Main", "Huge", "Far", "Beautiful", "Fair", "Prime", "Ancient", "Golden", "Proud", "Lucky", "Fat", "Honest", "Giant", "Distant", "Friendly", "Loud", "Hungry", "Magical", "Superior", "Peaceful", "Frozen", "Divine", "Favorable", "Brave", "Sunny", "Flying"];
 
         for (let i = 0; i < taverns.length && i < count; i++) {
-            const cell = taverns.splice(Math.floor(Math.random() * taverns.length), 1);
-            const id = appendMarker(cell, "inn");
+            const [cell] = taverns.splice(Math.floor(Math.random() * taverns.length), 1);
+            const id = appendMarker2(cell, "inn");
             const type = P(.3) ? "inn" : "tavern";
             const name = P(.5) ? ra(color) + " " + ra(animal) : P(.6) ? ra(adj) + " " + ra(animal) : ra(adj) + " " + capitalize(type);
             notes.push({ id, name: "The " + name, legend: `A big and famous roadside ${type}` });
