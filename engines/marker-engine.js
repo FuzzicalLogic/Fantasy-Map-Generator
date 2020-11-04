@@ -21,31 +21,7 @@ export function addMarkers(number = 1) {
 
     addVolcanoes(cells, number);
     addHotSprings(cells, number);
-
-    void function addMines() {
-        let hills = cells.map((v, k) => k)
-            .filter(i => cells[i].h > 47 && cells[i].burg);
-        let count = !hills.length
-            ? 0
-            : Math.ceil(hills.length / 7 * number);
-        if (!count)
-            return;
-
-        addMarker("mine", "⛏️", 48, 50, 13.5);
-        const resources = { "salt": 5, "gold": 2, "silver": 4, "copper": 2, "iron": 3, "lead": 1, "tin": 1 };
-
-        while (count && hills.length) {
-            const cell = hills.splice(Math.floor(Math.random() * hills.length), 1);
-            const id = appendMarker(cell, "mine");
-            const resource = rw(resources);
-            const burg = pack.burgs[cells[cell].burg];
-            const name = `${burg.name} — ${resource} mining town`;
-            const population = rn(burg.population * populationRate.value * urbanization.value);
-            const legend = `${burg.name} is a mining town of ${population} people just nearby the ${resource} mine`;
-            notes.push({ id, name, legend });
-            count--;
-        }
-    }()
+    addMines(cells, number)
 
     void function addBridges() {
         const meanRoad = d3.mean(cells.map(x => x.road).filter(x => x));
@@ -209,6 +185,30 @@ function addHotSprings(cells, number = 1) {
         const proper = Names.getCulture(cell.culture);
         const temp = convertTemperature(gauss(30, 15, 20, 100));
         notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
+        count--;
+    }
+}
+
+function addMines(cells, number) {
+    let hills = cells.filter(x => x.burg && x.h > 47);
+    let count = !hills.length
+        ? 0
+        : Math.ceil(hills.length / 7 * number);
+    if (!count)
+        return;
+
+    addMarker("mine", "⛏️", 48, 50, 13.5);
+    const resources = { "salt": 5, "gold": 2, "silver": 4, "copper": 2, "iron": 3, "lead": 1, "tin": 1 };
+
+    while (count && hills.length) {
+        const [cell] = hills.splice(Math.floor(Math.random() * hills.length), 1);
+        const id = appendMarker2(cell, "mine");
+        const resource = rw(resources);
+        const burg = pack.burgs[cell.burg];
+        const name = `${burg.name} — ${resource} mining town`;
+        const population = rn(burg.population * populationRate.value * urbanization.value);
+        const legend = `${burg.name} is a mining town of ${population} people just nearby the ${resource} mine`;
+        notes.push({ id, name, legend });
         count--;
     }
 }
