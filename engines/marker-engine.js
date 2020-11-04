@@ -73,26 +73,7 @@ export function addMarkers(number = 1) {
         }
     }()
 
-    void function addInns() {
-        const maxRoad = d3.max(cells.map(x => x.road)) * .9;
-        let taverns = cells.filter(x => x.crossroad && x.h >= 20 && x.road > maxRoad);
-        if (!taverns.length)
-            return;
-        const count = Math.ceil(4 * number);
-        addMarker("inn", "🍻", 50, 50, 14.5);
-
-        const color = ["Dark", "Light", "Bright", "Golden", "White", "Black", "Red", "Pink", "Purple", "Blue", "Green", "Yellow", "Amber", "Orange", "Brown", "Grey"];
-        const animal = ["Antelope", "Ape", "Badger", "Bear", "Beaver", "Bison", "Boar", "Buffalo", "Cat", "Crane", "Crocodile", "Crow", "Deer", "Dog", "Eagle", "Elk", "Fox", "Goat", "Goose", "Hare", "Hawk", "Heron", "Horse", "Hyena", "Ibis", "Jackal", "Jaguar", "Lark", "Leopard", "Lion", "Mantis", "Marten", "Moose", "Mule", "Narwhal", "Owl", "Panther", "Rat", "Raven", "Rook", "Scorpion", "Shark", "Sheep", "Snake", "Spider", "Swan", "Tiger", "Turtle", "Wolf", "Wolverine", "Camel", "Falcon", "Hound", "Ox"];
-        const adj = ["New", "Good", "High", "Old", "Great", "Big", "Major", "Happy", "Main", "Huge", "Far", "Beautiful", "Fair", "Prime", "Ancient", "Golden", "Proud", "Lucky", "Fat", "Honest", "Giant", "Distant", "Friendly", "Loud", "Hungry", "Magical", "Superior", "Peaceful", "Frozen", "Divine", "Favorable", "Brave", "Sunny", "Flying"];
-
-        for (let i = 0; i < taverns.length && i < count; i++) {
-            const [cell] = taverns.splice(Math.floor(Math.random() * taverns.length), 1);
-            const id = appendMarker2(cell, "inn");
-            const type = P(.3) ? "inn" : "tavern";
-            const name = P(.5) ? ra(color) + " " + ra(animal) : P(.6) ? ra(adj) + " " + ra(animal) : ra(adj) + " " + capitalize(type);
-            notes.push({ id, name: "The " + name, legend: `A big and famous roadside ${type}` });
-        }
-    }()
+    addInns(cells, number);
 
     void function addLighthouses() {
         const lands = cells.map((v, k) => k)
@@ -229,6 +210,27 @@ function addHotSprings(cells, number = 1) {
         const temp = convertTemperature(gauss(30, 15, 20, 100));
         notes.push({ id, name: proper + " Hot Springs", legend: `A hot springs area. Temperature: ${temp}` });
         count--;
+    }
+}
+
+function addInns(cells, number) {
+    const maxRoad = d3.max(cells.map(x => x.road)) * .9;
+    let taverns = cells.filter(x => x.crossroad && x.h >= 20 && x.road > maxRoad);
+    if (!taverns.length)
+        return;
+    const count = Math.ceil(4 * number);
+    addMarker("inn", "🍻", 50, 50, 14.5);
+
+    const color = ["Dark", "Light", "Bright", "Golden", "White", "Black", "Red", "Pink", "Purple", "Blue", "Green", "Yellow", "Amber", "Orange", "Brown", "Grey"];
+    const animal = ["Antelope", "Ape", "Badger", "Bear", "Beaver", "Bison", "Boar", "Buffalo", "Cat", "Crane", "Crocodile", "Crow", "Deer", "Dog", "Eagle", "Elk", "Fox", "Goat", "Goose", "Hare", "Hawk", "Heron", "Horse", "Hyena", "Ibis", "Jackal", "Jaguar", "Lark", "Leopard", "Lion", "Mantis", "Marten", "Moose", "Mule", "Narwhal", "Owl", "Panther", "Rat", "Raven", "Rook", "Scorpion", "Shark", "Sheep", "Snake", "Spider", "Swan", "Tiger", "Turtle", "Wolf", "Wolverine", "Camel", "Falcon", "Hound", "Ox"];
+    const adj = ["New", "Good", "High", "Old", "Great", "Big", "Major", "Happy", "Main", "Huge", "Far", "Beautiful", "Fair", "Prime", "Ancient", "Golden", "Proud", "Lucky", "Fat", "Honest", "Giant", "Distant", "Friendly", "Loud", "Hungry", "Magical", "Superior", "Peaceful", "Frozen", "Divine", "Favorable", "Brave", "Sunny", "Flying"];
+
+    for (let i = 0; i < taverns.length && i < count; i++) {
+        const [cell] = taverns.splice(Math.floor(Math.random() * taverns.length), 1);
+        const id = appendMarker2(cell, "inn");
+        const type = P(.3) ? "inn" : "tavern";
+        const name = P(.5) ? ra(color) + " " + ra(animal) : P(.6) ? ra(adj) + " " + ra(animal) : ra(adj) + " " + capitalize(type);
+        notes.push({ id, name: "The " + name, legend: `A big and famous roadside ${type}` });
     }
 }
 
