@@ -260,7 +260,7 @@ function addBattlefields(cells, number = 1) {
     while (count && battlefields.length) {
         const [cell] = battlefields.splice(Math.floor(Math.random() * battlefields.length), 1);
         const id = appendMarker2(cell, "battlefield");
-        const campaign = ra(states[cell.state].campaigns);
+        const campaign = ra(pack.states[cell.state].campaigns);
         const date = generateDate(campaign.start, campaign.end);
         const name = Names.getCulture(cell.culture) + " Battlefield";
         const legend = `A historical battle of the ${campaign.name}. \r\nDate: ${date} ${options.era}`;
