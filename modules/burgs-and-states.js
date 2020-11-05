@@ -197,9 +197,9 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
 
         if (b.port) {
             b.population = b.population * 1.3; // increase port population
-            const e = cells[i].v.filter(cell => vertices.c[cell].some(c => c === cells[i].haven)); // vertices of common edge
-            b.x = rn((vertices.p[e[0]][0] + vertices.p[e[1]][0]) / 2, 2);
-            b.y = rn((vertices.p[e[0]][1] + vertices.p[e[1]][1]) / 2, 2);
+            const e = cells[i].v.filter(cell => vertices[cell].c.some(c => c === cells[i].haven)); // vertices of common edge
+            b.x = rn((vertices[e[0]].p[0] + vertices[e[1]].p[0]) / 2, 2);
+            b.y = rn((vertices[e[0]].p[1] + vertices[e[1]].p[1]) / 2, 2);
         }
 
         // add random factor
@@ -456,7 +456,7 @@ export function drawStateLabels(list) {
         const visualCenter = findCell(s.pole[0], s.pole[1]);
         const start = cells[visualCenter].state === s.i ? visualCenter : s.center;
         const hull = getHull(start, s.i, s.cells / 10);
-        const points = [...hull].map(v => pack.vertices.p[v]);
+        const points = [...hull].map(v => pack.vertices[v].p);
         const delaunay = Delaunator.from(points);
         const voronoi = Voronoi(delaunay, points, points.length);
         const chain = connectCenters(voronoi.vertices, s.pole[1]);

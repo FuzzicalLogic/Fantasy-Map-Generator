@@ -806,7 +806,9 @@ export function reGraph({ cells, points, features, spacing }) {
         x.g = newCells.g[i];
         x.h = newCells.h[i];
         x.p = newCells.p[i];
-    })
+    });
+    let verts = pack.vertices;
+    pack.vertices = verts.p.map((x, i) => ({ p: x, c: verts.c[i], v: verts.v[i] }));
     let { p } = newCells; // points coordinates [x, y]
     cells.q = d3.quadtree(p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
     //cells.h = new Uint8Array(newCells.h); // heights

@@ -34,7 +34,7 @@ export function drawCoastline({ cells, vertices, features }) {
         if (features[f].type === "lake")
             relax(vchain, 1.2);
         used[f] = 1;
-        let points = clipPoly(vchain.map(v => vertices.p[v]), 1);
+        let points = clipPoly(vchain.map(v => vertices[v].p), 1);
         const area = d3.polygonArea(points); // area with lakes/islands
         if (area > 0 && features[f].type === "lake") {
             points = points.reverse();
@@ -74,8 +74,8 @@ export function drawCoastline({ cells, vertices, features }) {
         for (let i = 0, current = start; i === 0 || current !== start && i < 50000; i++) {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
-            const c = vertices.c[current] // cells adjacent to vertex
-            const v = vertices.v[current] // neighboring vertices
+            const c = vertices[current].c // cells adjacent to vertex
+            const v = vertices[current].v // neighboring vertices
             const c0 = c[0] >= n || cells[c[0]].t === t;
             const c1 = c[1] >= n || cells[c[1]].t === t;
             const c2 = c[2] >= n || cells[c[2]].t === t;
