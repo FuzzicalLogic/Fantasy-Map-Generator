@@ -12,7 +12,7 @@ import * as Names from "../modules/names-generator.js";
 // regenerate some zones
 export function addZones(number = 1) {
     console.time("addZones");
-    const data = [], cells = pack.cells, states = pack.states, burgs = pack.burgs;
+    const data = [], { cells, states, burgs } = pack;
     const used = new Uint8Array(cells.length); // to store used cells
 
     for (let i = 0; i < rn(Math.random() * 1.8 * number); i++) addInvasion(); // invasion of enemy lands
