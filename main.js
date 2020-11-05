@@ -163,6 +163,8 @@ view.landmass.append("rect").attr("x", 0).attr("y", 0).attr("width", graphWidth)
 oceanPattern.append("rect").attr("fill", "url(#oceanic)").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 oceanLayers.append("rect").attr("id", "oceanBase").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 
+import * as MapData from "./map/MapData.js";
+export const { calculateVoronoiO: calculateVoronoi } = MapData;
 void function removeLoading() {
     d3.select("#loading").transition().duration(4000).style("opacity", 0).remove();
     d3.select("#initial").transition().duration(4000).attr("opacity", 0).remove();
@@ -592,7 +594,7 @@ export function invokeActiveZooming() {
         ruler.selectAll("line, path").attr("stroke-width", size);
     }
 }
-import * as MapData from "./map/MapData.js";
+
 export function generate() {
     try {
         const timeStart = performance.now();
@@ -680,20 +682,6 @@ export function generateSeed() {
 }
 
 // calculate Delaunay and then Voronoi diagram
-import { Voronoi } from "./modules/voronoi.js";
-export function calculateVoronoi(graph, points) {
-    console.time("calculateDelaunay");
-    const n = points.length;
-    const allPoints = points.concat(grid.boundary);
-    const delaunay = Delaunator.from(allPoints);
-    console.timeEnd("calculateDelaunay");
-
-    console.time("calculateVoronoi");
-    const voronoi = Voronoi(delaunay, allPoints, n);
-    graph.cells = voronoi.cells;
-    graph.vertices = voronoi.vertices;
-    console.timeEnd("calculateVoronoi");
-}
 
 // define map size and position based on template and random factor
 function defineMapSize(grid) {
@@ -776,6 +764,7 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 // recalculate Voronoi Graph to pack cells
 export function reGraph({ cells, points, features, spacing }) {
     console.time("reGraph");
+    console.log(pack.vertices);
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
     const spacing2 = spacing ** 2;
 
@@ -810,6 +799,7 @@ export function reGraph({ cells, points, features, spacing }) {
         }
     }
 
+    console.log(newCells.p);
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
     cells.forEach((x, i) => {

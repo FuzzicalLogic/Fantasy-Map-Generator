@@ -178,3 +178,18 @@ export function openNearSeaLakes(grid) {
 
     console.timeEnd("openLakes");
 }
+
+export function calculateVoronoiO(graph, points) {
+    console.time("calculateDelaunay");
+    const n = points.length;
+    const allPoints = !!!graph.boundary ? points : points.concat(graph.boundary);
+    const delaunay = Delaunator.from(allPoints);
+    
+    console.timeEnd("calculateDelaunay");
+
+    console.time("calculateVoronoi");
+    const voronoi = Voronoi(delaunay, allPoints, n);
+    graph.cells = voronoi.cells;
+    graph.vertices = voronoi.vertices;
+    console.timeEnd("calculateVoronoi");
+}
