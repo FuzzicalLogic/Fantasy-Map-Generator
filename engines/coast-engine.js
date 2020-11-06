@@ -16,9 +16,10 @@ export function drawCoastline({ cells, vertices, features }) {
     lineGen.curve(d3.curveBasisClosed);
 
     let xs = cells.map((x, i) => ({ ...x, i: i }))
-        .filter(x => x.f !== "ocean" )
-        .filter(x => !!x.i && x.h >= 20)
-        .filter(x => x.t === 1 || x.t === -1)
+        .filter(x => x.h >= 20 && x.c.some(y => cells[y].h < 20 && features[cells[y].f].type === "ocean"))
+//        .filter(x => x.f !== "ocean" )
+//        .filter(x => !!x.i && x.h >= 20)
+//        .filter(x => x.t === 1 || x.t === -1)
         .map(x => x.i);
 
     for (const i of xs) {
