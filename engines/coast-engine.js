@@ -19,7 +19,6 @@ export function drawCoastline({ cells, vertices, features }) {
         (x.h >= 20 && x.c.some(y => cells[y].h < 20)
             || features[x.f].type === "lake"))
 
-    console.log(xs.map(x => x.t));
     for (const i of xs) {
         const f = i.f;
         if (used[f])
