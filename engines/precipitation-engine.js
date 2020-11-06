@@ -1,5 +1,5 @@
 import {
-    graphWidth, graphHeight,
+    graphWidth, graphHeight, mapCoordinates,
     view,
     options
 } from "../main.js";
