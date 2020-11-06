@@ -13,22 +13,22 @@ export function rankCells() {
         flMax = d3.max(cells.map(x => x.fl)) + d3.max(cells.map(x => x.conf)); // to normalize flux
     const areaMean = d3.mean(cells.map(x => x.area)); // to adjust population by cell area
 
-    let xs = cells.map((v, k) => k);
-    for (const i of xs) {
-        if (cells[i].h < 20)
+    let xs = cells.map(x => x);
+    for (const x of xs) {
+        if (x.h < 20)
             continue; // no population in water
-        let s = +biomesData.habitability[cells[i].biome || 0]; // base suitability derived from biome habitability
+        let s = +biomesData.habitability[x.biome || 0]; // base suitability derived from biome habitability
         if (!s)
             continue; // uninhabitable biomes has 0 suitability
         if (flMean)
-            s += normalize(cells[i].fl + cells[i].conf, flMean, flMax) * 250; // big rivers and confluences are valued
-        s -= (cells[i].h - 50) / 5; // low elevation is valued, high is not;
+            s += normalize(x.fl + x.conf, flMean, flMax) * 250; // big rivers and confluences are valued
+        s -= (x.h - 50) / 5; // low elevation is valued, high is not;
 
-        if (cells[i].t === 1) {
-            if (cells[i].r)
+        if (x.t === 1) {
+            if (x.r)
                 s += 15; // estuary is valued
-            const type = features[cells[cells[i].haven].f].type;
-            const group = features[cells[cells[i].haven].f].group;
+            const type = features[cells[x.haven].f].type;
+            const group = features[cells[x.haven].f].group;
             if (type === "lake") {
                 // lake coast is valued
                 if (group === "freshwater")
@@ -37,15 +37,15 @@ export function rankCells() {
                     s += 10;
             } else {
                 s += 5; // ocean coast is valued
-                if (cells[i].harbor === 1)
+                if (x.harbor === 1)
                     s += 20; // safe sea harbor is valued
             }
         }
 
-        cells[i].s = s / 5; // general population rate
+        x.s = s / 5; // general population rate
         // cell rural population is suitability adjusted by cell area
-        cells[i].pop = cells[i].s > 0
-            ? cells[i].s * cells[i].area / areaMean
+        x.pop = x.s > 0
+            ? x.s * x.area / areaMean
             : 0;
     }
 
