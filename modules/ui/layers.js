@@ -330,8 +330,8 @@ export function drawTemp() {
 
     const { cells, vertices } = grid, n = cells.length;
     const used = new Uint8Array(n); // to detect already passed cells
-    const min = d3.min(cells.temp),
-        max = d3.max(cells.temp);
+    const min = d3.min(cells.map(x => x.temp)),
+        max = d3.max(cells.map(x => x.temp));
     const step = Math.max(Math.round(Math.abs(min - max) / 5), 1);
     const isolines = d3.range(min + step, max, step);
     const chains = [], labels = []; // store label coordinates
