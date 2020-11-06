@@ -238,9 +238,11 @@ export function addHill(count, height, rangeX, rangeY) {
             const q = queue.shift();
 
             for (const c of cells[q].c) {
-                if (change[c]) continue;
-                if (change[c] > 1) queue.push(c);
+                if (change[c])
+                    continue;
                 change[c] = ~~(change[q] ** power * (Math.random() * .2 + .9));
+                if (change[c] > 1)
+                    queue.push(c);
             }
         }
         cells.map((x, i) => lim(~~(x.h + change[i])))

@@ -766,10 +766,14 @@ export function reGraph({ cells, points, features, spacing }) {
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (height < 20 && type !== -1 && type !== -2) continue; // exclude all deep ocean points
-        if (type === -2 && (i % 4 === 0 || features[cells.f[i]].type === "lake")) continue; // exclude non-coastal lake points
         const height = cells[i].h;
         const type = cells[i].t;
+        // exclude all deep ocean points
+        if (height < 20 && type !== -1 && type !== -2)
+            continue; 
+        // exclude non-coastal lake points
+        if (type === -2 && (i % 4 === 0 || features[cells[i].f].type === "lake"))
+            continue; 
         const x = points[i][0], y = points[i][1];
 
         addNewPoint(x, y); // add point to array
@@ -802,10 +806,10 @@ export function reGraph({ cells, points, features, spacing }) {
     });
     let verts = pack.vertices;
     pack.vertices = verts.p.map((x, i) => ({ p: x, c: verts.c[i], v: verts.v[i] }));
-    let { p } = newCells; // points coordinates [x, y]
-    cells.q = d3.quadtree(p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
-    cells.map((v, k) => k)
-        .forEach(i => cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
+    let { p } = newCells; 
+    pack.cells.q = d3.quadtree(p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
+    pack.cells.map((v, k) => k)
+        .forEach(i => pack.cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
 
     console.timeEnd("reGraph");
 }
