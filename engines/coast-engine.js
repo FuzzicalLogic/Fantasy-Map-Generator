@@ -61,7 +61,7 @@ export function drawCoastline({ cells, vertices, features }) {
     // find cell vertex to start path detection
     function findStart(i, t) {
         if (t === -1 && cells[i].b)
-            return cells[i].v.find(v => vertices.c[v].some(c => c >= n)); // map border cell
+            return cells[i].v.find(v => vertices[v].c.some(c => c >= n)); // map border cell
         const filtered = cells[i].c.filter(c => cells[c].t === t);
         const index = cells[i].c.indexOf(d3.min(filtered));
         return index === -1
@@ -73,6 +73,7 @@ export function drawCoastline({ cells, vertices, features }) {
     function connectVertices(start, t) {
         const chain = []; // vertices chain to form a path
         for (let i = 0, current = start; i === 0 || current !== start && i < 50000; i++) {
+            if (!!!vertices[current]) continue;
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices[current].c // cells adjacent to vertex
