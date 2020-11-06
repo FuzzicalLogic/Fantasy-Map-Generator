@@ -798,6 +798,7 @@ export function reGraph({ cells, points, features, spacing }) {
             newCells.h.push(height);
         }
     }
+    pack.boundary = grid.boundary;
     calculateVoronoi(pack, newCells.p);
     pack.cells.forEach((x, i) => {
         x.g = newCells.g[i];
