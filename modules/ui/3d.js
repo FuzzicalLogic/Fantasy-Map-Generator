@@ -210,8 +210,8 @@ async function createMesh(width, height, segmentsX, segmentsY) {
 }
 
 function getMeshHeight(i) {
-  const h = grid.cells.h[i];
-  return h < 20 ? 0 : (h - 18) / 82 * options.scale;
+    const h = grid.cells[i].h;
+    return h < 20 ? 0 : (h - 18) / 82 * options.scale;
 }
 
 function extendWater(width, height) {
