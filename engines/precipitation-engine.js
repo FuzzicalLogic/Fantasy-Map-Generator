@@ -63,6 +63,8 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
     function passWind(source, maxPrec, next, steps) {
         const maxPrecInit = maxPrec;
         for (let first of source) {
+            if (!!!cells[first]) continue;
+
             if (first[0]) {
                 maxPrec = Math.min(maxPrecInit * first[1], 255);
                 first = first[0];
