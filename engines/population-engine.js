@@ -9,18 +9,17 @@ export function rankCells() {
     cells.forEach(v => v.pop = 0);
     cells.forEach(v => v.s = 0);
 
+    const xs = cells.filter(x => x.h >= 20);
+
     // Normalize Flux
-    const fluxes = cells.filter(x => !!x.fl).map(x => x.fl),
-        confluences = cells.filter(x => !!x.conf).map(x => x.conf),
+    const fluxes = xs.filter(x => !!x.fl).map(x => x.fl),
+        confluences = xs.filter(x => !!x.conf).map(x => x.conf),
         flMean = d3.median(fluxes) || 0,
         flMax = d3.max(fluxes) + d3.max(confluences),
     // Adjust population by cell area
-        areaMean = d3.mean(cells.map(x => x.area));
+        areaMean = d3.mean(xs.map(x => x.area));
 
-    let xs = cells.map(x => x);
     for (const x of xs) {
-        if (x.h < 20)
-            continue; // no population in water
         let s = +biomesData.habitability[x.biome || 0]; // base suitability derived from biome habitability
         if (!s)
             continue; // uninhabitable biomes has 0 suitability
