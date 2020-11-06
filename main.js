@@ -764,7 +764,6 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 // recalculate Voronoi Graph to pack cells
 export function reGraph({ cells, points, features, spacing }) {
     console.time("reGraph");
-    console.log(pack.vertices);
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
     const spacing2 = spacing ** 2;
 
@@ -799,7 +798,6 @@ export function reGraph({ cells, points, features, spacing }) {
         }
     }
 
-    console.log(newCells.p);
     calculateVoronoi(pack, newCells.p);
     cells = pack.cells;
     cells.forEach((x, i) => {
