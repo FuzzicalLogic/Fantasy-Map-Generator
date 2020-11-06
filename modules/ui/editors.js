@@ -63,8 +63,8 @@ export function clicked() {
     else if (parent.id === "markers") editMarker();
     else if (grand.id === "coastline") editCoastline();
     else if (great.id === "armies") editRegiment();
-    else if (pack.cells.t[i] === 1) {
-        const node = document.getElementById("island_" + pack.cells.f[i]);
+    else if (pack.cells[i].t === 1) {
+        const node = document.getElementById("island_" + pack.cells[i].f);
         editCoastline(node);
     }
     else if (grand.id === "lakes") editLake();
