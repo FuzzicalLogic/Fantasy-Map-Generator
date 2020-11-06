@@ -338,12 +338,11 @@ export function drawTemp() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        const t = cells.temp[i];
+        const t = cells[i].temp;
         if (used[i] || !isolines.includes(t)) continue;
         const start = findStart(i, t);
         if (!start) continue;
         used[i] = 1;
-        //debug.append("circle").attr("r", 3).attr("cx", vertices.p[start][0]).attr("cy", vertices.p[start][1]).attr("fill", "red").attr("stroke", "black").attr("stroke-width", .3);
 
         const chain = connectVertices(start, t); // vertices chain to form a path
         const relaxed = chain.filter((v, i) => i % 4 === 0 || vertices.c[v].some(c => c >= n));
@@ -369,7 +368,7 @@ export function drawTemp() {
     // find cell with temp < isotherm and find vertex to start path detection
     function findStart(i, t) {
         if (cells[i].b) return cells[i].v.find(v => vertices.c[v].some(c => c >= n)); // map border cell
-        return cells[i].v[cells[i].c.findIndex(c => cells.temp[c] < t || !cells.temp[c])];
+        return cells[i].v[cells[i].c.findIndex(c => cells[c].temp < t || !cells[c].temp)];
     }
 
     function addLabel(points, t) {
@@ -399,10 +398,11 @@ export function drawTemp() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => cells.temp[c] === t).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || cells.temp[c[0]] < t;
-            const c1 = c[1] >= n || cells.temp[c[1]] < t;
-            const c2 = c[2] >= n || cells.temp[c[2]] < t;
+            c.filter(c => !!cells[c] && cells[c].temp === t).forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].temp < t;
+            const c1 = c[1] >= n || cells[c[1]].temp < t;
+            const c2 = c[2] >= n || cells[c[2]].temp < t;
+
             const v = vertices.v[current]; // neighboring vertices
             if (v[0] !== prev && c0 !== c1) current = v[0];
             else if (v[1] !== prev && c1 !== c2) current = v[1];
@@ -485,10 +485,11 @@ export function drawPrec() {
     const show = d3.transition().duration(800).ease(d3.easeSinIn);
     prec.selectAll("text").attr("opacity", 0).transition(show).attr("opacity", 1);
 
-    const data = cells.map((v,k)=>k).filter(i => cells.h[i] >= 20 && cells.prec[i]);
+    const data = cells.map((v, k) => k)
+        .filter(i => !!cells[i] && cells[i].h >= 20 && cells[i].prec);
     prec.selectAll("circle").data(data).enter().append("circle")
         .attr("cx", d => p[d][0]).attr("cy", d => p[d][1]).attr("r", 0)
-        .transition(show).attr("r", d => rn(Math.max(Math.sqrt(cells.prec[d] * .5), .8), 2));
+        .transition(show).attr("r", d => rn(Math.max(Math.sqrt(cells[d].prec * .5), .8), 2));
 }
 
 export function drawPopulation(event) {
@@ -533,28 +534,28 @@ export function drawIce() {
     let { ice } = view;
     const xs = grid.cells.map((v, k) => k);
     for (const i of xs) {
-        const t = temp[i];
+        const t = cells[i].temp;
         if (t > icebergMax) continue; // too warm: no ice
-        if (t > shieldMin && h[i] >= 20) continue; // non-glacier land: no ice
+        if (t > shieldMin && cells[i].h >= 20) continue; // non-glacier land: no ice
 
         if (t <= shieldMin) {
             // very cold: ice shield
             if (used[i]) continue; // already rendered
-            const onborder = cells[i].c.some(n => temp[n] > shieldMin);
+            const onborder = cells[i].c.some(n => cells[n].temp > shieldMin);
             if (!onborder) continue; // need to start from onborder cell
-            const vertex = cells[i].v.find(v => vertices.c[v].some(i => temp[i] > shieldMin));
+            const vertex = cells[i].v.find(v => !!vertices[v] && vertices[v].c.some(i => cells[i].temp > shieldMin));
             const chain = connectVertices(vertex);
             if (chain.length < 3) continue;
-            const points = clipPoly(chain.map(v => vertices.p[v]));
+            const points = clipPoly(chain.map(v => vertices[v].p));
             ice.append("polygon").attr("points", points).attr("type", "iceShield");
             continue;
         }
 
         // mildly cold: iceberd
         if (P(normalize(t, -7, 2.5))) continue; // t[-5; 2] cold: skip some cells
-        if (grid.features[cells.f[i]].type === "lake") continue; // lake: no icebers
+        if (grid.features[cells[i].f].type === "lake") continue; // lake: no icebers
         let size = (6.5 + t) / 10; // iceberg size: 0 = full size, 1 = zero size
-        if (cells.t[i] === -1) size *= 1.3; // coasline: smaller icebers
+        if (cells[i].t === -1) size *= 1.3; // coasline: smaller icebers
         size = Math.min(size * (.4 + rand() * 1.2), .95); // randomize iceberd size
         resizePolygon(i, size);
     }
@@ -571,12 +572,12 @@ export function drawIce() {
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
             const prev = last(chain); // previous vertex in chain
             chain.push(current); // add current vertex to sequence
-            const c = vertices.c[current]; // cells adjacent to vertex
-            c.filter(c => temp[c] <= shieldMin).forEach(c => used[c] = 1);
-            const c0 = c[0] >= n || temp[c[0]] > shieldMin;
-            const c1 = c[1] >= n || temp[c[1]] > shieldMin;
-            const c2 = c[2] >= n || temp[c[2]] > shieldMin;
-            const v = vertices.v[current]; // neighboring vertices
+            const c = vertices[current].c; // cells adjacent to vertex
+            c.filter(c => cells[c].temp <= shieldMin).forEach(c => used[c] = 1);
+            const c0 = c[0] >= n || cells[c[0]].temp > shieldMin;
+            const c1 = c[1] >= n || cells[c[1]].temp > shieldMin;
+            const c2 = c[2] >= n || cells[c[2]].temp > shieldMin;
+            const v = vertices[current].v; // neighboring vertices
             if (v[0] !== prev && c0 !== c1) current = v[0];
             else if (v[1] !== prev && c1 !== c2) current = v[1];
             else if (v[2] !== prev && c0 !== c2) current = v[2];

@@ -646,8 +646,6 @@ export function generate() {
         console.warn(`TOTAL: ${rn((performance.now() - timeStart) / 1000, 2)}s`);
         showStatistics();
         console.groupEnd("Generated Map " + seed);
-        console.log(grid);
-        console.log(pack);
     }
     catch (error) {
         console.error(error);
@@ -734,7 +732,6 @@ export function calculateMapCoordinates(size, latShift) {
 // temperature model
 export function calculateTemperatures({ cells, cellsX, points }) {
     console.time('calculateTemperatures');
-    cells.temp = new Int8Array(cells.length); // temperature array
 
     const tEq = +temperatureEquatorInput.value;
     const tPole = +temperaturePoleInput.value;
@@ -746,7 +743,7 @@ export function calculateTemperatures({ cells, cellsX, points }) {
         const lat = Math.abs(mapCoordinates.latN - y / graphHeight * mapCoordinates.latT); // [0; 90]
         const initTemp = tEq - int(lat / 90) * tDelta;
         for (let i = r; i < r + cellsX; i++) {
-            cells.temp[i] = Math.max(Math.min(initTemp - convertToFriendly(cells.h[i]), 127), -128);
+            cells[i].temp = ~~Math.max(Math.min(initTemp - convertToFriendly(cells[i].h), 127), -128);
         }
     });
 
@@ -769,10 +766,10 @@ export function reGraph({ cells, points, features, spacing }) {
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        const height = cells.h[i];
-        const type = cells.t[i];
         if (height < 20 && type !== -1 && type !== -2) continue; // exclude all deep ocean points
         if (type === -2 && (i % 4 === 0 || features[cells.f[i]].type === "lake")) continue; // exclude non-coastal lake points
+        const height = cells[i].h;
+        const type = cells[i].t;
         const x = points[i][0], y = points[i][1];
 
         addNewPoint(x, y); // add point to array
@@ -781,7 +778,7 @@ export function reGraph({ cells, points, features, spacing }) {
             if (cells[i].b) continue; // not for near-border cells
             cells[i].c.forEach(function (e) {
                 if (i > e) return;
-                if (cells.t[e] === type) {
+                if (cells[e].t === type) {
                     const dist2 = (y - points[e][1]) ** 2 + (x - points[e][0]) ** 2;
                     if (dist2 < spacing2) return; // too close to each other
                     const x1 = rn((x + points[e][0]) / 2, 1);
@@ -797,10 +794,8 @@ export function reGraph({ cells, points, features, spacing }) {
             newCells.h.push(height);
         }
     }
-
     calculateVoronoi(pack, newCells.p);
-    cells = pack.cells;
-    cells.forEach((x, i) => {
+    pack.cells.forEach((x, i) => {
         x.g = newCells.g[i];
         x.h = newCells.h[i];
         x.p = newCells.p[i];
@@ -819,8 +814,7 @@ export function reGraph({ cells, points, features, spacing }) {
 // Re-mark features (ocean, lakes, islands)
 export function reMarkFeatures({ cells }) {
     console.time("reMarkFeatures");
-    const features = [0],
-        temp = grid.cells.temp;
+    const features = [0];
     cells.forEach(x => x.f = 0);
     cells.forEach(x => x.t = 0);
     cells.forEach(x => x.haven = 0);
@@ -861,7 +855,7 @@ export function reMarkFeatures({ cells }) {
         const type = land ? "island" : border ? "ocean" : "lake";
         let group;
         if (type === "lake")
-            group = defineLakeGroup(start, cellNumber, temp[cells[start].g]);
+            group = defineLakeGroup(start, cellNumber, grid.cells[cells[start].g].temp);
         else if (type === "ocean")
             group = defineOceanGroup(cellNumber);
         else if (type === "island")

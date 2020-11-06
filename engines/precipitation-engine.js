@@ -9,7 +9,7 @@ import { rand } from "../modules/utils.js";
 export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
     console.time('generatePrecipitation');
     view.prec.selectAll("*").remove();
-    cells.prec = new Uint8Array(cells.length); // precipitation array
+    cells.forEach(x => x.prec = 0);
     const modifier = precInput.value / 100; // user's input
     let westerly = [], easterly = [], southerly = 0, northerly = 0;
 
@@ -57,36 +57,42 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
         const maxPrecInit = maxPrec;
         for (let first of source) {
             if (first[0]) { maxPrec = Math.min(maxPrecInit * first[1], 255); first = first[0]; }
-            let humidity = maxPrec - cells.h[first]; // initial water amount
             if (humidity <= 0) continue; // if first cell in row is too elevated cosdired wind dry
+            let humidity = maxPrec - cells[first].h; 
             for (let s = 0, current = first; s < steps; s++ , current += next) {
                 // no flux on permafrost
-                if (cells.temp[current] < -5) continue;
+                if (cells[current].temp < -5)
+                    continue;
                 // water cell
-                if (cells.h[current] < 20) {
-                    if (cells.h[current + next] >= 20) {
-                        cells.prec[current + next] += Math.max(humidity / rand(10, 20), 1); // coastal precipitation
-                    } else {
-                        humidity = Math.min(humidity + 5 * modifier, maxPrec); // wind gets more humidity passing water cell
-                        cells.prec[current] += 5 * modifier; // water cells precipitation (need to correctly pour water through lakes)
+                if (cells[current].h < 20) {
+                    if (!!cells[current + next] && cells[current + next].h >= 20) {
+                        // coastal precipitation
+                        cells[current + next].prec += Math.max(humidity / rand(10, 20), 1); 
+                    }
+                    else {
+                        // wind gets more humidity passing water cell
+                        humidity = Math.min(humidity + 5 * modifier, maxPrec); 
+                        // water cells precipitation (need to correctly pour water through lakes)
+                        cells[current].prec += 5 * modifier; 
                     }
                     continue;
                 }
 
                 // land cell
                 const precipitation = getPrecipitation(humidity, current, next);
-                cells.prec[current] += precipitation;
                 const evaporation = precipitation > 1.5 ? 1 : 0; // some humidity evaporates back to the atmosphere
+                cells[current].prec += precipitation;
                 humidity = Math.min(Math.max(humidity - precipitation + evaporation, 0), maxPrec);
             }
         }
     }
 
     function getPrecipitation(humidity, i, n) {
-        if (cells.h[i + n] > 85) return humidity; // 85 is max passable height
+        if (!!!cells[i + n])
+            return humidity;
         const normalLoss = Math.max(humidity / (10 * modifier), 1); // precipitation in normal conditions
-        const diff = Math.max(cells.h[i + n] - cells.h[i], 0); // difference in height
-        const mod = (cells.h[i + n] / 70) ** 2; // 50 stands for hills, 70 for mountains
+        const diff = Math.max(cells[i + n].h - cells[i].h, 0); // difference in height
+        const mod = (cells[i + n].h / 70) ** 2; // 50 stands for hills, 70 for mountains
         return Math.min(Math.max(normalLoss + diff * mod, 1), humidity);
     }
 

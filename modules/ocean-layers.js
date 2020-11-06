@@ -26,7 +26,7 @@ export function OceanLayers(grid) {
 
     let xs = cells.map((v, k) => k);
     for (const i of xs) {
-        const t = cells.t[i];
+        const t = cells[i].t;
         if (t > 0) continue;
         if (used[i] || !limits.includes(t)) continue;
         const start = findStart(i, t);
@@ -54,7 +54,7 @@ export function OceanLayers(grid) {
     // find eligible cell vertex to start path detection
     function findStart(i, t) {
         if (cells[i].b) return cells[i].v.find(v => vertices.c[v].some(c => c >= pointsN)); // map border cell
-        return cells[i].v[cells[i].c.findIndex(c => cells.t[c] < t || !cells.t[c])];
+        return cells[i].v[cells[i].c.findIndex(c => cells[c].t < t || !cells[c].t)];
     }
 
     console.timeEnd("drawOceanLayers");
@@ -72,14 +72,13 @@ function randomizeOutline() {
 
   // Define grid ocean cells type based on distance form land
 function markupOcean(cells, limits) {
-    let { t } = cells,
-        nCells = cells.length;
+    let nCells = cells.length;
     for (let j = -2; j >= limits[0] - 1; j--) {
         for (let i = 0; i < nCells; i++) {
-            if (t[i] !== j + 1)
+            if (cells[i].t !== j + 1)
                 continue;
             cells[i].c.forEach(e => {
-                if (!t[e]) t[e] = j;
+                if (!cells[e].t) cells[e].t = j;
             });
         }
     }
@@ -93,12 +92,12 @@ function connectVertices(start, t) {
         chain.push(current); // add current vertex to sequence
 
         const c = vertices.c[current]; // cells adjacent to vertex
-        c.filter(c => cells.t[c] === t).forEach(c => used[c] = 1);
+        c.filter(c => cells[c] && cells[c].t === t).forEach(c => used[c] = 1);
 
         const v = vertices.v[current]; // neighboring vertices
-        const c0 = !cells.t[c[0]] || cells.t[c[0]] === t - 1;
-        const c1 = !cells.t[c[1]] || cells.t[c[1]] === t - 1;
-        const c2 = !cells.t[c[2]] || cells.t[c[2]] === t - 1;
+        const c0 = !!!(cells[c[0]] && cells[c[0]].t) || cells[c[0]].t === t - 1;
+        const c1 = !!!(cells[c[1]] && cells[c[1]].t) || cells[c[1]].t === t - 1;
+        const c2 = !!!(cells[c[2]] && cells[c[2]].t) || cells[c[2]].t === t - 1;
 
         if (v[0] !== undefined && v[0] !== prev && c0 !== c1)
             current = v[0];

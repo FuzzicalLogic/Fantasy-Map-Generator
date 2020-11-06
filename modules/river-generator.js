@@ -21,9 +21,9 @@ export const generate = function (changeHeights = true) {
     markupLand(cells);
 
     // height with added t value to make map less depressed
-    const h = Array.from(cells.map(x => x.h))
+    const h = cells.map(x => x.h)
         .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + cells[i].t / 100)
-        .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + d3.mean(cells[i].c.map(c => cells[c].t)) / 10000);
+        .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + d3.mean(cells[i].c.map(c => cells[c].t)) / 10000)
 
     resolveDepressions(h);
     features.forEach(f => { delete f.river; delete f.flux; });
@@ -63,7 +63,7 @@ function drainWater(cells, h, features, riverNext, riversData) {
         .filter(i => h[i] >= 20)
         .sort((a, b) => h[b] - h[a]);
     land.forEach(function (i) {
-        cells[i].fl += grid.cells.prec[cells[i].g]; // flux from precipitation
+        cells[i].fl += grid.cells[cells[i].g].prec; // flux from precipitation
         const x = cells[i].p[0], y = cells[i].p[1];
 
         // near-border cell: pour out of the screen

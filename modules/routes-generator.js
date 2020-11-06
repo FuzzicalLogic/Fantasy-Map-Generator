@@ -216,7 +216,7 @@ function findOceanPath(cells, start, exit = null, toRoute = null) {
             }
             if (cells[c].h >= 20)
                 continue; // ignore land cells
-            if (temp[cells[c].g] <= -5)
+            if (grid.cells[cells[c].g].temp <= -5)
                 continue; // ignore cells with term <= -5
             const dist2 = (cells[c].p[1] - cells[n].p[1]) ** 2 + (cells[c].p[0] - cells[n].p[0]) ** 2;
             const totalCost = p + (cells[c].road ? 1 + dist2 / 2 : dist2 + (cells[c].t ? 1 : 100));

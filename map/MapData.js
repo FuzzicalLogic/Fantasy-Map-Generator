@@ -97,13 +97,13 @@ export function calculateVoronoi(graph, points) {
 export function markFeatures(grid, seed) {
     console.time("markFeatures");
     Math.seedrandom(seed); // restart Math.random() to get the same result on heightmap edit in Erase mode
-    const cells = grid.cells, heights = grid.cells.h;
-    cells.f = new Uint16Array(cells.length); // cell feature number
-    cells.t = new Int8Array(cells.length); // cell type: 1 = land coast; -1 = water near coast;
+    const cells = grid.cells, heights = cells.map(x => x.h);
+    cells.forEach(x => x.f = 0);
+    cells.forEach(x => x.t = 0);
     grid.features = [0];
 
     for (let i = 1, queue = [0]; queue[0] !== -1; i++) {
-        cells.f[queue[0]] = i; // feature number
+        cells[queue[0]].f = i; // feature number
         const land = heights[queue[0]] >= 20;
         let border = false; // true if feature touches map border
 
@@ -113,20 +113,20 @@ export function markFeatures(grid, seed) {
             cells[q].c.forEach(function (e) {
                 const eLand = heights[e] >= 20;
                 //if (eLand) cells.t[e] = 2;
-                if (land === eLand && cells.f[e] === 0) {
-                    cells.f[e] = i;
+                if (land === eLand && cells[e].f === 0) {
+                    cells[e].f = i;
                     queue.push(e);
                 }
                 if (land && !eLand) {
-                    cells.t[q] = 1;
-                    cells.t[e] = -1;
+                    cells[q].t = 1;
+                    cells[e].t = -1;
                 }
             });
         }
         const type = land ? "island" : border ? "ocean" : "lake";
         grid.features.push({ i, land, border, type });
 
-        queue[0] = cells.f.findIndex(f => !f); // find unmarked cell
+        queue[0] = cells.findIndex(x => !x.f); // find unmarked cell
     }
 
     console.timeEnd("markFeatures");
@@ -147,15 +147,15 @@ export function openNearSeaLakes(grid) {
 
         let xs = cells.map((v, k) => k)
         for (const i of xs) {
-            const lake = cells.f[i];
+            const lake = cells[i].f;
             if (features[lake].type !== "lake") continue; // not a lake cell
 
             check_neighbours:
             for (const c of cells[i].c) {
-                if (cells.t[c] !== 1 || cells[c].h > limit) continue; // water cannot brake this
+                if (cells[c].t !== 1 || cells[c].h > limit) continue; // water cannot brake this
 
                 for (const n of cells[c].c) {
-                    const ocean = cells.f[n];
+                    const ocean = cells[n].f;
                     if (features[ocean].type !== "ocean") continue; // not an ocean
                     removed = removeLake(c, lake, ocean);
                     break check_neighbours;
@@ -166,11 +166,11 @@ export function openNearSeaLakes(grid) {
     }
 
     function removeLake(threshold, lake, ocean) {
-        cells.h[threshold] = 19;
-        cells.t[threshold] = -1;
-        cells.f[threshold] = ocean;
+        cells[threshold].h = 19;
+        cells[threshold].t = -1;
+        cells[threshold].f = ocean;
         cells[threshold].c.forEach(function (c) {
-            if (cells.h[c] >= 20) cells.t[c] = 1; // mark as coastline
+            if (cells[c].h >= 20) cells[c].t = 1; // mark as coastline
         });
         features[lake].type = "ocean"; // mark former lake as ocean
         return true;

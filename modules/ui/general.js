@@ -276,7 +276,7 @@ function showMapTooltip(point, e, i, g) {
     else if (layerIsOn("togglePopulation"))
         tip(getPopulationTip(i));
     else if (layerIsOn("toggleTemp"))
-        tip("Temperature: " + convertTemperature(grid.cells.temp[g]));
+        tip("Temperature: " + convertTemperature(grid.cells[g].temp));
     else if (layerIsOn("toggleBiomes") && pack.cells[i].biome)
         tip("Biome: " + biomesData.name[pack.cells[i].biome]);
     else if (layerIsOn("toggleReligions") && pack.cells[i].religion) {
@@ -390,7 +390,7 @@ export function getHeight(h, abs) {
 
 // get user-friendly (real-world) precipitation value from map data
 function getFriendlyPrecipitation(i) {
-    const prec = grid.cells.prec[pack.cells[i].g];
+    const prec = grid.cells[pack.cells[i].g].prec;
     return prec * 100 + " mm";
 }
 

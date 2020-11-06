@@ -62,7 +62,6 @@ export function generate(map) {
     console.time('generateHeightmap');
     ({ cells, vertices, points: p } = map);
     cells.forEach(x => x.h = 0);
-    cells.h = new Uint8Array(p.length);
 
     Templates[document.getElementById("templateInput").value]()
     dispatchEvent(new CustomEvent('update', {
@@ -222,7 +221,7 @@ export function addHill(count, height, rangeX, rangeY) {
     while (count > 0) { addOneHill(); count--; }
 
     function addOneHill() {
-        const change = new Uint8Array(cells.h.length);
+        const change = cells.map(x => 0);
         let limit = 0, start;
         let h = lim(getNumberInRange(height));
 
@@ -231,7 +230,7 @@ export function addHill(count, height, rangeX, rangeY) {
             const y = getPointInRange(rangeY, graphHeight);
             start = findGridCell(x, y);
             limit++;
-        } while (cells.h[start] + h > 90 && limit < 50)
+        } while (cells[start].h + h > 90 && limit < 50)
 
         change[start] = h;
         const queue = [start];
@@ -256,7 +255,7 @@ export function addPit(count, height, rangeX, rangeY) {
     while (count > 0) { addOnePit(); count--; }
 
     function addOnePit() {
-        const used = new Uint8Array(cells.h.length);
+        const used = new Uint8Array(cells.length);
         let retries = 0, start;
         let h = lim(getNumberInRange(height));
 
@@ -265,7 +264,7 @@ export function addPit(count, height, rangeX, rangeY) {
             const y = getPointInRange(rangeY, graphHeight);
             start = findGridCell(x, y);
             retries++;
-        } while (cells.h[start] < 20 && retries < 50)
+        } while (cells[start].h < 20 && retries < 50)
 
         const queue = [start];
         while (queue.length) {
@@ -275,7 +274,7 @@ export function addPit(count, height, rangeX, rangeY) {
 
             cells[q].c.forEach(function (c, i) {
                 if (used[c]) return;
-                cells.h[c] = lim(cells.h[c] - h * (Math.random() * .2 + .9));
+                cells[c].h = ~~lim(cells[c].h - h * (Math.random() * .2 + .9));
                 used[c] = 1;
                 queue.push(c);
             });
@@ -333,7 +332,7 @@ export function addRange(count, height, rangeX, rangeY) {
             const frontier = queue.slice();
             queue = [], i++;
             frontier.forEach(i => {
-                cells.h[i] = lim(cells.h[i] + h * (Math.random() * .3 + .85));
+                cells[i].h = ~~lim(cells[i].h + h * (Math.random() * .3 + .85));
             });
             h = h ** power - 1;
             if (h < 2) break;
@@ -348,13 +347,12 @@ export function addRange(count, height, rangeX, rangeY) {
         range.forEach((cur, d) => {
             if (d % 6 !== 0) return;
             for (const l of d3.range(i)) {
-                const min = cells[cur].c[d3.scan(cells[cur].c, (a, b) => cells.h[a] - cells.h[b])]; // downhill cell
-                //debug.append("circle").attr("cx", p[min][0]).attr("cy", p[min][1]).attr("r", 1);
-                cells.h[min] = (cells.h[cur] * 2 + cells.h[min]) / 3;
+                const min = cells[cur].c.sort((a, b) => cells[a].h - cells[b].h)[0]
+                //const min = cells[cur].c[d3.scan(cells[cur].c, (a, b) => cells[a].h - cells[b].h)]; // downhill cell
+                cells[min].h = ~~((cells[cur].h * 2 + cells[min].h) / 3);
                 cur = min;
             }
         });
-
     }
 }
 
@@ -364,7 +362,7 @@ export function addTrough(count, height, rangeX, rangeY) {
     while (count > 0) { addOneTrough(); count--; }
 
     function addOneTrough() {
-        const used = new Uint8Array(cells.h.length);
+        const used = new Uint8Array(cells.length);
         let h = lim(getNumberInRange(height));
 
         // find start and end points
@@ -374,7 +372,7 @@ export function addTrough(count, height, rangeX, rangeY) {
             startY = getPointInRange(rangeY, graphHeight);
             start = findGridCell(startX, startY);
             limit++;
-        } while (cells.h[start] < 20 && limit < 50)
+        } while (cells[start].h < 20 && limit < 50)
 
         limit = 0;
         do {
@@ -413,9 +411,9 @@ export function addTrough(count, height, rangeX, rangeY) {
             const frontier = queue.slice();
             queue = [], i++;
             frontier.forEach(i => {
-                cells.h[i] = lim(cells.h[i] - h * (Math.random() * .3 + .85));
+                cells[i].h = ~~lim(cells[i].h - h * (Math.random() * .3 + .85));
             });
-            h = h ** power - 1;
+            h = ~~(h ** power - 1);
             if (h < 2) break;
             frontier.forEach(f => {
                 cells[f].c.forEach(i => {
@@ -423,14 +421,13 @@ export function addTrough(count, height, rangeX, rangeY) {
                 });
             });
         }
-
         // generate prominences
         range.forEach((cur, d) => {
             if (d % 6 !== 0) return;
             for (const l of d3.range(i)) {
-                const min = cells[cur].c[d3.scan(cells[cur].c, (a, b) => cells.h[a] - cells.h[b])]; // downhill cell
+                const min = cells[cur].c.map(x => x).sort((a,b)=> cells[a].h - cells[b].h)[0]; // downhill cell
                 //debug.append("circle").attr("cx", p[min][0]).attr("cy", p[min][1]).attr("r", 1);
-                cells.h[min] = (cells.h[cur] * 2 + cells.h[min]) / 3;
+                cells[min].h = (cells[cur].h * 2 + cells[min].h) / 3;
                 cur = min;
             }
         });
@@ -441,7 +438,7 @@ export function addTrough(count, height, rangeX, rangeY) {
 export function addStrait(width, direction = "vertical") {
     width = Math.min(getNumberInRange(width), grid.cellsX / 3);
     if (width < 1 && P(width)) return;
-    const used = new Uint8Array(cells.h.length);
+    const used = new Uint8Array(cells.length);
     const vert = direction === "vertical";
     const startX = vert ? Math.floor(Math.random() * graphWidth * .4 + graphWidth * .3) : 5;
     const startY = vert ? 5 : Math.floor(Math.random() * graphHeight * .4 + graphHeight * .3);
@@ -477,8 +474,8 @@ export function addStrait(width, direction = "vertical") {
                 if (used[e]) return;
                 used[e] = 1;
                 query.push(e);
-                cells.h[e] **= exp;
-                if (cells.h[e] > 100) cells.h[e] = 5;
+                cells[e].h = ~~(cells[e].h ** exp);
+                if (cells[e].h > 100) cells.h[e] = 5;
             });
         });
         range = query.slice();
@@ -493,7 +490,8 @@ export function modify(range, add, mult, power) {
             ? 0 : +range.split("-")[0];
     const max = range === "land" || range === "all"
         ? 100 : +range.split("-")[1];
-    grid.cells.h = grid.cells.h.map(
+
+    grid.cells.map(x => x.h).map(
         h => h >= min && h <= max ? mod(h) : h
     );
 
@@ -512,10 +510,10 @@ export function modify(range, add, mult, power) {
 }
 
 export function smooth(fr = 2, add = 0) {
-    cells.h = cells.h.map((h, i) => {
-        const a = [h];
-        cells[i].c.forEach(c => a.push(cells.h[c]));
         return lim((h * (fr - 1) + d3.mean(a) + add) / fr);
+    cells.map((x, i) => {
+        const a = [~~x.h];
+        cells[i].c.forEach(c => a.push(~~cells[c].h));
     });
 }
 

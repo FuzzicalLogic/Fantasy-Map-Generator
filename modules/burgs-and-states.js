@@ -183,7 +183,7 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
 
         // asign port status to some coastline burgs with temp > 0 °C
         const isHaven = cells[i].haven;
-        if (isHaven && temp[cells[i].g] > 0) {
+        if (isHaven && grid.cells[cells[i].g].temp > 0) {
             const idxF = cells[isHaven].f; // water body id
             // port is a capital with any harbor OR town with good harbor
             const port = features[idxF].cells > 1 && ((b.capital && cells[i].harbor) || cells[i].harbor === 1);

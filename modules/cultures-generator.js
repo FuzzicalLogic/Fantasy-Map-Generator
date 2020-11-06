@@ -12,7 +12,6 @@ let cells;
 export function generate() {
     console.time('generateCultures');
     cells = pack.cells;
-//    cells.culture = new Uint16Array(cells.length); // cell cultures
     cells.forEach(v => v.culture = 0);
     let count = Math.min(+culturesInput.value, +culturesSet.selectedOptions[0].dataset.max);
 
@@ -164,11 +163,10 @@ export function getDefault(count) {
     const cells = pack.cells,
         sMax = d3.max(cells.map(x => x.s)),
         t = cells.map(x => x.t),
-        h = cells.map(x => x.h),
-        temp = grid.cells.temp;
+        h = cells.map(x => x.h);
     const n = cell => Math.ceil(cells[cell].s / sMax * 3) // normalized cell score
     const td = (cell, goal) => {
-        const d = Math.abs(temp[cells[cell].g] - goal);
+        const d = Math.abs(grid.cells[cells[cell].g].temp - goal);
         return d ? d + 1 : 1;
     } // temperature difference fee
     const bd = (cell, biomes, fee = 4) =>
