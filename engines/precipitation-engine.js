@@ -37,20 +37,22 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
     });
 
     // distribute winds by direction
-    if (westerly.length) passWind(westerly, 120 * modifier, 1, cellsX);
-    if (easterly.length) passWind(easterly, 120 * modifier, -1, cellsX);
+    if (westerly.length)
+        passWind(westerly, ~~(120 * modifier), 1, cellsX);
+    if (easterly.length)
+        passWind(easterly, ~~(120 * modifier), -1, cellsX);
     const vertT = (southerly + northerly);
     if (northerly) {
         const bandN = (Math.abs(mapCoordinates.latN) - 1) / 5 | 0;
         const latModN = mapCoordinates.latT > 60 ? d3.mean(lalitudeModifier) : lalitudeModifier[bandN];
         const maxPrecN = northerly / vertT * 60 * modifier * latModN;
-        passWind(d3.range(0, cellsX, 1), maxPrecN, cellsX, cellsY);
+        passWind(d3.range(0, cellsX, 1), ~~maxPrecN, cellsX, cellsY);
     }
     if (southerly) {
         const bandS = (Math.abs(mapCoordinates.latS) - 1) / 5 | 0;
         const latModS = mapCoordinates.latT > 60 ? d3.mean(lalitudeModifier) : lalitudeModifier[bandS];
         const maxPrecS = southerly / vertT * 60 * modifier * latModS;
-        passWind(d3.range(cells.length - cellsX, cells.length, 1), maxPrecS, -cellsX, cellsY);
+        passWind(d3.range(cells.length - cellsX, cells.length, 1), ~~maxPrecS, -cellsX, cellsY);
     }
 
     function passWind(source, maxPrec, next, steps) {
