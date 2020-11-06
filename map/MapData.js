@@ -141,7 +141,6 @@ export function openNearSeaLakes(grid) {
     if (!features.find(f => f.type === "lake")) return; // no lakes
     console.time("openLakes");
     const limit = 50; // max height that can be breached by water
-
     for (let t = 0, removed = true; t < 5 && removed; t++) {
         removed = false;
 
@@ -189,7 +188,7 @@ export function calculateVoronoiO(graph, points) {
 
     console.time("calculateVoronoi");
     const voronoi = Voronoi(delaunay, allPoints, n);
-    graph.cells = voronoi.cells;
-    graph.vertices = voronoi.vertices;
+    graph.cells = [ ...voronoi.cells ];
+    graph.vertices = { ...voronoi.vertices };
     console.timeEnd("calculateVoronoi");
 }
