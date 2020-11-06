@@ -15,15 +15,13 @@ export function drawCoastline({ cells, vertices, features }) {
     const waterMask = view.defs.select("#water");
     lineGen.curve(d3.curveBasisClosed);
 
-    let xs = cells.map((x, i) => ({ ...x, i: i }))
-        .filter(x => x.h >= 20 && x.c.some(y => cells[y].h < 20 && features[cells[y].f].type === "ocean"))
-//        .filter(x => x.f !== "ocean" )
-//        .filter(x => !!x.i && x.h >= 20)
-//        .filter(x => x.t === 1 || x.t === -1)
-        .map(x => x.i);
+    let xs = cells.filter(x =>
+        (x.h >= 20 && x.c.some(y => cells[y].h < 20)
+            || features[x.f].type === "lake"))
 
+    console.log(xs.map(x => x.t));
     for (const i of xs) {
-        const f = cells[i].f;
+        const f = i.f;
         if (used[f])
             continue; // already connected
 
@@ -59,14 +57,14 @@ export function drawCoastline({ cells, vertices, features }) {
     }
 
     // find cell vertex to start path detection
-    function findStart(i, t) {
-        if (t === -1 && cells[i].b)
-            return cells[i].v.find(v => vertices[v].c.some(c => c >= n)); // map border cell
-        const filtered = cells[i].c.filter(c => cells[c].t === t);
-        const index = cells[i].c.indexOf(d3.min(filtered));
+    function findStart(cell, t) {
+        if (t === -1 && cell.b)
+            return cell.v.find(v => vertices[v].c.some(c => c >= n)); // map border cell
+        const filtered = cell.c.filter(c => cells[c].t === t);
+        const index = cell.c.indexOf(d3.min(filtered));
         return index === -1
             ? index
-            : cells[i].v[index];
+            : cell.v[index];
     }
 
     // connect vertices to chain
@@ -102,13 +100,13 @@ export function drawCoastline({ cells, vertices, features }) {
 
         for (let i = 0; i < vchain.length; i++) {
             const v = vchain[i];
-            let [x, y] = [p[v][0], p[v][1]];
+            let [x, y] = vertices[v].p;
             if (i && vchain[i + 1] && tree.find(x, y, r) !== undefined) {
                 const v1 = vchain[i - 1], v2 = vchain[i + 1];
-                const [x1, y1] = [p[v1][0], p[v1][1]];
-                const [x2, y2] = [p[v2][0], p[v2][1]];
+                const [x1, y1] = vertices[v1].p;
+                const [x2, y2] = vertices[v2].p;
                 [x, y] = [(x1 + x2) / 2, (y1 + y2) / 2];
-                p[v] = [x, y];
+                vertices[v].p = [x, y];
             }
             tree.add([x, y]);
         }
