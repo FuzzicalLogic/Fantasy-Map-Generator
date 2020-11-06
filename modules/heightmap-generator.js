@@ -243,8 +243,8 @@ export function addHill(count, height, rangeX, rangeY) {
                 if (change[c] > 1) queue.push(c);
             }
         }
-
-        cells.h = cells.h.map((h, i) => lim(h + change[i]));
+        cells.map((x, i) => lim(~~(x.h + change[i])))
+            .forEach((x, i) => cells[i].h = ~~x);
     }
 
 }
@@ -288,8 +288,8 @@ export function addRange(count, height, rangeX, rangeY) {
     while (count > 0) { addOneRange(); count--; }
 
     function addOneRange() {
-        const used = new Uint8Array(cells.h.length);
-        let h = lim(getNumberInRange(height));
+        const used = new Uint8Array(cells.length);
+        let h = lim(~~getNumberInRange(height));
 
         // find start and end points
         const startX = getPointInRange(rangeX, graphWidth);
@@ -334,7 +334,7 @@ export function addRange(count, height, rangeX, rangeY) {
             frontier.forEach(i => {
                 cells[i].h = ~~lim(cells[i].h + h * (Math.random() * .3 + .85));
             });
-            h = h ** power - 1;
+            h = ~~(h ** power - 1);
             if (h < 2) break;
             frontier.forEach(f => {
                 cells[f].c.forEach(i => {
@@ -501,19 +501,21 @@ export function modify(range, add, mult, power) {
                 ? Math.max(v + add, 20) : v + add;
         if (mult !== 1)
             v = min === 20
-                ? (v - 20) * mult + 20 : v * mult;
+                ? ~~((v - 20) * mult + 20) : ~~(v * mult);
         if (power)
             v = min === 20
-                ? (v - 20) ** power + 20 : v ** power;
+                ? ~~((v - 20) ** power + 20) : ~~(v ** power);
         return lim(v);
     }
 }
 
 export function smooth(fr = 2, add = 0) {
-        return lim((h * (fr - 1) + d3.mean(a) + add) / fr);
     cells.map((x, i) => {
         const a = [~~x.h];
         cells[i].c.forEach(c => a.push(~~cells[c].h));
+        return ~~lim((x.h * (fr - 1) + d3.mean(a) + add) / fr);
+    }).forEach((x, i) => {
+        cells[i].h = ~~x;
     });
 }
 
