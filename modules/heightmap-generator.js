@@ -493,7 +493,7 @@ export function modify(range, add, mult, power) {
 
     grid.cells.map(x => x.h).map(
         h => h >= min && h <= max ? mod(h) : h
-    );
+    ).forEach((x,i) => grid.cells[i].h = x);
 
     function mod(v) {
         if (add)

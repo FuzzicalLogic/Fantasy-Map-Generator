@@ -797,14 +797,13 @@ export function reGraph({ cells, points, features, spacing }) {
     calculateVoronoi(pack, newCells.p);
     pack.cells.forEach((x, i) => {
         x.g = newCells.g[i];
-        x.h = newCells.h[i];
+        x.h = ~~(newCells.h[i]);
         x.p = newCells.p[i];
     });
     let verts = pack.vertices;
     pack.vertices = verts.p.map((x, i) => ({ p: x, c: verts.c[i], v: verts.v[i] }));
     let { p } = newCells; // points coordinates [x, y]
     cells.q = d3.quadtree(p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
-    //cells.h = new Uint8Array(newCells.h); // heights
     cells.map((v, k) => k)
         .forEach(i => cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
 

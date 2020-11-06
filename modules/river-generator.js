@@ -24,6 +24,7 @@ export const generate = function (changeHeights = true) {
     const h = cells.map(x => x.h)
         .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + cells[i].t / 100)
         .map((h, i) => h < 20 || cells[i].t < 1 ? h : h + d3.mean(cells[i].c.map(c => cells[c].t)) / 10000)
+        .map(x => ~~x);
 
     resolveDepressions(h);
     features.forEach(f => { delete f.river; delete f.flux; });
