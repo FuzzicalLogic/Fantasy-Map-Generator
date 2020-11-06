@@ -264,7 +264,7 @@ export function drawHeightmap() {
         const onborder = c.some(n => cells[n].h < h);
         if (!onborder)
             continue;
-        const vertex = v.find(v => vertices[v].c.some(i => cells[i].h < h));
+        const vertex = v.find(v => vertices[v].c.some(i => cells[i] && cells[i].h < h));
         
         const chain = connectVertices(vertex, h);
         if (chain.length < 3)
@@ -290,7 +290,7 @@ export function drawHeightmap() {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices[current].c; // cells adjacent to vertex
-            c.filter(c => ~~(cells[c].h) === h)
+            c.filter(c => cells[c] && cells[c].h === h)
                 .forEach(c => used[c] = 1);
             const c0 = c[0] >= n || cells[c[0]].h < h;
             const c1 = c[1] >= n || cells[c[1]].h < h;
@@ -397,6 +397,7 @@ export function drawTemp() {
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
+
             const c = vertices.c[current]; // cells adjacent to vertex
             c.filter(c => !!cells[c] && cells[c].temp === t).forEach(c => used[c] = 1);
             const c0 = c[0] >= n || cells[c[0]].temp < t;
@@ -434,7 +435,7 @@ export function drawBiomes() {
         if (!onborder) continue;
         const edgeVerticle = cells[i].v.find(v =>
             vertices[v].c.some(i =>
-                cells[i].biome !== b
+                !!cells[i] && cells[i].biome !== b
             )
         );
         const chain = connectVertices(edgeVerticle, b);
@@ -452,6 +453,7 @@ export function drawBiomes() {
     function connectVertices(start, b) {
         const chain = []; // vertices chain to form a path
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
+            if (!!!vertices[current]) continue
             const prev = chain[chain.length - 1]; // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices[current].c; // cells adjacent to vertex
@@ -570,6 +572,7 @@ export function drawIce() {
     function connectVertices(start) {
         const chain = []; // vertices chain to form a path
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
+            if (!!!vertices[current]) continue;
             const prev = last(chain); // previous vertex in chain
             chain.push(current); // add current vertex to sequence
             const c = vertices[current].c; // cells adjacent to vertex
@@ -815,6 +818,7 @@ export function drawStates() {
         }
 
         for (let i = 0, current = start; i === 0 || current !== start && i < 20000; i++) {
+            if (!!!vertices[current]) continue;
             const prev = chain[chain.length - 1]
                 ? chain[chain.length - 1][0]
                 : -1; // previous vertex in chain
@@ -871,7 +875,7 @@ export function drawBorders() {
         if (provToCell) {
             const provTo = cells[provToCell].province;
             pUsed[p][provToCell] = provTo;
-            const vertex = cells[i].v.find(v => vertices[v].c.some(i => cells[i].province === provTo));
+            const vertex = cells[i].v.find(v => vertices[v].c.some(i => !!cells[i] && cells[i].province === provTo));
             const chain = connectVertices(vertex, p, cells.map(x => x.province), provTo, pUsed);
 
             if (chain.length > 1) {
@@ -886,7 +890,7 @@ export function drawBorders() {
         if (stateToCell !== undefined) {
             const stateTo = cells[stateToCell].state;
             sUsed[s][stateToCell] = stateTo;
-            const vertex = cells[i].v.find(v => vertices[v].c.some(i => cells[i].h >= 20 && cells[i].state === stateTo));
+            const vertex = cells[i].v.find(v => vertices[v].c.some(i => !!cells[i] && cells[i].h >= 20 && cells[i].state === stateTo));
             const chain = connectVertices(vertex, s, cells.map(x => x.state), stateTo, sUsed);
 
             if (chain.length > 1) {
@@ -904,10 +908,13 @@ export function drawBorders() {
     function connectVertices(current, f, array, t, used) {
         let chain = [];
         const checkCell = c => c >= n || array[c] !== f;
-        const checkVertex = v => vertices[v].c.some(c => array[c] === f) && vertices[v].c.some(c => array[c] === t && cells[c].h >= 20);
+        const checkVertex = v => !!vertices[v]
+            && vertices[v].c.some(c => array[c] === f)
+            && vertices[v].c.some(c => array[c] === t && cells[c].h >= 20);
 
         // find starting vertex
         for (let i = 0; i < 1000; i++) {
+            if (!!!vertices[current]) continue;
             if (i === 999)
                 console.error("Find starting vertex: limit is reached", current, f, t);
             const p = chain[chain.length - 2] || -1; // previous vertex
@@ -986,7 +993,7 @@ export function drawProvinces() {
         if (!onborder) continue;
 
         const borderWith = cells[i].c.map(c => cells[c].province).find(n => n !== p);
-        const vertex = cells[i].v.find(v => vertices[v].c.some(i => cells[i].province === borderWith));
+        const vertex = cells[i].v.find(v => vertices[v].c.some(i => !!cells[i] && cells[i].province === borderWith));
         const chain = connectVertices(vertex, p, borderWith);
         if (chain.length < 3)
             continue;
@@ -1028,8 +1035,8 @@ export function drawProvinces() {
         let land = vertices[start].c.some(c =>
             cells[c].h >= 20 && cells[c].province !== t);
         function check(i) {
-            province = cells[i].province;
-            land = (!!!cells[i] && !!!cells[i].h)
+            province = !!cells[i] ? cells[i].province : 0;
+            land = (!!cells[i] && !!cells[i].h)
                 ? cells[i].h >= 20 : false;
         }
 
@@ -1037,7 +1044,7 @@ export function drawProvinces() {
             const prev = chain[chain.length - 1] ? chain[chain.length - 1][0] : -1; // previous vertex in chain
             chain.push([current, province, land]); // add current vertex to sequence
             const c = vertices[current].c; // cells adjacent to vertex
-            c.filter(c => cells[c].province === t)
+            c.filter(c => !!cells[c] && cells[c].province === t)
                 .forEach(c => used[c] = 1);
             const c0 = c[0] >= n || cells[c[0]].province !== t;
             const c1 = c[1] >= n || cells[c[1]].province !== t;
