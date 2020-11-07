@@ -29,7 +29,7 @@ export function OceanLayers(grid) {
     for (const i of xs) {
         const t = cells[i].t;
         if (used[i] || !limits.includes(t)) continue;
-        const start = findStart(i, t);
+        const start = findStart(cells[i]);
         if (!start) continue;
         used[i] = 1;
         const chain = connectVertices(start, t); // vertices chain to form a path
@@ -52,9 +52,12 @@ export function OceanLayers(grid) {
     }
 
     // find eligible cell vertex to start path detection
-    function findStart(i, t) {
-        if (cells[i].b) return cells[i].v.find(v => vertices.c[v].some(c => c >= pointsN)); // map border cell
-        return cells[i].v[cells[i].c.findIndex(c => cells[c].t < t || !cells[c].t)];
+    function findStart(fromCell) {
+        let { t } = fromCell;
+        // map border cell
+        if (fromCell.b)
+            return fromCell.v.find(v => vertices.c[v].some(c => c >= cells.length)); 
+        return fromCell.v[fromCell.c.findIndex(c => cells[c].t < t || !cells[c].t)];
     }
 
     console.timeEnd("drawOceanLayers");
