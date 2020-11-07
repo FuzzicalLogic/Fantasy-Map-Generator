@@ -45,7 +45,7 @@ export function rankCells() {
             }
         }
 
-        x.s = s / 5; // general population rate
+        x.s = ~~s / 5; // general population rate
         // cell rural population is suitability adjusted by cell area
         x.pop = x.s > 0
             ? x.s * x.area / areaMean
