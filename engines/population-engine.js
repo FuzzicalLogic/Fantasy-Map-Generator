@@ -1,4 +1,4 @@
-import { pack, biomesData } from "../main.js";
+import { pack } from "../main.js";
 import {
     normalize
 } from "../modules/utils.js";
