@@ -32,21 +32,20 @@ export function OceanLayers(grid) {
         const start = findStart(cells[i]);
         if (!start) continue;
         used[i] = 1;
-        const chain = connectVertices(start, t); // vertices chain to form a path
+        // vertices chain to form a path
+        const chain = connectVertices(start, t); 
         if (chain.length < 4) continue;
-        const relax = 1 + t * -2; // select only n-th point
+        // select only n-th point
+        const relax = 1 + t * -2; 
         const relaxed = chain.filter((v, i) => !(i % relax) || vertices.c[v].some(c => c >= pointsN));
         if (relaxed.length < 4) continue;
         const points = clipPoly(relaxed.map(v => vertices.p[v]), 1);
-        //const inside = d3.polygonContains(points, grid.points[i]);
-        chains.push([t, points]); //chains.push([t, points, inside]);
+        chains.push([t, points]); 
     }
 
-    //const bbox = `M0,0h${graphWidth}v${graphHeight}h${-graphWidth}Z`;
     for (const t of limits) {
         const layer = chains.filter(c => c[0] === t);
         let path = layer.map(c => round(lineGen(c[1]))).join("");
-        //if (layer.every(c => !c[2])) path = bbox + path; // add outer ring if all segments are outside (works not for all cases)
         if (path)
             oceanLayers.append("path").attr("d", path).attr("fill", "#ecf2f9").style("opacity", opacity);
     }
@@ -67,8 +66,13 @@ function randomizeOutline() {
     const limits = [];
     let odd = .2
     for (let l = -9; l < 0; l++) {
-        if (P(odd)) { odd = .2; limits.push(l); }
-        else { odd *= 2; }
+        if (P(odd)) {
+            odd = .2;
+            limits.push(l);
+        }
+        else {
+            odd *= 2;
+        }
     }
     return limits;
 }
