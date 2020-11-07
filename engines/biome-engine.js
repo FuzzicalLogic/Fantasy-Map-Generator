@@ -1,4 +1,4 @@
-import { pack, grid, getBiomeId } from "../main.js";
+import { pack, grid, getBiomeId, biomesData } from "../main.js";
 import { rn, isLand } from "../modules/utils.js";
 
 // assign biome id for each cell
@@ -19,6 +19,7 @@ export function defineBiomes() {
             i.h = 19;
         const m = i.h < 20 ? 0 : calculateMoisture(i); // cell moisture
         i.biome = getBiomeId(m, grid.cells[i.g].temp, i.h);
+        i.s = +biomesData.habitability[i.biome || 0] || 0;
     }
 
     function calculateMoisture(forCell) {

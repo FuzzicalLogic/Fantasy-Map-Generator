@@ -7,7 +7,6 @@ export function rankCells() {
     console.time('rankCells');
     const { cells, features } = pack;
     cells.forEach(v => v.pop = 0);
-    cells.forEach(x => x.s = +biomesData.habitability[x.biome || 0]);
 
     const landCells = cells.filter(x => x.h >= 20);
 
