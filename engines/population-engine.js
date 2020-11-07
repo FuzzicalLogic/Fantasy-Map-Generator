@@ -7,7 +7,7 @@ export function rankCells() {
     console.time('rankCells');
     const { cells, features } = pack;
     cells.forEach(v => v.pop = 0);
-    cells.forEach(v => v.s = 0);
+    cells.forEach(x => x.s = +biomesData.habitability[x.biome || 0]);
 
     const xs = cells.filter(x => x.h >= 20);
 
@@ -20,9 +20,9 @@ export function rankCells() {
         areaMean = d3.mean(xs.map(x => x.area));
 
     for (const x of xs) {
-        let s = +biomesData.habitability[x.biome || 0]; // base suitability derived from biome habitability
         if (!s)
             continue; // uninhabitable biomes has 0 suitability
+        let s = x.s;
         if (flMean)
             s += normalize(x.fl + x.conf, flMean, flMax) * 250; // big rivers and confluences are valued
         s -= (x.h - 50) / 5; // low elevation is valued, high is not;
