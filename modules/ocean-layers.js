@@ -24,20 +24,20 @@ export function OceanLayers(grid) {
     const opacity = rn(0.4 / limits.length, 2);
     used = [];
 
-    let xs = cells.filter(x => x.t <= 0)
-        .map((v, k) => k);
-    for (const i of xs) {
-        const t = cells[i].t;
-        if (used.includes(cells[i]) || !limits.includes(t)) continue;
-        const start = findStart(cells[i]);
+    let ocean = cells.filter(x => x.t <= 0);
+    for (const cell of ocean) {
+        const t = cell.t;
+        if (used.includes(cell) || !limits.includes(t)) continue;
+        const start = findStart(cell);
         if (!start) continue;
-        used.push(cells[i]);
+        used.push(cell);
         // vertices chain to form a path
         const chain = connectVertices(start, t); 
         if (chain.length < 4) continue;
         // select only n-th point
         const relax = 1 + t * -2; 
-        const relaxed = chain.filter((v, i) => !(i % relax) || vertices.c[v].some(c => c >= pointsN));
+        const relaxed = chain.filter((v, i) =>
+            !(i % relax) || vertices.c[v].some(c => c >= pointsN));
         if (relaxed.length < 4) continue;
         const points = clipPoly(relaxed.map(v => vertices.p[v]), 1);
         chains.push([t, points]); 
