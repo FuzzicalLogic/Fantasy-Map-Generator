@@ -44,7 +44,7 @@ export function OceanLayers(grid) {
     }
 
     chains.filter(c => limits.includes(c[0]))
-        .map(layer => round(lineGen(layer[1])))
+        .map(([,points]) => createPath(points))
         .forEach(path => oceanLayers.append("path")
             .attr("d", path)
             .attr("fill", "#ecf2f9")
@@ -62,6 +62,8 @@ export function OceanLayers(grid) {
 
     console.timeEnd("drawOceanLayers");
 }
+
+const createPath = points => round(lineGen(points));
 
 function randomizeOutline() {
     const limits = [];
