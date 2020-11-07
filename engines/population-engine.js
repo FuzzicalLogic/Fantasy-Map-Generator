@@ -9,19 +9,19 @@ export function rankCells() {
     cells.forEach(v => v.pop = 0);
     cells.forEach(x => x.s = +biomesData.habitability[x.biome || 0]);
 
-    const xs = cells.filter(x => x.h >= 20);
+    const landCells = cells.filter(x => x.h >= 20);
 
     // Normalize Flux
-    const fluxes = xs.filter(x => !!x.fl).map(x => x.fl),
-        confluences = xs.filter(x => !!x.conf).map(x => x.conf),
+    const fluxes = landCells.filter(x => !!x.fl).map(x => x.fl),
+        confluences = landCells.filter(x => !!x.conf).map(x => x.conf),
         flMean = d3.median(fluxes) || 0,
         flMax = d3.max(fluxes) + d3.max(confluences),
     // Adjust population by cell area
-        areaMean = d3.mean(xs.map(x => x.area));
+        areaMean = d3.mean(landCells.map(x => x.area));
 
-    for (const x of xs) {
-        if (!s)
-            continue; // uninhabitable biomes has 0 suitability
+    // Initialize and remove unsuitable cells
+    const suitable = landCells.filter(x => !!x.s);
+    for (const x of suitable) {
         let s = x.s;
         if (flMean)
             s += normalize(x.fl + x.conf, flMean, flMax) * 250; // big rivers and confluences are valued
