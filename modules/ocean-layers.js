@@ -72,15 +72,12 @@ function randomizeOutline() {
 
   // Define grid ocean cells type based on distance form land
 function markupOcean(cells, limits) {
-    let nCells = cells.length;
     for (let j = -2; j >= limits[0] - 1; j--) {
-        for (let i = 0; i < nCells; i++) {
-            if (cells[i].t !== j + 1)
-                continue;
-            cells[i].c.forEach(e => {
-                if (!cells[e].t) cells[e].t = j;
-            });
-        }
+        cells.filter(x => x.t === j + 1)
+            .forEach(x => x.c.forEach(y => {
+                if (!cells[y].t)
+                    cells[y].t = j
+            }));
     }
 }
 
