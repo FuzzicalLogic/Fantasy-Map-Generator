@@ -43,12 +43,13 @@ export function OceanLayers(grid) {
         chains.push([t, points]); 
     }
 
-    for (const t of limits) {
-        const layer = chains.filter(c => c[0] === t);
-        let path = layer.map(c => round(lineGen(c[1]))).join("");
-        if (path)
-            oceanLayers.append("path").attr("d", path).attr("fill", "#ecf2f9").style("opacity", opacity);
-    }
+    chains.filter(c => limits.includes(c[0]))
+        .map(layer => round(lineGen(layer[1])))
+        .forEach(path => oceanLayers.append("path")
+            .attr("d", path)
+            .attr("fill", "#ecf2f9")
+            .style("opacity", opacity)
+        );
 
     // find eligible cell vertex to start path detection
     function findStart(fromCell) {
