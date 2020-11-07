@@ -22,16 +22,16 @@ export function OceanLayers(grid) {
 
     const chains = [];
     const opacity = rn(0.4 / limits.length, 2);
-    used = new Uint8Array(pointsN); // to detect already passed cells
+    used = [];
 
     let xs = cells.filter(x => x.t <= 0)
         .map((v, k) => k);
     for (const i of xs) {
         const t = cells[i].t;
-        if (used[i] || !limits.includes(t)) continue;
+        if (used.includes(cells[i]) || !limits.includes(t)) continue;
         const start = findStart(cells[i]);
         if (!start) continue;
-        used[i] = 1;
+        used.push(cells[i]);
         // vertices chain to form a path
         const chain = connectVertices(start, t); 
         if (chain.length < 4) continue;
@@ -96,7 +96,8 @@ function connectVertices(start, t) {
         chain.push(current); // add current vertex to sequence
 
         const c = vertices.c[current]; // cells adjacent to vertex
-        c.filter(c => cells[c] && cells[c].t === t).forEach(c => used[c] = 1);
+        c.filter(c => cells[c] && cells[c].t === t)
+            .forEach(c => used.push(cells[c]));
 
         const v = vertices.v[current]; // neighboring vertices
         const c0 = !!!(cells[c[0]] && cells[c[0]].t) || cells[c[0]].t === t - 1;
