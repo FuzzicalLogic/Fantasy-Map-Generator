@@ -1,4 +1,4 @@
-﻿import { pack, grid, getBiomeId, biomesData } from "../main.js";
+﻿import { pack, grid, biomesData } from "../main.js";
 import { rn, isLand } from "../modules/utils.js";
 
 // apply default biomes data
@@ -61,4 +61,14 @@ export function defineBiomes() {
     }
 
     console.timeEnd("defineBiomes");
+}
+
+// assign biome id to a cell
+export function getBiomeId(moisture, temperature, height) {
+    if (temperature < -5) return 11; // permafrost biome, including sea ice
+    if (height < 20) return 0; // marine biome: liquid water cells
+    if (moisture > 40 && temperature > -2 && (height < 25 || moisture > 24 && height > 24)) return 12; // wetland biome
+    const m = Math.min(~~(moisture / 5) | 0, 4); // moisture band from 0 to 4
+    const t = Math.min(Math.max(20 - temperature, 0), 25); // temparature band from 0 to 25
+    return biomesData.biomesMartix[m][t];
 }
