@@ -24,10 +24,10 @@ export function OceanLayers(grid) {
     const opacity = rn(0.4 / limits.length, 2);
     used = new Uint8Array(pointsN); // to detect already passed cells
 
-    let xs = cells.map((v, k) => k);
+    let xs = cells.filter(x => x.t <= 0)
+        .map((v, k) => k);
     for (const i of xs) {
         const t = cells[i].t;
-        if (t > 0) continue;
         if (used[i] || !limits.includes(t)) continue;
         const start = findStart(i, t);
         if (!start) continue;
