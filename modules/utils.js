@@ -1,5 +1,6 @@
 /** TODO: Complete dependency branch from P() below. */
 import {
+    mapOptions,
     view,
     graphWidth, graphHeight,
     pack, grid
@@ -334,12 +335,12 @@ export function* poissonDiscSampler(x0, y0, x1, y1, r, k = 3) {
 
 // filter land cells
 export function isLand(i) {
-    return pack.cells[i].h >= 20;
+    return pack.cells[i].h >= mapOptions.seaLevel;
 }
 
 // filter water cells
 function isWater(i) {
-    return pack.cells.h[i] < 20;
+    return !isLand(i);
 }
 
 // convert RGB color string to HEX without #
