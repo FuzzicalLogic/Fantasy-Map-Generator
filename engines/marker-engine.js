@@ -195,10 +195,8 @@ function addInns(cells, number) {
 }
 
 function addLighthouses(cells, number = 1) {
-    const lands = cells.map((x, i) => i)
-        .filter(x => cells[x].harbor > 6 && cells[x].c.some(y => cells[y].h < 20 && cells[y].road));
-    const lighthouses = Array.from(lands)
-        .map(x => [x, cells[x].v[cells[x].c.findIndex(y => cells[y].h < 20 && cells[y].road)]]);
+    const lands = cells.filter(x => x.harbor > 6 && x.c.some(y => cells[y].h < 20 && cells[y].road));
+    const lighthouses = lands.map(x => [x.i, x.v[x.c.findIndex(y => cells[y].h < 20 && cells[y].road)]]);
     if (lighthouses.length)
         addMarker("lighthouse", "🚨", 50, 50, 16);
     const count = Math.ceil(4 * number);
