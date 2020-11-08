@@ -590,6 +590,7 @@ export function generate() {
         calculateTemperatures(grid);
         generatePrecipitation(grid);
         packGrid(grid);
+        pack = packGrid(grid);
         pack.features = reMarkFeatures(pack);
         drawCoastline(pack);
 
@@ -732,6 +733,7 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 
 // recalculate Voronoi Graph to pack cells
 export function packGrid({ cells, points, features, spacing }) {
+    let pack = {};
     console.time("reGraph");
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
     const spacing2 = spacing ** 2;
@@ -785,6 +787,7 @@ export function packGrid({ cells, points, features, spacing }) {
         .forEach(i => pack.cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
 
     console.timeEnd("reGraph");
+    return pack;
 }
 
 // Re-mark features (ocean, lakes, islands)
