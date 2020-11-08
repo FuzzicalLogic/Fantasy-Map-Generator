@@ -17,7 +17,7 @@ import {
     burgIcons, anchors,
     burgLabels,
     mapHistory,
-    calculateVoronoi, reGraph, reMarkFeatures,
+    calculateVoronoi, packGrid, reMarkFeatures,
     focusOn, invokeActiveZooming, showStatistics,
     customization, drawCoastline
 } from "../main.js";
@@ -692,7 +692,7 @@ function parseLoadedData(data) {
 
         void function parsePackData() {
             setPack({});
-            reGraph(grid);
+            packGrid(grid);
             pack.features = reMarkFeatures(pack);
             pack.features = JSON.parse(data[12]);
             pack.cultures = JSON.parse(data[13]);

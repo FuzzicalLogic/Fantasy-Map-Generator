@@ -589,7 +589,7 @@ export function generate() {
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
         calculateTemperatures(grid);
         generatePrecipitation(grid);
-        reGraph(grid);
+        packGrid(grid);
         pack.features = reMarkFeatures(pack);
         drawCoastline(pack);
 
@@ -731,12 +731,12 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 }
 
 // recalculate Voronoi Graph to pack cells
-export function reGraph({ cells, points, features, spacing }) {
+export function packGrid({ cells, points, features, spacing }) {
     console.time("reGraph");
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
     const spacing2 = spacing ** 2;
 
-    let xs = cells.map((v, k) => k);
+    let xs = cells.map((x,i) => i);
     for (const i of xs) {
         const height = cells[i].h;
         const type = cells[i].t;

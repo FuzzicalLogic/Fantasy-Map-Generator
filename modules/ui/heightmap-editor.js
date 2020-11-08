@@ -2,7 +2,7 @@ import {
     modules, seed,
     grid, pack,
     view,
-    reGraph, resetZoom, rankCells,
+    packGrid, resetZoom, rankCells,
     drawCoastline, defineBiomes, elevateLakes,
     calculateTemperatures, generatePrecipitation,
     addMarkers, addZones
@@ -200,7 +200,7 @@ export function editHeightmap() {
         OceanLayers(grid);
         calculateTemperatures(grid);
         generatePrecipitation(grid);
-        reGraph(grid);
+        packGrid(grid);
         drawCoastline();
 
         elevateLakes(pack);
@@ -312,7 +312,7 @@ export function editHeightmap() {
         OceanLayers(grid);
         calculateTemperatures(grid);
         generatePrecipitation(grid);
-        reGraph(grid);
+        packGrid(grid);
         drawCoastline();
 
         if (changeHeights.checked) {
