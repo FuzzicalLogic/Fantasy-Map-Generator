@@ -776,6 +776,7 @@ export function packGrid({ cells, points, features, spacing }) {
     pack.boundary = grid.boundary;
     calculateVoronoi(pack, newCells.p);
     pack.cells.forEach((x, i) => {
+        x.i = i;
         x.g = newCells.g[i];
         x.h = ~~(newCells.h[i]);
         x.p = newCells.p[i];
@@ -784,8 +785,7 @@ export function packGrid({ cells, points, features, spacing }) {
     pack.vertices = verts.p.map((x, i) => ({ p: x, c: verts.c[i], v: verts.v[i] }));
     let { p } = newCells; 
     pack.cells.q = d3.quadtree(p.map((p, d) => [p[0], p[1], d])); // points quadtree for fast search
-    pack.cells.map((v, k) => k)
-        .forEach(i => pack.cells[i].area = Math.abs(d3.polygonArea(getPackPolygon(i))));
+    pack.cells.forEach(x => x.area = Math.abs(d3.polygonArea(getPackPolygon(x.i))));
 
     console.timeEnd("reGraph");
     return pack;
