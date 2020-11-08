@@ -6,6 +6,11 @@ import { P, rn, clipPoly, round } from "./utils.js";
 
 let cells, vertices, pointsN, used;
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = async (...args) => emitter.dispatchEvent(...args);
+
 export function OceanLayers(grid) {
     const outline = oceanLayers.attr("layers");
     if (outline === "none") return;
@@ -45,11 +50,11 @@ export function OceanLayers(grid) {
 
     chains.filter(c => limits.includes(c[0]))
         .map(([,points]) => createPath(points))
-        .forEach(path => oceanLayers.append("path")
-            .attr("d", path)
-            .attr("fill", "#ecf2f9")
-            .style("opacity", opacity)
-        );
+        .map(path => ({ path: path, opacity: opacity }))
+        .map(detail => new CustomEvent('post', {
+            detail: detail
+        }))
+        .forEach(x => dispatchEvent(x));
 
     // find eligible cell vertex to start path detection
     function findStart(fromCell) {
