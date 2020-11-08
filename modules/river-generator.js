@@ -59,16 +59,17 @@ function markupLand(cells) {
 }
 
 function drainWater(cells, h, features, riverNext, riversData) {
-    const land = cells.map((v, k) => k)
-        .filter(i => h[i] >= 20)
-        .sort((a, b) => h[b] - h[a]);
-    land.forEach(function (i) {
-        cells[i].fl += grid.cells[cells[i].g].prec; // flux from precipitation
-        const x = cells[i].p[0], y = cells[i].p[1];
+    const land = cells.filter(x => h[x.i] >= 20)
+        .sort((a, b) => h[b.i] - h[a.i]);
+
+    land.forEach((cell) => {
+        // flux from precipitation
+        cell.fl += grid.cells[cell.g].prec; 
+        const [x, y] = cell.p;
 
         // near-border cell: pour out of the screen
-        if (cells[i].b) {
-            if (cells[i].r) {
+        if (cell.b) {
+            if (cell.r) {
                 const to = [];
                 const min = Math.min(y, graphHeight - y, x, graphWidth - x);
                 if (min === y) {
@@ -88,8 +89,8 @@ function drainWater(cells, h, features, riverNext, riversData) {
                     to[1] = y;
                 }
                 riversData.push({
-                    river: cells[i].r,
-                    cell: i,
+                    river: cell.r,
+                    cell: cell.i,
                     x: to[0],
                     y: to[1]
                 });
@@ -98,56 +99,69 @@ function drainWater(cells, h, features, riverNext, riversData) {
         }
 
         // downhill cell
-        let min = cells[i].c[d3.scan(cells[i].c, (a, b) => h[a] - h[b])]; 
+        let min = cell.c[d3.scan(cell.c, (a, b) => h[a] - h[b])]; 
 
         // allow only one river can flow through a lake
-        const cf = features[cells[i].f]; // current cell feature
-        if (cf.river && cf.river !== cells[i].r) {
-            cells[i].fl = 0;
+        const cf = features[cell.f]; // current cell feature
+        if (cf.river && cf.river !== cell.r) {
+            cell.fl = 0;
         }
 
-        if (cells[i].fl < 30) {
+        if (cell.fl < 30) {
             if (h[min] >= 20)
-                cells[min].fl += cells[i].fl;
-            return; // flux is too small to operate as river
+                cells[min].fl += cell.fl;
+            // flux is too small to operate as river
+            return;
         }
 
         // Proclaim a new river
-        if (!cells[i].r) {
-            cells[i].r = riverNext;
-            riversData.push({ river: riverNext, cell: i, x, y });
+        if (!cell.r) {
+            cell.r = riverNext;
+            riversData.push({ river: riverNext, cell: cell.i, x, y });
             riverNext++;
         }
 
-        if (cells[min].r) { // downhill cell already has river assigned
-            if (cells[min].fl < cells[i].fl) {
-                cells[min].conf = cells[min].fl; // mark confluence
+        // downhill cell already has river assigned
+        if (cells[min].r) {
+            if (cells[min].fl < cell.fl) {
+                // mark confluence
+                cells[min].conf = cells[min].fl; 
+                // min river is a tributary of current river
                 if (h[min] >= 20)
-                    riversData.find(d => d.river === cells[min].r).parent = cells[i].r; // min river is a tributary of current river
-                cells[min].r = cells[i].r; // re-assign river if downhill part has less flux
+                    riversData.find(d => d.river === cells[min].r).parent = cell.r; 
+                // re-assign river if downhill part has less flux
+                cells[min].r = cell.r;
             } else {
-                cells[min].conf += cells[i].fl; // mark confluence
+                // mark confluence
+                cells[min].conf += cell.fl;
                 if (h[min] >= 20)
-                    riversData.find(d => d.river === cells[i].r).parent = cells[min].r; // current river is a tributary of min river
+                    // current river is a tributary of min river
+                    riversData.find(d => d.river === cell.r).parent = cells[min].r;
             }
         }
-        else cells[min].r = cells[i].r; // assign the river to the downhill cell
+        // assign the river to the downhill cell
+        else cells[min].r = cell.r;
 
         const nx = cells[min].p[0], ny = cells[min].p[1];
         if (h[min] < 20) {
             // pour water to the sea haven
-            riversData.push({ river: cells[i].r, cell: cells[i].haven, x: nx, y: ny });
+            riversData.push({ river: cell.r, cell: cell.haven, x: nx, y: ny });
         }
         else {
-            const mf = features[cells[min].f]; // feature of min cell
+            // feature of min cell
+            const mf = features[cells[min].f]; 
             if (mf.type === "lake") {
-                if (!mf.river || cells[i].fl > mf.flux) {
-                    mf.river = cells[i].r; // pour water to temporaly elevated lake
-                    mf.flux = cells[i].fl; // entering flux
+                if (!mf.river || cell.fl > mf.flux) {
+                    // pour water to temporaly elevated lake
+                    mf.river = cell.r;
+                    // entering flux
+                    mf.flux = cell.fl;
                 }
             }
-            cells[min].fl += cells[i].fl; // propagate flux
-            riversData.push({ river: cells[i].r, cell: min, x: nx, y: ny }); // add next River segment
+            // propagate flux
+            cells[min].fl += cell.fl;
+            // add next River segment
+            riversData.push({ river: cell.r, cell: min, x: nx, y: ny });
         }
 
     });
@@ -182,18 +196,18 @@ function defineRivers(pack, riverNext, riversData) {
   // depression filling algorithm (for a correct water flux modeling)
 export function resolveDepressions(h) {
     const cells = pack.cells;
-    const land = cells.map((v, k) => k)
-        .filter(i => h[i] >= 20 && h[i] < 100 && !cells[i].b); // exclude near-border cells
-    land.sort((a, b) => h[b] - h[a]); // highest cells go first
+    // exclude near-border cells
+    const land = cells.filter(x => h[x.i] >= 20 && h[x.i] < 100 && !x.b)
+        .sort((a, b) => h[b.i] - h[a.i]); // highest cells go first
     let depressed = false;
 
     for (let l = 0, depression = Infinity; depression && l < 100; l++) {
         depression = 0;
-        for (const i of land) {
-            const minHeight = d3.min(cells[i].c.map(c => h[c]));
+        for (const cell of land) {
+            const minHeight = d3.min(cell.c.map(c => h[c]));
             if (minHeight === 100) continue; // already max height
-            if (h[i] <= minHeight) {
-                h[i] = Math.min(minHeight + 1, 100);
+            if (h[cell.i] <= minHeight) {
+                h[cell.i] = Math.min(minHeight + 1, 100);
                 depression++;
                 depressed = true;
             }
