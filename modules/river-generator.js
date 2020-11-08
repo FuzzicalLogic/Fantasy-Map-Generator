@@ -49,12 +49,11 @@ export const generate = function (changeHeights = true) {
 
 // build distance field in cells from water (cells.t)
 function markupLand(cells) {
-    const q = j => cells.map((v, k) => k)
-        .filter(i => cells[i].t === j);
-    for (let k = 2, queue = q(k); queue.length; k++ , queue = q(k)) {
-        queue.forEach(i => cells[i].c.forEach(c => {
+    const q = distance => cells.filter(x => x.t === distance);
+    for (let distance = 2, queue = q(distance); queue.length; distance++ , queue = q(distance)) {
+        queue.forEach(x => x.c.forEach(c => {
             if (!cells[c].t)
-                cells[c].t = k + 1;
+                cells[c].t = distance + 1;
         }));
     }
 }
