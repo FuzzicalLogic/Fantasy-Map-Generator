@@ -9,6 +9,7 @@ function renderLayer({ detail: { path, opacity } }) {
         .style("opacity", opacity)
 }
 
+generator.addEventListener('clear', clear);
 function clear() {
     oceanLayers.selectAll('path').remove();
 }

@@ -12,6 +12,8 @@ export const removeEventListener = (...args) => emitter.removeEventListener(...a
 export const dispatchEvent = async (...args) => emitter.dispatchEvent(...args);
 
 export function OceanLayers(grid) {
+    dispatchEvent(new CustomEvent('clear'));
+
     const outline = oceanLayers.attr("layers");
     if (outline === "none") return;
     console.time("drawOceanLayers");
