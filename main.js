@@ -882,24 +882,18 @@ export function reMarkFeatures({ cells }) {
 
 // temporary elevate some lakes to resolve depressions and flux the water to form an open (exorheic) lake
 export function elevateLakes({ cells, features }) {
+    // no need for Atolls
     if (templateInput.value === "Atoll")
-        return; // no need for Atolls
+        return; 
     console.time('elevateLakes');
-    const maxCells = cells.length / 100; // size limit; let big lakes be closed (endorheic)
+    // size limit; let big lakes be closed (endorheic)
+    const maxCells = cells.length / 100; 
     cells.filter(x => x.h < 20)
         .filter(x => features[x.f].group === "freshwater")
         .filter(x => features[x.f].cells <= maxCells)
         .forEach(x => {
             x.h = 20
         });
-    /*cells.map((v,k) => k).forEach(i => {
-        if (cells[i].h >= 20)
-            return;
-        if (features[cells[i].f].group !== "freshwater"
-            || features[cells[i].f].cells > maxCells)
-            return;
-        cells[i].h = 20;
-    });*/
 
     console.timeEnd('elevateLakes');
 }
