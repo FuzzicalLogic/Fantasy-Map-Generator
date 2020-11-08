@@ -16,6 +16,8 @@ if (rn(localStorage.getItem("version"), 2) !== rn(version, 2)) {
     setTimeout(showWelcomeMessage, 8000);
 }
 
+import { Options } from "./map/MapOptions.js";
+
 import * as ThreeD from "./modules/ui/3d.js";
 import * as HeightmapGenerator from "./modules/heightmap-generator.js";
 import { OceanLayers } from "./modules/ocean-layers.js";
@@ -589,7 +591,6 @@ export function generate() {
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
         calculateTemperatures(grid);
         generatePrecipitation(grid);
-        packGrid(grid);
         pack = packGrid(grid);
         pack.features = reMarkFeatures(pack);
         drawCoastline(pack);
