@@ -17,6 +17,7 @@ if (rn(localStorage.getItem("version"), 2) !== rn(version, 2)) {
 }
 
 import { Options } from "./map/MapOptions.js";
+export const mapOptions = Options();
 
 import * as ThreeD from "./modules/ui/3d.js";
 import * as HeightmapGenerator from "./modules/heightmap-generator.js";
@@ -734,7 +735,6 @@ export function calculateTemperatures({ cells, cellsX, points }) {
 
 // recalculate Voronoi Graph to pack cells
 export function packGrid({ cells, points, features, spacing }) {
-    let pack = {};
     console.time("reGraph");
     const newCells = { p: [], g: [], h: [], t: [], f: [], r: [], biome: [] }; // to store new data
     const spacing2 = spacing ** 2;
