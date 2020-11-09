@@ -57,7 +57,7 @@ export function generate() {
         delete c.odd;
         delete c.sort;
         c.color = colors[i];
-        c.type = defineCultureType(cell);
+        c.type = defineCultureType(cells[i]);
         c.expansionism = defineCultureExpansionism(c.type);
         c.origin = 0;
         c.code = getCode(c.name);
@@ -80,6 +80,7 @@ export function generate() {
     cultures.forEach(c => c.base = c.base % nameBases.length);
 
     console.timeEnd('generateCultures');
+}
 
 // set culture type based on culture center position
 function defineCultureType(center) {
