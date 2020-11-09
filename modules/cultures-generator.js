@@ -7,6 +7,30 @@ import * as Names from "./names-generator.js";
 
 import { getColors, P, rn, biased, rand } from "./utils.js";
 
+export const CULTURE_TYPES = {
+    Generic: {
+        baseExpansion: 1.0
+    },
+    Lake: {
+        baseExpansion: 0.8
+    },
+    Naval: {
+        baseExpansion: 1.5
+    },
+    River: {
+        baseExpansion: 0.9
+    },
+    Nomadic: {
+        baseExpansion: 1.5
+    },
+    Hunting: {
+        baseExpansion: 0.7
+    },
+    Highland: {
+        baseExpansion: 1.2
+    }
+};
+
 let cells;
 
 export function generate() {
