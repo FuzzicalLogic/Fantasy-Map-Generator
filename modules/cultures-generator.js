@@ -39,8 +39,8 @@ export function generate() {
     cells.forEach(v => v.culture = 0);
     let count = Math.min(+culturesInput.value, +culturesSet.selectedOptions[0].dataset.max);
 
-    const populated = cells.map((v, k) => k)
-        .filter(i => cells[i].s); // populated cells
+    const populated = cells.filter(x => x.s)
+        .map(x => x.i); // populated cells
     if (populated.length < count * 25) {
         count = Math.floor(populated.length / 50);
         if (!count) {
