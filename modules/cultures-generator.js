@@ -81,26 +81,26 @@ export function generate() {
 
     console.timeEnd('generateCultures');
 
-    // set culture type based on culture center position
-    function defineCultureType(i) {
-        if (cells[i].h < 70 && [1, 2, 4].includes(cells[i].biome))
-            return "Nomadic"; // high penalty in forest biomes and near coastline
-        if (cells[i].h > 50)
-            return "Highland"; // no penalty for hills and moutains, high for other elevations
-        const f = pack.features[cells[cells[i].haven].f]; // opposite feature
-        if (f.type === "lake" && f.cells > 5)
-            return "Lake" // low water cross penalty and high for growth not along coastline
-        if (cells[i].harbor
+// set culture type based on culture center position
+function defineCultureType(center) {
+    if (center.h < 70 && [1, 2, 4].includes(center.biome))
+        return "Nomadic"; // high penalty in forest biomes and near coastline
+    if (center.h > 50)
+        return "Highland"; // no penalty for hills and moutains, high for other elevations
+    const f = pack.features[cells[center.haven].f]; // opposite feature
+    if (f.type === "lake" && f.cells > 5)
+        return "Lake" // low water cross penalty and high for growth not along coastline
+    if (center.harbor
         && f.type !== "lake" && P(.1)
-        || (cells[i].harbor === 1 && P(.6))
-            || (pack.features[cells[i].f].group === "isle" && P(.4)))
-            return "Naval"; // low water cross penalty and high for non-along-coastline growth
-        if (cells[i].r && cells[i].fl > 100)
-            return "River"; // no River cross penalty, penalty for non-River growth
-        if (cells[i].t > 2 && [3, 7, 8, 9, 10, 12].includes(cells[i].biome))
-            return "Hunting"; // high penalty in non-native biomes
-        return "Generic";
-    }
+        || (center.harbor === 1 && P(.6))
+        || (pack.features[center.f].group === "isle" && P(.4)))
+        return "Naval"; // low water cross penalty and high for non-along-coastline growth
+    if (center.r && center.fl > 100)
+        return "River"; // no River cross penalty, penalty for non-River growth
+    if (center.t > 2 && [3, 7, 8, 9, 10, 12].includes(center.biome))
+        return "Hunting"; // high penalty in non-native biomes
+    return "Generic";
+}
 
 function defineCultureExpansionism(type) {
     let base = (!!CULTURE_TYPES[type]
