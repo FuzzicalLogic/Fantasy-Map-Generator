@@ -79,19 +79,7 @@ export function generate() {
     if (!nameBases.length) { console.error("Name base is empty, default nameBases will be applied"); nameBases = Names.getNameBases(); }
     cultures.forEach(c => c.base = c.base % nameBases.length);
 
-    function getRandomCultures(c) {
-        const d = getDefault(c), n = d.length - 1;
-        const count = Math.min(c, d.length);
-        const cultures = [];
-        while (cultures.length < count) {
-            let culture = d[rand(n)];
-            do {
-                culture = d[rand(n)];
-            } while (!P(culture.odd) || cultures.find(c => c.name === culture.name))
-            cultures.push(culture);
-        }
-        return cultures;
-    }
+    console.timeEnd('generateCultures');
 
     // set culture type based on culture center position
     function defineCultureType(i) {
@@ -121,7 +109,18 @@ function defineCultureExpansionism(type) {
     return rn((Math.random() * powerInput.value / 2 + 1) * base, 1);
 }
 
-    console.timeEnd('generateCultures');
+function getRandomCultures(c) {
+    const d = getDefault(c), n = d.length - 1;
+    const count = Math.min(c, d.length);
+    const cultures = [];
+    while (cultures.length < count) {
+        let culture = d[rand(n)];
+        do {
+            culture = d[rand(n)];
+        } while (!P(culture.odd) || cultures.find(c => c.name === culture.name))
+        cultures.push(culture);
+    }
+    return cultures;
 }
 
 // assign a unique two-letters code (abbreviation)
