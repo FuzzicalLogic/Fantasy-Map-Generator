@@ -392,24 +392,25 @@ export function expand() {
     while (queue.length) {
         const next = queue.dequeue(), n = next.e, p = next.p, c = next.c;
         const type = pack.cultures[c].type;
-        cells[n].c.forEach(function (e) {
-            const biome = cells[e].biome;
-            const biomeCost = getBiomeCost(c, biome, type);
-            const biomeChangeCost = biome === cells[n].biome ? 0 : 20; // penalty on biome change
-            const heightCost = getHeightCost(e, cells[e].h, type);
-            const riverCost = getRiverCost(cells[e].r, e, type);
-            const typeCost = getTypeCost(cells[e].t, type);
-            const totalCost = p + (biomeCost + biomeChangeCost + heightCost + riverCost + typeCost) / pack.cultures[c].expansionism;
+        cells[n].c.map(i => cells[i])
+            .forEach(neighbor => {
+                const biome = neighbor.biome;
+                const biomeCost = getBiomeCost(c, biome, type);
+                const biomeChangeCost = biome === cells[n].biome ? 0 : 20; // penalty on biome change
+                const heightCost = getHeightCost(neighbor.i, neighbor.h, type);
+                const riverCost = getRiverCost(neighbor, type);
+                const typeCost = getTypeCost(neighbor.t, type);
+                const totalCost = p + (biomeCost + biomeChangeCost + heightCost + riverCost + typeCost) / pack.cultures[c].expansionism;
 
-            if (totalCost > neutral) return;
+                if (totalCost > neutral) return;
 
-            if (!cost[e] || totalCost < cost[e]) {
-                if (cells[e].s > 0)
-                    cells[e].culture = c; // assign culture to populated cell
-                cost[e] = totalCost;
-                queue.queue({ e, p: totalCost, c });
-            }
-        });
+                if (!cost[neighbor.i] || totalCost < cost[neighbor.i]) {
+                    if (neighbor.s > 0)
+                        neighbor.culture = c; // assign culture to populated cell
+                    cost[neighbor.i] = totalCost;
+                    queue.queue({ e: neighbor.i, p: totalCost, c });
+                }
+            });
     }
     console.timeEnd('expandCultures');
 }
