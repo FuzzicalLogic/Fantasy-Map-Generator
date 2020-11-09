@@ -114,16 +114,12 @@ export function generate() {
         return "Generic";
     }
 
-    function defineCultureExpansionism(type) {
-        let base = 1; // Generic
-        if (type === "Lake") base = .8;
-        else if (type === "Naval") base = 1.5;
-        else if (type === "River") base = .9;
-        else if (type === "Nomadic") base = 1.5;
-        else if (type === "Hunting") base = .7;
-        else if (type === "Highland") base = 1.2;
-        return rn((Math.random() * powerInput.value / 2 + 1) * base, 1);
-    }
+function defineCultureExpansionism(type) {
+    let base = (!!CULTURE_TYPES[type]
+        ? CULTURE_TYPES[type]
+        : CULTURE_TYPES.Generic).baseExpansion;
+    return rn((Math.random() * powerInput.value / 2 + 1) * base, 1);
+}
 
     console.timeEnd('generateCultures');
 }
