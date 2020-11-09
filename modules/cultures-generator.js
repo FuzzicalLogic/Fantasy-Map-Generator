@@ -448,10 +448,10 @@ function getHeightCost(i, h, type) {
     return 0;
 }
 
-function getRiverCost(r, i, type) {
-    if (type === "River") return r ? 0 : 100; // penalty for river cultures
-    if (!r) return 0; // no penalty for others if there is no river
-    return Math.min(Math.max(cells[i].fl / 10, 20), 100) // river penalty from 20 to 100 based on flux
+function getRiverCost(cell, type) {
+    if (!cell.r) return 0; // no penalty for others if there is no river
+    if (type === "River") return cell.r ? 0 : 100; // penalty for river cultures
+    return Math.min(Math.max(cell.fl / 10, 20), 100) // river penalty from 20 to 100 based on flux
 }
 
 function getTypeCost(t, type) {
