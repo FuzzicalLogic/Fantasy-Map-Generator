@@ -49,10 +49,11 @@ function placeCapitals(cells, count) {
     console.time('placeCapitals');
     let burgs = [0];
 
-    const score = new Int16Array(cells.map(x => x.s * Math.random())); // cell score for capitals placement
-    const sorted = cells.map((v, k) => k)
-        .filter(i => score[i] > 0 && cells[i].culture)
-        .sort((a, b) => score[b] - score[a]); // filtered and sorted array of indexes
+    // cell score for capitals placement
+    const score = new Int16Array(cells.map(x => x.s * Math.random())); 
+    // filtered and sorted array of cultured cells
+    const sorted = cells.filter(x => score[x.i] > 0 && x.culture)
+        .sort((a, b) => score[b.i] - score[a.i]); 
 
     if (sorted.length < count * 10) {
         count = Math.floor(sorted.length / 10);
@@ -66,15 +67,14 @@ function placeCapitals(cells, count) {
     }
 
     let burgsTree = d3.quadtree();
-    let spacing = (graphWidth + graphHeight) / 2 / count; // min distance between capitals
+    // min distance between capitals
+    let spacing = (graphWidth + graphHeight) / 2 / count; 
 
     for (let i = 0; burgs.length <= count; i++) {
-        const cell = sorted[i],
-            x = cells[cell].p[0],
-            y = cells[cell].p[1];
+        const cell = sorted[i], [x, y] = cell.p;
 
         if (burgsTree.find(x, y, spacing) === undefined) {
-            burgs.push({ cell, x, y });
+            burgs.push({ cell:cell.i, x, y });
             burgsTree.add([x, y]);
         }
 
