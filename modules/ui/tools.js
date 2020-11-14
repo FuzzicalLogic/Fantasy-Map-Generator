@@ -44,21 +44,21 @@ export function initialize() {
         const button = event.target.id;
 
         // Click to open Editor buttons
-        if (button === "editHeightmapButton") editHeightmap(); else
-            if (button === "editBiomesButton") editBiomes(); else
-                if (button === "editStatesButton") editStates(); else
-                    if (button === "editProvincesButton") editProvinces(); else
-                        if (button === "editDiplomacyButton") editDiplomacy(); else
-                            if (button === "editCulturesButton") editCultures(); else
-                                if (button === "editReligions") editReligions(); else
-                                    if (button === "editNamesBaseButton") editNamesbase(); else
-                                        if (button === "editUnitsButton") editUnits(); else
-                                            if (button === "editNotesButton") editNotes(); else
-                                                if (button === "editZonesButton") editZones(); else
-                                                    if (button === "overviewBurgsButton") overviewBurgs(); else
-                                                        if (button === "overviewRiversButton") overviewRivers(); else
-                                                            if (button === "overviewMilitaryButton") overviewMilitary(); else
-                                                                if (button === "overviewCellsButton") viewCellDetails();
+        if (button === "editHeightmapButton") editHeightmap();
+        else if (button === "editBiomesButton") editBiomes();
+        else if (button === "editStatesButton") editStates();
+        else if (button === "editProvincesButton") editProvinces();
+        else if (button === "editDiplomacyButton") editDiplomacy();
+        else if (button === "editCulturesButton") editCultures();
+        else if (button === "editReligions") editReligions();
+        else if (button === "editNamesBaseButton") editNamesbase();
+        else if (button === "editUnitsButton") editUnits();
+        else if (button === "editNotesButton") editNotes();
+        else if (button === "editZonesButton") editZones();
+        else if (button === "overviewBurgsButton") overviewBurgs();
+        else if (button === "overviewRiversButton") overviewRivers();
+        else if (button === "overviewMilitaryButton") overviewMilitary();
+        else if (button === "overviewCellsButton") viewCellDetails();
 
         // Click to Regenerate buttons
         if (event.target.parentNode.id === "regenerateFeature") {
