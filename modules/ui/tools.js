@@ -85,11 +85,11 @@ export function initialize() {
         }
 
         // Click to Add buttons
-        if (button === "addLabel") toggleAddLabel(); else
-            if (button === "addBurgTool") toggleAddBurg(); else
-                if (button === "addRiver") toggleAddRiver(); else
-                    if (button === "addRoute") toggleAddRoute(); else
-                        if (button === "addMarker") toggleAddMarker();
+        if (button === "addLabel") toggleAddLabel();
+        else if (button === "addBurgTool") toggleAddBurg();
+        else if (button === "addRiver") toggleAddRiver();
+        else if (button === "addRoute") toggleAddRoute();
+        else if (button === "addMarker") toggleAddMarker();
     });
 }
 
