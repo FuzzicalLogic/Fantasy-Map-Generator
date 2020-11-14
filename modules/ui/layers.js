@@ -26,7 +26,13 @@ export function initialize() {
     restoreLayers(); // run on-load
     restoreCustomPresets(); // run on-load
 
-    $("#mapLayers").sortable({ items: "li:not(.solid)", containment: "parent", cancel: ".solid", update: moveLayer });
+    $("#mapLayers").sortable({
+        items: "li:not(.solid)",
+        handle: ".Handle",
+        containment: "#mapLayers",
+        cancel: ".solid",
+        update: moveLayer
+    });
 
     window.changePreset = changePreset;
     window.savePreset = savePreset;
