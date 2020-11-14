@@ -62,7 +62,10 @@ export function initialize() {
 
         // Click to Regenerate buttons
         if (event.target.parentNode.id === "regenerateFeature") {
-            if (sessionStorage.getItem("regenerateFeatureDontAsk")) { processFeatureRegeneration(event, button); return; }
+            if (sessionStorage.getItem("regenerateFeatureDontAsk")) {
+                processFeatureRegeneration(event, button);
+                return;
+            }
 
             alertMessage.innerHTML = `Regeneration will remove all the custom changes for the element.<br><br>Are you sure you want to proceed?`
             $("#alert").dialog({
