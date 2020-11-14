@@ -600,15 +600,14 @@ export function drawCultures() {
     const used = new Uint8Array(n);
     const paths = new Array(cultures.length).fill("");
 
-    const xs = cells.map((v, k) => k);
-    for (const i of xs) {
-        if (!cells[i].culture) continue;
-        if (used[i]) continue;
-        used[i] = 1;
-        const c = cells[i].culture;
-        const onborder = cells[i].c.some(n => cells[n].culture !== c);
+    const xs = cells.filter(x => !!x.culture);
+    for (const cell of xs) {
+        if (used[cell.i]) continue;
+        used[cell.i] = 1;
+        const c = cell.culture;
+        const onborder = cell.c.some(n => cells[n].culture !== c);
         if (!onborder) continue;
-        const vertex = cells[i].v.find(v => vertices[v].c.some(i => cells[i].culture !== c));
+        const vertex = cell.v.find(v => vertices[v].c.some(i => cells[i] && cells[i].culture !== c));
         const chain = connectVertices(vertex, c);
         if (chain.length < 3) continue;
         const points = chain.map(v => vertices[v].p);
