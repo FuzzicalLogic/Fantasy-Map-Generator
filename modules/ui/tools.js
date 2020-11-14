@@ -94,6 +94,37 @@ export function initialize() {
         else if (button === "addRoute") toggleAddRoute();
         else if (button === "addMarker") toggleAddMarker();
     });
+
+    document.getElementById('mapLayers').addEventListener('click', e => {
+        if (e.target.tagName !== "BUTTON"
+        || !e.target.classList.contains('Generator'))
+            return;
+
+        const button = e.target.id;
+        if (sessionStorage.getItem("regenerateFeatureDontAsk")) {
+            processFeatureRegeneration(event, button);
+            return;
+        }
+
+        alertMessage.innerHTML = `Regeneration will remove all the custom changes for the element.<br><br>Are you sure you want to proceed?`
+        $("#alert").dialog({
+            resizable: false, title: "Regenerate element",
+            buttons: {
+                Proceed: function () { processFeatureRegeneration(event, button); $(this).dialog("close"); },
+                Cancel: function () { $(this).dialog("close"); }
+            },
+            open: function () {
+                const pane = $(this).dialog("widget").find(".ui-dialog-buttonpane");
+                $('<span><input id="dontAsk" class="checkbox" type="checkbox"><label for="dontAsk" class="checkbox-label dontAsk"><i>do not ask again</i></label><span>').prependTo(pane);
+            },
+            close: function () {
+                const box = $(this).dialog("widget").find(".checkbox")[0];
+                if (!box) return;
+                if (box.checked) sessionStorage.setItem("regenerateFeatureDontAsk", true);
+                $(this).dialog("destroy");
+            }
+        });
+    });
 }
 
 function processFeatureRegeneration(event, button) {
