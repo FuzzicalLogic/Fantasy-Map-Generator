@@ -33,11 +33,11 @@ export const CULTURE_TYPES = {
 
 let cells;
 
-export function generate() {
+export function generate(howMany, fromSet) {
     console.time('generateCultures');
     cells = pack.cells;
     cells.forEach(v => v.culture = 0);
-    let count = Math.min(+culturesInput.value, +culturesSet.selectedOptions[0].dataset.max);
+    let count = Math.min(howMany, +culturesSet.selectedOptions[0].dataset.max);
 
     const populated = cells.filter(x => x.s)
         .map(x => x.i); // populated cells

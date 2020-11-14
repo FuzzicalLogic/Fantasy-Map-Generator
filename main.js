@@ -601,7 +601,7 @@ export function generate() {
         defineBiomes();
 
         rankCells();
-        Cultures.generate();
+        Cultures.generate(+culturesInput.value);
         Cultures.expand();
         BurgsAndStates.generate(+regionsInput.value);
         Religions.generate(+religionsInput.value, pack);
