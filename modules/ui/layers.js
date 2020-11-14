@@ -17,8 +17,12 @@ import * as ThreeD from "./3d.js";
 import { editUnits } from "./units-editor.js";
 
 import { tip } from "./general.js";
-import { getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize, round, last, rand } from "../utils.js";
-import { editStyle, calculateFriendlyGridSize, shiftCompass, setBase64Texture } from "./style.js";
+import {
+    getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize, round, last, rand
+} from "../utils.js";
+import {
+    editStyle, calculateFriendlyGridSize, shiftCompass, setBase64Texture
+} from "./style.js";
 
 let presets = {}; // global object
 
