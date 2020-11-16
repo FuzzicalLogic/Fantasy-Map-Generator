@@ -99,7 +99,8 @@ function getLayer(id) {
 
 // on map regeneration restore layers if they was turned on
 export function restoreLayers() {
-    if (layerIsOn("toggleHeight")) drawHeightmap();
+    if (layerIsOn("toggleHeight"))
+        view.terrs.node().removeAttribute('hidden');
     if (layerIsOn("toggleCells")) drawCells();
     if (layerIsOn("toggleGrid")) drawGrid();
     if (layerIsOn("toggleCoordinates")) drawCoordinates();
@@ -238,6 +239,7 @@ export function getColorScheme() {
     let scheme = interpolations[view.terrs.attr("scheme")];
     return d3.scaleSequential(scheme || d3.interpolateSpectral);
 }
+
 
 export function drawHeightmap() {
     console.time("drawHeightmap");
@@ -1172,7 +1174,17 @@ function getViewPoint(x, y) {
 }
 
 export function toggleHeight(event) {
-    if (!view.terrs.selectAll("*").size()) {
+    let layer = document.getElementById('terrs');
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleHeight");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleHeight");
+    }
+
+    /*if (!view.terrs.selectAll("*").size()) {
         turnButtonOn("toggleHeight");
         drawHeightmap();
         if (event && isCtrlClick(event)) editStyle("terrs");
@@ -1181,7 +1193,7 @@ export function toggleHeight(event) {
         if (customization === 1) { tip("You cannot turn off the layer when heightmap is in edit mode", false, "error"); return; }
         turnButtonOff("toggleHeight");
         view.terrs.selectAll("*").remove();
-    }
+    }*/
 }
 
 export function toggleTemp(event) {
