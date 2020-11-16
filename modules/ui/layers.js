@@ -1330,6 +1330,16 @@ export function toggleTexture(event) {
 }
 
 export function toggleRivers(event) {
+    let layer = view.rivers.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleRivers");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleRivers");
+    }
+    /*
     if (!layerIsOn("toggleRivers")) {
         turnButtonOn("toggleRivers");
         $('#rivers').fadeIn();
@@ -1339,6 +1349,7 @@ export function toggleRivers(event) {
         $('#rivers').fadeOut();
         turnButtonOff("toggleRivers");
     }
+    */
 }
 
 export function toggleRoutes(event) {
