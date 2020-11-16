@@ -796,10 +796,50 @@ button.options {
         color: white !important;
     }
 
+
+.Handle.Icon {
+    position: relative;
+    padding: 0;
+    border: 1px solid transparent;
+    background-color: transparent;
+    color: var(--on-primary-dark);
+}
+
+    .Handle.Icon > * {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    .Handle.Icon:hover {
+        background-color: var(--secondary-dark);
+        border: 1px solid var(--primary-light);
+    }
+
+    .Handle.Icon::after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+    }
+
+#layersContent {
+    padding: 0 0.4rem 0 0.4rem;
+}
+
 .tabcontent {
     padding: 0 12px 2px 12px;
-    opacity: 0.9;
 }
+
+    .tabcontent li {
+        background-color: #997b89;
+        cursor: pointer;
+        padding: .35em;
+        margin: .2em .3em;
+        text-align: center;
+    }
 
     .tabcontent button {
         background-color: #916e7f;
@@ -823,7 +863,49 @@ button.options {
     list-style-type: none;
 }
 
-    #mapLayers li:not(.buttonoff) {
+
+    #mapLayers .Icon {
+        position: relative;
+        padding: 0;
+        background-color: transparent;
+        width: 2em;
+        margin: 0 0 0 0.25rem;
+    }
+
+        #mapLayers .Icon > * {
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        #mapLayers .Icon::after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+        }
+
+    #mapLayers .Handle {
+        margin: 0 0.5rem 0 0;
+    }
+
+    #mapLayers li {
+        display: flex;
+        flex-flow: row nowrap;
+        align-content: center;
+        align-items: center;
+        padding: 0;
+        margin: 0 0 0.2rem 0;
+        text-align: left;
+    }
+
+    #mapLayers li > span {
+        flex: 1 1 0;
+    }
+
+        #mapLayers li:not(.buttonoff) {
         min-width: 8em;
         background-color: var(--secondary, #FFF);
         color: var(--on-secondary, #000);
@@ -875,13 +957,6 @@ fieldset {
     border: 1px solid #5d4651;
 }
 
-.tabcontent li {
-    background-color: #997b89;
-    cursor: pointer;
-    padding: .35em;
-    margin: .2em .3em;
-    text-align: center;
-}
 
 #options .buttonoff {
     background-color: #b6b4b440;
