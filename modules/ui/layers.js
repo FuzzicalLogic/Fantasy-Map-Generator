@@ -112,7 +112,8 @@ export function restoreLayers() {
     if (layerIsOn("toggleRelief")) ReliefIcons();
     if (layerIsOn("toggleCultures")) drawCultures();
     if (layerIsOn("toggleProvinces")) drawProvinces();
-    if (layerIsOn("toggleReligions")) drawReligions();
+    if (layerIsOn("toggleReligions"))
+        view.relig.node().removeAttribute('hidden');
     if (layerIsOn("toggleIce")) drawIce();
 
     // states are getting rendered each time, if it's not required than layers should be hidden
@@ -1522,6 +1523,16 @@ export function toggleCultures(event) {
 }
 
 export function toggleReligions(event) {
+    let layer = view.relig.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleReligions");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleReligions");
+    }
+    /*
     const religions = pack.religions.filter(r => r.i && !r.removed);
     let { relig } = view;
     if (!relig.selectAll("path").size() && religions.length) {
@@ -1532,7 +1543,7 @@ export function toggleReligions(event) {
         if (event && isCtrlClick(event)) { editStyle("relig"); return; }
         relig.selectAll("path").remove();
         turnButtonOff("toggleReligions");
-    }
+    }*/
 }
 
 export function toggleStates(event) {

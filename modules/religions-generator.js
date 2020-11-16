@@ -5,6 +5,11 @@ import * as Names from "./names-generator.js";
 
 import { getMixedColor, gauss, rn, rw, ra, toAdjective, trimVowels, biased, rand } from "./utils.js";
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
   // name generation approach and relative chance to be selected
 const approach = {
     "Number": 1, "Being": 3, "Adjective": 5, "Color + Animal": 5,
@@ -200,6 +205,10 @@ export function generate(numReligions, pack) {
 
     expandHeresies(pack);
     checkCenters(pack);
+
+    emitter.dispatchEvent(new CustomEvent('post', {
+        detail: pack
+    }));
 
     console.timeEnd('generateReligions');
 }

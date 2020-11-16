@@ -329,7 +329,9 @@ function regenerateProvinces() {
 
 function regenerateReligions() {
     Religions.generate(religionsInput.value, pack);
-    if (!layerIsOn("toggleReligions")) toggleReligions(); else drawReligions();
+    if (!layerIsOn("toggleReligions"))
+        toggleReligions();
+    else drawReligions();
 }
 
 function regenerateCultures() {

@@ -50,7 +50,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "lakes");
     box.append("g").attr("id", "landmass");
     box.append("g").attr("id", "texture");
-    box.append("g").attr("id", "terrs").attr('class', 'Layer').node().classList.add('Hidden');
+    box.append("g").attr("id", "terrs").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "biomes");
     box.append("g").attr("id", "cells");
     box.append("g").attr("id", "gridOverlay");
@@ -58,7 +58,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "compass");
     box.append("g").attr("id", "rivers");
     box.append("g").attr("id", "terrain");
-    box.append("g").attr("id", "relig");
+    box.append("g").attr("id", "relig").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "cults");
     box.append("g").attr("id", "regions");
     box.append("g").attr("id", "provs");
