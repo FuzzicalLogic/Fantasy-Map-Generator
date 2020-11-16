@@ -1353,7 +1353,16 @@ export function toggleRivers(event) {
 }
 
 export function toggleRoutes(event) {
-    if (!layerIsOn("toggleRoutes")) {
+    let layer = view.routes.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleRoutes");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleRoutes");
+    }
+/*    if (!layerIsOn("toggleRoutes")) {
         turnButtonOn("toggleRoutes");
         $('#routes').fadeIn();
         if (event && isCtrlClick(event)) editStyle("routes");
@@ -1362,6 +1371,7 @@ export function toggleRoutes(event) {
         $('#routes').fadeOut();
         turnButtonOff("toggleRoutes");
     }
+    */
 }
 
 export function toggleMilitary() {
