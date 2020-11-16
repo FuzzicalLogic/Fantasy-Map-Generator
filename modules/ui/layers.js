@@ -1529,6 +1529,16 @@ export function toggleIce() {
 }
 
 export function toggleCultures(event) {
+    let layer = view.cults.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleCultures");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleCultures");
+    }
+/*
     let { cults } = view;
     const cultures = pack.cultures.filter(c => c.i && !c.removed);
     const empty = !cults.selectAll("path").size();
@@ -1541,6 +1551,7 @@ export function toggleCultures(event) {
         cults.selectAll("path").remove();
         turnButtonOff("toggleCultures");
     }
+    */
 }
 
 export function toggleReligions(event) {

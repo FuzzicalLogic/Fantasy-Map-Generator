@@ -120,6 +120,7 @@ fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("hei
 import "./map/HeightmapLayer.js";
 import "./map/OceanLayer.js";
 import "./map/RiversLayer.js";
+import "./map/CultureLayer.js";
 import "./map/ReligionsLayer.js";
 import "./map/RoutesLayer.js";
 

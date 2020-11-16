@@ -59,7 +59,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "rivers").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "terrain");
     box.append("g").attr("id", "relig").attr('class', 'Layer Hidden');
-    box.append("g").attr("id", "cults");
+    box.append("g").attr("id", "cults").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "regions");
     box.append("g").attr("id", "provs");
     box.append("g").attr("id", "zones").style("display", "none");

@@ -7,6 +7,11 @@ import * as Names from "./names-generator.js";
 
 import { getColors, P, rn, biased, rand } from "./utils.js";
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 export const CULTURE_TYPES = {
     Generic: {
         baseExpansion: 1.0
@@ -436,6 +441,11 @@ export function expand() {
                 }
             });
     }
+
+    emitter.dispatchEvent(new CustomEvent('post', {
+        detail: pack
+    }));
+
     console.timeEnd('expandCultures');
 }
 
