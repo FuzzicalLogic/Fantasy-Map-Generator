@@ -843,6 +843,10 @@ button.options {
             background-color: var(--secondary-dark);
         }
 
+#mapLayers .Hidden {
+    display: none;
+}
+
 #mapFilters > button {
     width: 23%;
     padding: 4px 0;
