@@ -15,7 +15,6 @@ export function drawHeightmap({ detail:{ cells, vertices}}) {
     const scheme = getColorScheme();
     const terracing = terrs.attr("terracing") / 10; // add additional shifted darker layer for pseudo-3d effect
     const skip = +terrs.attr("skip") + 1;
-    const simplification = +terrs.attr("relax");
     switch (+terrs.attr("curve")) {
         case 0: lineGen.curve(d3.curveBasisClosed); break;
         case 1: lineGen.curve(d3.curveLinear); break;
@@ -56,6 +55,7 @@ export function drawHeightmap({ detail:{ cells, vertices}}) {
             terrs.append("path").attr("d", paths[i]).attr("transform", "translate(.7,1.4)").attr("fill", d3.color(color).darker(terracing)).attr("data-height", i);
         terrs.append("path").attr("d", paths[i]).attr("fill", color).attr("data-height", i);
     }
+    console.timeEnd("Heightmap.Render");
 
     // connect vertices to chain
     function connectVertices(start, h) {
