@@ -119,6 +119,7 @@ population.append("g").attr("id", "urban");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
+import { drawCells } from "./map/CellsLayer.js";
 import { drawCompass } from "./map/CompassLayer.js";
 import { drawCoordinates } from "./map/CoordinatesLayer.js";
 import "./map/HeightmapLayer.js";
@@ -602,6 +603,7 @@ export function generate() {
         calculateTemperatures(grid);
         generatePrecipitation(grid);
         pack = packGrid(grid);
+        drawCells();
         pack.features = reMarkFeatures(pack);
         drawCoastline(pack);
 
