@@ -1290,7 +1290,17 @@ export function toggleCoordinates(event) {
 
 export function toggleCompass(event) {
     let { compass } = view;
-    if (!layerIsOn("toggleCompass")) {
+    let layer = compass.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleCompass");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleCompass");
+    }
+
+/*    if (!layerIsOn("toggleCompass")) {
         turnButtonOn("toggleCompass");
         $('#compass').fadeIn();
         if (!compass.selectAll("*").size()) {
@@ -1305,7 +1315,7 @@ export function toggleCompass(event) {
         if (event && isCtrlClick(event)) { editStyle("compass"); return; }
         $('#compass').fadeOut();
         turnButtonOff("toggleCompass");
-    }
+    }*/
 }
 
 export function toggleRelief(event) {
