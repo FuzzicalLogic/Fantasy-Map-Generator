@@ -48,7 +48,9 @@ import { initialize as initStorage, uploadMap } from "./modules/save-and-load.js
 import { initialize as initEditors, closeDialogs, clearLegend, unfog } from "./modules/ui/editors.js";
 import { drawScaleBar } from "./modules/ui/measurers.js";
 
-import { initialize as initLayers, restoreLayers, applyPreset, drawStates, drawBorders, drawCoordinates } from "./modules/ui/layers.js";
+import {
+    initialize as initLayers, restoreLayers, applyPreset, drawStates, drawBorders
+} from "./modules/ui/layers.js";
 import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js";
 import { initialize as initGeneral, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {
@@ -118,6 +120,7 @@ fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("hei
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
 import { drawCompass } from "./map/CompassLayer.js";
+import { drawCoordinates } from "./map/CoordinatesLayer.js";
 import "./map/HeightmapLayer.js";
 import "./map/OceanLayer.js";
 import "./map/PrecipitationLayer.js";
@@ -595,6 +598,7 @@ export function generate() {
         OceanLayers(grid);
         defineMapSize(grid);
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
+        drawCoordinates();
         calculateTemperatures(grid);
         generatePrecipitation(grid);
         pack = packGrid(grid);
