@@ -1267,8 +1267,7 @@ export function toggleCoordinates(event) {
 }
 
 export function toggleCompass(event) {
-    let { compass } = view;
-    let layer = compass.node();
+    let layer = view.compass.node();
     if (layer.classList.contains('Hidden')) {
         layer.classList.remove('Hidden');
         turnButtonOn("toggleCompass");
