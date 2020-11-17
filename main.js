@@ -117,8 +117,10 @@ population.append("g").attr("id", "urban");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
+import { drawCompass } from "./map/CompassLayer.js";
 import "./map/HeightmapLayer.js";
 import "./map/OceanLayer.js";
+import "./map/PrecipitationLayer.js";
 import "./map/RiversLayer.js";
 import "./map/CultureLayer.js";
 import "./map/ReligionsLayer.js";
@@ -581,6 +583,7 @@ export function generate() {
         generateSeed();
         console.group("Generated Map " + seed);
         applyMapSize();
+        drawCompass();
         randomizeOptions();
         grid = MapData.placePoints(graphWidth, graphHeight);
         calculateVoronoi(grid, grid.points);
