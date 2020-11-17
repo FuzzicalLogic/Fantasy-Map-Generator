@@ -1508,8 +1508,17 @@ export function turnButtonOn(el) {
 
 export function togglePrec(event) {
     let { prec } = view;
+    let layer = prec.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("togglePrec");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("togglePrec");
+    }
 
-    if (!prec.selectAll("circle").size()) {
+/*    if (!prec.selectAll("circle").size()) {
         turnButtonOn("togglePrec");
         drawPrec();
         if (event && isCtrlClick(event)) editStyle("prec");
@@ -1520,7 +1529,7 @@ export function togglePrec(event) {
         prec.selectAll("text").attr("opacity", 1).transition(hide).attr("opacity", 0);
         prec.selectAll("circle").transition(hide).attr("r", 0).remove();
         prec.transition().delay(1000).style("display", "none");
-    }
+    }*/
 }
 
 export function togglePopulation(event) {
