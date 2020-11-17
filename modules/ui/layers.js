@@ -1228,7 +1228,17 @@ export function toggleBiomes(event) {
 }
 
 export function toggleBorders(event) {
-    if (!layerIsOn("toggleBorders")) {
+    let layer = view.borders.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleBorders");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleBorders");
+    }
+
+/*    if (!layerIsOn("toggleBorders")) {
         turnButtonOn("toggleBorders");
         $('#borders').fadeIn();
         if (event && isCtrlClick(event)) editStyle("borders");
@@ -1236,7 +1246,7 @@ export function toggleBorders(event) {
         if (event && isCtrlClick(event)) { editStyle("borders"); return; }
         turnButtonOff("toggleBorders");
         $('#borders').fadeOut();
-    }
+    }*/
 }
 
 export function toggleProvinces(event) {
