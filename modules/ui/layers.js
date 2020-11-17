@@ -1464,7 +1464,17 @@ export function toggleScaleBar(event) {
 }
 
 export function toggleZones(event) {
-    if (!layerIsOn("toggleZones")) {
+    let layer = view.zones.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleZones");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleZones");
+    }
+
+/*    if (!layerIsOn("toggleZones")) {
         turnButtonOn("toggleZones");
         $('#zones').fadeIn();
         if (event && isCtrlClick(event)) editStyle("zones");
@@ -1473,6 +1483,7 @@ export function toggleZones(event) {
         turnButtonOff("toggleZones");
         $('#zones').fadeOut();
     }
+    */
 }
 
 export function turnButtonOff(el) {
