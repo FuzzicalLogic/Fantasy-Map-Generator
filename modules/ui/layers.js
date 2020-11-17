@@ -38,37 +38,26 @@ export function initialize() {
         update: moveLayer
     });
 
+    document.getElementById('mapLayers')
+        .querySelectorAll('[data-layer] > span')
+        .forEach(el => el.addEventListener('click', toggleLayer));
+
     window.changePreset = changePreset;
     window.savePreset = savePreset;
     window.removePreset = removePreset;
     window.toggleHeight = toggleHeight;
-    window.drawHeightmap = drawHeightmap;
     window.toggleTemp = toggleTemp;
     window.toggleBiomes = toggleBiomes;
-    window.togglePrec = togglePrec;
     window.togglePopulation = togglePopulation;
-    window.toggleCells = toggleCells;
     window.toggleIce = toggleIce;
-    window.toggleCultures = toggleCultures;
-    window.toggleReligions = toggleReligions;
     window.toggleStates = toggleStates;
-    window.toggleBorders = toggleBorders;
     window.toggleProvinces = toggleProvinces;
     window.toggleGrid = toggleGrid;
-    window.toggleCoordinates = toggleCoordinates;
-    window.toggleCompass = toggleCompass;
     window.toggleRelief = toggleRelief;
     window.toggleTexture = toggleTexture;
-    window.toggleRivers = toggleRivers;
-    window.toggleRoutes = toggleRoutes;
-    window.toggleMilitary = toggleMilitary;
-    window.toggleMarkers = toggleMarkers;
-    window.toggleLabels = toggleLabels;
     window.toggleIcons = toggleIcons;
     window.toggleRulers = toggleRulers;
     window.toggleScaleBar = toggleScaleBar;
-    window.toggleZones = toggleZones;
-
 }
 
 // define connection between option layer buttons and actual svg groups to move the element
@@ -1176,6 +1165,19 @@ function getViewPoint(x, y) {
     const pt = svg.createSVGPoint();
     pt.x = x, pt.y = y;
     return pt.matrixTransform(view.getScreenCTM().inverse());
+}
+
+export function toggleLayer({ path: [, layerName] }) {
+    const name = layerName.dataset.layer;
+    const layer = view[name].node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn(layerName.id);
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff(layerName.id);
+    }
 }
 
 export function toggleHeight(event) {
