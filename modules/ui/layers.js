@@ -1188,17 +1188,6 @@ export function toggleHeight(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleHeight");
     }
-
-    /*if (!view.terrs.selectAll("*").size()) {
-        turnButtonOn("toggleHeight");
-        drawHeightmap();
-        if (event && isCtrlClick(event)) editStyle("terrs");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("terrs"); return; }
-        if (customization === 1) { tip("You cannot turn off the layer when heightmap is in edit mode", false, "error"); return; }
-        turnButtonOff("toggleHeight");
-        view.terrs.selectAll("*").remove();
-    }*/
 }
 
 export function toggleTemp(event) {
@@ -1237,16 +1226,6 @@ export function toggleBorders(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleBorders");
     }
-
-/*    if (!layerIsOn("toggleBorders")) {
-        turnButtonOn("toggleBorders");
-        $('#borders').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("borders");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("borders"); return; }
-        turnButtonOff("toggleBorders");
-        $('#borders').fadeOut();
-    }*/
 }
 
 export function toggleProvinces(event) {
@@ -1298,23 +1277,6 @@ export function toggleCompass(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleCompass");
     }
-
-/*    if (!layerIsOn("toggleCompass")) {
-        turnButtonOn("toggleCompass");
-        $('#compass').fadeIn();
-        if (!compass.selectAll("*").size()) {
-            compass.append("use").attr("xlink:href", "#rose");
-            // prolongate rose lines
-            svg.select("g#rose > g#sL > line#sL1").attr("y1", -19000).attr("y2", 19000);
-            svg.select("g#rose > g#sL > line#sL2").attr("x1", -19000).attr("x2", 19000);
-            shiftCompass();
-        }
-        if (event && isCtrlClick(event)) editStyle("compass");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("compass"); return; }
-        $('#compass').fadeOut();
-        turnButtonOff("toggleCompass");
-    }*/
 }
 
 export function toggleRelief(event) {
@@ -1362,17 +1324,6 @@ export function toggleRivers(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleRivers");
     }
-    /*
-    if (!layerIsOn("toggleRivers")) {
-        turnButtonOn("toggleRivers");
-        $('#rivers').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("rivers");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("rivers"); return; }
-        $('#rivers').fadeOut();
-        turnButtonOff("toggleRivers");
-    }
-    */
 }
 
 export function toggleRoutes(event) {
@@ -1385,16 +1336,6 @@ export function toggleRoutes(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleRoutes");
     }
-/*    if (!layerIsOn("toggleRoutes")) {
-        turnButtonOn("toggleRoutes");
-        $('#routes').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("routes");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("routes"); return; }
-        $('#routes').fadeOut();
-        turnButtonOff("toggleRoutes");
-    }
-    */
 }
 
 export function toggleMilitary() {
@@ -1407,16 +1348,6 @@ export function toggleMilitary() {
         layer.classList.add('Hidden');
         turnButtonOff("toggleMilitary");
     }
-/*    if (!layerIsOn("toggleMilitary")) {
-        turnButtonOn("toggleMilitary");
-        $('#armies').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("armies");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("armies"); return; }
-        $('#armies').fadeOut();
-        turnButtonOff("toggleMilitary");
-    }
-    */
 }
 
 export function toggleMarkers(event) {
@@ -1490,17 +1421,6 @@ export function toggleZones(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleZones");
     }
-
-/*    if (!layerIsOn("toggleZones")) {
-        turnButtonOn("toggleZones");
-        $('#zones').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("zones");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("zones"); return; }
-        turnButtonOff("toggleZones");
-        $('#zones').fadeOut();
-    }
-    */
 }
 
 export function turnButtonOff(el) {
@@ -1589,20 +1509,6 @@ export function toggleCultures(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleCultures");
     }
-/*
-    let { cults } = view;
-    const cultures = pack.cultures.filter(c => c.i && !c.removed);
-    const empty = !cults.selectAll("path").size();
-    if (empty && cultures.length) {
-        turnButtonOn("toggleCultures");
-        drawCultures();
-        if (event && isCtrlClick(event)) editStyle("cults");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("cults"); return; }
-        cults.selectAll("path").remove();
-        turnButtonOff("toggleCultures");
-    }
-    */
 }
 
 export function toggleReligions(event) {
@@ -1615,18 +1521,6 @@ export function toggleReligions(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleReligions");
     }
-    /*
-    const religions = pack.religions.filter(r => r.i && !r.removed);
-    let { relig } = view;
-    if (!relig.selectAll("path").size() && religions.length) {
-        turnButtonOn("toggleReligions");
-        drawReligions();
-        if (event && isCtrlClick(event)) editStyle("relig");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("relig"); return; }
-        relig.selectAll("path").remove();
-        turnButtonOff("toggleReligions");
-    }*/
 }
 
 export function toggleStates(event) {
