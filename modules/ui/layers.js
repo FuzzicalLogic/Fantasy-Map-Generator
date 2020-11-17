@@ -1276,15 +1276,14 @@ export function toggleGrid(event) {
 }
 
 export function toggleCoordinates(event) {
-    let { coordinates } = view;
-    if (!coordinates.selectAll("*").size()) {
+    let layer = view.coordinates.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleCoordinates");
-        drawCoordinates();
-        if (event && isCtrlClick(event)) editStyle("coordinates");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("coordinates"); return; }
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleCoordinates");
-        coordinates.selectAll("*").remove();
     }
 }
 
