@@ -45,7 +45,6 @@ export function initialize() {
     window.changePreset = changePreset;
     window.savePreset = savePreset;
     window.removePreset = removePreset;
-    window.toggleHeight = toggleHeight;
     window.toggleTemp = toggleTemp;
     window.toggleBiomes = toggleBiomes;
     window.togglePopulation = togglePopulation;
@@ -1194,18 +1193,6 @@ export function toggleLayer(button, name) {
     }
 }
 
-export function toggleHeight(event) {
-    let layer = document.getElementById('terrs');
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleHeight");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleHeight");
-    }
-}
-
 export function toggleTemp(event) {
     let { temperature } = view;
     if (!temperature.selectAll("*").size()) {
@@ -1267,30 +1254,6 @@ export function toggleGrid(event) {
         if (event && isCtrlClick(event)) { editStyle("gridOverlay"); return; }
         turnButtonOff("toggleGrid");
         gridOverlay.selectAll("*").remove();
-    }
-}
-
-export function toggleCoordinates(event) {
-    let layer = view.coordinates.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleCoordinates");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleCoordinates");
-    }
-}
-
-export function toggleCompass(event) {
-    let layer = view.compass.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleCompass");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleCompass");
     }
 }
 
@@ -1448,19 +1411,10 @@ export function turnButtonOn(el) {
     getCurrentPreset();
 }
 
+/*
 export function togglePrec(event) {
     let { prec } = view;
-    let layer = prec.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("togglePrec");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("togglePrec");
-    }
-
-/*    if (!prec.selectAll("circle").size()) {
+    if (!prec.selectAll("circle").size()) {
         turnButtonOn("togglePrec");
         drawPrec();
         if (event && isCtrlClick(event)) editStyle("prec");
@@ -1471,8 +1425,9 @@ export function togglePrec(event) {
         prec.selectAll("text").attr("opacity", 1).transition(hide).attr("opacity", 0);
         prec.selectAll("circle").transition(hide).attr("r", 0).remove();
         prec.transition().delay(1000).style("display", "none");
-    }*/
+    }
 }
+*/
 
 export function togglePopulation(event) {
     let { population } = view;
