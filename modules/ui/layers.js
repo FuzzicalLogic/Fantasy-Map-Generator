@@ -1351,14 +1351,14 @@ export function toggleMilitary() {
 }
 
 export function toggleMarkers(event) {
-    if (!layerIsOn("toggleMarkers")) {
-        turnButtonOn("toggleMarkers");
-        $('#markers').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("markers");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("markers"); return; }
-        $('#markers').fadeOut();
-        turnButtonOff("toggleMarkers");
+    let layer = view.markers.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleLabels");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleLabels");
     }
 }
 
