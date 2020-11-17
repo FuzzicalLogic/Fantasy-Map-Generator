@@ -1556,14 +1556,14 @@ export function togglePopulation(event) {
     }
 }
 
-export function toggleCells(event) {
-    if (!view.cells.selectAll("path").size()) {
+export function toggleCells() {
+    let layer = view.cells.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleCells");
-        drawCells();
-        if (event && isCtrlClick(event)) editStyle("cells");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("cells"); return; }
-        view.cells.selectAll("path").remove();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleCells");
     }
 }
