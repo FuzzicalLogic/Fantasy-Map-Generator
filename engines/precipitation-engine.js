@@ -5,6 +5,11 @@ import {
 } from "../main.js";
 import { rand } from "../modules/utils.js";
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 // difine wind directions based on cells latitude and prevailing winds there
 // by 5d step
 {// latitude bands
@@ -139,6 +144,12 @@ export function generatePrecipitation({ cells, cellsX, cellsY, points }) {
         if (southerly) wind.append("text").attr("x", graphWidth / 2).attr("y", graphHeight - 20).text("\u21C8");
     }();
 
+    emitter.dispatchEvent(new CustomEvent('post', {
+        detail: {
+            cells: cells,
+            p: points
+        }
+    }));
     console.timeEnd('generatePrecipitation');
 }
 
