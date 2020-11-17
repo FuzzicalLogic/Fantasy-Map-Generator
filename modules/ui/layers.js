@@ -172,10 +172,14 @@ export function applyPreset() {
 // toggle layers on preset change
 function changePreset(preset) {
     const layers = presets[preset]; // layers to be turned on
-    document.getElementById("mapLayers").querySelectorAll("li").forEach(function (e) {
-        if (layers.includes(e.id) && !layerIsOn(e.id)) e.click(); // turn on
-        else if (!layers.includes(e.id) && layerIsOn(e.id)) e.click(); // turn off
-    });
+    document.getElementById("mapLayers")
+        .querySelectorAll("li")
+        .forEach(function (e) {
+            if (layers.includes(e.id) && !layerIsOn(e.id))
+                e.click(); // turn on
+            else if (!layers.includes(e.id) && layerIsOn(e.id))
+                e.click(); // turn off
+        });
     layersPreset.value = preset;
     localStorage.setItem("preset", preset);
 
@@ -1375,7 +1379,16 @@ export function toggleRoutes(event) {
 }
 
 export function toggleMilitary() {
-    if (!layerIsOn("toggleMilitary")) {
+    let layer = view.armies.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
+        turnButtonOn("toggleMilitary");
+    }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleMilitary");
+    }
+/*    if (!layerIsOn("toggleMilitary")) {
         turnButtonOn("toggleMilitary");
         $('#armies').fadeIn();
         if (event && isCtrlClick(event)) editStyle("armies");
@@ -1384,6 +1397,7 @@ export function toggleMilitary() {
         $('#armies').fadeOut();
         turnButtonOff("toggleMilitary");
     }
+    */
 }
 
 export function toggleMarkers(event) {
