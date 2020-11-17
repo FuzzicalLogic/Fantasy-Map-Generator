@@ -1048,7 +1048,7 @@
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleTexture(event)">Te<u>x</u>ture</span>
                     </li>
-                    <li id="toggleHeight" data-layer="terrs" data-tip="Heightmap: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: H" class="buttonoff">
+                    <li id="toggleHeight" data-layer="terrs" data-keycode="72" data-tip="Heightmap: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: H" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>H</u>eightmap</span>
                     </li>
@@ -1056,7 +1056,7 @@
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleBiomes(event)"><u>B</u>iomes</span>
                     </li>
-                    <li id="toggleCells" data-layer="cells" data-tip="Cells structure: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: E" class="buttonoff">
+                    <li id="toggleCells" data-layer="cells" data-keycode="69" data-tip="Cells structure: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: E" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>C<u>e</u>lls</span>
                     </li>
@@ -1064,15 +1064,15 @@
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleGrid(event)"><u>G</u>rid</span>
                     </li>
-                    <li id="toggleCoordinates" data-layer="coordinates" data-tip="Coordinate grid: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: O" class="buttonoff">
+                    <li id="toggleCoordinates" data-layer="coordinates" data-keycode="79" data-tip="Coordinate grid: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: O" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>C<u>o</u>ordinates</span>
                     </li>
-                    <li id="toggleCompass" data-layer="compass" data-tip="Wind (Compass) Rose: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: W" class="buttonoff">
+                    <li id="toggleCompass" data-layer="compass" data-keycode="87" data-tip="Wind (Compass) Rose: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: W" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>W</u>ind Rose</span>
                     </li>
-                    <li id="toggleRivers" data-layer="rivers" data-tip="Rivers: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: V">
+                    <li id="toggleRivers" data-layer="rivers" data-keycode="86" data-tip="Rivers: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: V">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>Ri<u>v</u>ers</span>
                         <button id="regenerateRivers" class="Generator Icon" data-tip="Click to regenerate all rivers (restore default state)"><span>R</span></button>
@@ -1082,12 +1082,12 @@
                         <span onclick="toggleRelief(event)">Relie<u>f</u></span>
                         <button id="regenerateReliefIcons" class="Generator Icon" data-tip="Click to regenerate all relief icons based on current cell biome and elevation"><span>R</span></button>
                     </li>
-                    <li id="toggleReligions" data-layer="relig" data-tip="Religions: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: R" class="buttonoff">
+                    <li id="toggleReligions" data-layer="relig" data-keycode="82" data-tip="Religions: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: R" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>R</u>eligions</span>
                         <button id="regenerateReligions" class="Generator Icon" data-tip="Click to regenerate religions"><span>R</span></button>
                     </li>
-                    <li id="toggleCultures" data-layer="cults" data-tip="Cultures: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: C" class="buttonoff">
+                    <li id="toggleCultures" data-layer="cults" data-keycode="67" data-tip="Cultures: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: C" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>C</u>ultures</span>
                         <button id="regenerateCultures" class="Generator Icon" data-tip="Click to regenerate cultures"><span>R</span></button>
@@ -1102,16 +1102,16 @@
                         <span onclick="toggleProvinces(event)"><u>P</u>rovinces</span>
                         <button id="regenerateProvinces" class="Generator Icon" data-tip="Click to regenerate provinces. States will remain as they are"><span>R</span></button>
                     </li>
-                    <li id="toggleZones" data-layer="zones" data-tip="Zones: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: Z" class="buttonoff">
+                    <li id="toggleZones" data-layer="zones" data-keycode="90" data-tip="Zones: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: Z" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>Z</u>ones</span>
                         <button id="regenerateZones" class="Generator Icon" data-tip="Click to regenerate zones. Hold Ctrl and click to set zones number multiplier"><span>R</span></button>
                     </li>
-                    <li id="toggleBorders" data-layer="borders" data-tip="State borders: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: D">
+                    <li id="toggleBorders" data-layer="borders" data-keycode="68" data-tip="State borders: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: D">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>Bor<u>d</u>ers</span>
                     </li>
-                    <li id="toggleRoutes" data-layer="routes" data-tip="Trade routes: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: U">
+                    <li id="toggleRoutes" data-layer="routes" data-keycode="85" data-tip="Trade routes: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: U">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>Ro<u>u</u>tes</span>
                         <button id="regenerateRoutes" class="Generator Icon" data-tip="Click to regenerate all routes"><span>R</span></button>
@@ -1130,11 +1130,11 @@
                         <span onclick="toggleIce(event)">Ice</span>
                         <button id="regenerateIce" class="Generator Icon" data-tip="Click to icebergs and glaciers"><span>R</span></button>
                     </li>
-                    <li id="togglePrec" data-layer="prec" data-tip="Precipitation map: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: A" class="buttonoff">
+                    <li id="togglePrec" data-layer="prec" data-keycode="65" data-tip="Precipitation map: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: A" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>Precipit<u>a</u>tion</span>
                     </li>
-                    <li id="toggleLabels" data-layer="labels" data-tip="Labels: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: L">
+                    <li id="toggleLabels" data-layer="labels" data-keycode="76" data-tip="Labels: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: L">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>L</u>abels</span>
                     </li>
@@ -1142,12 +1142,12 @@
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleIcons(event)"><u>I</u>cons</span>
                     </li>
-                    <li id="toggleMilitary" data-layer="armies" data-tip="Military forces: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: M" class="buttonoff">
+                    <li id="toggleMilitary" data-layer="armies" data-keycode="77" data-tip="Military forces: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: M" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span><u>M</u>ilitary</span>
                         <button id="regenerateMilitary" class="Generator Icon" data-tip="Click to recalculate military forces based on current military options"><span>R</span></button>
                     </li>
-                    <li id="toggleMarkers" data-layer="markers" data-tip="Markers: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: K" class="buttonoff">
+                    <li id="toggleMarkers" data-layer="markers" data-keycode="75" data-tip="Markers: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: K" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span>Mar<u>k</u>ers</span>
                         <button id="regenerateMarkers" class="Generator Icon" data-tip="Click to regenerate markers. Hold Ctrl and click to set markers number multiplier"><span>R</span></button>

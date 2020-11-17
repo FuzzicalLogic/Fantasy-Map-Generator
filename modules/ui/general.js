@@ -26,9 +26,10 @@ import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleA
 import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, capitalize, si } from "../utils.js";
 import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 import {
-    toggleHeight, toggleTemp, toggleBiomes, togglePrec, togglePopulation, toggleCells, toggleIce, toggleCultures, toggleReligions, toggleStates,
-    toggleBorders, toggleProvinces, toggleGrid, toggleCoordinates, toggleCompass, toggleRelief, toggleTexture, toggleRivers, toggleRoutes,
-    toggleMilitary, toggleMarkers, toggleLabels, toggleIcons, toggleRulers, toggleScaleBar, toggleZones, layerIsOn
+    toggleLayer,
+    toggleTemp, toggleBiomes, togglePopulation, toggleIce, toggleStates,
+    toggleProvinces, toggleGrid, toggleRelief, toggleTexture, 
+    toggleIcons, toggleRulers, toggleScaleBar, layerIsOn
 } from "./layers.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
@@ -70,6 +71,16 @@ export function initialize() {
     document.addEventListener("keydown", event => {
         if (event.altKey && event.keyCode !== 18) event.preventDefault(); // disallow alt key combinations
         if ([112, 113, 117, 120, 9].includes(event.keyCode)) event.preventDefault(); // F1, F2, F6, F9, Tab
+    });
+
+    const keys = Array.from(document.querySelectorAll('#mapLayers [data-keycode]'))
+        .map(x => +x.dataset.keycode);
+    document.addEventListener('keyup', e => {
+        const key = e.keyCode;
+        if (keys.includes(key)) {
+            let layer = document.querySelector(`[data-keycode="${key}"]`)
+            toggleLayer(layer.id, layer.dataset.layer);
+        }
     });
 
     // Hotkeys, see github.com/Azgaar/Fantasy-Map-Generator/wiki/Hotkeys
@@ -128,29 +139,15 @@ export function initialize() {
         else if (alt && key === 70) console.table(pack.features); // Alt + "F" to log features data
 
         else if (key === 88) toggleTexture(); // "X" to toggle Texture layer
-        else if (key === 72) toggleHeight(); // "H" to toggle Heightmap layer
         else if (key === 66) toggleBiomes(); // "B" to toggle Biomes layer
-        else if (key === 69) toggleCells(); // "E" to toggle Cells layer
         else if (key === 71) toggleGrid(); // "G" to toggle Grid layer
-        else if (key === 79) toggleCoordinates(); // "O" to toggle Coordinates layer
-        else if (key === 87) toggleCompass(); // "W" to toggle Compass Rose layer
-        else if (key === 86) toggleRivers(); // "V" to toggle Rivers layer
         else if (key === 70) toggleRelief(); // "F" to toggle Relief icons layer
-        else if (key === 67) toggleCultures(); // "C" to toggle Cultures layer
         else if (key === 83) toggleStates(); // "S" to toggle States layer
         else if (key === 80) toggleProvinces(); // "P" to toggle Provinces layer
-        else if (key === 90) toggleZones(); // "Z" to toggle Zones
-        else if (key === 68) toggleBorders(); // "D" to toggle Borders layer
-        else if (key === 82) toggleReligions(); // "R" to toggle Religions layer
-        else if (key === 85) toggleRoutes(); // "U" to toggle Routes layer
         else if (key === 84) toggleTemp(); // "T" to toggle Temperature layer
         else if (key === 78) togglePopulation(); // "N" to toggle Population layer
         else if (key === 74) toggleIce(); // "J" to toggle Ice layer
-        else if (key === 65) togglePrec(); // "A" to toggle Precipitation layer
-        else if (key === 76) toggleLabels(); // "L" to toggle Labels layer
         else if (key === 73) toggleIcons(); // "I" to toggle Icons layer
-        else if (key === 77) toggleMilitary(); // "M" to toggle Military layer
-        else if (key === 75) toggleMarkers(); // "K" to toggle Markers layer
         else if (key === 187) toggleRulers(); // Equal (=) to toggle Rulers
         else if (key === 189) toggleScaleBar(); // Minus (-) to toggle Scale bar
 
@@ -171,8 +168,8 @@ export function initialize() {
         else if (key === 57 || key === 105) zoom.scaleTo(svg, 9); // 9 to zoom to 9
         else if (ctrl) pressControl(); // Control to toggle mode
     });
-
 }
+
 
 export function tip(tip = "Tip is undefined", main, type, time) {
     const tooltip = document.getElementById("tooltip");

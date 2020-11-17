@@ -40,7 +40,7 @@ export function initialize() {
 
     document.getElementById('mapLayers')
         .querySelectorAll('[data-layer] > span')
-        .forEach(el => el.addEventListener('click', toggleLayer));
+        .forEach(el => el.addEventListener('click', onClickLayer));
 
     window.changePreset = changePreset;
     window.savePreset = savePreset;
@@ -1167,16 +1167,30 @@ function getViewPoint(x, y) {
     return pt.matrixTransform(view.getScreenCTM().inverse());
 }
 
-export function toggleLayer({ path: [, layerName] }) {
+function onClickLayer({ path: [, layerName] }) {
     const name = layerName.dataset.layer;
+    toggleLayer(layerName.id, name);
+}
+
+export function showLayer(button, name) {
+    const layer = view[name].node();
+    layer.classList.remove('Hidden');
+    turnButtonOn(button);
+}
+
+export function hideLayer(button, name) {
+    const layer = view[name].node();
+    layer.classList.add('Hidden');
+    turnButtonOff(button);
+}
+
+export function toggleLayer(button, name) {
     const layer = view[name].node();
     if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn(layerName.id);
+        showLayer(button, name);
     }
     else {
-        layer.classList.add('Hidden');
-        turnButtonOff(layerName.id);
+        hideLayer(button, name);
     }
 }
 
