@@ -24,6 +24,8 @@ import * as HeightmapGenerator from "./modules/heightmap-generator.js";
 import { OceanLayers } from "./modules/ocean-layers.js";
 import * as Precipitation from "./engines/precipitation-engine.js";
 export const generatePrecipitation = Precipitation.generatePrecipitation;
+import * as Temperatures from "./engines/temperature-engine.js";
+export const calculateTemperatures = Temperatures.calculateTemperatures;
 import * as Rivers from "./modules/river-generator.js";
 import * as Coast from "./engines/coast-engine.js";
 export const drawCoastline = Coast.drawCoastline;
@@ -713,35 +715,6 @@ export function calculateMapCoordinates(size, latShift) {
 
     const lon = Math.min(graphWidth / graphHeight * latT / 2, 180);
     mapCoordinates = { latT, latN, latS, lonT: lon * 2, lonW: -lon, lonE: lon };
-}
-
-// temperature model
-export function calculateTemperatures({ cells, cellsX, points }) {
-    console.time('calculateTemperatures');
-
-    const tEq = +temperatureEquatorInput.value;
-    const tPole = +temperaturePoleInput.value;
-    const tDelta = tEq - tPole;
-    const int = d3.easePolyInOut.exponent(.5); // interpolation function
-
-    d3.range(0, cells.length, cellsX).forEach(function (r) {
-        const y = points[r][1];
-        const lat = Math.abs(mapCoordinates.latN - y / graphHeight * mapCoordinates.latT); // [0; 90]
-        const initTemp = tEq - int(lat / 90) * tDelta;
-        for (let i = r; i < r + cellsX; i++) {
-            cells[i].temp = ~~Math.max(Math.min(initTemp - convertToFriendly(cells[i].h), 127), -128);
-        }
-    });
-
-    // temperature decreases by 6.5 degree C per 1km
-    function convertToFriendly(h) {
-        if (h < 20) return 0;
-        const exponent = +heightExponentInput.value;
-        const height = Math.pow(h - 18, exponent);
-        return rn(height / 1000 * 6.5);
-    }
-
-    console.timeEnd('calculateTemperatures');
 }
 
 // recalculate Voronoi Graph to pack cells
