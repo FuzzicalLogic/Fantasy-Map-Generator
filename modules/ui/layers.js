@@ -1432,18 +1432,16 @@ export function toggleMarkers(event) {
 }
 
 export function toggleLabels(event) {
-    let { labels } = view;
-
-    if (!layerIsOn("toggleLabels")) {
+    let layer = view.labels.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleLabels");
-        labels.style("display", null)
-        invokeActiveZooming();
-        if (event && isCtrlClick(event)) editStyle("labels");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("labels"); return; }
-        turnButtonOff("toggleLabels");
-        labels.style("display", "none");
     }
+    else {
+        layer.classList.add('Hidden');
+        turnButtonOff("toggleLabels");
+    }
+    /** TODO: invokeActiveZooming on show */
 }
 
 export function toggleIcons(event) {
