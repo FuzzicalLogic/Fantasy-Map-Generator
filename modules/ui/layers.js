@@ -46,7 +46,6 @@ export function initialize() {
     window.savePreset = savePreset;
     window.removePreset = removePreset;
     window.toggleBiomes = toggleBiomes;
-    window.togglePopulation = togglePopulation;
     window.toggleIce = toggleIce;
     window.toggleStates = toggleStates;
     window.toggleProvinces = toggleProvinces;
@@ -1412,18 +1411,6 @@ export function togglePrec(event) {
     }
 }
 */
-
-export function togglePopulation(event) {
-    let layer = view.population.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("togglePopulation");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("togglePopulation");
-    }
-}
 
 export function toggleCells() {
     let layer = view.cells.node();
