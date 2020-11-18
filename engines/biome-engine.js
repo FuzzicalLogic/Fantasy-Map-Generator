@@ -1,6 +1,11 @@
 ﻿import { pack, grid, biomesData } from "../main.js";
 import { rn, isLand } from "../modules/utils.js";
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 // apply default biomes data
 export function applyDefaultBiomesSystem() {
     const name = ["Marine", "Hot desert", "Cold desert", "Savanna", "Grassland", "Tropical seasonal forest", "Temperate deciduous forest", "Tropical rainforest", "Temperate rainforest", "Taiga", "Tundra", "Glacier", "Wetland"];
@@ -31,6 +36,8 @@ export function applyDefaultBiomesSystem() {
 
 // assign biome id for each cell
 export function defineBiomes() {
+    dispatchEvent(new CustomEvent('clear', { detail: pack }));
+
     console.time("defineBiomes");
     const { cells, features } = pack;
 
@@ -61,6 +68,8 @@ export function defineBiomes() {
     }
 
     console.timeEnd("defineBiomes");
+
+    dispatchEvent(new CustomEvent('post', { detail: pack }));
 }
 
 // assign biome id to a cell
