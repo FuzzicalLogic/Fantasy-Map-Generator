@@ -72,7 +72,7 @@ export function drawProvinces({ detail: { cells, vertices, provinces } }) {
     function connectVertices(start, t, province) {
         const chain = []; // vertices chain to form a path
         let land = vertices[start].c.some(c =>
-            cells[c].h >= 20 && cells[c].province !== t);
+            cells[c] && cells[c].h >= 20 && cells[c].province !== t);
         function check(i) {
             province = !!cells[i] ? cells[i].province : 0;
             land = (!!cells[i] && !!cells[i].h)
