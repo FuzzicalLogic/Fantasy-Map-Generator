@@ -17,6 +17,11 @@ import {
 } from "./utils.js";
 import { toggleLabels, layerIsOn } from "./ui/layers.js";
 
+const populationEmitter = new EventTarget();
+export const addPopulationEventListener = (...args) => populationEmitter.addEventListener(...args);
+export const removePopulationEventListener = (...args) => populationEmitter.removeEventListener(...args);
+export const dispatchPopulationEvent = (...args) => populationEmitter.dispatchEvent(...args);
+
 export function generate(howMany) {
     const { cells, cultures } = pack,
         n = cells.length;
@@ -217,6 +222,9 @@ export function specifyBurgs({ burgs, cells, vertices, features }, { cells: { te
         }
     }
 
+    dispatchPopulationEvent(new CustomEvent('post', {
+        detail: pack
+    }));
     // de-assign port status if it's the only one on feature
     const ports = burgs.filter(b => !b.removed && b.port > 0);
     for (const f of features) {
