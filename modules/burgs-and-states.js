@@ -29,6 +29,13 @@ export const ProvinceEvents = {
     dispatchEvent: (...args) => provinceEmitter.dispatchEvent(...args)
 };
 
+const stateEmitter = new EventTarget();
+export const StateEvents = {
+    addEventListener: (...args) => stateEmitter.addEventListener(...args),
+    removeEventListener: (...args) => stateEmitter.removeEventListener(...args),
+    dispatchEvent: (...args) => stateEmitter.dispatchEvent(...args)
+};
+
 export function generate(howMany) {
     const { cells, cultures } = pack,
         n = cells.length;
@@ -411,8 +418,9 @@ export function expandStates({ cells, states, cultures, burgs}) {
             return type === "Naval" || type === "Lake" ? 100 : 0; // penalty for mainland for navals
         return 0;
     }
-
     console.timeEnd("expandStates");
+
+    StateEvents.dispatchEvent(new CustomEvent('post', { detail: pack }))
 }
 
 export function normalizeStates({ cells, burgs }) {
