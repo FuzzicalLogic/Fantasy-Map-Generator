@@ -1044,9 +1044,9 @@
 
                 <h1 data-tip="Click to toggle a layer, drag to raise or lower a layer. Ctrl + click to edit layer style">Layers:</h1>
                 <ol data-tip="Click to toggle a layer, drag to raise or lower a layer. Ctrl + click to edit layer style" id="mapLayers">
-                    <li id="toggleTexture" data-tip="Texture overlay: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: X" class="buttonoff">
+                    <li id="toggleTexture" data-layer="texture" data-keycode="88" data-tip="Texture overlay: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: X" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
-                        <span onclick="toggleTexture(event)">Te<u>x</u>ture</span>
+                        <span>Te<u>x</u>ture</span>
                     </li>
                     <li id="toggleHeight" data-layer="terrs" data-keycode="72" data-tip="Heightmap: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: H" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
@@ -1060,7 +1060,7 @@
                         <button class="Handle Icon"><span>_</span></button>
                         <span>C<u>e</u>lls</span>
                     </li>
-                    <li id="toggleGrid" data-tip="Grid: click to toggle, drag to raise or lower. Select type in styles dropdown below. Ctrl + click to edit layer style. Shortcut: G" class="buttonoff">
+                    <li id="toggleGrid" data-layer="gridOverlay" data-tip="Grid: click to toggle, drag to raise or lower. Select type in styles dropdown below. Ctrl + click to edit layer style. Shortcut: G" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleGrid(event)"><u>G</u>rid</span>
                     </li>
@@ -1077,7 +1077,7 @@
                         <span>Ri<u>v</u>ers</span>
                         <button id="regenerateRivers" class="Generator Icon" data-tip="Click to regenerate all rivers (restore default state)"><span>R</span></button>
                     </li>
-                    <li id="toggleRelief" data-tip="Relief and biome icons: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: F" class="buttonoff">
+                    <li id="toggleRelief" data-layer="terrain" data-tip="Relief and biome icons: click to toggle, drag to raise or lower the layer. Ctrl + click to edit layer style. Shortcut: F" class="buttonoff">
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleRelief(event)">Relie<u>f</u></span>
                         <button id="regenerateReliefIcons" class="Generator Icon" data-tip="Click to regenerate all relief icons based on current cell biome and elevation"><span>R</span></button>
@@ -1156,7 +1156,7 @@
                         <button class="Handle Icon"><span>_</span></button>
                         <span>Rulers</span>
                     </li>
-                    <li id="toggleScaleBar" data-tip="Scale Bar: click to toggle. Ctrl + click to edit style. Shortcut: - (minus)" class="solid">
+                    <li id="toggleScaleBar" data-layer="scaleBar" data-tip="Scale Bar: click to toggle. Ctrl + click to edit style. Shortcut: - (minus)" class="solid">
                         <button class="Handle Icon"><span>_</span></button>
                         <span onclick="toggleScaleBar(event)">Scale Bar</span>
                     </li>

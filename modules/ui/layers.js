@@ -18,7 +18,7 @@ import { editUnits } from "./units-editor.js";
 
 import { tip } from "./general.js";
 import {
-    getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, getDefaultTexture, clipPoly, normalize, round, last, rand
+    getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, clipPoly, normalize, round, last, rand
 } from "../utils.js";
 import {
     editStyle, calculateFriendlyGridSize, shiftCompass, setBase64Texture
@@ -45,63 +45,36 @@ export function initialize() {
     window.changePreset = changePreset;
     window.savePreset = savePreset;
     window.removePreset = removePreset;
-    window.toggleBiomes = toggleBiomes;
-    window.toggleIce = toggleIce;
-    window.toggleStates = toggleStates;
     window.toggleGrid = toggleGrid;
     window.toggleRelief = toggleRelief;
-    window.toggleTexture = toggleTexture;
     window.toggleScaleBar = toggleScaleBar;
 }
 
 // define connection between option layer buttons and actual svg groups to move the element
 function getLayer(id) {
-    if (id === "toggleHeight") return $("#terrs");
-    if (id === "toggleBiomes") return $("#biomes");
-    if (id === "toggleCells") return $("#cells");
-    if (id === "toggleGrid") return $("#gridOverlay");
-    if (id === "toggleCoordinates") return $("#coordinates");
-    if (id === "toggleCompass") return $("#compass");
-    if (id === "toggleRivers") return $("#rivers");
-    if (id === "toggleRelief") return $("#terrain");
-    if (id === "toggleCultures") return $("#cults");
-    if (id === "toggleStates") return $("#regions");
-    if (id === "toggleProvinces") return $("#provs");
-    if (id === "toggleBorders") return $("#borders");
-    if (id === "toggleRoutes") return $("#routes");
-    if (id === "toggleTemp") return $("#temperature");
-    if (id === "togglePrec") return $("#prec");
-    if (id === "togglePopulation") return $("#population");
-    if (id === "toggleIce") return $("#ice");
-    if (id === "toggleTexture") return $("#texture");
-    if (id === "toggleLabels") return $("#labels");
-    if (id === "toggleIcons") return $("#icons");
-    if (id === "toggleMarkers") return $("#markers");
-    if (id === "toggleRulers") return $("#ruler");
+    let layer = document.getElementById(id).dataset.layer;
+    if (!layer) {
+        if (id === 'toggleGrid')
+            layer = 'gridOverlay';
+        else if (id === 'toggleRelief')
+            layer = 'terrain';
+    }
+    return layer
+        ? $(`#layer`)
+        : null;
 }
 
 // on map regeneration restore layers if they was turned on
 export function restoreLayers() {
-    if (layerIsOn("toggleHeight"))
-        view.terrs.node().removeAttribute('hidden');
-    if (layerIsOn("toggleCells")) drawCells();
-    if (layerIsOn("toggleGrid")) drawGrid();
-    if (layerIsOn("toggleCoordinates")) drawCoordinates();
-    if (layerIsOn("toggleCompass")) view.compass.style("display", "block");
-    if (layerIsOn("toggleTemp")) drawTemp();
-    if (layerIsOn("togglePrec")) drawPrec();
-    if (layerIsOn("togglePopulation")) drawPopulation();
-    if (layerIsOn("toggleBiomes")) drawBiomes();
-    if (layerIsOn("toggleRelief")) ReliefIcons();
-    if (layerIsOn("toggleCultures")) drawCultures();
-    if (layerIsOn("toggleProvinces")) drawProvinces();
-    if (layerIsOn("toggleReligions"))
-        view.relig.node().removeAttribute('hidden');
-    if (layerIsOn("toggleIce")) drawIce();
-
-    // states are getting rendered each time, if it's not required than layers should be hidden
-    if (!layerIsOn("toggleBorders")) $('#borders').fadeOut();
-    if (!layerIsOn("toggleStates")) view.regions.style("display", "none").selectAll("path").remove();
+    document.querySelectorAll('#mapLayers [data-layer]')
+        .forEach(x => {
+            if (layerIsOn(x.id))
+                toggleLayer(x.id, x.dataset.layer);
+        })
+    if (layerIsOn("toggleGrid"))
+        drawGrid();
+    if (layerIsOn("toggleRelief"))
+        ReliefIcons();
 }
 
 export function layerIsOn(el) {
@@ -159,9 +132,9 @@ function changePreset(preset) {
         .querySelectorAll("li")
         .forEach(function (e) {
             if (layers.includes(e.id) && !layerIsOn(e.id))
-                e.click(); // turn on
+                showLayer(e.id, e.dataset.layer); // turn on
             else if (!layers.includes(e.id) && layerIsOn(e.id))
-                e.click(); // turn off
+                hideLayer(e.id, e.dataset.layer); // turn off
         });
     layersPreset.value = preset;
     localStorage.setItem("preset", preset);
@@ -197,7 +170,9 @@ function removePreset() {
 }
 
 export function getCurrentPreset() {
-    const layers = Array.from(document.getElementById("mapLayers").querySelectorAll("li:not(.buttonoff)")).map(node => node.id).sort();
+    const layers = Array.from(document.getElementById("mapLayers").querySelectorAll("li:not(.buttonoff)"))
+        .map(node => node.id)
+        .sort();
     const defaultPresets = getDefaultPresets();
 
     for (const preset in presets) {
@@ -1178,18 +1153,22 @@ function onClickLayer({ path: [, layerName] }) {
 
 export function showLayer(button, name) {
     const layer = view[name].node();
+    if (!layer || !layer.classList) return;
     layer.classList.remove('Hidden');
     turnButtonOn(button);
 }
 
 export function hideLayer(button, name) {
     const layer = view[name].node();
+    if (!layer || !layer.classList) return;
     layer.classList.add('Hidden');
     turnButtonOff(button);
 }
 
 export function toggleLayer(button, name) {
     const layer = view[name].node();
+    if (!layer || !layer.classList) return;
+
     if (layer.classList.contains('Hidden')) {
         showLayer(button, name);
     }
@@ -1263,22 +1242,13 @@ export function toggleRelief(event) {
 }
 
 export function toggleTexture(event) {
-    if (!layerIsOn("toggleTexture")) {
+    let layer = view.texture.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleTexture");
-        // append default texture image selected by default. Don't append on load to not harm performance
-        if (!view.texture.selectAll("*").size()) {
-            const x = +styleTextureShiftX.value, y = +styleTextureShiftY.value;
-            const href = styleTextureInput.value === "default" ? getDefaultTexture() : setBase64Texture(styleTextureInput.value);
-            view.texture.append("image").attr("id", "textureImage")
-                .attr("x", x).attr("y", y).attr("width", graphWidth - x).attr("height", graphHeight - y)
-                .attr("xlink:href", href).attr("preserveAspectRatio", "xMidYMid slice");
-        }
-        $('#texture').fadeIn();
-        zoom.scaleBy(svg, 1.00001); // enforce browser re-draw
-        if (event && isCtrlClick(event)) editStyle("texture");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("texture"); return; }
-        $('#texture').fadeOut();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleTexture");
     }
 }

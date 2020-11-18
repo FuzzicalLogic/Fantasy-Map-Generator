@@ -26,8 +26,7 @@ import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleA
 import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, capitalize, si } from "../utils.js";
 import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 import {
-    toggleLayer, toggleGrid, toggleRelief, toggleTexture, 
-    toggleScaleBar, layerIsOn
+    toggleLayer, toggleGrid, toggleRelief, toggleScaleBar, layerIsOn
 } from "./layers.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
@@ -136,7 +135,6 @@ export function initialize() {
         else if (alt && key === 82) console.table(pack.religions); // Alt + "R" to log religions data
         else if (alt && key === 70) console.table(pack.features); // Alt + "F" to log features data
 
-        else if (key === 88) toggleTexture(); // "X" to toggle Texture layer
         else if (key === 71) toggleGrid(); // "G" to toggle Grid layer
         else if (key === 70) toggleRelief(); // "F" to toggle Relief icons layer
         else if (key === 189) toggleScaleBar(); // Minus (-) to toggle Scale bar
