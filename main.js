@@ -186,6 +186,7 @@ oceanLayers.append("rect").attr("id", "oceanBase").attr("x", 0).attr("y", 0).att
 
 import * as MapData from "./map/MapData.js";
 export const { calculateVoronoiO: calculateVoronoi } = MapData;
+
 void function removeLoading() {
     d3.select("#loading").transition().duration(4000).style("opacity", 0).remove();
     d3.select("#initial").transition().duration(4000).attr("opacity", 0).remove();
