@@ -135,6 +135,7 @@ import "./map/CultureLayer.js";
 import "./map/ReligionsLayer.js";
 import "./map/ProvincesLayer.js";
 import "./map/RoutesLayer.js";
+import "./map/StatesLayer.js";
 
 // Necessary Load order -- Prior to main
 initUtilities();
@@ -626,8 +627,6 @@ export function generate() {
         BurgsAndStates.generateProvinces();
         BurgsAndStates.defineBurgFeatures();
 
-        drawStates();
-        drawBorders();
         BurgsAndStates.drawStateLabels();
 
         Rivers.specify();
