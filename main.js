@@ -51,13 +51,12 @@ import { initialize as initEditors, closeDialogs, clearLegend, unfog } from "./m
 import { drawScaleBar } from "./modules/ui/measurers.js";
 
 import {
-    initialize as initLayers, restoreLayers, applyPreset, drawStates, drawBorders
-} from "./modules/ui/layers.js";
+    initialize as initLayers, restoreLayers, applyPreset } from "./modules/ui/layers.js";
 import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js";
 import { initialize as initGeneral, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {
     initialize as initUtilities, parseError, getPackPolygon, P, gauss, rn,
-    debounce, link, normalize
+    debounce, link
 } from "./modules/utils.js";
 
 import { initialize as initOptions, applyStoredOptions, applyMapSize, randomizeOptions } from "./modules/ui/options.js";
@@ -356,7 +355,7 @@ export function generateMapOnLoad() {
     applyStyleOnLoad(); // apply default of previously selected style
     generate(); // generate map
     focusOn(); // based on searchParams focus on point, cell or burg from MFCG
-    applyPreset(); // apply saved layers preset
+    applyPreset();
 }
 
 // focus on coordinates, cell or burg provided in searchParams
