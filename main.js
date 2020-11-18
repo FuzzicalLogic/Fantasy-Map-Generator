@@ -127,6 +127,7 @@ import { drawCoordinates } from "./map/CoordinatesLayer.js";
 import "./map/HeightmapLayer.js";
 import "./map/OceanLayer.js";
 import "./map/TemperatureLayer.js";
+import { drawIce } from "./map/IceLayer.js";
 import "./map/PrecipitationLayer.js";
 import "./map/PopulationLayer.js";
 import "./map/RiversLayer.js";
@@ -608,6 +609,7 @@ export function generate() {
         calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
         drawCoordinates();
         calculateTemperatures(grid);
+        drawIce();
         generatePrecipitation(grid);
         pack = packGrid(grid);
         drawCells();
