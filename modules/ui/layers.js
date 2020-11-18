@@ -1414,17 +1414,14 @@ export function togglePrec(event) {
 */
 
 export function togglePopulation(event) {
-    let { population } = view;
-    if (!population.selectAll("line").size()) {
+    let layer = view.population.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("togglePopulation");
-        drawPopulation();
-        if (event && isCtrlClick(event)) editStyle("population");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("population"); return; }
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("togglePopulation");
-        const hide = d3.transition().duration(1000).ease(d3.easeSinIn);
-        population.select("#rural").selectAll("line").transition(hide).attr("y2", d => d[1]).remove();
-        population.select("#urban").selectAll("line").transition(hide).delay(1000).attr("y2", d => d[1]).remove();
     }
 }
 
