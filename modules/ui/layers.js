@@ -45,7 +45,6 @@ export function initialize() {
     window.changePreset = changePreset;
     window.savePreset = savePreset;
     window.removePreset = removePreset;
-    window.toggleTemp = toggleTemp;
     window.toggleBiomes = toggleBiomes;
     window.togglePopulation = togglePopulation;
     window.toggleIce = toggleIce;
@@ -1190,18 +1189,6 @@ export function toggleLayer(button, name) {
     }
     else {
         hideLayer(button, name);
-    }
-}
-
-export function toggleTemp(event) {
-    let layer = view.temperature.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleTemp");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleTemp");
     }
 }
 
