@@ -26,8 +26,7 @@ import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleA
 import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, capitalize, si } from "../utils.js";
 import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 import {
-    toggleLayer,
-    toggleTemp, toggleBiomes, togglePopulation, toggleIce, toggleStates,
+    toggleLayer, toggleBiomes, togglePopulation, toggleIce, toggleStates,
     toggleProvinces, toggleGrid, toggleRelief, toggleTexture, 
     toggleIcons, toggleRulers, toggleScaleBar, layerIsOn
 } from "./layers.js";
@@ -144,7 +143,6 @@ export function initialize() {
         else if (key === 70) toggleRelief(); // "F" to toggle Relief icons layer
         else if (key === 83) toggleStates(); // "S" to toggle States layer
         else if (key === 80) toggleProvinces(); // "P" to toggle Provinces layer
-        else if (key === 84) toggleTemp(); // "T" to toggle Temperature layer
         else if (key === 78) togglePopulation(); // "N" to toggle Population layer
         else if (key === 74) toggleIce(); // "J" to toggle Ice layer
         else if (key === 73) toggleIcons(); // "I" to toggle Icons layer
