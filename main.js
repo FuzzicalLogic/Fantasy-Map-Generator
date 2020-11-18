@@ -132,6 +132,7 @@ import "./map/PopulationLayer.js";
 import "./map/RiversLayer.js";
 import "./map/CultureLayer.js";
 import "./map/ReligionsLayer.js";
+import "./map/ProvincesLayer.js";
 import "./map/RoutesLayer.js";
 
 // Necessary Load order -- Prior to main

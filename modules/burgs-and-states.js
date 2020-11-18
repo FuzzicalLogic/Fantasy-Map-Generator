@@ -22,6 +22,13 @@ export const addPopulationEventListener = (...args) => populationEmitter.addEven
 export const removePopulationEventListener = (...args) => populationEmitter.removeEventListener(...args);
 export const dispatchPopulationEvent = (...args) => populationEmitter.dispatchEvent(...args);
 
+const provinceEmitter = new EventTarget();
+export const ProvinceEvents = {
+    addEventListener: (...args) => provinceEmitter.addEventListener(...args),
+    removeEventListener: (...args) => provinceEmitter.removeEventListener(...args),
+    dispatchEvent: (...args) => provinceEmitter.dispatchEvent(...args)
+};
+
 export function generate(howMany) {
     const { cells, cultures } = pack,
         n = cells.length;
@@ -1107,5 +1114,7 @@ export function generateProvinces(regenerate) {
     });
 
     console.timeEnd("generateProvinces");
+
+    ProvinceEvents.dispatchEvent(new CustomEvent('post', { detail: pack }));
 }
 
