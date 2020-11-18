@@ -1162,6 +1162,16 @@ function getViewPoint(x, y) {
     return pt.matrixTransform(view.getScreenCTM().inverse());
 }
 
+export function turnButtonOff(el) {
+    document.getElementById(el).classList.add("buttonoff");
+    getCurrentPreset();
+}
+
+export function turnButtonOn(el) {
+    document.getElementById(el).classList.remove("buttonoff");
+    getCurrentPreset();
+}
+
 function onClickLayer({ path: [, layerName] }) {
     const name = layerName.dataset.layer;
     toggleLayer(layerName.id, name);
@@ -1382,16 +1392,6 @@ export function toggleZones(event) {
         layer.classList.add('Hidden');
         turnButtonOff("toggleZones");
     }
-}
-
-export function turnButtonOff(el) {
-    document.getElementById(el).classList.add("buttonoff");
-    getCurrentPreset();
-}
-
-export function turnButtonOn(el) {
-    document.getElementById(el).classList.remove("buttonoff");
-    getCurrentPreset();
 }
 
 /*
