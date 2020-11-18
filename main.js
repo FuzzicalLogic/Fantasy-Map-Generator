@@ -121,6 +121,7 @@ population.append("g").attr("id", "urban");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%");
 fogging.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", "#e8f0f6").attr("filter", "url(#splotch)");
 
+import { applyTexture } from "./map/TextureLayer.js";
 import { drawCells } from "./map/CellsLayer.js";
 import { drawCompass } from "./map/CompassLayer.js";
 import { drawCoordinates } from "./map/CoordinatesLayer.js";
@@ -595,6 +596,7 @@ export function generate() {
         generateSeed();
         console.group("Generated Map " + seed);
         applyMapSize();
+        applyTexture();
         drawCompass();
         randomizeOptions();
         grid = MapData.placePoints(graphWidth, graphHeight);
