@@ -53,8 +53,6 @@ export function initialize() {
     window.toggleGrid = toggleGrid;
     window.toggleRelief = toggleRelief;
     window.toggleTexture = toggleTexture;
-    window.toggleIcons = toggleIcons;
-    window.toggleRulers = toggleRulers;
     window.toggleScaleBar = toggleScaleBar;
 }
 
@@ -1352,13 +1350,13 @@ export function toggleIcons(event) {
 }
 
 export function toggleRulers(event) {
-    if (!layerIsOn("toggleRulers")) {
+    let layer = view.ruler.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleRulers");
-        $('#ruler').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("ruler");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("ruler"); return; }
-        $('#ruler').fadeOut();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleRulers");
     }
 }

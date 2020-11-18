@@ -126,6 +126,7 @@ import { drawCompass } from "./map/CompassLayer.js";
 import { drawCoordinates } from "./map/CoordinatesLayer.js";
 import "./map/HeightmapLayer.js";
 import "./map/OceanLayer.js";
+import "./map/TemperatureLayer.js";
 import "./map/PrecipitationLayer.js";
 import "./map/RiversLayer.js";
 import "./map/CultureLayer.js";

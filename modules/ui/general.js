@@ -28,7 +28,7 @@ import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOp
 import {
     toggleLayer, toggleBiomes, togglePopulation, toggleIce, toggleStates,
     toggleProvinces, toggleGrid, toggleRelief, toggleTexture, 
-    toggleRulers, toggleScaleBar, layerIsOn
+    toggleScaleBar, layerIsOn
 } from "./layers.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
@@ -145,7 +145,6 @@ export function initialize() {
         else if (key === 80) toggleProvinces(); // "P" to toggle Provinces layer
         else if (key === 78) togglePopulation(); // "N" to toggle Population layer
         else if (key === 74) toggleIce(); // "J" to toggle Ice layer
-        else if (key === 187) toggleRulers(); // Equal (=) to toggle Rulers
         else if (key === 189) toggleScaleBar(); // Minus (-) to toggle Scale bar
 
         else if (key === 37) zoom.translateBy(svg, 10, 0); // Left to scroll map left
