@@ -48,7 +48,6 @@ export function initialize() {
     window.toggleBiomes = toggleBiomes;
     window.toggleIce = toggleIce;
     window.toggleStates = toggleStates;
-    window.toggleProvinces = toggleProvinces;
     window.toggleGrid = toggleGrid;
     window.toggleRelief = toggleRelief;
     window.toggleTexture = toggleTexture;
@@ -1225,13 +1224,13 @@ export function toggleBorders(event) {
 }
 
 export function toggleProvinces(event) {
-    if (!layerIsOn("toggleProvinces")) {
+    let layer = view.provs.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleProvinces");
-        drawProvinces();
-        if (event && isCtrlClick(event)) editStyle("provs");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("provs"); return; }
-        view.provs.selectAll("*").remove();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleProvinces");
     }
 }

@@ -27,7 +27,7 @@ import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, 
 import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 import {
     toggleLayer, toggleBiomes, toggleIce, toggleStates,
-    toggleProvinces, toggleGrid, toggleRelief, toggleTexture, 
+    toggleGrid, toggleRelief, toggleTexture, 
     toggleScaleBar, layerIsOn
 } from "./layers.js";
 
@@ -142,7 +142,6 @@ export function initialize() {
         else if (key === 71) toggleGrid(); // "G" to toggle Grid layer
         else if (key === 70) toggleRelief(); // "F" to toggle Relief icons layer
         else if (key === 83) toggleStates(); // "S" to toggle States layer
-        else if (key === 80) toggleProvinces(); // "P" to toggle Provinces layer
         else if (key === 74) toggleIce(); // "J" to toggle Ice layer
         else if (key === 189) toggleScaleBar(); // Minus (-) to toggle Scale bar
 

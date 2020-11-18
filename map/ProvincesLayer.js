@@ -4,8 +4,15 @@ import {
 } from "../main.js";
 import { round } from "../modules/utils.js";
 
+generator.addEventListener('clear', onClear);
+export function onClear() {
+    view.provs.selectAll("*").remove();
+}
+
 generator.addEventListener('post', drawProvinces);
 export function drawProvinces({ detail: { cells, vertices, provinces } }) {
+    onClear();
+
     let { provs } = view;
     console.time("drawProvinces");
     const labelsOn = provs.attr("data-labels") == 1;
