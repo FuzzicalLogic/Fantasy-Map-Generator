@@ -71,7 +71,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "prec").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "population");
     box.append("g").attr("id", "labels").attr('class', 'Layer Hidden');
-    box.append("g").attr("id", "icons");
+    box.append("g").attr("id", "icons").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "armies").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "markers").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "fogging-cont").attr("mask", "url(#fog)").append("g").attr("id", "fogging").style("display", "none");

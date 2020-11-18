@@ -1340,14 +1340,14 @@ export function toggleLabels(event) {
 }
 
 export function toggleIcons(event) {
-    if (!layerIsOn("toggleIcons")) {
+    let layer = view.icons.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleIcons");
-        $('#icons').fadeIn();
-        if (event && isCtrlClick(event)) editStyle("burgIcons");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("burgIcons"); return; }
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleIcons");
-        $('#icons').fadeOut();
     }
 }
 
