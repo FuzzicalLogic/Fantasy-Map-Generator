@@ -128,6 +128,7 @@ import "./map/HeightmapLayer.js";
 import "./map/OceanLayer.js";
 import "./map/TemperatureLayer.js";
 import "./map/PrecipitationLayer.js";
+import "./map/PopulationLayer.js";
 import "./map/RiversLayer.js";
 import "./map/CultureLayer.js";
 import "./map/ReligionsLayer.js";

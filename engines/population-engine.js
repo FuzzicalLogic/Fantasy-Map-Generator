@@ -3,6 +3,12 @@ import {
     normalize
 } from "../modules/utils.js";
 // assess cells suitability to calculate population and rand cells for culture center and burgs placement
+
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+export const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+
 export function rankCells() {
     console.time('rankCells');
     const { cells, features } = pack;
@@ -15,7 +21,7 @@ export function rankCells() {
         confluences = landCells.filter(x => !!x.conf).map(x => x.conf),
         flMean = d3.median(fluxes) || 0,
         flMax = d3.max(fluxes) + d3.max(confluences),
-    // Adjust population by cell area
+        // Adjust population by cell area
         areaMean = d3.mean(landCells.map(x => x.area));
 
     // Initialize and remove unsuitable cells
@@ -50,6 +56,9 @@ export function rankCells() {
             ? x.s * x.area / areaMean
             : 0;
     }
-
     console.timeEnd('rankCells');
+
+    dispatchEvent(new CustomEvent('post', {
+        detail: pack
+    }))
 }
