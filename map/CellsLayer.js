@@ -5,7 +5,7 @@ import {
 } from "../main.js";
 import { getGridPolygon, getPackPolygon } from "../modules/utils.js";
 
-export function drawCells() {
+export async function drawCells() {
     view.cells.selectAll("path").remove();
     const data = customization === 1 ? grid.cells.i : pack.cells.map(({ i }) => i);
     const polygon = customization === 1 ? getGridPolygon : getPackPolygon;

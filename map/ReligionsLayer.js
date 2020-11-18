@@ -5,7 +5,7 @@ import {
 import { round } from "../modules/utils.js";
 
 generator.addEventListener('post', onPostReligions);
-export function onPostReligions({ detail: { cells, vertices, religions } }) {
+async function onPostReligions({ detail: { cells, vertices, religions } }) {
     let { relig } = view;
     console.time("drawReligions");
 

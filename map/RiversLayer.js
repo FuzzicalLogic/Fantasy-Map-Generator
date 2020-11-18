@@ -8,7 +8,7 @@ import {
 import { round } from "../modules/utils.js";
 
 generator.addEventListener('add', render);
-function render({ detail: rivers }) {
+async function render({ detail: rivers }) {
     view.rivers.selectAll("path").remove();
     view.rivers.selectAll("path").data(rivers).enter()
         .append("path")

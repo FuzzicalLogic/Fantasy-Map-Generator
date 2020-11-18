@@ -64,10 +64,11 @@ export function generate(map) {
     cells.forEach(x => x.h = 0);
 
     Templates[document.getElementById("templateInput").value]()
+    console.timeEnd('generateHeightmap');
+
     dispatchEvent(new CustomEvent('update', {
         detail: { cells, vertices }
     }))
-    console.timeEnd('generateHeightmap');
 }
 
 // Heighmap Template: Volcano

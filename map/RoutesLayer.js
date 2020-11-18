@@ -13,7 +13,7 @@ const layers = {
     get searoute() { return searoutes; },
 }
 
-function drawRoutes({ detail: data }) {
+async function drawRoutes({ detail: data }) {
     let { type, data: routes } = data;
 
     const { cells, burgs } = pack;

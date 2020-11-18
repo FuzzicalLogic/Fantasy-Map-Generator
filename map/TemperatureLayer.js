@@ -6,7 +6,7 @@ import {
 import { convertTemperature, round } from "../modules/utils.js";
 
 generator.addEventListener('post', drawTemperatures);
-export function drawTemperatures({ detail: { cells, vertices } }) {
+async function drawTemperatures({ detail: { cells, vertices } }) {
     let { temperature } = view;
 
     console.time("drawTemp");

@@ -4,7 +4,7 @@ import { round } from "../modules/utils.js";
 import * as generator from "../modules/heightmap-generator.js";
 
 generator.addEventListener('update', drawHeightmap)
-export function drawHeightmap({ detail:{ cells, vertices}}) {
+export async function drawHeightmap({ detail:{ cells, vertices}}) {
     console.time("Heightmap.Render");
     let { terrs } = view;
     terrs.selectAll("*").remove();

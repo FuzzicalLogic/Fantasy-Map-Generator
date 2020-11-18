@@ -1,7 +1,7 @@
 import { view } from "../main.js";
 
 
-export function drawCompass() {
+export async function drawCompass() {
     if (!view.compass.selectAll("*").size()) {
         view.compass.append("use").attr("xlink:href", "#rose");
         // prolongate rose lines

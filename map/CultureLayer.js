@@ -5,7 +5,7 @@ import {
 import { round } from "../modules/utils.js";
 
 generator.addEventListener('post', onPostCultures);
-export function onPostCultures({ detail: { cells, vertices, cultures } }) {
+async function onPostCultures({ detail: { cells, vertices, cultures } }) {
     let { cults } = view;
     console.time("drawCultures");
 

@@ -5,7 +5,7 @@ import {
 import { rn } from "../modules/utils.js";
 
 generator.addEventListener('post', drawPrec);
-function drawPrec({ detail: { cells, p } }) {
+async function drawPrec({ detail: { cells, p } }) {
     let { prec } = view;
 
     const show = d3.transition().duration(800).ease(d3.easeSinIn);

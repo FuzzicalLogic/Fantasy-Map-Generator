@@ -5,7 +5,7 @@ import {
 } from "../main.js";
 import { rn, round } from "../modules/utils.js";
 
-export function drawCoordinates() {
+export async function drawCoordinates() {
     let { coordinates } = view;
     coordinates.selectAll("*").remove(); // remove every time
     const steps = [.5, 1, 2, 5, 10, 15, 30]; // possible steps
