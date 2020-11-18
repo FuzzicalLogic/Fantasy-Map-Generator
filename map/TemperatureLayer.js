@@ -1,9 +1,9 @@
 import * as generator from "../engines/temperature-engine.js";
 import {
     grid,
-    view, lineGen
+    view, svgWidth, svgHeight, lineGen
 } from "../main.js";
-import { rn } from "../modules/utils.js";
+import { convertTemperature, round } from "../modules/utils.js";
 
 generator.addEventListener('post', drawTemperatures);
 export function drawTemperatures({ detail: { cells, vertices } }) {
@@ -15,7 +15,7 @@ export function drawTemperatures({ detail: { cells, vertices } }) {
     const scheme = d3.scaleSequential(d3.interpolateSpectral);
     const tMax = +temperatureEquatorOutput.max, tMin = +temperatureEquatorOutput.min, delta = tMax - tMin;
 
-    const { cells, vertices } = grid, n = cells.length;
+    const n = cells.length;
     const used = new Uint8Array(n); // to detect already passed cells
     const min = d3.min(cells.map(x => x.temp)),
         max = d3.max(cells.map(x => x.temp));
@@ -50,7 +50,9 @@ export function drawTemperatures({ detail: { cells, vertices } }) {
     }
 
     const tempLabels = temperature.append("g").attr("id", "tempLabels").attr("fill-opacity", 1);
-    tempLabels.selectAll("text").data(labels).enter().append("text").attr("x", d => d[0]).attr("y", d => d[1]).text(d => convertTemperature(d[2]));
+    tempLabels.selectAll("text").data(labels).enter().append("text")
+        .attr("x", d => d[0])
+        .attr("y", d => d[1]).text(d => convertTemperature(d[2]));
 
     // find cell with temp < isotherm and find vertex to start path detection
     function findStart(i, t) {

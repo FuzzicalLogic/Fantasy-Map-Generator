@@ -1194,15 +1194,14 @@ export function toggleLayer(button, name) {
 }
 
 export function toggleTemp(event) {
-    let { temperature } = view;
-    if (!temperature.selectAll("*").size()) {
+    let layer = view.temperature.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleTemp");
-        drawTemp();
-        if (event && isCtrlClick(event)) editStyle("temperature");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("temperature"); return; }
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleTemp");
-        temperature.selectAll("*").remove();
     }
 }
 

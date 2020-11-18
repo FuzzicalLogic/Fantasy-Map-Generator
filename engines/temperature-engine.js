@@ -26,6 +26,7 @@ export function calculateTemperatures({ cells, cellsX, points, vertices }) {
             cells[i].temp = ~~Math.max(Math.min(initTemp - convertToFriendly(cells[i].h), 127), -128);
         }
     });
+    console.timeEnd('calculateTemperatures');
 
     // temperature decreases by 6.5 degree C per 1km
     function convertToFriendly(h) {
@@ -41,5 +42,4 @@ export function calculateTemperatures({ cells, cellsX, points, vertices }) {
             vertices: vertices,
         }
     }));
-    console.timeEnd('calculateTemperatures');
 }
