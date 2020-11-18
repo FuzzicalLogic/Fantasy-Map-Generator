@@ -1199,14 +1199,13 @@ export function toggleLayer(button, name) {
 }
 
 export function toggleBiomes(event) {
-    let { biomes } = view;
-    if (!biomes.selectAll("path").size()) {
+    let layer = view.biomes.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleBiomes");
-        drawBiomes();
-        if (event && isCtrlClick(event)) editStyle("biomes");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("biomes"); return; }
-        biomes.selectAll("path").remove();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleBiomes");
     }
 }

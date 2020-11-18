@@ -51,7 +51,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "landmass");
     box.append("g").attr("id", "texture");
     box.append("g").attr("id", "terrs").attr('class', 'Layer Hidden');
-    box.append("g").attr("id", "biomes");
+    box.append("g").attr("id", "biomes").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "cells").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "gridOverlay");
     box.append("g").attr("id", "coordinates").attr('class', 'Layer Hidden');

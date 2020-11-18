@@ -26,7 +26,7 @@ import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleA
 import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, capitalize, si } from "../utils.js";
 import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 import {
-    toggleLayer, toggleBiomes, toggleIce, toggleStates,
+    toggleLayer, toggleIce, toggleStates,
     toggleGrid, toggleRelief, toggleTexture, 
     toggleScaleBar, layerIsOn
 } from "./layers.js";
@@ -138,7 +138,6 @@ export function initialize() {
         else if (alt && key === 70) console.table(pack.features); // Alt + "F" to log features data
 
         else if (key === 88) toggleTexture(); // "X" to toggle Texture layer
-        else if (key === 66) toggleBiomes(); // "B" to toggle Biomes layer
         else if (key === 71) toggleGrid(); // "G" to toggle Grid layer
         else if (key === 70) toggleRelief(); // "F" to toggle Relief icons layer
         else if (key === 83) toggleStates(); // "S" to toggle States layer
