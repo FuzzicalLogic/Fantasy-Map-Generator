@@ -1460,15 +1460,13 @@ export function toggleReligions(event) {
 }
 
 export function toggleStates(event) {
-    let { regions } = view;
-    if (!layerIsOn("toggleStates")) {
+    let layer = view.regions.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleStates");
-        regions.style("display", null);
-        drawStates();
-        if (event && isCtrlClick(event)) editStyle("regions");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("regions"); return; }
-        regions.style("display", "none").selectAll("path").remove();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleStates");
     }
 }
