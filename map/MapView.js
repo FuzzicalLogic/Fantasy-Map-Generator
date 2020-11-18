@@ -67,7 +67,7 @@ MapView.initialize = view => {
     box.append("g").attr("id", "routes").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "temperature").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "coastline");
-    box.append("g").attr("id", "ice").style("display", "none");
+    box.append("g").attr("id", "ice").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "prec").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "population").attr('class', 'Layer Hidden');
     box.append("g").attr("id", "labels").attr('class', 'Layer Hidden');

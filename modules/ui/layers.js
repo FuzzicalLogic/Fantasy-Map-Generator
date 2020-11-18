@@ -1423,14 +1423,13 @@ export function toggleCells() {
 }
 
 export function toggleIce() {
-    if (!layerIsOn("toggleIce")) {
+    let layer = view.ice.node();
+    if (layer.classList.contains('Hidden')) {
+        layer.classList.remove('Hidden');
         turnButtonOn("toggleIce");
-        $('#ice').fadeIn();
-        if (!view.ice.selectAll("*").size()) drawIce();
-        if (event && isCtrlClick(event)) editStyle("ice");
-    } else {
-        if (event && isCtrlClick(event)) { editStyle("ice"); return; }
-        $('#ice').fadeOut();
+    }
+    else {
+        layer.classList.add('Hidden');
         turnButtonOff("toggleIce");
     }
 }
