@@ -19,7 +19,7 @@ import { tip, applyOption, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P, rn, isCtrlClick, rw, toAdjective, si, openURL } from "../utils.js";
 import {
     toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces,
-    drawProvinces, toggleTexture, layerIsOn
+    drawProvinces, layerIsOn
 } from "./layers.js";
 
 const getById = id => document.getElementById(id);
@@ -33,8 +33,6 @@ export function editStates() {
     if (layerIsOn("toggleCultures")) toggleCultures();
     if (layerIsOn("toggleBiomes")) toggleBiomes();
     if (layerIsOn("toggleReligions")) toggleReligions();
-    if (layerIsOn("toggleTexture")) toggleTexture();
-
     
     refreshStatesEditor();
 
