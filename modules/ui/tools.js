@@ -196,7 +196,7 @@ function regenerateBurgs() {
     for (let i = 0; i < sorted.length && burgs.length < burgsCount; i++) {
         const id = burgs.length;
         const cell = sorted[i];
-        const x = cells.p[cell][0], y = cells.p[cell][1];
+        const x = cells[cell].p[0], y = cells[cell].p[1];
 
         const s = spacing * gauss(1, .3, .2, 2, 2); // randomize to make the placement not uniform
         if (burgsTree.find(x, y, s) !== undefined) continue; // to close to existing burg
@@ -210,7 +210,7 @@ function regenerateBurgs() {
 
         const culture = cells[cell].culture;
         const name = Names.getCulture(culture);
-        burgs.push({ cell, x, y, state, i: id, culture, name, capital, feature: cells.f[cell] });
+        burgs.push({ cell, x, y, state, i: id, culture, name, capital, feature: cells[cell].f });
         burgsTree.add([x, y]);
         cells[cell].burg = id;
     }
