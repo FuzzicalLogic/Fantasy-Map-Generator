@@ -80,13 +80,13 @@ function biomesCollectStatistics() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (cells.h[i] < 20) continue;
+        if (cells[i].h < 20) continue;
         const b = cells[i].biome;
         biomesData.cells[b] += 1;
         biomesData.area[b] += cells[i].area;
         biomesData.rural[b] += cells[i].pop;
-        if (cells.burg[i])
-            biomesData.urban[b] += pack.burgs[cells.burg[i]].population;
+        if (cells[i].burg)
+            biomesData.urban[b] += pack.burgs[cells[i].burg].population;
     }
 }
 
@@ -127,7 +127,7 @@ function biomesEditorAddLines() {
 
     // update footer
     biomesFooterBiomes.innerHTML = body.querySelectorAll(":scope > div").length;
-    biomesFooterCells.innerHTML = pack.cells.h.filter(h => h >= 20).length;
+    biomesFooterCells.innerHTML = pack.cells.filter(x => x.h >= 20).length;
     biomesFooterArea.innerHTML = si(totalArea) + unit;
     biomesFooterPopulation.innerHTML = si(totalPopulation);
     biomesFooterArea.dataset.area = totalArea;

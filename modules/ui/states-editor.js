@@ -84,17 +84,15 @@ export function editStates() {
             stateRemovePrompt(state);
     });
 
-    body.addEventListener("input", function (ev) {
-        const el = ev.target,
-            { classList: cl, parentNode: line } = el,
-            state = +line.dataset.id;
+    body.addEventListener("input", function ({ target: { classList: cl, parentNode: line, value } }) {
+        const state = +line.dataset.id;
 
         if (cl.contains("stateCapital"))
-            stateChangeCapitalName(state, line, el.value);
+            changeCapitalName(state, line, value);
         else if (cl.contains("cultureType"))
-            stateChangeType(state, line, el.value);
+            stateChangeType(state, line, value);
         else if (cl.contains("statePower"))
-            stateChangeExpansionism(state, line, el.value);
+            stateChangeExpansionism(state, line, value);
     });
 
     body.addEventListener("change", function (ev) {
@@ -187,7 +185,7 @@ function statesEditorAddLines() {
 
     // update footer
     statesFooterStates.innerHTML = pack.states.filter(s => s.i && !s.removed).length;
-    statesFooterCells.innerHTML = pack.cells.h.filter(h => h >= 20).length;
+    statesFooterCells.innerHTML = pack.cells.filter(x => x.h >= 20).length;
     statesFooterBurgs.innerHTML = totalBurgs;
     statesFooterArea.innerHTML = si(totalArea) + unit;
     statesFooterPopulation.innerHTML = si(totalPopulation);
@@ -357,7 +355,7 @@ function editStateName(state) {
     }
 }
 
-function stateChangeCapitalName(state, line, value) {
+function changeCapitalName(state, line, value) {
     line.dataset.capital = value;
     const capital = pack.states[state].capital;
     if (!capital) return;

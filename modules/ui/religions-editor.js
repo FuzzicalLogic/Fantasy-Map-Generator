@@ -62,7 +62,7 @@ function religionsCollectStatistics() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (cells.h[i] < 20) continue;
+        if (cells[i].h < 20) continue;
         const r = cells[i].religion;
         religions[r].cells += 1;
         religions[r].area += cells[i].area;
@@ -346,7 +346,7 @@ function drawReligionCenters() {
     religionCenters.selectAll("circle").data(data).enter().append("circle")
         .attr("id", d => "religionsCenter" + d.i).attr("data-id", d => d.i)
         .attr("r", 4).attr("fill", d => d.color)
-        .attr("cx", d => pack.cells.p[d.center][0]).attr("cy", d => pack.cells.p[d.center][1])
+        .attr("cx", d => pack.cells[d.center].p[0]).attr("cy", d => pack.cells[d.center].p[1])
         .on("mouseenter", d => {
             tip(d.name + ". Drag to move the religion center", true);
             religionHighlightOn(event);

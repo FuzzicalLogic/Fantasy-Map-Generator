@@ -3,7 +3,8 @@ import {
     graphWidth, graphHeight,
     pack, grid, notes,
     biomesData,
-    resetZoom, zoom
+    resetZoom, zoom,
+    mapCoordinates
 } from "../../main.js";
 import { closeDialogs } from "./editors.js";
 
@@ -293,7 +294,7 @@ function updateCellInfo(point, i, g) {
     const cells = pack.cells;
     const x = infoX.innerHTML = rn(point[0]);
     const y = infoY.innerHTML = rn(point[1]);
-    const f = cells.f[i];
+    const f = cells[i].f;
     infoLat.innerHTML = toDMS(mapCoordinates.latN - (y / graphHeight) * mapCoordinates.latT, "lat");
     infoLon.innerHTML = toDMS(mapCoordinates.lonW + (x / graphWidth) * mapCoordinates.lonT, "lon");
 
@@ -302,12 +303,12 @@ function updateCellInfo(point, i, g) {
     infoArea.innerHTML = cells[i].area
         ? si(cells[i].area * distanceScaleInput.value ** 2) + unit
         : "n/a";
-    infoEvelation.innerHTML = getElevation(pack.features[f], pack.cells.h[i]);
-    infoDepth.innerHTML = getDepth(pack.features[f], pack.cells.h[i], point);
-    infoTemp.innerHTML = convertTemperature(grid.cells.temp[g]);
-    infoPrec.innerHTML = cells.h[i] >= 20 ? getFriendlyPrecipitation(i) : "n/a";
-    infoRiver.innerHTML = cells.h[i] >= 20 && cells.r[i] ? getRiverInfo(cells.r[i]) : "no";
-    infoState.innerHTML = cells.h[i] >= 20 ? cells[i].state ? `${pack.states[cells[i].state].fullName} (${cells[i].state})` : "neutral lands (0)" : "no";
+    infoEvelation.innerHTML = getElevation(pack.features[f], pack.cells[i].h);
+    infoDepth.innerHTML = getDepth(pack.features[f], pack.cells[i].h, point);
+    infoTemp.innerHTML = convertTemperature(grid.cells[g].temp);
+    infoPrec.innerHTML = cells[i].h >= 20 ? getFriendlyPrecipitation(i) : "n/a";
+    infoRiver.innerHTML = cells[i].h >= 20 && cells[i].r ? getRiverInfo(cells[i].r) : "no";
+    infoState.innerHTML = cells[i].h >= 20 ? cells[i].state ? `${pack.states[cells[i].state].fullName} (${cells[i].state})` : "neutral lands (0)" : "no";
     infoProvince.innerHTML = cells[i].province ? `${pack.provinces[cells[i].province].fullName} (${cells[i].province})` : "no";
     infoCulture.innerHTML = cells[i].culture
         ? `${pack.cultures[cells[i].culture].name} (${cells[i].culture})`
@@ -347,7 +348,7 @@ function getElevation(f, h) {
 function getDepth(f, h, p) {
     if (f.land) return "0 " + heightUnit.value; // land: 0
     if (!f.border) return getHeight(h, "abs"); // lake: pack abs height
-    const gridH = grid.cells.h[findGridCell(p[0], p[1])];
+    const gridH = grid.cells[findGridCell(...p)].h;
     return getHeight(gridH, "abs"); // ocean: grig height
 }
 

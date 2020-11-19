@@ -62,7 +62,7 @@ function culturesCollectStatistics() {
 
     const xs = cells.map((v, k) => k);
     for (const i of xs) {
-        if (cells.h[i] < 20) continue;
+        if (cells[i].h < 20) continue;
         const c = cells[i].culture;
         cultures[c].cells += 1;
         cultures[c].area += cells[i].area;
@@ -132,7 +132,7 @@ function culturesEditorAddLines() {
 
     // update footer
     culturesFooterCultures.innerHTML = pack.cultures.filter(c => c.i && !c.removed).length;
-    culturesFooterCells.innerHTML = pack.cells.h.filter(h => h >= 20).length;
+    culturesFooterCells.innerHTML = pack.cells.filter(x => x.h >= 20).length;
     culturesFooterArea.innerHTML = si(totalArea) + unit;
     culturesFooterPopulation.innerHTML = si(totalPopulation);
     culturesFooterArea.dataset.area = totalArea;
@@ -353,7 +353,7 @@ function drawCultureCenters() {
     cultureCenters.selectAll("circle").data(data).enter().append("circle")
         .attr("id", d => "cultureCenter" + d.i).attr("data-id", d => d.i)
         .attr("r", 6).attr("fill", d => d.color)
-        .attr("cx", d => pack.cells.p[d.center][0]).attr("cy", d => pack.cells.p[d.center][1])
+        .attr("cx", d => pack.cells[d.center].p[0]).attr("cy", d => pack.cells[d.center].p[1])
         .on("mouseenter", d => {
             tip(tooltip, true);
             body.querySelector(`div[data-id='${d.i}']`).classList.add("selected");
