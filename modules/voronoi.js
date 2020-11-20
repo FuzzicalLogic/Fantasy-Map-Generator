@@ -1,5 +1,4 @@
 export const Voronoi = function ({ triangles, halfedges }, points, pointsN) {
-//    const cells = { v: [], c: [], b: [] }; // voronoi cells: v = cell vertices, c = adjacent cells, b = near-border cell
     const vertices = { p: [], v: [], c: [] }; // cells vertices: p = vertex coordinates, v = neighboring vertices, c = adjacent cells
 
     const cells = [];
@@ -7,13 +6,6 @@ export const Voronoi = function ({ triangles, halfedges }, points, pointsN) {
     for (let e = 0; e < length; e++) {
 
         const p = triangles[nextHalfedge(e)];
-//        if (p < pointsN && !cells.c[p]) {
-//            const edges = getEdges(halfedges, e);
-//            cells.v[p] = edges.map(e => triangleOfEdge(e));                              // cell: adjacent vertex
-//            cells.c[p] = edges.map(e => triangles[e]).filter(c => c < pointsN); // cell: adjacent valid cells
-//            cells.b[p] = edges.length > cells.c[p].length ? 1 : 0;                       // cell: is border
-//        }
-
         if (p < pointsN && !cells[p])
             cells[p] = { v: [], c: [], b: 0 };
 
@@ -37,7 +29,6 @@ export const Voronoi = function ({ triangles, halfedges }, points, pointsN) {
         return circumcenter(vertices[0], vertices[1], vertices[2]);
     }
 
-//    return { cells, vertices }
     return { cells, vertices }
 
 }
