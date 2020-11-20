@@ -3,14 +3,14 @@ import { restoreDefaultEvents, unselect, moveCircle, removeCircle } from "./edit
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, rn } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleRelief, layerIsOn } from "./layers.js";
+import { toggleRelief, isPressed } from "./layers.js";
 
 export function editReliefIcon() {
     if (customization) return;
 
     let { terrain } = view;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleRelief")) toggleRelief();
+    if (!isPressed("toggleRelief")) toggleRelief();
 
     terrain.selectAll("use").call(d3.drag().on("drag", dragReliefIcon)).classed("draggable", true);
     elSelected = d3.select(d3.event.target);

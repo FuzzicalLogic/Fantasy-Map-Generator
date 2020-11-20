@@ -6,7 +6,7 @@ import {
 generator.addEventListener('post', onPostStates);
 async function onPostStates({ detail: { cells, vertices, states } }) {
     let { regions } = view;
-    console.time("drawStates");
+//    console.time("drawStates");
     regions.selectAll("path").remove();
 
     const n = cells.length;
@@ -60,6 +60,9 @@ async function onPostStates({ detail: { cells, vertices, states } }) {
         .attr("d", d => d[0]).attr("stroke", d => d3.color(d[2]) ? d3.color(d[2]).darker().hex() : "#666666")
         .attr("id", d => "state-border" + d[1]).attr("clip-path", d => "url(#state-clip" + d[1] + ")");
 
+    invokeActiveZooming();
+    //console.timeEnd("drawStates");
+
     // connect vertices to chain
     function connectVertices(start, t, state) {
         const chain = []; // vertices chain to form a path
@@ -108,6 +111,4 @@ async function onPostStates({ detail: { cells, vertices, states } }) {
         chain.push([start, state, land]); // add starting vertex to sequence to close the path
         return chain;
     }
-    invokeActiveZooming();
-    console.timeEnd("drawStates");
 }

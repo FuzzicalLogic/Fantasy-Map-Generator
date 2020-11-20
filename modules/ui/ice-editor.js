@@ -3,14 +3,14 @@ import { clicked, unselect } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findGridCell, getGridPolygon, rn, ra, parseTransform } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleIce, layerIsOn } from "./layers.js";
+import { toggleIce, isPressed } from "./layers.js";
 
 export function editIce() {
     let { ice } = view;
 
     if (customization) return;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleIce")) toggleIce();
+    if (!isPressed("toggleIce")) toggleIce();
 
     elSelected = d3.select(d3.event.target);
     const type = elSelected.attr("type") ? "Glacier" : "Iceberg";

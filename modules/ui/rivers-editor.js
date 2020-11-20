@@ -5,19 +5,19 @@ import { closeDialogs, clicked, unselect } from "./editors.js";
 import * as Rivers from "../river-generator.js";
 import * as Names from "../names-generator.js";
 import { editNotes } from "./notes-editor.js";
-import { showEPForRiver, showElevationProfile } from "./elevation-profile.js";
+import { showEPForRiver } from "./elevation-profile.js";
 
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { rn, rw, parseTransform, getNextId } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleRivers, layerIsOn } from "./layers.js";
+import { showDisplay } from "./layers.js";
 
 let elSelected;
 export function editRiver(id) {
     if (customization) return;
     if (elSelected && d3.event && d3.event.target.id === elSelected.attr("id")) return;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleRivers")) toggleRivers();
+    showDisplay(['toggleRivers']);
 
     const node = id ? document.getElementById(id) : d3.event.target;
     elSelected = d3.select(node).on("click", addInterimControlPoint);

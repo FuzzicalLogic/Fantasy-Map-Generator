@@ -14,7 +14,7 @@ export function drawProvinces({ detail: { cells, vertices, provinces } }) {
     onClear();
 
     let { provs } = view;
-    console.time("drawProvinces");
+    //console.time("drawProvinces");
     const labelsOn = provs.attr("data-labels") == 1;
     provs.selectAll("*").remove();
 
@@ -67,6 +67,7 @@ export function drawProvinces({ detail: { cells, vertices, provinces } }) {
     labels.selectAll(".path").data(labelData).enter().append("text")
         .attr("x", d => d.pole[0]).attr("y", d => d.pole[1])
         .attr("id", d => "provinceLabel" + d.i).text(d => d.name);
+    //console.timeEnd("drawProvinces");
 
     // connect vertices to chain
     function connectVertices(start, t, province) {
@@ -108,5 +109,4 @@ export function drawProvinces({ detail: { cells, vertices, provinces } }) {
         chain.push([start, province, land]); // add starting vertex to sequence to close the path
         return chain;
     }
-    console.timeEnd("drawProvinces");
 }

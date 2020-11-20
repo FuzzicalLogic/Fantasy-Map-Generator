@@ -8,13 +8,13 @@ import { editNotes } from "./notes-editor.js";
 import { restoreDefaultEvents } from "./editors.js";
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, capitalize } from "../utils.js";
-import { toggleMilitary, layerIsOn } from "./layers.js";
+import { toggleMilitary, isPressed } from "./layers.js";
 
 window.editRegiment = editRegiment;
 export function editRegiment(selector) {
     if (customization) return;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleMilitary")) toggleMilitary();
+    if (!isPressed("toggleMilitary")) toggleMilitary();
 
     let { armies } = view;
     armies.selectAll(":scope > g").classed("draggable", true);

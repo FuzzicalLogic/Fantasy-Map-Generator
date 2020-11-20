@@ -6,12 +6,12 @@ import { editNotes } from "./notes-editor.js";
 import { tip } from "./general.js";
 import { getPackPolygon, rn, si } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleCells, layerIsOn } from "./layers.js";
+import { toggleCells, isPressed } from "./layers.js";
 
 export function editLake() {
     if (customization) return;
     closeDialogs(".stable");
-    if (layerIsOn("toggleCells")) toggleCells();
+    if (isPressed("toggleCells")) toggleCells();
 
     $("#lakeEditor").dialog({
         title: "Edit Lake", resizable: false,

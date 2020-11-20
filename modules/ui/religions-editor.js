@@ -9,7 +9,7 @@ import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitConten
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, rn, isCtrlClick, si } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleBiomes, toggleCultures, toggleReligions, drawReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
+import { showDisplay, toggleReligions, drawReligions, isPressed } from "./layers.js";
 
 const getById = id => document.getElementById(id);
 const getBody = () => getById('religionsBody');
@@ -19,11 +19,7 @@ const animate = d3.transition().duration(1500).ease(d3.easeSinIn);
 export function editReligions() {
     if (customization) return;
     closeDialogs("#religionsEditor, .stable");
-    if (!layerIsOn("toggleReligions")) toggleReligions();
-    if (layerIsOn("toggleCultures")) toggleCultures();
-    if (layerIsOn("toggleStates")) toggleStates();
-    if (layerIsOn("toggleBiomes")) toggleBiomes();
-    if (layerIsOn("toggleProvinces")) toggleProvinces();
+    showDisplay(['toggleReligions']);
 
     refreshReligionsEditor();
     drawReligionCenters();
@@ -179,7 +175,7 @@ function religionHighlightOn(event) {
     const el = getBody().querySelector(`div[data-id='${religion}']`);
     if (el) el.classList.add("active");
 
-    if (!layerIsOn("toggleReligions")) return;
+    if (!isPressed("toggleReligions")) return;
     if (customization) return;
     view.relig.select("#religion" + religion).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#c13119");
     view.debug.select("#religionsCenter" + religion).raise().transition(animate).attr("r", 8).attr("stroke-width", 2).attr("stroke", "#c13119");
@@ -491,7 +487,7 @@ function toggleExtinct() {
 }
 
 function enterReligionsManualAssignent() {
-    if (!layerIsOn("toggleReligions")) toggleReligions();
+    if (!isPressed("toggleReligions")) toggleReligions();
     customization = 7;
     view.relig.append("g").attr("id", "temp");
     document.querySelectorAll("#religionsBottom > button").forEach(el => el.style.display = "none");

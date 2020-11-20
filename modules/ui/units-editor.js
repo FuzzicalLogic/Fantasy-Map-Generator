@@ -11,7 +11,7 @@ import { addRuler, drawOpisometer, drawPlanimeter, drawScaleBar, fitScaleBar } f
 import { tip, clearMainTip, lock, unlock } from "./general.js";
 import { rn } from "../utils.js";
 import { calculateFriendlyGridSize } from "./style.js";
-import { drawTemp, toggleRulers, layerIsOn } from "./layers.js";
+import { drawTemp, toggleRulers, isPressed } from "./layers.js";
 
 window.editUnits = editUnits;
 export function editUnits() {
@@ -104,13 +104,13 @@ function changeHeightExponent() {
     document.getElementById("heightExponentInput").value = this.value;
     document.getElementById("heightExponentOutput").value = this.value;
     calculateTemperatures(grid);
-    if (layerIsOn("toggleTemp")) drawTemp();
+    if (isPressed("toggleTemp")) drawTemp();
     lock("heightExponent");
 }
 
 function changeTemperatureScale() {
     lock("temperatureScale");
-    if (layerIsOn("toggleTemp")) drawTemp();
+    if (isPressed("toggleTemp")) drawTemp();
 }
 
 function changeScaleBarSize() {
@@ -217,7 +217,7 @@ function restoreDefaultUnits() {
 }
 
 function addAdditionalRuler() {
-    if (!layerIsOn("toggleRulers")) toggleRulers();
+    if (!isPressed("toggleRulers")) toggleRulers();
     const x = graphWidth / 2, y = graphHeight / 2;
     const pt = document.getElementById('map').createSVGPoint();
     pt.x = x, pt.y = y;
@@ -232,7 +232,7 @@ function toggleOpisometerMode() {
         clearMainTip();
         this.classList.remove("pressed");
     } else {
-        if (!layerIsOn("toggleRulers")) toggleRulers();
+        if (!isPressed("toggleRulers")) toggleRulers();
         tip("Draw a curve to measure its length", true);
         unitsBottom.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
         this.classList.add("pressed");
@@ -246,7 +246,7 @@ function togglePlanimeterMode() {
         clearMainTip();
         this.classList.remove("pressed");
     } else {
-        if (!layerIsOn("toggleRulers")) toggleRulers();
+        if (!isPressed("toggleRulers")) toggleRulers();
         tip("Draw a line to measure its inner area", true);
         unitsBottom.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
         this.classList.add("pressed");

@@ -7,16 +7,14 @@ import { overviewRegiments } from "./regiments-overview.js";
 
 import { tip } from "./general.js";
 import { rn, capitalize, si, wiki } from "../utils.js";
-import { toggleStates, toggleBorders, toggleMilitary, layerIsOn } from "./layers.js";
+import { showDisplay, isPressed } from "./layers.js";
 
 export function overviewMilitary() {
     if (customization) return;
 
     let { armies } = view;
     closeDialogs("#militaryOverview, .stable");
-    if (!layerIsOn("toggleStates")) toggleStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders();
-    if (!layerIsOn("toggleMilitary")) toggleMilitary();
+    showDisplay(['toggleStates', 'toggleBorders', 'toggleMilitary']);
 
     const body = document.getElementById("militaryBody");
     addLines();
@@ -139,7 +137,7 @@ export function overviewMilitary() {
         if (customization || !state) return;
         armies.select("#army" + state).transition().duration(2000).style("fill", "#ff0000");
 
-        if (!layerIsOn("toggleStates")) return;
+        if (!isPressed("toggleStates")) return;
         const d = view.regions.select("#state" + state).attr("d");
 
         const path = view.debug.append("path").attr("class", "highlight").attr("d", d)

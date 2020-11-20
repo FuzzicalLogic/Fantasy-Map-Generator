@@ -11,7 +11,7 @@ import * as ThreeD from "./3d.js";
 
 import { tip, lock } from "./general.js";
 import { rn, parseTransform, round } from "../utils.js";
-import { drawTemp, toggleBiomes, drawBiomes, drawPrec, drawCoordinates, layerIsOn } from "./layers.js";
+import { drawTemp, drawBiomes, drawPrec, drawCoordinates, isPressed } from "./layers.js";
 
 window.editWorld = editWorld;
 
@@ -110,10 +110,10 @@ function updateWorld(globe, path, el) {
     pack.cells.h = new Float32Array(heights);
     defineBiomes();
 
-    if (layerIsOn("toggleTemp")) drawTemp();
-    if (layerIsOn("togglePrec")) drawPrec();
-    if (layerIsOn("toggleBiomes")) drawBiomes();
-    if (layerIsOn("toggleCoordinates")) drawCoordinates();
+    if (isPressed("toggleTemp")) drawTemp();
+    if (isPressed("togglePrec")) drawPrec();
+    if (isPressed("toggleBiomes")) drawBiomes();
+    if (isPressed("toggleCoordinates")) drawCoordinates();
     if (document.getElementById("canvas3d")) setTimeout(ThreeD.update(), 500);
 }
 

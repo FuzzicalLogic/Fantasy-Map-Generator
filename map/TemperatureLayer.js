@@ -9,7 +9,7 @@ generator.addEventListener('post', drawTemperatures);
 async function drawTemperatures({ detail: { cells, vertices } }) {
     let { temperature } = view;
 
-    console.time("drawTemp");
+    //console.time("drawTemp");
     temperature.selectAll("*").remove();
     lineGen.curve(d3.curveBasisClosed);
     const scheme = d3.scaleSequential(d3.interpolateSpectral);
@@ -53,6 +53,8 @@ async function drawTemperatures({ detail: { cells, vertices } }) {
     tempLabels.selectAll("text").data(labels).enter().append("text")
         .attr("x", d => d[0])
         .attr("y", d => d[1]).text(d => convertTemperature(d[2]));
+
+    //console.timeEnd("drawTemp");
 
     // find cell with temp < isotherm and find vertex to start path detection
     function findStart(i, t) {
@@ -105,5 +107,4 @@ async function drawTemperatures({ detail: { cells, vertices } }) {
         chain.push(start);
         return chain;
     }
-    console.timeEnd("drawTemp");
 }

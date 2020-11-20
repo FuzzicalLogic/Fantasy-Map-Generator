@@ -8,7 +8,7 @@ import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitConten
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, isCtrlClick, si, rn, findAll } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleBiomes, toggleCultures, drawCultures, toggleReligions, toggleStates, toggleProvinces, layerIsOn } from "./layers.js";
+import { showDisplay, toggleCultures, drawCultures, isPressed } from "./layers.js";
 
 const getById = id => document.getElementById(id);
 const getBody = () => getById('culturesBody');
@@ -16,11 +16,7 @@ const getBody = () => getById('culturesBody');
 export function editCultures() {
     if (customization) return;
     closeDialogs("#culturesEditor, .stable");
-    if (!layerIsOn("toggleCultures")) toggleCultures();
-    if (layerIsOn("toggleStates")) toggleStates();
-    if (layerIsOn("toggleBiomes")) toggleBiomes();
-    if (layerIsOn("toggleReligions")) toggleReligions();
-    if (layerIsOn("toggleProvinces")) toggleProvinces();
+    showDisplay(['toggleCultures']);
 
     const body = getBody();
     drawCultureCenters();
@@ -182,7 +178,7 @@ function cultureHighlightOn(event) {
         tip("Drag to change parent, drag to itself to move to the top level. Hold CTRL and click to change abbreviation");
     }
 
-    if (!layerIsOn("toggleCultures")) return;
+    if (!isPressed("toggleCultures")) return;
     if (customization) return;
     const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
     view.cults.select("#culture" + culture).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
@@ -198,7 +194,7 @@ function cultureHighlightOff(event) {
         tip("");
     }
 
-    if (!layerIsOn("toggleCultures")) return;
+    if (!isPressed("toggleCultures")) return;
     view.cults.select("#culture" + culture).transition().attr("stroke-width", null).attr("stroke", null);
     view.debug.select("#cultureCenter" + culture).transition().attr("r", 6).attr("stroke", null);
 }
@@ -516,7 +512,7 @@ function recalculateCultures(must) {
 }
 
 function enterCultureManualAssignent() {
-    if (!layerIsOn("toggleCultures")) toggleCultures();
+    if (!isPressed("toggleCultures")) toggleCultures();
     customization = 4;
     view.cults.append("g").attr("id", "temp");
     document.querySelectorAll("#culturesBottom > *").forEach(el => el.style.display = "none");

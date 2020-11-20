@@ -15,7 +15,7 @@ import {
     P, gauss, rn, rw, ra, splitInTwo, toAdjective, trimVowels, common,
     rand, round
 } from "./utils.js";
-import { toggleLabels, layerIsOn } from "./ui/layers.js";
+import { toggleLabels, isPressed } from "./ui/layers.js";
 
 const populationEmitter = new EventTarget();
 export const addPopulationEventListener = (...args) => populationEmitter.addEventListener(...args);
@@ -467,7 +467,7 @@ export function updateCultures({ cells, burgs, states }) {
 // calculate and draw curved state labels for a list of states
 import { Voronoi } from "./voronoi.js";
 export function drawStateLabels(list) {
-    console.time("drawStateLabels");
+    //console.time("drawStateLabels");
     const { cells, features, states } = pack;
     const paths = []; // text paths
     lineGen.curve(d3.curveBundle.beta(1));
@@ -564,11 +564,12 @@ export function drawStateLabels(list) {
         }
 
     }
+    //console.timeEnd("drawStateLabels");
 
     void function drawLabels() {
         const g = view.labels.select("#states"),
             t = view.defs.select("#textPaths");
-        const displayed = layerIsOn("toggleLabels");
+        const displayed = isPressed("toggleLabels");
         if (!displayed) toggleLabels();
 
         if (!list) {
@@ -658,7 +659,6 @@ export function drawStateLabels(list) {
         if (!displayed) toggleLabels();
     }()
 
-    console.timeEnd("drawStateLabels");
 }
 
 // calculate states data like area, population etc.

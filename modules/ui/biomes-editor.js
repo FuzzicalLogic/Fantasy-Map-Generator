@@ -12,7 +12,7 @@ import { findCell, getPackPolygon, isLand, getRandomColor, rn, si, openURL, find
 import { editStyle } from "./style.js";
 
 import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, applySorting, drawLegend, clearLegend, openPicker, getFileName, downloadFile } from "./editors.js";
-import { toggleBiomes, drawBiomes, toggleCultures, toggleReligions, toggleStates, toggleProvinces, toggleRelief, layerIsOn } from "./layers.js";
+import { showDisplay, drawBiomes, toggleRelief, isPressed } from "./layers.js";
 
 const getById = id => document.getElementById(id);
 const getBody = () => getById("biomesBody");
@@ -20,11 +20,7 @@ const getBody = () => getById("biomesBody");
 export function editBiomes() {
     if (customization) return;
     closeDialogs("#biomesEditor, .stable");
-    if (!layerIsOn("toggleBiomes")) toggleBiomes();
-    if (layerIsOn("toggleStates")) toggleStates();
-    if (layerIsOn("toggleCultures")) toggleCultures();
-    if (layerIsOn("toggleReligions")) toggleReligions();
-    if (layerIsOn("toggleProvinces")) toggleProvinces();
+    showDisplay(["toggleBiomes"])
 
     const body = getBody();
     refreshBiomesEditor();
@@ -285,7 +281,7 @@ function removeCustomBiome(el) {
 
 function regenerateIcons() {
     ReliefIcons();
-    if (!layerIsOn("toggleRelief")) toggleRelief();
+    if (!isPressed("toggleRelief")) toggleRelief();
 }
 
 function downloadBiomesData() {
@@ -307,7 +303,8 @@ function downloadBiomesData() {
 }
 
 function enterBiomesCustomizationMode() {
-    if (!layerIsOn("toggleBiomes")) toggleBiomes();
+    showDisplay(['toggleBiomes']);
+
     customization = 6;
     view.biomes.append("g").attr("id", "temp");
 

@@ -1,6 +1,6 @@
 "use strict";
 import {
-    svg, svgWidth, svgHeight, graphWidth, graphHeight, view,
+    svgWidth, svgHeight, graphWidth, graphHeight, view,
     seed, pack,
     grid,
     biomesData,
@@ -16,19 +16,18 @@ import { ReliefIcons } from "../relief-icons.js";
 import * as ThreeD from "./3d.js";
 import { editUnits } from "./units-editor.js";
 
-import { tip } from "./general.js";
 import {
     getGridPolygon, getPackPolygon, convertTemperature, P, rn, isCtrlClick, clipPoly, normalize, round, last, rand
 } from "../utils.js";
 import {
-    editStyle, calculateFriendlyGridSize, shiftCompass, setBase64Texture
+    editStyle, calculateFriendlyGridSize
 } from "./style.js";
 
 let presets = {}; // global object
 
 export function initialize() {
     restoreLayers(); // run on-load
-    restoreCustomPresets(); // run on-load
+    loadCustomDisplays(); // run on-load
 
     $("#mapLayers").sortable({
         items: "li:not(.solid)",
@@ -43,8 +42,8 @@ export function initialize() {
         .forEach(el => el.addEventListener('click', onClickLayer));
 
     window.changePreset = changePreset;
-    window.savePreset = savePreset;
-    window.removePreset = removePreset;
+    window.savePreset = saveDisplay;
+    window.removePreset = removeDisplay;
     window.toggleGrid = toggleGrid;
     window.toggleRelief = toggleRelief;
     window.toggleScaleBar = toggleScaleBar;
@@ -68,18 +67,21 @@ function getLayer(id) {
 export function restoreLayers() {
     document.querySelectorAll('#mapLayers [data-layer]')
         .forEach(x => {
-            if (layerIsOn(x.id))
-                toggleLayer(x.id, x.dataset.layer);
+            if (isPressed(x.id))
+                showLayer(x.id, x.dataset.layer);
         })
-    if (layerIsOn("toggleGrid"))
+    if (isPressed("toggleGrid"))
         drawGrid();
-    if (layerIsOn("toggleRelief"))
+    if (isPressed("toggleRelief"))
         ReliefIcons();
 }
 
-export function layerIsOn(el) {
-    const buttonoff = document.getElementById(el).classList.contains("buttonoff");
-    return !buttonoff;
+export function isPressed(buttonId) {
+    return !document.getElementById(buttonId).classList.contains("buttonoff");
+}
+
+export function isShowing(layerId) {
+    return !document.getElementById(layerId).classList.contains('Hidden');
 }
 
 // move layers on mapLayers dragging (jquery sortable)
@@ -92,7 +94,10 @@ function moveLayer(event, ui) {
     else if (next) el.insertBefore(next);
 }
 
-function getDefaultPresets() {
+//const displays = { ...getDefaultDisplays(), ...loadCustomDisplays() };
+//console.log(displays);
+
+function getDefaultDisplays() {
     return {
         "political": ["toggleBorders", "toggleIcons", "toggleIce", "toggleLabels", "toggleRivers", "toggleRoutes", "toggleScaleBar", "toggleStates"],
         "cultural": ["toggleBorders", "toggleCultures", "toggleIcons", "toggleLabels", "toggleRivers", "toggleRoutes", "toggleScaleBar"],
@@ -107,8 +112,8 @@ function getDefaultPresets() {
     }
 }
 
-function restoreCustomPresets() {
-    presets = getDefaultPresets();
+function loadCustomDisplays() {
+    presets = getDefaultDisplays();
     const storedPresets = JSON.parse(localStorage.getItem("presets"));
     if (!storedPresets) return;
 
@@ -120,7 +125,7 @@ function restoreCustomPresets() {
     presets = storedPresets;
 }
 
-export function applyPreset() {
+export function loadDisplay() {
     const selected = localStorage.getItem("preset");
     if (selected) changePreset(selected);
 }
@@ -131,21 +136,21 @@ function changePreset(preset) {
     document.getElementById("mapLayers")
         .querySelectorAll("li")
         .forEach(function (e) {
-            if (layers.includes(e.id) && !layerIsOn(e.id))
+            if (layers.includes(e.id) && !isPressed(e.id))
                 showLayer(e.id, e.dataset.layer); // turn on
-            else if (!layers.includes(e.id) && layerIsOn(e.id))
+            else if (!layers.includes(e.id) && isPressed(e.id))
                 hideLayer(e.id, e.dataset.layer); // turn off
         });
     layersPreset.value = preset;
     localStorage.setItem("preset", preset);
 
-    const isDefault = getDefaultPresets()[preset];
+    const isDefault = getDefaultDisplays()[preset];
     removePresetButton.style.display = isDefault ? "none" : "inline-block";
     savePresetButton.style.display = "none";
     if (document.getElementById("canvas3d")) setTimeout(ThreeD.update(), 400);
 }
 
-function savePreset() {
+function saveDisplay() {
     prompt("Please provide a preset name", { default: "" }, name => {
         presets[name] = Array.from(document.getElementById("mapLayers").querySelectorAll("li:not(.buttonoff)")).map(node => node.id).sort();
         layersPreset.add(new Option(name, name, false, true));
@@ -156,7 +161,7 @@ function savePreset() {
     });
 }
 
-function removePreset() {
+function removeDisplay() {
     const preset = layersPreset.value;
     delete presets[preset];
     const index = Array.from(layersPreset.options).findIndex(o => o.value === preset);
@@ -169,11 +174,11 @@ function removePreset() {
     localStorage.removeItem("preset");
 }
 
-export function getCurrentPreset() {
+export function getDisplay() {
     const layers = Array.from(document.getElementById("mapLayers").querySelectorAll("li:not(.buttonoff)"))
         .map(node => node.id)
         .sort();
-    const defaultPresets = getDefaultPresets();
+    const defaultPresets = getDefaultDisplays();
 
     for (const preset in presets) {
         if (JSON.stringify(presets[preset]) !== JSON.stringify(layers)) continue;
@@ -186,6 +191,15 @@ export function getCurrentPreset() {
     layersPreset.value = "custom";
     removePresetButton.style.display = "none";
     savePresetButton.style.display = "inline-block";
+}
+
+export function showDisplay(layers) {
+    document.querySelectorAll('#mapLayers [data-layer]')
+        .forEach(x => {
+            if (layers.includes(x.id))
+                showLayer(x.id, x.dataset.layer);
+            else hideLayer(x.id, x.dataset.layer);
+        })
 }
 
 export function getColor(value, scheme = getColorScheme()) {
@@ -1097,7 +1111,7 @@ export function drawGrid() {
 
 export function drawCoordinates() {
     let { coordinates } = view;
-    if (!layerIsOn("toggleCoordinates")) return;
+    if (!isPressed("toggleCoordinates")) return;
     coordinates.selectAll("*").remove(); // remove every time
     const steps = [.5, 1, 2, 5, 10, 15, 30]; // possible steps
     const goal = mapCoordinates.lonT / scale / 10;
@@ -1138,12 +1152,12 @@ function getViewPoint(x, y) {
 
 export function turnButtonOff(el) {
     document.getElementById(el).classList.add("buttonoff");
-    getCurrentPreset();
+    getDisplay();
 }
 
 export function turnButtonOn(el) {
     document.getElementById(el).classList.remove("buttonoff");
-    getCurrentPreset();
+    getDisplay();
 }
 
 function onClickLayer({ path: [, layerName] }) {
@@ -1174,18 +1188,6 @@ export function toggleLayer(button, name) {
     }
     else {
         hideLayer(button, name);
-    }
-}
-
-export function toggleBiomes(event) {
-    let layer = view.biomes.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleBiomes");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleBiomes");
     }
 }
 
@@ -1229,7 +1231,7 @@ export function toggleGrid(event) {
 
 export function toggleRelief(event) {
     let { terrain } = view;
-    if (!layerIsOn("toggleRelief")) {
+    if (!isPressed("toggleRelief")) {
         turnButtonOn("toggleRelief");
         if (!terrain.selectAll("*").size()) ReliefIcons();
         $('#terrain').fadeIn();
@@ -1238,18 +1240,6 @@ export function toggleRelief(event) {
         if (event && isCtrlClick(event)) { editStyle("terrain"); return; }
         $('#terrain').fadeOut();
         turnButtonOff("toggleRelief");
-    }
-}
-
-export function toggleTexture(event) {
-    let layer = view.texture.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleTexture");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleTexture");
     }
 }
 
@@ -1339,7 +1329,7 @@ export function toggleRulers(event) {
 }
 
 export function toggleScaleBar(event) {
-    if (!layerIsOn("toggleScaleBar")) {
+    if (!isPressed("toggleScaleBar")) {
         turnButtonOn("toggleScaleBar");
         $('#scaleBar').fadeIn();
         if (event && isCtrlClick(event)) editUnits();

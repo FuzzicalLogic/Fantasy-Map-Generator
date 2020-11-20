@@ -15,7 +15,7 @@ import {
 } from "./editors.js";
 import { tip, getHeight, clearMainTip } from "./general.js";
 import { findCell, rn, getInteger, si } from "../utils.js";
-import { toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
+import { toggleLabels, toggleIcons, isPressed } from "./layers.js";
 
 const getById = id => document.getElementById(id);
 
@@ -36,8 +36,8 @@ const listCultures = () => getById("burgsFilterCulture");
 export function overviewBurgs() {
     if (customization) return;
     closeDialogs("#burgsOverview, .stable");
-    if (!layerIsOn("toggleIcons")) toggleIcons();
-    if (!layerIsOn("toggleLabels")) toggleLabels();
+    if (!isPressed("toggleIcons")) toggleIcons();
+    if (!isPressed("toggleLabels")) toggleLabels();
 
     updateFilter();
     burgsOverviewAddLines();
@@ -278,7 +278,7 @@ function openBurgEditor() {
 }
 
 function burgHighlightOn(event) {
-    if (!layerIsOn("toggleLabels")) toggleLabels();
+    if (!isPressed("toggleLabels")) toggleLabels();
     const burg = +event.target.dataset.id;
     burgLabels.select("[data-id='" + burg + "']").classed("drag", true);
 }

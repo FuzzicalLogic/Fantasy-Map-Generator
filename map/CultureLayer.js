@@ -7,7 +7,7 @@ import { round } from "../modules/utils.js";
 generator.addEventListener('post', onPostCultures);
 async function onPostCultures({ detail: { cells, vertices, cultures } }) {
     let { cults } = view;
-    console.time("drawCultures");
+    //console.time("drawCultures");
 
     cults.selectAll("path").remove();
     const n = cells.length;
@@ -57,6 +57,6 @@ async function onPostCultures({ detail: { cells, vertices, cultures } }) {
         }
         return chain;
     }
-    console.timeEnd("drawCultures");
+    //console.timeEnd("drawCultures");
 }
 

@@ -18,7 +18,7 @@ import * as Military from "../military-generator.js";
 import { tip, applyOption } from "./general.js";
 import { rn, getDefaultTexture, parseTransform } from "../utils.js";
 import { showOptions } from "./options.js";
-import { drawHeightmap, drawGrid, toggleRelief, layerIsOn } from "./layers.js";
+import { drawHeightmap, drawGrid, toggleRelief, isPressed } from "./layers.js";
 
 export function initialize() {
     let { legend, texture, terrs, terrain } = view;
@@ -84,13 +84,13 @@ export function initialize() {
 
     styleGridType.addEventListener("change", function () {
         getEl().attr("type", this.value);
-        if (layerIsOn("toggleGrid")) drawGrid();
+        if (isPressed("toggleGrid")) drawGrid();
         calculateFriendlyGridSize();
     });
 
     styleGridSize.addEventListener("input", function () {
         getEl().attr("size", this.value);
-        if (layerIsOn("toggleGrid")) drawGrid();
+        if (isPressed("toggleGrid")) drawGrid();
         calculateFriendlyGridSize();
     });
 
@@ -159,7 +159,7 @@ export function initialize() {
     styleReliefSet.addEventListener("change", function () {
         terrain.attr("set", this.value);
         ReliefIcons();
-        if (!layerIsOn("toggleRelief")) toggleRelief();
+        if (!isPressed("toggleRelief")) toggleRelief();
     });
 
     styleReliefSizeInput.addEventListener("change", function () {
@@ -183,7 +183,7 @@ export function initialize() {
         terrain.attr("density", this.value);
         styleReliefDensityOutput.value = this.value;
         ReliefIcons();
-        if (!layerIsOn("toggleRelief")) toggleRelief();
+        if (!isPressed("toggleRelief")) toggleRelief();
     });
 
     let { temperature, population } = view;
@@ -905,7 +905,7 @@ function updateElements() {
     });
 
     // redraw elements
-    if (layerIsOn("toggleHeight")) drawHeightmap();
+    if (isPressed("toggleHeight")) drawHeightmap();
     if (view.legend.selectAll("*").size() && window.redrawLegend) redrawLegend();
     oceanLayers.selectAll("path").remove();
     OceanLayers(grid);

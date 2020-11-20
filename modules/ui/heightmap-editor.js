@@ -22,7 +22,7 @@ import { restoreDefaultEvents, moveCircle, removeCircle, removeBurg, getFileName
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findGridCell, findGridAll, findCell, getGridPolygon, getPackPolygon, rn, lim } from "../utils.js";
 import { enterStandardView, changeViewMode } from "./options.js";
-import { turnButtonOn, turnButtonOff, getCurrentPreset, getColorScheme, getColor, drawStates, drawBorders, layerIsOn } from "./layers.js";
+import { turnButtonOn, turnButtonOff, getDisplay, getColorScheme, getColor, drawStates, drawBorders, isPressed } from "./layers.js";
 
 import { saveMap } from "../save-and-load.js";
 
@@ -184,10 +184,10 @@ export function editHeightmap() {
         document.getElementById("heights").remove();
         turnButtonOff("toggleHeight");
         document.getElementById("mapLayers").querySelectorAll("li").forEach(function (e) {
-            if (editHeightmap.layers.includes(e.id) && !layerIsOn(e.id)) e.click(); // turn on
-            else if (!editHeightmap.layers.includes(e.id) && layerIsOn(e.id)) e.click(); // turn off
+            if (editHeightmap.layers.includes(e.id) && !isPressed(e.id)) e.click(); // turn on
+            else if (!editHeightmap.layers.includes(e.id) && isPressed(e.id)) e.click(); // turn off
         });
-        getCurrentPreset();
+        getDisplay();
     }
 
     function regenerateErasedData() {

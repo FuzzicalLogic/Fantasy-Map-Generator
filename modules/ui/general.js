@@ -27,7 +27,7 @@ import { viewCellDetails, toggleAddLabel, toggleAddBurg, toggleAddRiver, toggleA
 import { findGridCell, findCell, convertTemperature, rn, link, getComposedPath, capitalize, si } from "../utils.js";
 import { toggle3dOptions, regeneratePrompt, changeMapSize, toggleOptions, hideOptions } from "./options.js";
 import {
-    toggleLayer, toggleGrid, toggleRelief, toggleScaleBar, layerIsOn
+    toggleLayer, toggleGrid, toggleRelief, toggleScaleBar, isPressed
 } from "./layers.js";
 
 import { quickLoad, quickSave, toggleSaveReminder } from "../save-and-load.js";
@@ -257,20 +257,20 @@ function showMapTooltip(point, e, i, g) {
     if (group === "ice") { tip("Click to edit the Ice"); return; }
 
     // covering elements
-    if (layerIsOn("togglePrec") && land)
+    if (isPressed("togglePrec") && land)
         tip("Annual Precipitation: " + getFriendlyPrecipitation(i));
-    else if (layerIsOn("togglePopulation"))
+    else if (isPressed("togglePopulation"))
         tip(getPopulationTip(i));
-    else if (layerIsOn("toggleTemp"))
+    else if (isPressed("toggleTemp"))
         tip("Temperature: " + convertTemperature(grid.cells[g].temp));
-    else if (layerIsOn("toggleBiomes") && pack.cells[i].biome)
+    else if (isPressed("toggleBiomes") && pack.cells[i].biome)
         tip("Biome: " + biomesData.name[pack.cells[i].biome]);
-    else if (layerIsOn("toggleReligions") && pack.cells[i].religion) {
+    else if (isPressed("toggleReligions") && pack.cells[i].religion) {
         const religion = pack.religions[pack.cells[i].religion];
         const type = religion.type === "Cult" || religion.type == "Heresy" ? religion.type : religion.type + " religion";
         tip(type + ": " + religion.name);
     }
-    else if (pack.cells[i].state && (layerIsOn("toggleProvinces") || layerIsOn("toggleStates"))) {
+    else if (pack.cells[i].state && (isPressed("toggleProvinces") || isPressed("toggleStates"))) {
         const state = pack.states[pack.cells[i].state].fullName;
         const province = pack.cells[i].province;
         const prov = province
@@ -278,9 +278,9 @@ function showMapTooltip(point, e, i, g) {
             : "";
         tip(prov + state);
     }
-    else if (layerIsOn("toggleCultures") && pack.cells[i].culture)
+    else if (isPressed("toggleCultures") && pack.cells[i].culture)
         tip("Culture: " + pack.cultures[pack.cells[i].culture].name);
-    else if (layerIsOn("toggleHeight"))
+    else if (isPressed("toggleHeight"))
         tip("Height: " + getFriendlyHeight(point));
 }
 

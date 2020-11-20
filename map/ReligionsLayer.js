@@ -7,7 +7,7 @@ import { round } from "../modules/utils.js";
 generator.addEventListener('post', onPostReligions);
 async function onPostReligions({ detail: { cells, vertices, religions } }) {
     let { relig } = view;
-    console.time("drawReligions");
+    //console.time("drawReligions");
 
     relig.selectAll("path").remove();
     const n = cells.length;
@@ -58,6 +58,7 @@ async function onPostReligions({ detail: { cells, vertices, religions } }) {
     const gapData = gap.map((p, i) => [p.length > 10 ? p : null, i, religions[i].color])
         .filter(d => d[0]);
     relig.selectAll(".path").data(gapData).enter().append("path").attr("d", d => d[0]).attr("fill", "none").attr("stroke", d => d[2]).attr("id", d => "religion-gap" + d[1]).attr("stroke-width", "10px");
+    //console.timeEnd("drawReligions");
 
     // connect vertices to chain
     function connectVertices(start, t, religion) {
@@ -99,5 +100,4 @@ async function onPostReligions({ detail: { cells, vertices, religions } }) {
         }
         return chain;
     }
-    console.timeEnd("drawReligions");
 }

@@ -7,12 +7,12 @@ import { editRegiment } from "./regiment-editor.js";
 
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, capitalize, si } from "../utils.js";
-import { toggleMilitary, layerIsOn } from "./layers.js";
+import { toggleMilitary, isPressed } from "./layers.js";
 
 export function overviewRegiments(state) {
     if (customization) return;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleMilitary")) toggleMilitary();
+    if (!isPressed("toggleMilitary")) toggleMilitary();
 
     const body = document.getElementById("regimentsBody");
     updateFilter(state);

@@ -11,7 +11,7 @@ import { closeDialogs, clicked, unselect, moveBurgToGroup, removeBurg, togglePor
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, isCtrlClick, normalize, parseTransform, openURL, rand } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleCells, toggleLabels, toggleIcons, layerIsOn } from "./layers.js";
+import { toggleCells, toggleLabels, toggleIcons, isPressed } from "./layers.js";
 
 const getById = id => document.getElementById(id);
 const getBurgId = () => getById('burgEditor').dataset.id;
@@ -46,8 +46,8 @@ let editor = {
 export function editBurg(id = d3.event.target.dataset.id) {
     if (customization) return;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleIcons")) toggleIcons();
-    if (!layerIsOn("toggleLabels")) toggleLabels();
+    if (!isPressed("toggleIcons")) toggleIcons();
+    if (!isPressed("toggleLabels")) toggleLabels();
 
     const my = id || d3.event.target.tagName === "text" ? "center bottom-20" : "center top+20";
     const at = id ? "center" : d3.event.target.tagName === "text" ? "top" : "bottom";
@@ -343,14 +343,14 @@ function toggleRelocateBurg() {
     if (editor.burgRelocate.classList.contains("pressed")) {
         view.box.style("cursor", "crosshair").on("click", relocateBurgOnClick);
         tip("Click on map to relocate burg. Hold Shift for continuous move", true);
-        if (!layerIsOn("toggleCells")) {
+        if (!isPressed("toggleCells")) {
             toggleCells();
             toggler.dataset.forced = true;
         }
     } else {
         clearMainTip();
         view.box.on("click", clicked).style("cursor", "default");
-        if (layerIsOn("toggleCells") && toggler.dataset.forced) {
+        if (isPressed("toggleCells") && toggler.dataset.forced) {
             toggleCells();
             toggler.dataset.forced = false;
         }

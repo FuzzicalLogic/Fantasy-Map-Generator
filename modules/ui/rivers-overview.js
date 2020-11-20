@@ -7,13 +7,13 @@ import { editRiver } from "./rivers-editor.js";
 
 import { tip } from "./general.js";
 import { toggleAddRiver } from "./tools.js";
-import { findCell, getColors, rn, isCtrlClick } from "../utils.js";
-import { toggleRivers, layerIsOn } from "./layers.js";
+import { getColors, rn, isCtrlClick } from "../utils.js";
+import { showDisplay } from "./layers.js";
 
 export function overviewRivers() {
     if (customization) return;
     closeDialogs("#riversOverview, .stable");
-    if (!layerIsOn("toggleRivers")) toggleRivers();
+    showDisplay(['toggleRivers']);
 
     const body = document.getElementById("riversBody");
     riversOverviewAddLines();
@@ -74,7 +74,7 @@ export function overviewRivers() {
     }
 
     function riverHighlightOn(event) {
-        if (!layerIsOn("toggleRivers")) toggleRivers();
+        showDisplay(['toggleRivers']);
         const r = +event.target.dataset.id;
         view.rivers.select("#river" + r).attr("stroke", "red").attr("stroke-width", 1);
     }

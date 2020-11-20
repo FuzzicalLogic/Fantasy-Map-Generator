@@ -13,7 +13,8 @@ import { tip, applyOption, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, rn, isCtrlClick, si, openURL, findAll } from "../utils.js";
 import { editStyle } from "./style.js";
 import {
-    turnButtonOff, toggleCultures, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces, drawProvinces, layerIsOn
+    showDisplay,
+    turnButtonOff, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces, drawProvinces, isPressed
 } from "./layers.js";
 
 const getById = id => document.getElementById(id);
@@ -22,10 +23,7 @@ const getBody = () => getById('provincesBodySection');
 export function editProvinces() {
     if (customization) return;
     closeDialogs("#provincesEditor, .stable");
-    if (!layerIsOn("toggleProvinces")) toggleProvinces();
-    if (!layerIsOn("toggleBorders")) toggleBorders();
-    if (layerIsOn("toggleStates")) toggleStates();
-    if (layerIsOn("toggleCultures")) toggleCultures();
+    showDisplay(['toggleProvinces', 'toggleBorders']);
 
     const body = getBody();
     refreshProvincesEditor();
@@ -199,7 +197,7 @@ function provinceHighlightOn(event) {
     const el = getBody().querySelector(`div[data-id='${province}']`);
     if (el) el.classList.add("active");
 
-    if (!layerIsOn("toggleProvinces")) return;
+    if (!isPressed("toggleProvinces")) return;
     if (customization) return;
     const animate = d3.transition().duration(2000).ease(d3.easeSinIn);
     view.provs.select("#province" + province).raise().transition(animate).attr("stroke-width", 2.5).attr("stroke", "#d0240f");
@@ -210,7 +208,7 @@ function provinceHighlightOff(event) {
     const el = getBody().querySelector(`div[data-id='${province}']`);
     if (el) el.classList.remove("active");
 
-    if (!layerIsOn("toggleProvinces")) return;
+    if (!isPressed("toggleProvinces")) return;
     view.provs.select("#province" + province).transition().attr("stroke-width", null).attr("stroke", null);
 }
 
@@ -326,12 +324,12 @@ function declareProvinceIndependence(p) {
     BurgsAndStates.collectStatistics();
     BurgsAndStates.defineStateForms([newState]);
 
-    if (layerIsOn("toggleProvinces"))
+    if (isPressed("toggleProvinces"))
         toggleProvinces();
-    if (!layerIsOn("toggleStates"))
+    if (!isPressed("toggleStates"))
         toggleStates();
     else drawStates();
-    if (!layerIsOn("toggleBorders"))
+    if (!isPressed("toggleBorders"))
         toggleBorders();
     else drawBorders();
     BurgsAndStates.drawStateLabels([newState, oldState]);
@@ -432,7 +430,7 @@ function removeProvince(p) {
                 const g = view.provs.select("#provincesBody");
                 g.select("#province" + p).remove();
                 g.select("#province-gap" + p).remove();
-                if (!layerIsOn("toggleBorders"))
+                if (!isPressed("toggleBorders"))
                     toggleBorders();
                 else drawBorders();
                 refreshProvincesEditor();
@@ -673,9 +671,9 @@ function enterProvincesManualAssignent() {
     const body = getBody();
     let { provs } = view;
 
-    if (!layerIsOn("toggleProvinces"))
+    if (!isPressed("toggleProvinces"))
         toggleProvinces();
-    if (!layerIsOn("toggleBorders"))
+    if (!isPressed("toggleBorders"))
         toggleBorders();
 
     // make province and state borders more visible
@@ -802,10 +800,10 @@ function applyProvincesManualAssignent() {
         pack.cells.province[i] = +this.dataset.province;;
     });
 
-    if (!layerIsOn("toggleBorders"))
+    if (!isPressed("toggleBorders"))
         toggleBorders();
     else drawBorders();
-    if (!layerIsOn("toggleProvinces"))
+    if (!isPressed("toggleProvinces"))
         toggleProvinces();
     else drawProvinces();
     exitProvincesManualAssignment();
@@ -895,10 +893,10 @@ function addProvince() {
         cells.province[c] = province;
     });
 
-    if (!layerIsOn("toggleBorders"))
+    if (!isPressed("toggleBorders"))
         toggleBorders();
     else drawBorders();
-    if (!layerIsOn("toggleProvinces"))
+    if (!isPressed("toggleProvinces"))
         toggleProvinces();
     else drawProvinces();
     collectStatistics();
@@ -926,7 +924,7 @@ function recolorProvinces() {
         p.color = stateColor[0] === "#" ? d3.color(d3.interpolate(stateColor, rndColor)(.2)).hex() : rndColor;
     });
 
-    if (!layerIsOn("toggleProvinces"))
+    if (!isPressed("toggleProvinces"))
         toggleProvinces();
     else drawProvinces();
 }
@@ -967,7 +965,7 @@ function removeAllProvinces() {
                 pack.cells.i.forEach(i => pack.cells.province[i] = 0);
                 pack.states.filter(s => s.i && !s.removed).forEach(s => s.provinces = []);
 
-                if (!layerIsOn("toggleBorders"))
+                if (!isPressed("toggleBorders"))
                     toggleBorders();
                 else drawBorders();
                 view.provs.select("#provincesBody").remove();

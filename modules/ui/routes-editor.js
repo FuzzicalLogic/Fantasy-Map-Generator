@@ -6,13 +6,13 @@ import { showEPForRoute, showElevationProfile } from "./elevation-profile.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { rn, getNextId } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleRoutes, layerIsOn } from "./layers.js";
+import { showDisplay } from "./layers.js";
 
 export function editRoute(onClick) {
     if (customization) return;
     if (!onClick && elSelected && d3.event.target.id === elSelected.attr("id")) return;
     closeDialogs(".stable");
-    if (!layerIsOn("toggleRoutes")) toggleRoutes();
+    showDisplay(['toggleRoutes']);
 
     $("#routeEditor").dialog({
         title: "Edit Route", resizable: false,

@@ -18,8 +18,8 @@ import {
 import { tip, applyOption, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, isLand, getRandomColor, getMixedColor, P, rn, isCtrlClick, rw, toAdjective, si, openURL } from "../utils.js";
 import {
-    toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, drawBorders, toggleBorders, toggleProvinces,
-    drawProvinces, layerIsOn
+    showDisplay, toggleStates, drawStates, drawBorders, toggleBorders, 
+    drawProvinces, isPressed
 } from "./layers.js";
 
 const getById = id => document.getElementById(id);
@@ -28,12 +28,8 @@ const getBody = () => getById("statesBodySection");
 export function editStates() {
     if (customization) return;
     closeDialogs("#statesEditor, .stable");
-    if (!layerIsOn("toggleStates")) toggleStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders();
-    if (layerIsOn("toggleCultures")) toggleCultures();
-    if (layerIsOn("toggleBiomes")) toggleBiomes();
-    if (layerIsOn("toggleReligions")) toggleReligions();
-    
+    showDisplay(['toggleStates', 'toggleBorders']);
+
     refreshStatesEditor();
 
     if (modules.editStates) return;
@@ -217,7 +213,7 @@ function getTypeOptions(type) {
 }
 
 function stateHighlightOn(event) {
-    if (!layerIsOn("toggleStates")) return;
+    if (!isPressed("toggleStates")) return;
     if (view.defs.select("#fog path").size()) return;
 
     const state = +event.target.dataset.id;
@@ -515,9 +511,9 @@ function stateRemove(state) {
     pack.states[state].military = [];
 
     view.debug.selectAll(".highlight").remove();
-    if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
-    if (layerIsOn("toggleProvinces")) drawProvinces();
+    if (!isPressed("toggleStates")) toggleStates(); else drawStates();
+    if (!isPressed("toggleBorders")) toggleBorders(); else drawBorders();
+    if (isPressed("toggleProvinces")) drawProvinces();
     refreshStatesEditor();
 }
 
@@ -657,9 +653,9 @@ function recalculateStates(must) {
 
     BurgsAndStates.expandStates(pack);
     BurgsAndStates.generateProvinces();
-    if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
-    if (layerIsOn("toggleProvinces")) drawProvinces();
+    if (!isPressed("toggleStates")) toggleStates(); else drawStates();
+    if (!isPressed("toggleBorders")) toggleBorders(); else drawBorders();
+    if (isPressed("toggleProvinces")) drawProvinces();
     if (adjustLabels.checked) BurgsAndStates.drawStateLabels();
     refreshStatesEditor();
 }
@@ -682,7 +678,7 @@ function exitRegenerationMenu() {
 }
 
 function enterStatesManualAssignent() {
-    if (!layerIsOn("toggleStates")) toggleStates();
+    if (!isPressed("toggleStates")) toggleStates();
     customization = 2;
     statesBody.append("g").attr("id", "temp");
     document.querySelectorAll("#statesBottom > button").forEach(el => el.style.display = "none");
@@ -777,11 +773,11 @@ function applyStatesManualAssignent() {
 
     if (affectedStates.length) {
         refreshStatesEditor();
-        if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
+        if (!isPressed("toggleStates")) toggleStates(); else drawStates();
         if (adjustLabels.checked) BurgsAndStates.drawStateLabels([...new Set(affectedStates)]);
         adjustProvinces([...new Set(affectedProvinces)]);
-        if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
-        if (layerIsOn("toggleProvinces")) drawProvinces();
+        if (!isPressed("toggleBorders")) toggleBorders(); else drawBorders();
+        if (isPressed("toggleProvinces")) drawProvinces();
     }
     exitStatesManualAssignment();
 }
@@ -936,9 +932,8 @@ function addState() {
     BurgsAndStates.defineStateForms([newState]);
     adjustProvinces([...new Set(affectedProvinces)]);
 
-    if (layerIsOn("toggleProvinces")) toggleProvinces();
-    if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
+    if (!isPressed("toggleStates")) toggleStates(); else drawStates();
+    if (!isPressed("toggleBorders")) toggleBorders(); else drawBorders();
     BurgsAndStates.drawStateLabels([...new Set(affectedStates)]);
     statesEditorAddLines();
 }

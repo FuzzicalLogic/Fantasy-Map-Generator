@@ -10,13 +10,13 @@ import { editNotes } from "./notes-editor.js";
 import { tip, showMainTip } from "./general.js";
 import { round, findCell, parseTransform } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleLabels, layerIsOn } from "./layers.js";
+import { toggleLabels, isPressed } from "./layers.js";
 
 let elSelected;
 export function editLabel() {
     if (customization) return;
     closeDialogs();
-    if (!layerIsOn("toggleLabels")) toggleLabels();
+    if (!isPressed("toggleLabels")) toggleLabels();
 
     const tspan = d3.event.target;
     const textPath = tspan.parentNode;

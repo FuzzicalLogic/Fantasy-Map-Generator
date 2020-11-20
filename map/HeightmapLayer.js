@@ -5,7 +5,7 @@ import * as generator from "../modules/heightmap-generator.js";
 
 generator.addEventListener('update', drawHeightmap)
 export async function drawHeightmap({ detail:{ cells, vertices}}) {
-    console.time("Heightmap.Render");
+    //console.time("Heightmap.Render");
     let { terrs } = view;
     terrs.selectAll("*").remove();
     const n = cells.length;
@@ -55,7 +55,7 @@ export async function drawHeightmap({ detail:{ cells, vertices}}) {
             terrs.append("path").attr("d", paths[i]).attr("transform", "translate(.7,1.4)").attr("fill", d3.color(color).darker(terracing)).attr("data-height", i);
         terrs.append("path").attr("d", paths[i]).attr("fill", color).attr("data-height", i);
     }
-    console.timeEnd("Heightmap.Render");
+    //console.timeEnd("Heightmap.Render");
 
     // connect vertices to chain
     function connectVertices(start, h) {

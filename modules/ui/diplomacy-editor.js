@@ -6,7 +6,7 @@ import { closeDialogs, restoreDefaultEvents, fitContent, applySorting, getFileNa
 import { tip, clearMainTip } from "./general.js";
 import { findCell, rn, toAdjective } from "../utils.js";
 import { editStyle } from "./style.js";
-import { toggleBiomes, toggleCultures, toggleReligions, toggleStates, drawStates, toggleBorders, toggleProvinces, layerIsOn } from "./layers.js";
+import { showDisplay, toggleStates, drawStates, isPressed } from "./layers.js";
 
 const colors = ["#00b300", "#d4f8aa", "#edeee8", "#eeafaa", "#e64b40", "#a9a9a9", "#ad5a1f", "#87CEFA", "#00008B"];
 const statuses = ["Ally", "Friendly", "Neutral", "Suspicion", "Enemy", "Unknown", "Rival", "Vassal", "Suzerain"];
@@ -24,12 +24,7 @@ export function editDiplomacy() {
     }
 
     closeDialogs("#diplomacyEditor, .stable");
-    if (!layerIsOn("toggleStates")) toggleStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders();
-    if (layerIsOn("toggleProvinces")) toggleProvinces();
-    if (layerIsOn("toggleCultures")) toggleCultures();
-    if (layerIsOn("toggleBiomes")) toggleBiomes();
-    if (layerIsOn("toggleReligions")) toggleReligions();
+    showDisplay(['toggleStates', 'toggleBorders']);
 
     refreshDiplomacyEditor();
 
@@ -112,7 +107,7 @@ function diplomacyEditorAddLines() {
 }
 
 function stateHighlightOn(event) {
-    if (!layerIsOn("toggleStates")) return;
+    if (!isPressed("toggleStates")) return;
     const state = +event.target.dataset.id;
     if (customization || !state) return;
     const d = view.regions.select("#state" + state).attr("d");
@@ -136,7 +131,7 @@ function showStateRelations() {
     const selectedLine = getSelected();
     const sel = selectedLine ? +selectedLine.dataset.id : pack.states.find(s => s.i && !s.removed).i;
     if (!sel) return;
-    if (!layerIsOn("toggleStates")) toggleStates();
+    if (!isPressed("toggleStates")) toggleStates();
 
     statesBody.selectAll("path").each(function () {
         if (this.id.slice(0, 9) === "state-gap") return; // exclude state gap element
@@ -301,7 +296,7 @@ function close() {
     clearMainTip();
     const selected = getSelected();
     if (selected) selected.classList.remove("Self");
-    if (layerIsOn("toggleStates"))
+    if (isPressed("toggleStates"))
         drawStates();
     else toggleStates();
     view.debug.selectAll(".highlight").remove();

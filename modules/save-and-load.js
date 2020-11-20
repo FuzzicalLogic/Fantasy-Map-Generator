@@ -36,7 +36,7 @@ import { findCell, getGridPolygon, P, rn, link, parseError, rw, ra, removeParent
 import { dragRuler, dragRulerEdge, rulerCenterDrag, dragOpisometerEnd } from "./ui/measurers.js";
 import { armiesStyle, addDefaulsStyles } from "./ui/style.js";
 import { changeMapSize, saveGeoJSON } from "./ui/options.js";
-import { turnButtonOn, turnButtonOff, getCurrentPreset, getColorScheme, getColor, drawPopulation, drawIce, drawStates, drawBorders, layerIsOn } from "./ui/layers.js";
+import { turnButtonOn, turnButtonOff, getDisplay, getColorScheme, getColor, drawPopulation, drawIce, drawStates, drawBorders, isPressed } from "./ui/layers.js";
 
 export function initialize() {
     saveReminder();
@@ -761,7 +761,7 @@ function parseLoadedData(data) {
             if (populationIsOn) drawPopulation();
             if (populationIsOn) turnButtonOn("togglePopulation"); else turnButtonOff("togglePopulation");
 
-            getCurrentPreset();
+            getDisplay();
         }()
 
         void function restoreEvents() {
@@ -813,8 +813,8 @@ function parseLoadedData(data) {
                 drawStates();
                 BurgsAndStates.generateProvinces();
                 drawBorders();
-                if (!layerIsOn("toggleBorders")) $('#borders').fadeOut();
-                if (!layerIsOn("toggleStates")) regions.attr("display", "none").selectAll("path").remove();
+                if (!isPressed("toggleBorders")) $('#borders').fadeOut();
+                if (!isPressed("toggleStates")) regions.attr("display", "none").selectAll("path").remove();
 
                 // 1.0 adds hatching
                 document.getElementsByTagName("defs")[0].appendChild(hatching);

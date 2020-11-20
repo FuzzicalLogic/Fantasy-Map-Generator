@@ -33,8 +33,9 @@ import { closeDialogs, restoreDefaultEvents, addBurg, moveBurgToGroup, unfog, re
 import { tip, clearMainTip } from "./general.js";
 import { findCell, gauss, rn, isCtrlClick, rw, getNextId } from "../utils.js";
 import {
-    toggleIce, drawIce, toggleCultures, drawCultures, toggleReligions, drawReligions, toggleStates, drawStates, drawBorders,
-    toggleBorders, drawProvinces, toggleRelief, toggleRivers, toggleRoutes, toggleMilitary, toggleMarkers, toggleLabels, toggleZones, layerIsOn
+    showDisplay,
+    toggleIce, drawIce, toggleCultures, drawCultures, toggleReligions, drawReligions, drawBorders,
+    drawProvinces, toggleRelief, toggleRivers, toggleRoutes, toggleMilitary, toggleMarkers, toggleLabels, toggleZones, isPressed
 } from "./layers.js";
 
 export function initialize() {
@@ -130,15 +131,15 @@ export function initialize() {
 function processFeatureRegeneration(event, button) {
     if (button === "regenerateStateLabels") {
         BurgsAndStates.drawStateLabels();
-        if (!layerIsOn("toggleLabels")) toggleLabels();
+        if (!isPressed("toggleLabels")) toggleLabels();
     }
     else if (button === "regenerateReliefIcons") {
         ReliefIcons();
-        if (!layerIsOn("toggleRelief")) toggleRelief();
+        if (!isPressed("toggleRelief")) toggleRelief();
     }
     else if (button === "regenerateRoutes") {
         Routes.generate(pack);
-        if (!layerIsOn("toggleRoutes")) toggleRoutes();
+        if (!isPressed("toggleRoutes")) toggleRoutes();
     } else if (button === "regenerateRivers") regenerateRivers();
     else if (button === "regeneratePopulation") recalculatePopulation();
     else if (button === "regenerateBurgs") regenerateBurgs();
@@ -161,7 +162,7 @@ function regenerateRivers() {
         if (f.group === "freshwater") pack.cells.h[i] = 19; // de-elevate lakes
     }
     Rivers.specify();
-    if (!layerIsOn("toggleRivers")) toggleRivers();
+    if (!isPressed("toggleRivers")) toggleRivers();
 }
 
 export function recalculatePopulation() {
@@ -310,8 +311,9 @@ function regenerateStates() {
     BurgsAndStates.generateDiplomacy();
     BurgsAndStates.defineStateForms();
     BurgsAndStates.generateProvinces(true);
-    if (!layerIsOn("toggleStates")) toggleStates(); else drawStates();
-    if (!layerIsOn("toggleBorders")) toggleBorders(); else drawBorders();
+    showDisplay(['toggleStates', 'toggleBorders']);
+    //if (!isPressed("toggleStates")) toggleStates(); else drawStates();
+    //if (!isPressed("toggleBorders")) toggleBorders(); else drawBorders();
     BurgsAndStates.drawStateLabels();
     Military.generate();
 
@@ -324,12 +326,12 @@ function regenerateProvinces() {
     unfog();
     BurgsAndStates.generateProvinces(true);
     drawBorders();
-    if (layerIsOn("toggleProvinces")) drawProvinces();
+    if (isPressed("toggleProvinces")) drawProvinces();
 }
 
 function regenerateReligions() {
     Religions.generate(religionsInput.value, pack);
-    if (!layerIsOn("toggleReligions"))
+    if (!isPressed("toggleReligions"))
         toggleReligions();
     else drawReligions();
 }
@@ -339,18 +341,18 @@ function regenerateCultures() {
     Cultures.expand();
     BurgsAndStates.updateCultures(pack);
     Religions.updateCultures(pack);
-    if (!layerIsOn("toggleCultures")) toggleCultures(); else drawCultures();
+    if (!isPressed("toggleCultures")) toggleCultures(); else drawCultures();
     refreshAllEditors();
 }
 
 function regenerateMilitary() {
     Military.generate();
-    if (!layerIsOn("toggleMilitary")) toggleMilitary();
+    if (!isPressed("toggleMilitary")) toggleMilitary();
     if (document.getElementById("militaryOverviewRefresh").offsetParent) militaryOverviewRefresh.click();
 }
 
 function regenerateIce() {
-    if (!layerIsOn("toggleIce")) toggleIce();
+    if (!isPressed("toggleIce")) toggleIce();
     view.ice.selectAll("*").remove();
     drawIce();
 }
@@ -367,7 +369,7 @@ function regenerateMarkers(event) {
         }).remove();
 
         addMarkers(number);
-        if (!layerIsOn("toggleMarkers")) toggleMarkers();
+        if (!isPressed("toggleMarkers")) toggleMarkers();
     }
 }
 
@@ -379,7 +381,7 @@ function regenerateZones(event) {
         view.zones.selectAll("g").remove(); // remove existing zones
         addZones(number);
         if (document.getElementById("zonesEditorRefresh").offsetParent) zonesEditorRefresh.click();
-        if (!layerIsOn("toggleZones")) toggleZones();
+        if (!isPressed("toggleZones")) toggleZones();
     }
 }
 
@@ -398,7 +400,7 @@ export function toggleAddLabel() {
     closeDialogs(".stable");
     view.box.style("cursor", "crosshair").on("click", addLabelOnClick);
     tip("Click on map to place label. Hold Shift to add multiple", true);
-    if (!layerIsOn("toggleLabels")) toggleLabels();
+    if (!isPressed("toggleLabels")) toggleLabels();
 }
 
 function addLabelOnClick() {
@@ -454,7 +456,7 @@ export function toggleAddRiver() {
     closeDialogs(".stable");
     view.box.style("cursor", "crosshair").on("click", addRiverOnClick);
     tip("Click on map to place new river or extend an existing one. Hold Shift to place multiple rivers", true, "warn");
-    if (!layerIsOn("toggleRivers")) toggleRivers();
+    if (!isPressed("toggleRivers")) toggleRivers();
 }
 
 function addRiverOnClick() {
@@ -559,7 +561,7 @@ export function toggleAddRoute() {
     closeDialogs(".stable");
     view.box.style("cursor", "crosshair").on("click", addRouteOnClick);
     tip("Click on map to add a first control point", true);
-    if (!layerIsOn("toggleRoutes")) toggleRoutes();
+    if (!isPressed("toggleRoutes")) toggleRoutes();
 }
 
 function addRouteOnClick() {
@@ -579,7 +581,7 @@ export function toggleAddMarker() {
     closeDialogs(".stable");
     view.box.style("cursor", "crosshair").on("click", addMarkerOnClick);
     tip("Click on map to add a marker. Hold Shift to add multiple", true);
-    if (!layerIsOn("toggleMarkers")) toggleMarkers();
+    if (!isPressed("toggleMarkers")) toggleMarkers();
 }
 
 function addMarkerOnClick() {
