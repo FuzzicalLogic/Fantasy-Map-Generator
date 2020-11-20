@@ -1340,18 +1340,6 @@ export function toggleScaleBar(event) {
     }
 }
 
-export function toggleZones(event) {
-    let layer = view.zones.node();
-    if (layer.classList.contains('Hidden')) {
-        layer.classList.remove('Hidden');
-        turnButtonOn("toggleZones");
-    }
-    else {
-        layer.classList.add('Hidden');
-        turnButtonOff("toggleZones");
-    }
-}
-
 /*
 export function togglePrec(event) {
     let { prec } = view;

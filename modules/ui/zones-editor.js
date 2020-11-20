@@ -8,14 +8,15 @@ import { editStyle } from "./style.js";
 import { closeDialogs, restoreDefaultEvents, moveCircle, removeCircle, fitContent, drawLegend, clearLegend, openPicker, fog, unfog, getFileName, downloadFile } from "./editors.js";
 import { tip, showMainTip, clearMainTip } from "./general.js";
 import { findCell, getPackPolygon, rn, si, getNextId, findAll } from "../utils.js";
-import { toggleZones, isPressed } from "./layers.js";
+import { showDisplay } from "./layers.js";
 
 const getById = id => document.getElementById(id);
 const getBody = () => getById('zonesBodySection');
 
 export function editZones() {
     closeDialogs();
-    if (!isPressed("toggleZones")) toggleZones();
+    showDisplay(['toggleZones']);
+
     const body = getBody();
     zonesEditorAddLines();
 
@@ -134,7 +135,7 @@ function movezone(ev, ui) {
 }
 
 function enterZonesManualAssignent() {
-    if (!isPressed("toggleZones")) toggleZones();
+    showDisplay(['toggleZones']);
 
     const body = getBody();
     customization = 10;

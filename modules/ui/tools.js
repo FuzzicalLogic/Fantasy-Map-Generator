@@ -35,7 +35,7 @@ import { findCell, gauss, rn, isCtrlClick, rw, getNextId } from "../utils.js";
 import {
     showDisplay,
     toggleIce, drawIce, toggleCultures, drawCultures, toggleReligions, drawReligions, drawBorders,
-    drawProvinces, toggleRelief, toggleRivers, toggleRoutes, toggleMilitary, toggleMarkers, toggleLabels, toggleZones, isPressed
+    drawProvinces, toggleRelief, toggleRivers, toggleRoutes, toggleMilitary, toggleMarkers, toggleLabels, isPressed
 } from "./layers.js";
 
 export function initialize() {
@@ -381,7 +381,7 @@ function regenerateZones(event) {
         view.zones.selectAll("g").remove(); // remove existing zones
         addZones(number);
         if (document.getElementById("zonesEditorRefresh").offsetParent) zonesEditorRefresh.click();
-        if (!isPressed("toggleZones")) toggleZones();
+        showDisplay(['toggleZones']);
     }
 }
 
