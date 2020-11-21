@@ -8,7 +8,7 @@ import {
     stateBorders, provinceBorders,
     statesHalo,
     scale,
-    lineGen, invokeActiveZooming, zoom,
+    lineGen, invokeActiveZooming,
     mapCoordinates, customization
 } from "../../main.js";
 
