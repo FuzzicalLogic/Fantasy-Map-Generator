@@ -63,6 +63,19 @@ import { initialize as initOptions, applyStoredOptions, randomizeOptions } from 
 import { initialize as initTools } from "./modules/ui/tools.js";
 
 export let svg = d3.select("#map");
+// d3 zoom behavior
+export let scale = 1, viewX = 0, viewY = 0;
+import { Camera } from "./map/Camera.js";
+export const camera = Camera(svg);
+camera.addEventListener('move',
+    ({ detail: { zoom, position: [x, y] } }) => {
+        viewX = x;
+        viewY = y;
+        scale = zoom;
+    }
+);
+camera.addEventListener('move', invokeActiveZooming);
+camera.addEventListener('move', drawScaleBar);
 
 import { MapView } from "./map/MapView.js";
 export let view = MapView(document.getElementById('map'));
@@ -168,12 +181,6 @@ export const fonts = ["Almendra+SC", "Georgia", "Arial", "Times+New+Roman", "Com
 export let color = d3.scaleSequential(d3.interpolateSpectral); // default color scheme
 export const lineGen = d3.line().curve(d3.curveBasis); // d3 line generator with default curve interpolation
 
-// d3 zoom behavior
-export let scale = 1, viewX = 0, viewY = 0;
-
-import { Camera } from "./map/Camera.js";
-export const camera = Camera(svg);
-export const zoom = d3.zoom().scaleExtent([1, 20]).on("zoom", onZoomMap);
 
 // default options
 export let options = { pinNotes: false }; // options object
@@ -584,37 +591,6 @@ function showWelcomeMessage() {
             close: () => localStorage.setItem("version", version)
         }
     );
-}
-
-function onZoomMap() {
-    const transform = d3.event.transform;
-    const scaleDiff = scale - transform.k;
-    const positionDiff = viewX - transform.x | viewY - transform.y;
-    if (!positionDiff && !scaleDiff) return;
-
-    scale = transform.k;
-    viewX = transform.x;
-    viewY = transform.y;
-    view.box.attr("transform", transform);
-
-    // update grid only if view position
-    if (positionDiff) drawCoordinates();
-
-    // rescale only if zoom is changed
-    if (scaleDiff) {
-        invokeActiveZooming();
-        drawScaleBar();
-    }
-
-    // zoom image converter overlay
-    const canvas = document.getElementById("canvas");
-    if (canvas && +canvas.style.opacity) {
-        const img = document.getElementById("image");
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.setTransform(scale, 0, 0, scale, viewX, viewY);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
 }
 
 // calculate x,y extreme points of viewBox

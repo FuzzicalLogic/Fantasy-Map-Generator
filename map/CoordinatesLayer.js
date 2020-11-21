@@ -1,7 +1,8 @@
 import {
     graphWidth, graphHeight,
     mapCoordinates, scale,
-    view
+    view,
+    camera
 } from "../main.js";
 import { rn, round } from "../modules/utils.js";
 

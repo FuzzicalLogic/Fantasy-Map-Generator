@@ -1,7 +1,6 @@
 import {
     view,
-    viewX, viewY, scale,
-    setViewX, setViewY, setScale
+    viewX, viewY, scale
 } from "../main.js";
 
 export const DEFAULT_MIN_ZOOM = 1;
@@ -13,6 +12,8 @@ export const Camera = (svg) => {
     const zoom = d3.zoom()
         .scaleExtent([DEFAULT_MIN_ZOOM, DEFAULT_MAX_ZOOM])
         .on("zoom", onMoveCamera);
+    const emitter = new EventTarget();
+    const dispatchEvent = (...args) => emitter.dispatchEvent(...args)
 
     return {
         setBoundaries: (topleft, bottomright) => {
@@ -43,38 +44,34 @@ export const Camera = (svg) => {
         },
         reset: (ms = DEFAULT_ZOOM_DURATION) => {
             svg.transition().duration(ms).call(zoom.transform, d3.zoomIdentity);
-        }
+        },
+        addEventListener: (...args) => emitter.addEventListener(...args),
+        removeEventListener: (...args) => emitter.removeEventListener(...args),
     };
-}
 
-function onMoveCamera() {
-    const transform = d3.event.transform;
-    const scaleDiff = scale - transform.k;
-    const positionDiff = viewX - transform.x | viewY - transform.y;
-    if (!positionDiff && !scaleDiff) return;
+    function onMoveCamera() {
+        const transform = d3.event.transform;
+        const scaleDiff = scale - transform.k;
+        const positionDiff = viewX - transform.x | viewY - transform.y;
+        if (!positionDiff && !scaleDiff) return;
+        view.box.attr("transform", transform);
 
-    setScale(transform.k);
-    setViewX(transform.x);
-    setViewY(transform.y);
-    view.box.attr("transform", transform);
+        if (positionDiff || scaleDiff)
+            dispatchEvent(new CustomEvent('move', {
+                detail: {
+                    zoom: transform.k,
+                    position: [ transform.x, transform.y]
+                }
+            }));
 
-    // update grid only if view position
-    if (positionDiff) drawCoordinates();
-
-    // rescale only if zoom is changed
-    if (scaleDiff) {
-        invokeActiveZooming();
-        drawScaleBar();
-    }
-
-    // zoom image converter overlay
-    const canvas = document.getElementById("canvas");
-    if (canvas && +canvas.style.opacity) {
-        const img = document.getElementById("image");
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.setTransform(scale, 0, 0, scale, viewX, viewY);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // zoom image converter overlay
+        const canvas = document.getElementById("canvas");
+        if (canvas && +canvas.style.opacity) {
+            const img = document.getElementById("image");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.setTransform(scale, 0, 0, scale, viewX, viewY);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
     }
 }
-
