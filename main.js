@@ -333,7 +333,7 @@ export function redefineElements(mapview) {
     burgLabels = labels.select("#burgLabels");
 }
 
-export async function loadMapFromURL(maplink, random) {
+async function loadMapFromURL(maplink, random) {
     const URL = decodeURIComponent(maplink);
 
     try {
@@ -498,7 +498,7 @@ export function focusOn() {
 }
 
 // find burg for MFCG and focus on it
-export function findBurgForMFCG(params) {
+function findBurgForMFCG(params) {
     const { cells, burgs } = pack;
     if (pack.burgs.length < 2) {
         console.error("Cannot select a burg for MFCG");
@@ -593,13 +593,6 @@ function showWelcomeMessage() {
     );
 }
 
-// calculate x,y extreme points of viewBox
-export function getViewBoxExtent() {
-    // x = trX / scale * -1 + graphWidth / scale
-    // y = trY / scale * -1 + graphHeight / scale
-    return [[Math.abs(viewX / scale), Math.abs(viewY / scale)], [Math.abs(viewX / scale) + graphWidth / scale, Math.abs(viewY / scale) + graphHeight / scale]];
-}
-
 // active zooming feature
 export function invokeActiveZooming() {
     if (coastline.select("#sea_island").size() && +coastline.select("#sea_island").attr("auto-filter")) {
@@ -651,7 +644,7 @@ export function invokeActiveZooming() {
 }
 
 // generate map seed (string!) or get it from URL searchParams
-export function generateSeed() {
+function generateSeed() {
     const first = !mapHistory[0];
     const url = new URL(window.location.href);
     const params = url.searchParams;
@@ -912,7 +905,7 @@ export const regenerateMap = debounce(function () {
 }, 500);
 
 // clear the map
-export function undraw() {
+function undraw() {
     view.box.selectAll("path, circle, polygon, line, text, use, #zones > g, #armies > g, #ruler > g").remove();
     view.defs.selectAll("path, clipPath").remove();
     notes = [];
