@@ -547,7 +547,7 @@ export function findBurgForMFCG(params) {
     tip("Here stands the glorious city of " + b.name, true, "success", 15000);
 }
 
-export function showWelcomeMessage() {
+function showWelcomeMessage() {
     const post = link("https://www.reddit.com/r/FantasyMapGenerator/comments/ft5b41/update_new_version_is_published_into_the_battle_v14/", "Main changes:"); // announcement on Reddit
     const changelog = link("https://github.com/Azgaar/Fantasy-Map-Generator/wiki/Changelog", "previous version");
     const reddit = link("https://www.reddit.com/r/FantasyMapGenerator", "Reddit community");
@@ -585,7 +585,7 @@ export function showWelcomeMessage() {
     );
 }
 
-function zoomed() {
+function onZoomMap() {
     const transform = d3.event.transform;
     const scaleDiff = scale - transform.k;
     const positionDiff = viewX - transform.x | viewY - transform.y;
