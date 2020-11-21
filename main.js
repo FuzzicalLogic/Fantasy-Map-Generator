@@ -170,7 +170,10 @@ export const lineGen = d3.line().curve(d3.curveBasis); // d3 line generator with
 
 // d3 zoom behavior
 export let scale = 1, viewX = 0, viewY = 0;
-export const zoom = d3.zoom().scaleExtent([1, 20]).on("zoom", zoomed);
+
+import { Camera } from "./map/Camera.js";
+export const camera = Camera(svg);
+export const zoom = d3.zoom().scaleExtent([1, 20]).on("zoom", onZoomMap);
 
 // default options
 export let options = { pinNotes: false }; // options object
@@ -299,6 +302,10 @@ export function setPack(v) { pack = v; }
 export function setNameBases(v) { nameBases = v; }
 export function setSvgWidth(v) { svgWidth = v; }
 export function setSvgHeight(v) { svgHeight = v; }
+
+export function setViewX(v) { viewX = v };
+export function setViewY(v) { viewY = v };
+export function setScale(v) { scale = v };
 
 export function redefineElements(mapview) {
     view = mapview;
