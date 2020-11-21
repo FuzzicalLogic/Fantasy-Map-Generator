@@ -1,9 +1,8 @@
 import {
-    svg,
     graphWidth, graphHeight,
     pack, grid, notes,
     biomesData,
-    resetZoom, zoom,
+    camera,
     mapCoordinates
 } from "../../main.js";
 import { closeDialogs } from "./editors.js";
@@ -140,21 +139,21 @@ export function initialize() {
         else if (key === 70) toggleRelief(); // "F" to toggle Relief icons layer
         else if (key === 189) toggleScaleBar(); // Minus (-) to toggle Scale bar
 
-        else if (key === 37) zoom.translateBy(svg, 10, 0); // Left to scroll map left
-        else if (key === 39) zoom.translateBy(svg, -10, 0); // Right to scroll map right
-        else if (key === 38) zoom.translateBy(svg, 0, 10); // Up to scroll map up
-        else if (key === 40) zoom.translateBy(svg, 0, -10); // Up to scroll map up
+        else if (key === 37) camera.pan(1); // Left to scroll map left
+        else if (key === 39) camera.pan(-1); // Right to scroll map right
+        else if (key === 38) camera.pan(0, 1); // Up to scroll map up
+        else if (key === 40) camera.pan(0, -1); // Up to scroll map up
         else if (key === 107 || key === 109) pressNumpadSign(key); // Numpad Plus/Minus to zoom map or change brush size
-        else if (key === 48 || key === 96) resetZoom(1000); // 0 to reset zoom
-        else if (key === 49 || key === 97) zoom.scaleTo(svg, 1); // 1 to zoom to 1
-        else if (key === 50 || key === 98) zoom.scaleTo(svg, 2); // 2 to zoom to 2
-        else if (key === 51 || key === 99) zoom.scaleTo(svg, 3); // 3 to zoom to 3
-        else if (key === 52 || key === 100) zoom.scaleTo(svg, 4); // 4 to zoom to 4
-        else if (key === 53 || key === 101) zoom.scaleTo(svg, 5); // 5 to zoom to 5
-        else if (key === 54 || key === 102) zoom.scaleTo(svg, 6); // 6 to zoom to 6
-        else if (key === 55 || key === 103) zoom.scaleTo(svg, 7); // 7 to zoom to 7
-        else if (key === 56 || key === 104) zoom.scaleTo(svg, 8); // 8 to zoom to 8
-        else if (key === 57 || key === 105) zoom.scaleTo(svg, 9); // 9 to zoom to 9
+        else if (key === 48 || key === 96) camera.reset(); // 0 to reset zoom
+        else if (key === 49 || key === 97) camera.zoom(1); // 1 to zoom to 1
+        else if (key === 50 || key === 98) camera.zoom(2); // 2 to zoom to 2
+        else if (key === 51 || key === 99) camera.zoom(3); // 3 to zoom to 3
+        else if (key === 52 || key === 100) camera.zoom(4); // 4 to zoom to 4
+        else if (key === 53 || key === 101) camera.zoom(5); // 5 to zoom to 5
+        else if (key === 54 || key === 102) camera.zoom(6); // 6 to zoom to 6
+        else if (key === 55 || key === 103) camera.zoom(7); // 7 to zoom to 7
+        else if (key === 56 || key === 104) camera.zoom(8); // 8 to zoom to 8
+        else if (key === 57 || key === 105) camera.zoom(9); // 9 to zoom to 9
         else if (ctrl) pressControl(); // Control to toggle mode
     });
 }
@@ -483,22 +482,27 @@ function pressNumpadSign(key) {
     let brush = null;
     const d = key === 107 ? 1 : -1;
 
-    if (brushRadius.offsetParent) brush = document.getElementById("brushRadius"); else
-        if (biomesManuallyBrush.offsetParent) brush = document.getElementById("biomesManuallyBrush"); else
-            if (statesManuallyBrush.offsetParent) brush = document.getElementById("statesManuallyBrush"); else
-                if (provincesManuallyBrush.offsetParent) brush = document.getElementById("provincesManuallyBrush"); else
-                    if (culturesManuallyBrush.offsetParent) brush = document.getElementById("culturesManuallyBrush"); else
-                        if (zonesBrush.offsetParent) brush = document.getElementById("zonesBrush"); else
-                            if (religionsManuallyBrush.offsetParent) brush = document.getElementById("religionsManuallyBrush");
+    if (brushRadius.offsetParent)
+        brush = document.getElementById("brushRadius");
+    else if (biomesManuallyBrush.offsetParent)
+        brush = document.getElementById("biomesManuallyBrush");
+    else if (statesManuallyBrush.offsetParent)
+        brush = document.getElementById("statesManuallyBrush");
+    else if (provincesManuallyBrush.offsetParent)
+        brush = document.getElementById("provincesManuallyBrush");
+    else if (culturesManuallyBrush.offsetParent)
+        brush = document.getElementById("culturesManuallyBrush");
+    else if (zonesBrush.offsetParent)
+        brush = document.getElementById("zonesBrush");
+    else if (religionsManuallyBrush.offsetParent)
+        brush = document.getElementById("religionsManuallyBrush");
 
     if (brush) {
         const value = Math.max(Math.min(+brush.value + d, +brush.max), +brush.min);
         brush.value = document.getElementById(brush.id + "Number").value = value;
         return;
     }
-
-    const scaleBy = key === 107 ? 1.2 : .8;
-    zoom.scaleBy(svg, scaleBy); // if no, zoom map
+    camera.zoomBy(key === 107 ? 1.2 : .8); // if no, zoom map
 }
 
 function pressControl() {
