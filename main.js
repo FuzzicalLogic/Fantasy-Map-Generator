@@ -450,9 +450,9 @@ function applyMapSize() {
     svgWidth = Math.min(graphWidth, window.innerWidth);
     svgHeight = Math.min(graphHeight, window.innerHeight);
     svg.attr("width", svgWidth).attr("height", svgHeight);
-    zoom.translateExtent([[0, 0], [graphWidth, graphHeight]])
-        .scaleExtent([zoomMin, zoomMax])
-        .scaleTo(svg, zoomMin);
+    camera.setBoundaries([0, 0], [graphWidth, graphHeight]);
+    camera.setZoomLimit(zoomMin, zoomMax)
+    camera.reset();
 }
 
 // focus on coordinates, cell or burg provided in searchParams
@@ -487,7 +487,7 @@ export function focusOn() {
         y = pack.burgs[b].y;
     }
 
-    if (x && y) zoomTo(x, y, s, 1600);
+    if (x && y) camera.zoomTo(x, y, s);
 }
 
 // find burg for MFCG and focus on it
@@ -543,7 +543,7 @@ export function findBurgForMFCG(params) {
         });
     }
 
-    zoomTo(b.x, b.y, 8, 1600);
+    camera.zoomTo(b.x, b.y, 8);
     invokeActiveZooming();
     tip("Here stands the glorious city of " + b.name, true, "success", 15000);
 }
@@ -615,12 +615,6 @@ function onZoomMap() {
         ctx.setTransform(scale, 0, 0, scale, viewX, viewY);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
-}
-
-// Zoom to a specific point
-export function zoomTo(x, y, z = 8, d = 2000) {
-    const transform = d3.zoomIdentity.translate(x * -z + graphWidth / 2, y * -z + graphHeight / 2).scale(z);
-    svg.transition().duration(d).call(zoom.transform, transform);
 }
 
 // Reset zoom to initial

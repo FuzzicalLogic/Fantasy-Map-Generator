@@ -1,7 +1,7 @@
 import {
     modules, pack,
     provinceBorders, stateBorders,
-    view, zoomTo, customization
+    view, camera, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -245,7 +245,7 @@ function capitalZoomIn(p) {
     const capital = pack.provinces[p].burg;
     const l = burgLabels.select("[data-id='" + capital + "']");
     const x = +l.attr("x"), y = +l.attr("y");
-    zoomTo(x, y, 8, 2000);
+    camera.zoomTo(x, y, 8);
 }
 
 function triggerIndependencePromps(p) {

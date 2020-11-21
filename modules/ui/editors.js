@@ -1,8 +1,8 @@
 import {
     pack,
-    svg, svgWidth, svgHeight,
+    svgWidth, svgHeight,
     view, scale,
-    zoom,
+    camera,
     burgIcons, anchors, burgLabels,
     elSelected
 } from "../../main.js";
@@ -35,7 +35,7 @@ export function initialize() {
 
 // restore default viewbox events
 export function restoreDefaultEvents() {
-    svg.call(zoom);
+    camera.restore();
     view.box.style("cursor", "default")
         .on(".drag", null)
         .on("click", clicked)

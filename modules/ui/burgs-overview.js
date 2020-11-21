@@ -1,8 +1,7 @@
 import {
     modules, pack, customization,
     view, mapCoordinates, graphWidth, graphHeight,
-    burgLabels,
-    zoomTo
+    burgLabels, camera
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -292,7 +291,7 @@ function zoomIntoBurg() {
     const label = document.querySelector("#burgLabels [data-id='" + burg + "']");
     const x = +label.getAttribute("x"),
         y = +label.getAttribute("y");
-    zoomTo(x, y, 8, 2000);
+    camera.zoomTo(x, y, 8);
 }
 
 function enterAddBurgMode() {
@@ -373,7 +372,7 @@ function showBurgsChart() {
         .attr("cx", d => d.x).attr("cy", d => d.y)
         .on("mouseenter", d => showInfo(event, d))
         .on("mouseleave", d => hideInfo(event, d))
-        .on("click", d => zoomTo(d.data.x, d.data.y, 8, 2000));
+        .on("click", d => camera.zoomTo(d.data.x, d.data.y, 8));
 
     function showInfo(ev, d) {
         d3.select(ev.target).transition().duration(1500).attr("stroke", "#c13119");

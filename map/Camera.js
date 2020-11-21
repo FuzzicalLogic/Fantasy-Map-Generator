@@ -15,6 +15,12 @@ export const Camera = (svg) => {
         .on("zoom", onMoveCamera);
 
     return {
+        setBoundaries: (topleft, bottomright) => {
+            zoom.translateExtent([topleft, bottomright])
+        },
+        setZoomLimit: (min = DEFAULT_MIN_ZOOM, max = DEFAULT_MAX_ZOOM) => {
+            zoom.scaleExtent([min, max])
+        },
         pan: (xSteps = 0, ySteps = 0) => {
             zoom.translateBy(svg, xSteps * DEFAULT_PAN_INTERVAL, ySteps * DEFAULT_PAN_INTERVAL);
         },
@@ -31,6 +37,9 @@ export const Camera = (svg) => {
             svg.transition()
                 .duration(ms)
                 .call(zoom.transform, transform);
+        },
+        restore: () => {
+            svg.call(zoom);
         },
         reset: (ms = DEFAULT_ZOOM_DURATION) => {
             svg.transition().duration(ms).call(zoom.transform, d3.zoomIdentity);

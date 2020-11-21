@@ -3,7 +3,7 @@ import {
     seed, pack,
     statesBody, statesHalo,
     notes, burgLabels,
-    view, zoomTo, customization
+    view, camera, customization
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
@@ -436,7 +436,7 @@ function stateCapitalZoomIn(state) {
     const capital = pack.states[state].capital;
     const l = burgLabels.select("[data-id='" + capital + "']");
     const x = +l.attr("x"), y = +l.attr("y");
-    zoomTo(x, y, 8, 2000);
+    camera.zoomTo(x, y, 8);
 }
 
 function stateChangeCulture(state, line, value) {

@@ -184,7 +184,7 @@ export function initialize() {
         else if (id === "loadButton")
             showLoadPane();
         else if (id === "zoomReset")
-            resetZoom(1000);
+            camera.reset();
     });
 
     // load map
@@ -260,7 +260,7 @@ export function changeMapSize() {
 
     const maxWidth = Math.max(+doc.mapWidthInput().value, graphWidth);
     const maxHeight = Math.max(+doc.mapHeightInput().value, graphHeight);
-    zoom.translateExtent([[0, 0], [maxWidth, maxHeight]]);
+    camera.setBoundaries([0, 0], [maxWidth, maxHeight]);
     view.landmass.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
     oceanPattern.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
     oceanLayers.select("rect").attr("x", 0).attr("y", 0).attr("width", maxWidth).attr("height", maxHeight);
@@ -284,8 +284,9 @@ function toggleFullscreen() {
 
 function toggleTranslateExtent(el) {
     const on = el.dataset.on = +!(+el.dataset.on);
-    if (on) zoom.translateExtent([[-graphWidth / 2, -graphHeight / 2], [graphWidth * 1.5, graphHeight * 1.5]]);
-    else zoom.translateExtent([[0, 0], [graphWidth, graphHeight]]);
+    if (on)
+        camera.setBoundaries([-graphWidth / 2, -graphHeight / 2], [graphWidth * 1.5, graphHeight * 1.5]);
+    else camera.setBoundaries([0, 0], [graphWidth, graphHeight]);
 }
 
 function generateMapWithSeed() {
@@ -326,7 +327,8 @@ function restoreSeed(id) {
 function restoreDefaultZoomExtent() {
     zoomExtentMin.value = 1;
     zoomExtentMax.value = 20;
-    zoom.scaleExtent([1, 20]).scaleTo(svg, 1);
+    camera.setZoomLimit()
+    camera.reset();
 }
 
 function copyMapURL() {
@@ -388,9 +390,9 @@ function changeDialogsTransparency(value) {
 function changeZoomExtent(value) {
     const min = Math.max(+zoomExtentMin.value, .01),
         max = Math.min(+zoomExtentMax.value, 200);
-    zoom.scaleExtent([min, max]);
+    camera.setZoomLimit([min, max]);
     const scale = Math.max(Math.min(+value, 200), .01);
-    zoom.scaleTo(svg, scale);
+    camera.zoom(scale);
 }
 
 // control stored options logic
