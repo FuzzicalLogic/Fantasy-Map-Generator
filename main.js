@@ -363,7 +363,95 @@ export function generateMapOnLoad() {
     applyStyleOnLoad(); // apply default of previously selected style
     generate(); // generate map
     focusOn(); // based on searchParams focus on point, cell or burg from MFCG
-    applyPreset();
+    loadDisplay();
+}
+
+export function generate() {
+    try {
+        const timeStart = performance.now();
+        invokeActiveZooming();
+        generateSeed();
+        console.group("Generated Map " + seed);
+        applyMapSize();
+        applyTexture();
+        drawCompass();
+        randomizeOptions();
+        grid = MapData.placePoints(graphWidth, graphHeight);
+        calculateVoronoi(grid, grid.points);
+        //console.log(MapData.generate(seed, graphWidth, graphHeight))
+        drawScaleBar();
+        HeightmapGenerator.generate(grid);
+        MapData.markFeatures(grid, seed);
+        MapData.openNearSeaLakes(grid);
+        OceanLayers(grid);
+        defineMapSize(grid);
+        calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
+        drawCoordinates();
+        calculateTemperatures(grid);
+        drawIce();
+        generatePrecipitation(grid);
+        window.grid = grid
+        pack = packGrid(grid);
+        drawCells();
+        window.pack = pack;
+        pack.features = reMarkFeatures(pack);
+        drawCoastline(pack);
+
+        elevateLakes(pack);
+        Rivers.generate();
+        defineBiomes();
+
+        rankCells();
+        Cultures.generate(+culturesInput.value);
+        Cultures.expand();
+        BurgsAndStates.generate(+regionsInput.value);
+        Religions.generate(+religionsInput.value, pack);
+        BurgsAndStates.defineStateForms();
+        BurgsAndStates.generateProvinces();
+        BurgsAndStates.defineBurgFeatures();
+
+        BurgsAndStates.drawStateLabels();
+
+        Rivers.specify();
+
+        Military.generate();
+        addMarkers();
+        addZones();
+        Names.getMapName();
+
+        console.warn(`TOTAL: ${rn((performance.now() - timeStart) / 1000, 2)}s`);
+        showStatistics();
+        console.groupEnd("Generated Map " + seed);
+    }
+    catch (error) {
+        console.error(error);
+        clearMainTip();
+
+        alertMessage.innerHTML = `An error is occured on map generation. Please retry.
+      <br>If error is critical, clear the stored data and try again.
+      <p id="errorBox">${parseError(error)}</p>`;
+        $("#alert").dialog({
+            resizable: false, title: "Generation error", width: "32em", buttons: {
+                "Clear data": function () { localStorage.clear(); localStorage.setItem("version", version); },
+                Regenerate: function () { regenerateMap(); $(this).dialog("close"); },
+                Ignore: function () { $(this).dialog("close"); }
+            }, position: { my: "center", at: "center", of: "svg" }
+        });
+    }
+
+}
+
+// just apply canvas size that was already set
+function applyMapSize() {
+    const zoomMin = +zoomExtentMin.value, zoomMax = +zoomExtentMax.value;
+    graphWidth = +doc.mapWidthInput().value;
+    graphHeight = +doc.mapHeightInput().value;
+    svgWidth = Math.min(graphWidth, window.innerWidth);
+    svgHeight = Math.min(graphHeight, window.innerHeight);
+    svg.attr("width", svgWidth).attr("height", svgHeight);
+    zoom.translateExtent([[0, 0], [graphWidth, graphHeight]])
+        .scaleExtent([zoomMin, zoomMax])
+        .scaleTo(svg, zoomMin);
 }
 
 // focus on coordinates, cell or burg provided in searchParams
@@ -594,79 +682,6 @@ export function invokeActiveZooming() {
         ruler.selectAll("text").attr("font-size", 10 * size);
         ruler.selectAll("line, path").attr("stroke-width", size);
     }
-}
-
-export function generate() {
-    try {
-        const timeStart = performance.now();
-        invokeActiveZooming();
-        generateSeed();
-        console.group("Generated Map " + seed);
-        applyMapSize();
-        applyTexture();
-        drawCompass();
-        randomizeOptions();
-        grid = MapData.placePoints(graphWidth, graphHeight);
-        calculateVoronoi(grid, grid.points);
-        //console.log(MapData.generate(seed, graphWidth, graphHeight))
-        drawScaleBar();
-        HeightmapGenerator.generate(grid);
-        MapData.markFeatures(grid, seed);
-        MapData.openNearSeaLakes(grid);
-        OceanLayers(grid);
-        defineMapSize(grid);
-        calculateMapCoordinates(+document.getElementById("mapSizeOutput").value, +document.getElementById("latitudeOutput").value);
-        drawCoordinates();
-        calculateTemperatures(grid);
-        drawIce();
-        generatePrecipitation(grid);
-        pack = packGrid(grid);
-        drawCells();
-        pack.features = reMarkFeatures(pack);
-        drawCoastline(pack);
-
-        elevateLakes(pack);
-        Rivers.generate();
-        defineBiomes();
-
-        rankCells();
-        Cultures.generate(+culturesInput.value);
-        Cultures.expand();
-        BurgsAndStates.generate(+regionsInput.value);
-        Religions.generate(+religionsInput.value, pack);
-        BurgsAndStates.defineStateForms();
-        BurgsAndStates.generateProvinces();
-        BurgsAndStates.defineBurgFeatures();
-
-        BurgsAndStates.drawStateLabels();
-
-        Rivers.specify();
-
-        Military.generate();
-        addMarkers();
-        addZones();
-        Names.getMapName();
-
-        console.warn(`TOTAL: ${rn((performance.now() - timeStart) / 1000, 2)}s`);
-        showStatistics();
-        console.groupEnd("Generated Map " + seed);
-    }
-    catch (error) {
-        console.error(error);
-        clearMainTip();
-
-        alertMessage.innerHTML = `An error is occured on map generation. Please retry.
-      <br>If error is critical, clear the stored data and try again.
-      <p id="errorBox">${parseError(error)}</p>`;
-        $("#alert").dialog({
-            resizable: false, title: "Generation error", width: "32em", buttons: {
-                "Clear data": function () { localStorage.clear(); localStorage.setItem("version", version); },
-                Regenerate: function () { regenerateMap(); $(this).dialog("close"); },
-                Ignore: function () { $(this).dialog("close"); }
-            }, position: { my: "center", at: "center", of: "svg" }
-        });
-    }
-
 }
 
 // generate map seed (string!) or get it from URL searchParams
