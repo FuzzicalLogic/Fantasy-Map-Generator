@@ -2,8 +2,8 @@ import {
     modules, options,
     seed, nameBases,
     svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
-    graphWidth, setWidth, graphHeight, setHeight,
-    zoom, resetZoom,
+    graphWidth, graphHeight, 
+    camera,
     view, oceanPattern, oceanLayers,
     mapHistory, regenerateMap,
     customization

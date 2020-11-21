@@ -617,11 +617,6 @@ function onZoomMap() {
     }
 }
 
-// Reset zoom to initial
-export function resetZoom(d = 1000) {
-    svg.transition().duration(d).call(zoom.transform, d3.zoomIdentity);
-}
-
 // calculate x,y extreme points of viewBox
 export function getViewBoxExtent() {
     // x = trX / scale * -1 + graphWidth / scale
@@ -933,7 +928,7 @@ export const regenerateMap = debounce(function () {
     closeDialogs("#worldConfigurator, #options3d");
     customization = 0;
     undraw();
-    resetZoom(1000);
+    camera.reset();
     generate();
     restoreLayers();
     if (ThreeD.options.isOn) ThreeD.redraw();

@@ -1,8 +1,8 @@
 import {
     modules, seed,
     grid, pack,
-    view,
-    packGrid, resetZoom, rankCells,
+    view, camera,
+    packGrid, rankCells,
     drawCoastline, defineBiomes, elevateLakes,
     calculateTemperatures, generatePrecipitation,
     addMarkers, addZones
@@ -169,7 +169,7 @@ export function editHeightmap() {
         restoreDefaultEvents();
         clearMainTip();
         closeDialogs();
-        resetZoom();
+        camera.reset();
 
         if (document.getElementById("preview")) document.getElementById("preview").remove();
         if (document.getElementById("canvas3d")) enterStandardView();
@@ -1060,7 +1060,7 @@ export function editHeightmap() {
                 const ctx = document.getElementById("canvas").getContext("2d");
                 ctx.drawImage(img, 0, 0, graphWidth, graphHeight);
                 heightsFromImage(+convertColors.value);
-                resetZoom();
+                camera.reset();
             };
 
             reader.onloadend = () => img.src = reader.result;
