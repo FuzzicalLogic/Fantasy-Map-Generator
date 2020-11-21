@@ -269,19 +269,6 @@ export function changeMapSize() {
     fitLegendBox();
 }
 
-// just apply canvas size that was already set
-export function applyMapSize() {
-    const zoomMin = +zoomExtentMin.value, zoomMax = +zoomExtentMax.value;
-    setWidth(+doc.mapWidthInput().value);
-    setHeight(+doc.mapHeightInput().value);
-    setSvgWidth(Math.min(graphWidth, window.innerWidth));
-    setSvgHeight(Math.min(graphHeight, window.innerHeight));
-    svg.attr("width", svgWidth).attr("height", svgHeight);
-    zoom.translateExtent([[0, 0], [graphWidth, graphHeight]])
-        .scaleExtent([zoomMin, zoomMax])
-        .scaleTo(svg, zoomMin);
-}
-
 function toggleFullscreen() {
     if (doc.mapWidthInput().value != window.innerWidth || doc.mapHeightInput().value != window.innerHeight) {
         doc.mapWidthInput().value = window.innerWidth;
