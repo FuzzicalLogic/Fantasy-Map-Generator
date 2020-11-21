@@ -51,7 +51,7 @@ import { initialize as initEditors, closeDialogs, clearLegend, unfog } from "./m
 import { drawScaleBar } from "./modules/ui/measurers.js";
 
 import {
-    initialize as initLayers, restoreLayers, applyPreset } from "./modules/ui/layers.js";
+    initialize as initLayers, restoreLayers, loadDisplay } from "./modules/ui/layers.js";
 import { initialize as initStyle, applyStyleOnLoad } from "./modules/ui/style.js";
 import { initialize as initGeneral, clearMainTip, locked, tip } from "./modules/ui/general.js";
 import {
@@ -59,7 +59,7 @@ import {
     debounce, link
 } from "./modules/utils.js";
 
-import { initialize as initOptions, applyStoredOptions, applyMapSize, randomizeOptions } from "./modules/ui/options.js";
+import { initialize as initOptions, applyStoredOptions, randomizeOptions } from "./modules/ui/options.js";
 import { initialize as initTools } from "./modules/ui/tools.js";
 
 export let svg = d3.select("#map");
@@ -288,6 +288,7 @@ void function addDragToUpload() {
 // Necessary Load Order -- After main
 initTools();
 initEditors();
+
 
 export function setSeed(v) { seed = v; }
 export function setWidth(v) { graphWidth = v; }
