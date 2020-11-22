@@ -384,7 +384,16 @@ text.drag {
 
 dialog, .ui-dialog {
     pointer-events: all;
+    opacity: var(--ui-opacity, 1.0);
+    transition: opacity var(--transition-duration, 500ms) ease-in-out;
 }
+
+    dialog:not([open]) {
+        display: none; opacity: 0;
+    }
+    .ui-dialog > dialog:not([open]) {
+        display: block; opacity: 1;
+    }
 
 dialog, .ui-dialog-content {
     background-color: var(--primary-light) !important;
