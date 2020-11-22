@@ -200,7 +200,7 @@ export const { calculateVoronoiO: calculateVoronoi } = MapData;
 void function removeLoading() {
     d3.select("#loading").transition().duration(4000).style("opacity", 0).remove();
     d3.select("#initial").transition().duration(4000).attr("opacity", 0).remove();
-    d3.select("#optionsContainer").transition().duration(3000).style("opacity", 1);
+    //d3.select("#optionsContainer").transition().duration(3000).style("opacity", 1);
     d3.select("#tooltip").transition().duration(4000).style("opacity", 1);
 }()
 
@@ -815,6 +815,7 @@ export function reMarkFeatures({ cells }) {
         features.push({ i, land, border, type, cells: cellNumber, firstCell: start, group });
         queue[0] = cells.findIndex(x => !!!x.f); // find unmarked cell
     }
+    console.timeEnd("reMarkFeatures");
 
     return features;
 

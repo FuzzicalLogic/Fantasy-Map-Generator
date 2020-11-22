@@ -7,18 +7,6 @@
 
 :root {
     font-family: Helvetica, Arial, sans-serif;
-}
-
-    :root * {
-        box-sizing: border-box;
-    }
-
-html {
-    position: fixed;
-    min-width: 100vw; width: 100vw; max-width: 100vw;
-    min-height: 100vh; height: 100vh; max-height: 100vh;
-    display: flex; flex-flow: row nowrap; align-items: stretch;
-    font-size: 0.75em;
 
     --primary: #111111; /*#263238;*/
     --primary-dark: #000000;
@@ -33,6 +21,23 @@ html {
     --on-secondary: #FFFFFF;
     --on-secondary-light: #000000;
     --on-secondary-dark: #FFFFFF;
+
+    --ui-opacity: 1.0;
+
+    --transition-duration: 350ms;
+}
+
+    :root * {
+        box-sizing: border-box;
+    }
+
+html {
+    position: fixed;
+    min-width: 100vw; width: 100vw; max-width: 100vw;
+    min-height: 100vh; height: 100vh; max-height: 100vh;
+    display: flex; flex-flow: row nowrap; align-items: stretch;
+    font-size: 0.75em;
+
 }
 
 html[data-theme="dark"] {
@@ -114,9 +119,13 @@ button, select, a, .pointer {
     cursor: pointer;
 }
 
-.Layer.Hidden {
-    display: none; pointer-events: none;
+.Layer {
+    transition: opacity var(--transition-duration, 500ms) ease-in-out;
 }
+    .Layer.Hidden {
+        display: none; opacity: 0;
+        pointer-events: none;
+    }
 
 #prec text {
     font-size: 32px;
@@ -352,6 +361,8 @@ text.drag {
     display: flex;
     flex-flow: row nowrap;
     align-items: stretch;
+    opacity: var(--ui-opacity, 0);
+    transition: opacity var(--transition-duration, 350ms) ease-in-out;
 }
 
     #optionsContainer > * {
