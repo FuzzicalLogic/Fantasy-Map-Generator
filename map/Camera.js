@@ -1,5 +1,6 @@
 import {
     view,
+    graphWidth, graphHeight,
     viewX, viewY, scale
 } from "../main.js";
 
