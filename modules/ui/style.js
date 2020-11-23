@@ -1,6 +1,6 @@
 import {
     grid,
-    view, svg, fonts, pack,
+    view, fonts, pack,
     oceanLayers, stateBorders,
     provinceBorders,
     roads, trails, searoutes, statesHalo,
@@ -21,7 +21,7 @@ import { showOptions } from "./options.js";
 import { drawHeightmap, drawGrid, toggleRelief, isPressed } from "./layers.js";
 
 export function initialize() {
-    let { legend, texture, terrs, terrain } = view;
+    let { svg, legend, texture, terrs, terrain } = view;
     styleElementSelect.addEventListener("change", selectStyleElement);
 
     // Handle style inputs change
@@ -541,9 +541,9 @@ function selectStyleElement() {
 
     if (sel === "ocean") {
         styleOcean.style.display = "block";
-        styleOceanBack.value = styleOceanBackOutput.value = d3.color(svg.style("background-color")).hex();
+        styleOceanBack.value = styleOceanBackOutput.value = d3.color(view.svg.style("background-color")).hex();
         styleOceanFore.value = styleOceanForeOutput.value = oceanLayers.select("#oceanBase").attr("fill");
-        styleOceanPattern.value = svg.select("#oceanicPattern").attr("filter");
+        styleOceanPattern.value = view.svg.select("#oceanicPattern").attr("filter");
         outlineLayers.value = oceanLayers.attr("layers");
     }
 
@@ -590,7 +590,9 @@ function selectStyleElement() {
 
 function getEl() {
     const el = styleElementSelect.value, g = styleGroupSelect.value;
-    if (g === el) return svg.select("#" + el); else return svg.select("#" + el).select("#" + g);
+    if (g === el)
+        return view.svg.select("#" + el);
+    else return view.svg.select("#" + el).select("#" + g);
 }
 
 export function calculateFriendlyGridSize() {
@@ -671,7 +673,7 @@ function textureProvideURL() {
                 styleTextureInput.add(opt);
                 styleTextureInput.value = textureURL.value;
                 setBase64Texture(textureURL.value);
-                zoom.scaleBy(svg, 1.00001); // enforce browser re-draw
+                zoom.scaleBy(view.svg, 1.00001); // enforce browser re-draw
                 $(this).dialog("close");
             },
             Cancel: function () { $(this).dialog("close"); }
@@ -712,7 +714,7 @@ export function armiesStyle() {
 // apply default or custom style settings on load
 export function applyStyleOnLoad() {
     addDefaulsStyles(); // add FMG system styles to localStorage
-    svg.select("defs").append("style").text(armiesStyle()); // add armies style
+    view.svg.select("defs").append("style").text(armiesStyle()); // add armies style
 
     const preset = localStorage.getItem("presetStyle");
     const style = preset ? localStorage.getItem(preset) : null;
@@ -779,40 +781,118 @@ function applyDefaultStyle() {
     population.select("#rural").attr("stroke", "#0000ff");
     population.select("#urban").attr("stroke", "#ff0000");
 
-    lakes.select("#freshwater").attr("opacity", .5).attr("fill", "#a6c1fd").attr("stroke", "#5f799d").attr("stroke-width", .7).attr("filter", null);
-    lakes.select("#salt").attr("opacity", .5).attr("fill", "#409b8a").attr("stroke", "#388985").attr("stroke-width", .7).attr("filter", null);
-    lakes.select("#sinkhole").attr("opacity", 1).attr("fill", "#5bc9fd").attr("stroke", "#53a3b0").attr("stroke-width", .7).attr("filter", null);
+    lakes.select("#freshwater")
+        .attr("opacity", .5)
+        .attr("fill", "#a6c1fd")
+        .attr("stroke", "#5f799d")
+        .attr("stroke-width", .7)
+        .attr("filter", null);
+    lakes.select("#salt")
+        .attr("opacity", .5)
+        .attr("fill", "#409b8a")
+        .attr("stroke", "#388985")
+        .attr("stroke-width", .7)
+        .attr("filter", null);
+    lakes.select("#sinkhole")
+        .attr("opacity", 1)
+        .attr("fill", "#5bc9fd").attr("stroke", "#53a3b0").attr("stroke-width", .7).attr("filter", null);
     lakes.select("#frozen").attr("opacity", .95).attr("fill", "#cdd4e7").attr("stroke", "#cfe0eb").attr("stroke-width", 0).attr("filter", null);
     lakes.select("#lava").attr("opacity", .7).attr("fill", "#90270d").attr("stroke", "#f93e0c").attr("stroke-width", 2).attr("filter", "url(#crumpled)");
-    lakes.select("#dry").attr("opacity", 1).attr("fill", "#c9bfa7").attr("stroke", "#8e816f").attr("stroke-width", .7).attr("filter", null);
+    lakes.select("#dry")
+        .attr("opacity", 1)
+        .attr("fill", "#c9bfa7")
+        .attr("stroke", "#8e816f")
+        .attr("stroke-width", .7)
+        .attr("filter", null);
 
-    coastline.select("#sea_island").attr("opacity", .5).attr("stroke", "#1f3846").attr("stroke-width", .7).attr("auto-filter", 1).attr("filter", "url(#dropShadow)");
-    coastline.select("#lake_island").attr("opacity", 1).attr("stroke", "#7c8eaf").attr("stroke-width", .35).attr("filter", null);
+    coastline.select("#sea_island")
+        .attr("opacity", .5)
+        .attr("stroke", "#1f3846")
+        .attr("stroke-width", .7)
+        .attr("auto-filter", 1)
+        .attr("filter", "url(#dropShadow)");
+    coastline.select("#lake_island")
+        .attr("opacity", 1)
+        .attr("stroke", "#7c8eaf")
+        .attr("stroke-width", .35)
+        .attr("filter", null);
 
-    view.terrain.attr("opacity", null).attr("set", "simple").attr("size", 1).attr("density", .4).attr("filter", null).attr("mask", null);
-    view.rivers.attr("opacity", null).attr("fill", "#5d97bb").attr("filter", null);
-    view.ruler.attr("opacity", null).attr("filter", null);
+    view.terrain.attr("opacity", null)
+        .attr("set", "simple")
+        .attr("size", 1)
+        .attr("density", .4)
+        .attr("filter", null)
+        .attr("mask", null);
+    view.rivers.attr("opacity", null)
+        .attr("fill", "#5d97bb")
+        .attr("filter", null);
+    view.ruler.attr("opacity", null)
+        .attr("filter", null);
 
-    roads.attr("opacity", .9).attr("stroke", "#d06324").attr("stroke-width", .7).attr("stroke-dasharray", "2").attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
-    trails.attr("opacity", .9).attr("stroke", "#d06324").attr("stroke-width", .25).attr("stroke-dasharray", ".8 1.6").attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
-    searoutes.attr("opacity", .8).attr("stroke", "#ffffff").attr("stroke-width", .45).attr("stroke-dasharray", "1 2").attr("stroke-linecap", "round").attr("filter", null).attr("mask", null);
+    roads.attr("opacity", .9)
+        .attr("stroke", "#d06324")
+        .attr("stroke-width", .7)
+        .attr("stroke-dasharray", "2")
+        .attr("stroke-linecap", "butt")
+        .attr("filter", null)
+        .attr("mask", null);
+    trails.attr("opacity", .9)
+        .attr("stroke", "#d06324")
+        .attr("stroke-width", .25)
+        .attr("stroke-dasharray", ".8 1.6")
+        .attr("stroke-linecap", "butt")
+        .attr("filter", null)
+        .attr("mask", null);
+    searoutes.attr("opacity", .8)
+        .attr("stroke", "#ffffff")
+        .attr("stroke-width", .45)
+        .attr("stroke-dasharray", "1 2")
+        .attr("stroke-linecap", "round")
+        .attr("filter", null)
+        .attr("mask", null);
 
-    view.regions.attr("opacity", .4).attr("filter", null);
-    statesHalo.attr("data-width", 10).attr("stroke-width", 10).attr("opacity", 1);
-    view.provs.attr("opacity", .6).attr("filter", null);
+    view.regions.attr("opacity", .4)
+        .attr("filter", null);
+    statesHalo.attr("data-width", 10)
+        .attr("stroke-width", 10)
+        .attr("opacity", 1);
+    view.provs.attr("opacity", .6)
+        .attr("filter", null);
 
-    view.temperature.attr("opacity", null).attr("fill", "#000000").attr("stroke-width", 1.8).attr("fill-opacity", .3).attr("font-size", "8px").attr("stroke-dasharray", null).attr("filter", null).attr("mask", null);
-    texture.attr("opacity", null).attr("filter", null).attr("mask", "url(#land)");
-    texture.select("#textureImage").attr("x", 0).attr("y", 0);
-    view.zones.attr("opacity", .6).attr("stroke", "#333333").attr("stroke-width", 0).attr("stroke-dasharray", null).attr("stroke-linecap", "butt").attr("filter", null).attr("mask", null);
+    view.temperature.attr("opacity", null)
+        .attr("fill", "#000000")
+        .attr("stroke-width", 1.8)
+        .attr("fill-opacity", .3)
+        .attr("font-size", "8px")
+        .attr("stroke-dasharray", null)
+        .attr("filter", null)
+        .attr("mask", null);
+    texture.attr("opacity", null)
+        .attr("filter", null)
+        .attr("mask", "url(#land)");
+    texture.select("#textureImage")
+        .attr("x", 0)
+        .attr("y", 0);
+    view.zones.attr("opacity", .6)
+        .attr("stroke", "#333333")
+        .attr("stroke-width", 0)
+        .attr("stroke-dasharray", null)
+        .attr("stroke-linecap", "butt")
+        .attr("filter", null)
+        .attr("mask", null);
 
     // ocean and svg default style
-    svg.attr("background-color", "#000000").attr("data-filter", null).attr("filter", null);
+    view.svg.attr("background-color", "#000000")
+        .attr("data-filter", null)
+        .attr("filter", null);
     view.ocean.attr("opacity", null);
-    oceanLayers.select("rect").attr("fill", "#466eab"); // old color #53679f
-    oceanLayers.attr("filter", null).attr("layers", "-6,-3,-1");
+    oceanLayers.select("rect")
+        .attr("fill", "#466eab"); // old color #53679f
+    oceanLayers.attr("filter", null)
+        .attr("layers", "-6,-3,-1");
     oceanPattern.attr("opacity", null);
-    svg.select("#oceanicPattern").attr("filter", "url(#pattern1)");
+    view.svg.select("#oceanicPattern")
+        .attr("filter", "url(#pattern1)");
 
     // heightmap style
     view.terrs.attr("opacity", null).attr("filter", null).attr("mask", "url(#land)").attr("stroke", "none")
@@ -1063,17 +1143,24 @@ function removeStylePreset() {
 }
 
 function applyMapFilter(event) {
-    if (event.target.tagName !== "BUTTON") return;
+    if (event.target.tagName !== "BUTTON")
+        return;
     const button = event.target;
-    svg.attr("data-filter", null).attr("filter", null);
-    if (button.classList.contains("pressed")) { button.classList.remove("pressed"); return; }
-    mapFilters.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
+    view.svg.attr("data-filter", null)
+        .attr("filter", null);
+    if (button.classList.contains("pressed")) {
+        button.classList.remove("pressed");
+        return;
+    }
+    mapFilters.querySelectorAll(".pressed")
+        .forEach(button => button.classList.remove("pressed"));
     button.classList.add("pressed");
-    svg.attr("data-filter", button.id).attr("filter", "url(#filter-" + button.id + ")");
+    view.svg.attr("data-filter", button.id)
+        .attr("filter", "url(#filter-" + button.id + ")");
 }
 
 function updateMapFilter() {
-    const filter = svg.attr("data-filter");
+    const filter = view.svg.attr("data-filter");
     mapFilters.querySelectorAll(".pressed").forEach(button => button.classList.remove("pressed"));
     if (!filter) return;
     mapFilters.querySelector("#" + filter).classList.add("pressed");

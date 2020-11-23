@@ -2,7 +2,7 @@
 
 import {
     version, seed, setSeed, view, 
-    svg, redefineElements,
+    redefineElements,
     mapId, setMapId, graphWidth, graphHeight, setWidth, setHeight,
     mapCoordinates, setCoordinates, notes, setNotes,
     grid, setGrid,
@@ -674,7 +674,7 @@ function parseLoadedData(data) {
         }()
 
         void function replaceSVG() {
-            svg.remove();
+            view.svg.remove();
             document.body.insertAdjacentHTML("afterbegin", data[5]);
             redefineElements(MapView(document.getElementById('map')));
         }()
@@ -792,7 +792,7 @@ function parseLoadedData(data) {
                 Religions.generate();
 
                 // 1.0 adds a legend box
-                legend = svg.append("g").attr("id", "legend");
+                legend = view.svg.append("g").attr("id", "legend");
                 legend.attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC")
                     .attr("font-size", 13).attr("data-size", 13).attr("data-x", 99).attr("data-y", 93)
                     .attr("stroke-width", 2.5).attr("stroke", "#812929").attr("stroke-dasharray", "0 4 10 4").attr("stroke-linecap", "round");
@@ -909,7 +909,7 @@ function parseLoadedData(data) {
             if (version < 1.11) {
                 // v 1.11 added new attributes
                 view.terrs.attr("scheme", "bright").attr("terracing", 0).attr("skip", 5).attr("relax", 0).attr("curve", 0);
-                svg.select("#oceanic > rect").attr("id", "oceanicPattern");
+                view.svg.select("#oceanic > rect").attr("id", "oceanicPattern");
                 oceanLayers.attr("layers", "-6,-3,-1");
                 view.gridOverlay.attr("type", "pointyHex").attr("size", 10);
 
@@ -979,7 +979,8 @@ function parseLoadedData(data) {
                 BurgsAndStates.generateCampaigns();
 
                 // v 1.3 added militry layer
-                svg.select("defs").append("style").text(armiesStyle()); // add armies style
+                view.svg.select("defs").append("style")
+                    .text(armiesStyle()); // add armies style
                 view.box.insert("g", "#icons").attr("id", "armies");
                 view.armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
                 turnButtonOn("toggleMilitary");

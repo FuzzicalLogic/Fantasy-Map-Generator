@@ -1,7 +1,6 @@
 import {
     modules, options,
     seed, nameBases,
-    svg, svgWidth, svgHeight, setSvgWidth, setSvgHeight,
     graphWidth, graphHeight, 
     camera,
     view, oceanPattern, oceanLayers,
@@ -254,9 +253,8 @@ function mapSizeInputChange() {
 
 // change svg size on manual size change or window resize, do not change graph size
 export function changeMapSize() {
-    setSvgWidth(Math.min(+doc.mapWidthInput().value, window.innerWidth));
-    setSvgHeight(Math.min(+doc.mapHeightInput().value, window.innerHeight));
-    svg.attr("width", svgWidth).attr("height", svgHeight);
+    view.svg.attr("width", Math.min(+doc.mapWidthInput().value, window.innerWidth))
+        .attr("height", Math.min(+doc.mapHeightInput().value, window.innerHeight));
 
     const maxWidth = Math.max(+doc.mapWidthInput().value, graphWidth);
     const maxHeight = Math.max(+doc.mapHeightInput().value, graphHeight);
@@ -676,8 +674,8 @@ async function enter3dView(type) {
         canvas.height = canvas.width / (graphWidth / graphHeight);
         canvas.style.display = "block";
     } else {
-        canvas.width = svgWidth;
-        canvas.height = svgHeight;
+        canvas.width = view.width;
+        canvas.height = view.height;
         canvas.style.position = "absolute";
         canvas.style.display = "none";
     }

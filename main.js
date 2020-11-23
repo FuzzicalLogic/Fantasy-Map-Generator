@@ -69,7 +69,7 @@ import {
 import { initialize as initOptions, applyStoredOptions, randomizeOptions } from "./modules/ui/options.js";
 import { initialize as initTools } from "./modules/ui/tools.js";
 
-export let svg = d3.select("#map");
+let svg = d3.select("#map");
 // d3 zoom behavior
 export let scale = 1, viewX = 0, viewY = 0;
 import { Camera } from "./map/Camera.js";

@@ -1,6 +1,5 @@
 ﻿import {
-    pack, notes, options,
-    svg, view
+    view, pack, notes, options    
 } from "../main.js";
 import * as Names from "../modules/names-generator.js";
 import {
@@ -32,7 +31,7 @@ export function addMarkers(number = 1) {
 }
 
 function addMarker(id, icon, x, y, size) {
-    const markers = svg.select("#defs-markers");
+    const markers = view.svg.select("#defs-markers");
     if (markers.select("#marker_" + id).size()) return;
 
     const symbol = markers.append("symbol")
