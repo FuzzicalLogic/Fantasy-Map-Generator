@@ -2,7 +2,7 @@
 
 import {
     version, seed, setSeed, view, 
-    svg, svgWidth, svgHeight, redefineElements,
+    svg, redefineElements,
     mapId, setMapId, graphWidth, graphHeight, setWidth, setHeight,
     mapCoordinates, setCoordinates, notes, setNotes,
     grid, setGrid,
@@ -72,8 +72,8 @@ export async function savePNG() {
     const link = document.createElement("a");
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-    canvas.width = svgWidth * pngResolutionInput.value;
-    canvas.height = svgHeight * pngResolutionInput.value;
+    canvas.width = view.width * pngResolutionInput.value;
+    canvas.height = view.height * pngResolutionInput.value;
     const img = new Image();
     img.src = url;
 
@@ -101,8 +101,8 @@ export async function saveJPEG() {
     const url = await getMapURL("png");
 
     const canvas = document.createElement("canvas");
-    canvas.width = svgWidth * pngResolutionInput.value;
-    canvas.height = svgHeight * pngResolutionInput.value;
+    canvas.width = view.width * pngResolutionInput.value;
+    canvas.height = view.height * pngResolutionInput.value;
     const img = new Image();
     img.src = url;
 

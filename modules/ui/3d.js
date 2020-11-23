@@ -1,5 +1,5 @@
 import {
-    svgWidth, svgHeight,
+    view,
     graphWidth, graphHeight,
     grid, mapCoordinates
 } from "../../main.js";
@@ -167,7 +167,7 @@ async function newMesh(canvas) {
 
   // camera
   camera = new THREE.PerspectiveCamera(70, canvas.width / canvas.height, .1, 2000);
-  camera.position.set(0, rn(svgWidth/3.5), 500);
+  camera.position.set(0, rn(view.width/3.5), 500);
 
   // controls
   controls = await OrbitControls(camera, canvas);

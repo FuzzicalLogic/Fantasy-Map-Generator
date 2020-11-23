@@ -1,6 +1,6 @@
 "use strict";
 import {
-    svgWidth, svgHeight, graphWidth, graphHeight, view,
+    graphWidth, graphHeight, view,
     seed, pack,
     grid,
     biomesData,
@@ -342,7 +342,9 @@ export function drawTemp() {
     }
 
     // min temp isoline covers all map
-    temperature.append("path").attr("d", `M0,0 h${svgWidth} v${svgHeight} h${-svgWidth} Z`).attr("fill", scheme(1 - (min - tMin) / delta)).attr("stroke", "none");
+    temperature.append("path").attr("d", `M0,0 h${view.width} v${view.height} h${-view.width} Z`)
+        .attr("fill", scheme(1 - (min - tMin) / delta))
+        .attr("stroke", "none");
 
     for (const t of isolines) {
         const path = chains.filter(c => c[0] === t).map(c => round(lineGen(c[1]))).join("");
@@ -361,7 +363,7 @@ export function drawTemp() {
     }
 
     function addLabel(points, t) {
-        const c = svgWidth / 2; // map center x coordinate
+        const c = view.width / 2; // map center x coordinate
         // add label on isoline top center
         const tc = points[d3.scan(points, (a, b) => (a[1] - b[1]) + (Math.abs(a[0] - c) - Math.abs(b[0] - c)) / 2)];
         pushLabel(tc[0], tc[1], t);
@@ -375,8 +377,8 @@ export function drawTemp() {
     }
 
     function pushLabel(x, y, t) {
-        if (x < 20 || x > svgWidth - 20) return;
-        if (y < 20 || y > svgHeight - 20) return;
+        if (x < 20 || x > view.width - 20) return;
+        if (y < 20 || y > view.height - 20) return;
         labels.push([x, y, t]);
     }
 
@@ -1066,14 +1068,15 @@ export function drawGrid() {
     gridOverlay.selectAll("*").remove();
     const type = styleGridType.value;
     const size = Math.max(+styleGridSize.value, 2);
+
     if (type === "pointyHex" || type === "flatHex") {
         const points = getHexGridPoints(size, type);
         const hex = "m" + getHex(size, type).slice(0, 4).join("l");
         const d = points.map(p => "M" + p + hex).join("");
         gridOverlay.append("path").attr("d", d);
     } else if (type === "square") {
-        const pathX = d3.range(size, svgWidth, size).map(x => "M" + rn(x, 2) + ",0v" + svgHeight).join(" ");
-        const pathY = d3.range(size, svgHeight, size).map(y => "M0," + rn(y, 2) + "h" + svgWidth).join(" ");
+        const pathX = d3.range(size, view.width, size).map(x => "M" + rn(x, 2) + ",0v" + svgHeight).join(" ");
+        const pathY = d3.range(size, view.height, size).map(y => "M0," + rn(y, 2) + "h" + svgWidth).join(" ");
         gridOverlay.append("path").attr("d", pathX + pathY);
     }
 

@@ -10,6 +10,13 @@
 export const version = "1.4"; // generator version
 document.title += " v" + version;
 
+const emitter = new EventTarget();
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.addEventListener(...args);
+const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+export const on = addEventListener;
+export const off = removeEventListener;
+
 // if map version is not stored, clear localStorage and show a message
 if (rn(localStorage.getItem("version"), 2) !== rn(version, 2)) {
     localStorage.clear();
@@ -66,7 +73,7 @@ export let svg = d3.select("#map");
 // d3 zoom behavior
 export let scale = 1, viewX = 0, viewY = 0;
 import { Camera } from "./map/Camera.js";
-export const camera = Camera(svg);
+export const camera = Camera(svg, emitter);
 camera.addEventListener('move',
     ({ detail: { zoom, position: [x, y] } }) => {
         viewX = x;
@@ -78,7 +85,7 @@ camera.addEventListener('move', invokeActiveZooming);
 camera.addEventListener('move', drawScaleBar);
 
 import { MapView } from "./map/MapView.js";
-export let view = MapView(document.getElementById('map'));
+export let view = MapView(document.getElementById('map'), emitter);
 MapView.initialize(view);
 
 // append svg layers (in default order)
@@ -189,7 +196,6 @@ options.winds = [225, 45, 225, 315, 135, 315]; // default wind directions
 
 applyStoredOptions();
 export let graphWidth = +mapWidthInput.value, graphHeight = +mapHeightInput.value; // voronoi graph extention, cannot be changed arter generation
-export let svgWidth = graphWidth, svgHeight = graphHeight; // svg canvas resolution, can be changed
 view.landmass.append("rect").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 oceanPattern.append("rect").attr("fill", "url(#oceanic)").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
 oceanLayers.append("rect").attr("id", "oceanBase").attr("x", 0).attr("y", 0).attr("width", graphWidth).attr("height", graphHeight);
@@ -200,7 +206,6 @@ export const { calculateVoronoiO: calculateVoronoi } = MapData;
 void function removeLoading() {
     d3.select("#loading").transition().duration(4000).style("opacity", 0).remove();
     d3.select("#initial").transition().duration(4000).attr("opacity", 0).remove();
-    //d3.select("#optionsContainer").transition().duration(3000).style("opacity", 1);
     d3.select("#tooltip").transition().duration(4000).style("opacity", 1);
 }()
 
@@ -314,6 +319,7 @@ export function setSvgHeight(v) { svgHeight = v; }
 export function setViewX(v) { viewX = v };
 export function setViewY(v) { viewY = v };
 export function setScale(v) { scale = v };
+
 
 export function redefineElements(mapview) {
     view = mapview;
@@ -454,12 +460,12 @@ function applyMapSize() {
     const zoomMin = +zoomExtentMin.value, zoomMax = +zoomExtentMax.value;
     graphWidth = +doc.mapWidthInput().value;
     graphHeight = +doc.mapHeightInput().value;
-    svgWidth = Math.min(graphWidth, window.innerWidth);
-    svgHeight = Math.min(graphHeight, window.innerHeight);
-    svg.attr("width", svgWidth).attr("height", svgHeight);
-    camera.setBoundaries([0, 0], [graphWidth, graphHeight]);
-    camera.setZoomLimit(zoomMin, zoomMax)
-    camera.reset();
+    dispatchEvent(new CustomEvent('resize', {
+        detail: {
+            width: graphWidth,
+            height: graphHeight
+        }
+    }));
 }
 
 // focus on coordinates, cell or burg provided in searchParams

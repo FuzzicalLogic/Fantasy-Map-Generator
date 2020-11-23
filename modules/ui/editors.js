@@ -1,6 +1,5 @@
 import {
     pack,
-    svgWidth, svgHeight,
     view, scale,
     camera,
     burgIcons, anchors, burgLabels,
@@ -297,7 +296,8 @@ export function fitLegendBox() {
     const px = isNaN(+legend.attr("data-x")) ? 99 : legend.attr("data-x") / 100;
     const py = isNaN(+legend.attr("data-y")) ? 93 : legend.attr("data-y") / 100;
     const bbox = legend.node().getBBox();
-    const x = rn(svgWidth * px - bbox.width), y = rn(svgHeight * py - bbox.height);
+    const x = rn(view.width * px - bbox.width),
+        y = rn(view.height * py - bbox.height);
     legend.attr("transform", `translate(${x},${y})`);
 }
 
@@ -319,10 +319,12 @@ function dragLegendBox() {
     const bbox = legend.node().getBBox();
 
     d3.event.on("drag", function () {
-        const px = rn((x + d3.event.x + bbox.width) / svgWidth * 100, 2);
-        const py = rn((y + d3.event.y + bbox.height) / svgHeight * 100, 2);
+        const px = rn((x + d3.event.x + bbox.width) / view.width * 100, 2);
+        const py = rn((y + d3.event.y + bbox.height) / view.height * 100, 2);
         const transform = `translate(${(x + d3.event.x)},${(y + d3.event.y)})`;
-        legend.attr("transform", transform).attr("data-x", px).attr("data-y", py);
+        legend.attr("transform", transform)
+            .attr("data-x", px)
+            .attr("data-y", py);
     });
 }
 
@@ -408,12 +410,41 @@ function createPicker() {
     const width = bbox.width + 8;
     const height = bbox.height + 9;
 
-    picker.insert("rect", ":first-child").attr("x", 0).attr("y", 0).attr("width", width).attr("height", height).attr("fill", "#ffffff").attr("stroke", "#5d4651").on("mousemove", pos);
-    picker.insert("text", ":first-child").attr("x", 291).attr("y", -10).attr("id", "pickerCloseText").text("✕");
-    picker.insert("rect", ":first-child").attr("x", 288).attr("y", -21).attr("id", "pickerCloseRect").attr("width", 14).attr("height", 14).on("mousemove", cl).on("click", closePicker);
-    picker.insert("text", ":first-child").attr("x", 12).attr("y", -10).attr("id", "pickerLabel").text("Color Picker").on("mousemove", pos);
-    picker.insert("rect", ":first-child").attr("x", 0).attr("y", -30).attr("width", width).attr("height", 30).attr("id", "pickerHeader").on("mousemove", pos);
-    picker.attr("transform", `translate(${(svgWidth - width) / 2},${(svgHeight - height) / 2})`);
+    picker.insert("rect", ":first-child")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "#ffffff")
+        .attr("stroke", "#5d4651")
+        .on("mousemove", pos);
+    picker.insert("text", ":first-child")
+        .attr("x", 291)
+        .attr("y", -10)
+        .attr("id", "pickerCloseText")
+        .text("✕");
+    picker.insert("rect", ":first-child")
+        .attr("x", 288)
+        .attr("y", -21)
+        .attr("id", "pickerCloseRect")
+        .attr("width", 14)
+        .attr("height", 14)
+        .on("mousemove", cl)
+        .on("click", closePicker);
+    picker.insert("text", ":first-child")
+        .attr("x", 12)
+        .attr("y", -10)
+        .attr("id", "pickerLabel")
+        .text("Color Picker")
+        .on("mousemove", pos);
+    picker.insert("rect", ":first-child")
+        .attr("x", 0)
+        .attr("y", -30)
+        .attr("width", width)
+        .attr("height", 30)
+        .attr("id", "pickerHeader")
+        .on("mousemove", pos);
+    picker.attr("transform", `translate(${(view.width - width) / 2},${(view.height - height) / 2})`);
 }
 
 function updateSelectedRect(fill) {
@@ -499,8 +530,8 @@ function dragPicker() {
     const bbox = picker.node().getBBox();
 
     d3.event.on("drag", function () {
-        const px = rn((x + d3.event.x + bbox.width) / svgWidth * 100, 2);
-        const py = rn((y + d3.event.y + bbox.height) / svgHeight * 100, 2);
+        const px = rn((x + d3.event.x + bbox.width) / view.width * 100, 2);
+        const py = rn((y + d3.event.y + bbox.height) / view.height * 100, 2);
         const transform = `translate(${(x + d3.event.x)},${(y + d3.event.y)})`;
         picker.attr("transform", transform).attr("data-x", px).attr("data-y", py);
     });

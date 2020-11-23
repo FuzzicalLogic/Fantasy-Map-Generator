@@ -1,8 +1,15 @@
 import { MapLayer } from "./MapLayer.js";
 
-export const MapView = el => {
+export const MapView = (el, map) => {
+    map.addEventListener('resize', e => {
+        el.setAttribute('width', Math.min(e.detail.width, window.innerWidth))
+        el.setAttribute('height', Math.min(e.detail.height, window.innerHeight))
+    });
+
     return {
         get svg() { return d3.select(el) },
+        get width() { return +el.getAttribute('width') },
+        get height() { return +el.getAttribute('height') },
         get box() { return this.svg.select('#viewbox') },
         get defs() { return this.svg.select("#deftemp") },
         get scaleBar() { return this.svg.select("#scaleBar") },

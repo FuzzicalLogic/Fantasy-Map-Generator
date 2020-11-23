@@ -9,12 +9,17 @@ export const DEFAULT_MAX_ZOOM = 20;
 export const DEFAULT_PAN_INTERVAL = 10;
 export const DEFAULT_ZOOM_DURATION = 350;
 
-export const Camera = (svg) => {
+export const Camera = (svg, map) => {
     const zoom = d3.zoom()
         .scaleExtent([DEFAULT_MIN_ZOOM, DEFAULT_MAX_ZOOM])
         .on("zoom", onMoveCamera);
     const emitter = new EventTarget();
     const dispatchEvent = (...args) => emitter.dispatchEvent(...args)
+
+    map.addEventListener('resize', e => {
+        zoom.translateExtent([[0, 0], [e.detail.width, e.detail.height]]);
+        svg.transition().duration(DEFAULT_ZOOM_DURATION).call(zoom.transform, d3.zoomIdentity);
+    });
 
     return {
         setBoundaries: (topleft, bottomright) => {

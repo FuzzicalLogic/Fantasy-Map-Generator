@@ -1,7 +1,5 @@
 import {
-    view,
-    svgWidth, svgHeight,
-    scale, lineGen
+    view, scale, lineGen
 } from "../../main.js";
 import { restoreDefaultEvents } from "./editors.js";
 
@@ -279,6 +277,8 @@ export function fitScaleBar() {
     const px = isNaN(+barPosX.value) ? .99 : barPosX.value / 100;
     const py = isNaN(+barPosY.value) ? .99 : barPosY.value / 100;
     const bbox = view.scaleBar.select("rect").node().getBBox();
-    const x = rn(svgWidth * px - bbox.width + 10), y = rn(svgHeight * py - bbox.height + 20);
+
+    const x = rn(view.width * px - bbox.width + 10),
+        y = rn(view.height * py - bbox.height + 20);
     view.scaleBar.attr("transform", `translate(${x},${y})`);
 }
