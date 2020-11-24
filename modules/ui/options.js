@@ -5,7 +5,8 @@ import {
     camera,
     view, oceanPattern, oceanLayers,
     mapHistory, regenerateMap,
-    customization
+    customization,
+    burgLabels
 } from "../../main.js";
 
 import * as Names from "../names-generator.js";
