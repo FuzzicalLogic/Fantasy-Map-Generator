@@ -8,7 +8,7 @@ import {
     customization,
     burgLabels
 } from "../../main.js";
-
+import { TabView } from "../../gui/TabView.js";
 import * as Names from "../names-generator.js";
 
 import * as ThreeD from "./3d.js";
