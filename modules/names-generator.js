@@ -9,7 +9,11 @@ import { BASE_NAMES } from "../config/basenames.js";
 let chains = [];
 
 export const getNameBases = () => BASE_NAMES;
-
+const Errors = {
+    BASE_UNDEFINED: () => `Please define a base`,
+    CULTURE_UNDEFINED: () => `Please define a culture`,
+    BASE_INCORRECT: (base) => `Namebase ${base} is incorrect!`,
+}
  // calculate Markov chain for a namesbase
 export function calculateChain(string) {
     const chain = [], array = string.split(",");
@@ -60,13 +64,15 @@ export function clearChains() { chains = []; }
 
   // generate name using Markov's chain
 export const getBase = function (base, min, max, dupl) {
-    if (base === undefined) { console.error("Please define a base"); return; }
+    if (base === undefined) {
+        console.error(Errors.BASE_UNDEFINED()); return;
+    }
     if (!chains[base]) updateChain(base);
 
     const data = chains[base];
     if (!data || data[""] === undefined) {
         tip("Namesbase " + base + " is incorrect. Please check in namesbase editor", false, "error");
-        console.error("Namebase " + base + " is incorrect!");
+        console.error(Errors.BASE_INCORRECT(base));
         return "ERROR";
     }
 
@@ -120,7 +126,7 @@ export const getBase = function (base, min, max, dupl) {
   // generate name for culture
 export function getCulture(culture, min, max, dupl) {
     if (culture === undefined) {
-        console.error("Please define a culture");
+        console.error(Errors.CULTURE_UNDEFINED());
         return;
     }
     const base = pack.cultures[culture].base;
@@ -129,7 +135,9 @@ export function getCulture(culture, min, max, dupl) {
 
   // generate short name for culture
 export function getCultureShort(culture) {
-    if (culture === undefined) { console.error("Please define a culture"); return; }
+    if (culture === undefined) {
+        console.error(Errors.CULTURE_UNDEFINED()); return;
+    }
     return getBaseShort(pack.cultures[culture].base);
 }
 
@@ -146,50 +154,85 @@ export function getBaseShort(base) {
 
   // generate state name based on capital or random name and culture-specific suffix
 export function getState(name, culture, base) {
-    if (name === undefined) { console.error("Please define a base name"); return; }
-    if (culture === undefined && base === undefined) { console.error("Please define a culture"); return; }
-    if (base === undefined) base = pack.cultures[culture].base;
+    if (name === undefined) {
+        console.error("Please define a base name");
+        return;
+    }
+    if (culture === undefined && base === undefined) {
+        console.error(Errors.CULTURE_UNDEFINED());
+        return;
+    }
+    if (base === undefined)
+        base = pack.cultures[culture].base;
 
     // exclude endings inappropriate for states name
-    if (name.includes(" ")) name = capitalize(name.replace(/ /g, "").toLowerCase()); // don't allow multiword state names
-    if (name.length > 6 && name.slice(-4) === "berg") name = name.slice(0, -4); // remove -berg for any
-    if (name.length > 5 && name.slice(-3) === "ton") name = name.slice(0, -3); // remove -ton for any
+    if (name.includes(" "))
+        name = capitalize(name.replace(/ /g, "").toLowerCase()); // don't allow multiword state names
+    if (name.length > 6 && name.slice(-4) === "berg")
+        name = name.slice(0, -4); // remove -berg for any
+    if (name.length > 5 && name.slice(-3) === "ton")
+        name = name.slice(0, -3); // remove -ton for any
 
-    if (base === 5 && ["sk", "ev", "ov"].includes(name.slice(-2))) name = name.slice(0, -2); // remove -sk/-ev/-ov for Ruthenian
-    else if (base === 12) return vowel(name.slice(-1)) ? name : name + "u"; // Japanese ends on any vowel or -u
-    else if (base === 18 && P(.4)) name = vowel(name.slice(0, 1).toLowerCase()) ? "Al" + name.toLowerCase() : "Al " + name; // Arabic starts with -Al
+    if (base === 5 && ["sk", "ev", "ov"].includes(name.slice(-2)))
+        name = name.slice(0, -2); // remove -sk/-ev/-ov for Ruthenian
+    else if (base === 12)
+        return vowel(name.slice(-1)) ? name : name + "u"; // Japanese ends on any vowel or -u
+    else if (base === 18 && P(.4))
+        name = vowel(name.slice(0, 1).toLowerCase()) ? "Al" + name.toLowerCase() : "Al " + name; // Arabic starts with -Al
 
     // no suffix for fantasy bases
-    if (base > 32 && base < 42) return name;
+    if (base > 32 && base < 42)
+        return name;
 
     // define if suffix should be used
     if (name.length > 3 && vowel(name.slice(-1))) {
-        if (vowel(name.slice(-2, -1)) && P(.85)) name = name.slice(0, -2); // 85% for vv
-        else if (P(.7)) name = name.slice(0, -1); // ~60% for cv
+        if (vowel(name.slice(-2, -1)) && P(.85))
+            name = name.slice(0, -2); // 85% for vv
+        else if (P(.7))
+            name = name.slice(0, -1); // ~60% for cv
         else return name;
-    } else if (P(.4)) return name; // 60% for cc and vc
+    } else if (P(.4))
+        return name; // 60% for cc and vc
 
     // define suffix
     let suffix = "ia"; // standard suffix
 
-    const rnd = Math.random(), l = name.length;
-    if (base === 3 && rnd < .03 && l < 7) suffix = "terra"; // Italian
-    else if (base === 4 && rnd < .03 && l < 7) suffix = "terra"; // Spanish
-    else if (base === 13 && rnd < .03 && l < 7) suffix = "terra"; // Portuguese
-    else if (base === 2 && rnd < .03 && l < 7) suffix = "terre"; // French
-    else if (base === 0 && rnd < .5 && l < 7) suffix = "land"; // German
-    else if (base === 1 && rnd < .4 && l < 7) suffix = "land"; // English
-    else if (base === 6 && rnd < .3 && l < 7) suffix = "land"; // Nordic
-    else if (base === 32 && rnd < .1 && l < 7) suffix = "land"; // generic Human
-    else if (base === 7 && rnd < .1) suffix = "eia"; // Greek
-    else if (base === 9 && rnd < .35) suffix = "maa"; // Finnic
-    else if (base === 15 && rnd < .4 && l < 6) suffix = "orszag"; // Hungarian
-    else if (base === 16) suffix = rnd < .6 ? "stan" : "ya"; // Turkish
-    else if (base === 10) suffix = "guk"; // Korean
-    else if (base === 11) suffix = " Guo"; // Chinese
-    else if (base === 14) suffix = rnd < .5 && l < 6 ? "tlan" : "co"; // Nahuatl
-    else if (base === 17 && rnd < .8) suffix = "a"; // Berber
-    else if (base === 18 && rnd < .8) suffix = "a"; // Arabic
+    const rnd = Math.random(),
+        l = name.length;
+    if (base === 3 && rnd < .03 && l < 7)
+        suffix = "terra"; // Italian
+    else if (base === 4 && rnd < .03 && l < 7)
+        suffix = "terra"; // Spanish
+    else if (base === 13 && rnd < .03 && l < 7)
+        suffix = "terra"; // Portuguese
+    else if (base === 2 && rnd < .03 && l < 7)
+        suffix = "terre"; // French
+    else if (base === 0 && rnd < .5 && l < 7)
+        suffix = "land"; // German
+    else if (base === 1 && rnd < .4 && l < 7)
+        suffix = "land"; // English
+    else if (base === 6 && rnd < .3 && l < 7)
+        suffix = "land"; // Nordic
+    else if (base === 32 && rnd < .1 && l < 7)
+        suffix = "land"; // generic Human
+    else if (base === 7 && rnd < .1)
+        suffix = "eia"; // Greek
+    else if (base === 9 && rnd < .35)
+        suffix = "maa"; // Finnic
+    else if (base === 15 && rnd < .4 && l < 6)
+        suffix = "orszag"; // Hungarian
+    else if (base === 16)
+        suffix = rnd < .6 ? "stan" : "ya"; // Turkish
+    else if (base === 10)
+        suffix = "guk"; // Korean
+    else if (base === 11)
+        suffix = " Guo"; // Chinese
+    else if (base === 14)
+        suffix = rnd < .5 && l < 6 ? "tlan" : "co"; // Nahuatl
+    else if (base === 17 && rnd < .8)
+        suffix = "a"; // Berber
+    else if (base === 18 && rnd < .8)
+        suffix = "a"; // Arabic
 
     return validateSuffix(name, suffix);
 }
