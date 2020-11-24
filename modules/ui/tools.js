@@ -317,9 +317,12 @@ function regenerateStates() {
     BurgsAndStates.drawStateLabels();
     Military.generate();
 
-    if (document.getElementById("burgsOverviewRefresh").offsetParent) burgsOverviewRefresh.click();
-    if (document.getElementById("statesEditorRefresh").offsetParent) statesEditorRefresh.click();
-    if (document.getElementById("militaryOverviewRefresh").offsetParent) militaryOverviewRefresh.click();
+    if (document.getElementById("burgsOverviewRefresh").offsetParent)
+        burgsOverviewRefresh.click();
+    if (document.getElementById("statesEditorRefresh").offsetParent)
+        statesEditorRefresh.click();
+    if (document.getElementById("militaryOverviewRefresh").offsetParent)
+        militaryOverviewRefresh.click();
 }
 
 function regenerateProvinces() {

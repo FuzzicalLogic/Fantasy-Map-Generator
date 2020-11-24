@@ -86,10 +86,14 @@ function updateGlobeTemperature(globe) {
     document.getElementById("temperatureEquatorF").innerHTML = rn(tEq * 9 / 5 + 32);
     const tPole = +document.getElementById("temperaturePoleOutput").value;
     document.getElementById("temperaturePoleF").innerHTML = rn(tPole * 9 / 5 + 32);
-    globe.selectAll(".tempGradient90").attr("stop-color", clr(1 - (tPole - tMin) / (tMax - tMin)));
-    globe.selectAll(".tempGradient60").attr("stop-color", clr(1 - (tEq - (tEq - tPole) * 2 / 3 - tMin) / (tMax - tMin)));
-    globe.selectAll(".tempGradient30").attr("stop-color", clr(1 - (tEq - (tEq - tPole) * 1 / 3 - tMin) / (tMax - tMin)));
-    globe.select(".tempGradient0").attr("stop-color", clr(1 - (tEq - tMin) / (tMax - tMin)));
+    globe.selectAll(".tempGradient90")
+        .attr("stop-color", clr(1 - (tPole - tMin) / (tMax - tMin)));
+    globe.selectAll(".tempGradient60")
+        .attr("stop-color", clr(1 - (tEq - (tEq - tPole) * 2 / 3 - tMin) / (tMax - tMin)));
+    globe.selectAll(".tempGradient30")
+        .attr("stop-color", clr(1 - (tEq - (tEq - tPole) * 1 / 3 - tMin) / (tMax - tMin)));
+    globe.select(".tempGradient0")
+        .attr("stop-color", clr(1 - (tEq - tMin) / (tMax - tMin)));
 }
 
 function updateWorld(globe, path, el) {
@@ -110,11 +114,16 @@ function updateWorld(globe, path, el) {
     pack.cells.h = new Float32Array(heights);
     defineBiomes();
 
-    if (isPressed("toggleTemp")) drawTemp();
-    if (isPressed("togglePrec")) drawPrec();
-    if (isPressed("toggleBiomes")) drawBiomes();
-    if (isPressed("toggleCoordinates")) drawCoordinates();
-    if (document.getElementById("canvas3d")) setTimeout(ThreeD.update(), 500);
+    if (isPressed("toggleTemp"))
+        drawTemp();
+    if (isPressed("togglePrec"))
+        drawPrec();
+    if (isPressed("toggleBiomes"))
+        drawBiomes();
+    if (isPressed("toggleCoordinates"))
+        drawCoordinates();
+    if (document.getElementById("canvas3d"))
+        setTimeout(ThreeD.update(), 500);
 }
 
 function updateGlobePosition(globe, path) {
