@@ -69,31 +69,7 @@ export function initialize() {
         optionsTrigger.classList.remove("glow");
     }
 
-    // Activate options tab on click
-    getById("options").querySelector(".tab").addEventListener("click", function (event) {
-        if (event.target.tagName !== "BUTTON") return;
-        const id = event.target.id;
-        const active = getById("options").querySelector(".tab > button.active");
-        if (active && id === active.id) return; // already active tab is clicked
-
-        if (active)
-            active.classList.remove("active");
-        getById(id).classList.add("active");
-        getById("options").querySelectorAll(".tabcontent")
-            .forEach(e => e.setAttribute('hidden',''));
-
-        if (id === "layersTab")
-            layersContent.removeAttribute('hidden');
-        else if (id === "styleTab")
-            styleContent.removeAttribute('hidden');
-        else if (id === "optionsTab")
-            optionsContent.removeAttribute('hidden');
-        else if (id === "toolsTab") customization === 1
-            ? customizationMenu.removeAttribute('hidden')
-            : toolsContent.removeAttribute('hidden');
-        else if (id === "aboutTab")
-            aboutContent.removeAttribute('hidden');
-    });
+    TabView(getById("options"));
 
     optionsContent.addEventListener("input", function (event) {
         const { id, value } = event.target;
