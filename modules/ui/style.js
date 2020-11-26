@@ -187,20 +187,20 @@ export function initialize() {
         if (!isPressed("toggleRelief")) toggleRelief();
     });
 
-    let { temperature, population } = view;
+    let { population } = view;
     styleTemperatureFillOpacityInput.addEventListener("input", function () {
-        temperature.attr("fill-opacity", this.value);
         styleTemperatureFillOpacityOutput.value = this.value;
+        dispatchEvent(StyleEvent('temperature', { fillOpacity: this.value }));
     });
 
     styleTemperatureFontSizeInput.addEventListener("input", function () {
-        temperature.attr("font-size", this.value + "px");
-        styleTemperatureFontSizeOutput.value = this.value + "px";
+        styleTemperatureFontSizeOutput.value = `${this.value}px`;
+        dispatchEvent(StyleEvent('temperature', { fontSize: `${this.value}px` }));
     });
 
     styleTemperatureFillInput.addEventListener("input", function () {
-        temperature.attr("fill", this.value);
         styleTemperatureFillOutput.value = this.value;
+        dispatchEvent(StyleEvent('temperature', { fill: this.value }));
     });
 
     stylePopulationRuralStrokeInput.addEventListener("input", function () {

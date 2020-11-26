@@ -119,3 +119,17 @@ async function drawTemperatures({ detail: { cells, vertices } }) {
         return chain;
     }
 }
+
+import { addEventListener as onStyleEvent } from "../modules/ui/style.js";
+onStyleEvent('change', e => {
+    if (e.detail.layer !== 'temperature')
+        return;
+
+    const { fillOpacity, fontSize, fill } = e.detail;
+    if (fillOpacity !== undefined)
+        view.temperature.attr("fill-opacity", fillOpacity);
+    if (fontSize !== undefined)
+        view.temperature.attr("font-size", fontSize);
+    if (fill !== undefined)
+        view.temperature.attr("fill", fill);
+});
