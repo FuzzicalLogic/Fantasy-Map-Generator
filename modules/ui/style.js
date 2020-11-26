@@ -75,17 +75,15 @@ export function initialize() {
     });
 
     styleTextureInput.addEventListener("change", function () {
-        if (this.value === "none") texture.select("image").attr("xlink:href", "");
-        else if (this.value === "default") texture.select("image").attr("xlink:href", getDefaultTexture());
-        else setBase64Texture(this.value);
+        dispatchEvent(StyleEvent('texture', { image: this.value }));
     });
 
     styleTextureShiftX.addEventListener("input", function () {
-        texture.select("image").attr("x", this.value).attr("width", graphWidth - this.valueAsNumber);
+        dispatchEvent(StyleEvent('texture', { xShift: +this.value }));
     });
 
     styleTextureShiftY.addEventListener("input", function () {
-        texture.select("image").attr("y", this.value).attr("height", graphHeight - this.valueAsNumber);
+        dispatchEvent(StyleEvent('texture', { yShift: +this.value }));
     });
 
     styleClippingInput.addEventListener("change", function () {
