@@ -46,8 +46,8 @@ const onShiftChange = ([x, y]) => {
 
 const onTextureImageChange = img => {
     if (img === "none")
-        texture.select("image").attr("xlink:href", "");
+        view.texture.select("image").attr("xlink:href", "");
     else if (img === "default")
-        texture.select("image").attr("xlink:href", getDefaultTexture());
+        view.texture.select("image").attr("xlink:href", getDefaultTexture());
     else setBase64Texture(img);
 }
