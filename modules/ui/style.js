@@ -20,6 +20,16 @@ import { rn, getDefaultTexture, parseTransform } from "../utils.js";
 import { showOptions } from "./options.js";
 import { drawHeightmap, drawGrid, toggleRelief, isPressed } from "./layers.js";
 
+//const Emitter = () => {
+    const emitter = new EventTarget();
+//    return {
+export const addEventListener = (...args) => emitter.addEventListener(...args);
+export const removeEventListener = (...args) => emitter.removeEventListener(...args);
+const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
+//    };
+//}
+//export const HeightmapStyle = Emitter();
+
 export function initialize() {
     let { svg, legend, texture, terrs, terrain } = view;
     styleElementSelect.addEventListener("change", selectStyleElement);
@@ -340,6 +350,13 @@ export function initialize() {
     document.getElementById('removeStyleButton').addEventListener('click', removeStylePreset);
 
 }
+
+const StyleEvent = (layer, props) => new CustomEvent('change', {
+    detail: {
+        layer,
+        ...props
+    }
+});
 
 // select element to be edited
 export function editStyle(element, group) {
