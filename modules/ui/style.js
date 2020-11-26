@@ -117,23 +117,21 @@ export function initialize() {
     });
 
     styleOceanBack.addEventListener("input", function () {
-        svg.style("background-color", this.value);
         styleOceanBackOutput.value = this.value;
+        dispatchEvent(StyleEvent('ocean', { backgroundColor: this.value }));
     });
 
     styleOceanFore.addEventListener("input", function () {
-        oceanLayers.select("rect").attr("fill", this.value);
         styleOceanForeOutput.value = this.value;
+        dispatchEvent(StyleEvent('ocean', { color: this.value }));
     });
 
     styleOceanPattern.addEventListener("change", function () {
-        svg.select("#oceanicPattern").attr("filter", this.value);
+        dispatchEvent(StyleEvent('ocean', { pattern: this.value }));
     });
 
     outlineLayers.addEventListener("change", function () {
-        oceanLayers.selectAll("path").remove();
-        oceanLayers.attr("layers", this.value);
-        OceanLayers(grid);
+        dispatchEvent(StyleEvent('ocean', { layers: this.value }));
     });
 
     styleHeightmapScheme.addEventListener("change", function () {
