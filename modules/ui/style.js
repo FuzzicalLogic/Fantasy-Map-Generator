@@ -135,31 +135,26 @@ export function initialize() {
     });
 
     styleHeightmapScheme.addEventListener("change", function () {
-        terrs.attr("scheme", this.value);
-        drawHeightmap();
+        dispatchEvent(StyleEvent('heightmap', { scheme: this.value }));
     });
 
     styleHeightmapTerracing.addEventListener("input", function () {
         styleHeightmapTerracingOutput.value = this.value;
-        terrs.attr("terracing", this.value);
-        drawHeightmap();
+        dispatchEvent(StyleEvent('heightmap', { terracing: this.value }));
     });
 
     styleHeightmapSkip.addEventListener("input", function () {
         styleHeightmapSkipOutput.value = this.value;
-        terrs.attr("skip", this.value);
-        drawHeightmap();
+        dispatchEvent(StyleEvent('heightmap', { skip: this.value }));
     });
 
     styleHeightmapSimplification.addEventListener("input", function () {
         styleHeightmapSimplificationOutput.value = this.value;
-        terrs.attr("relax", this.value);
-        drawHeightmap();
+        dispatchEvent(StyleEvent('heightmap', { relax: this.value }));
     });
 
     styleHeightmapCurve.addEventListener("change", function () {
-        terrs.attr("curve", this.value);
-        drawHeightmap();
+        dispatchEvent(StyleEvent('heightmap', { curve: this.value }));
     });
 
     styleReliefSet.addEventListener("change", function () {

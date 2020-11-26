@@ -1,7 +1,8 @@
-import { pack, view, lineGen } from "../main.js";
+import { grid, view, lineGen } from "../main.js";
 import { getColorScheme, getColor } from "../modules/ui/layers.js";
 import { round } from "../modules/utils.js";
 import * as generator from "../modules/heightmap-generator.js";
+import { addEventListener as onStyleEvent } from "../modules/ui/style.js";
 
 generator.addEventListener('update', drawHeightmap)
 export async function drawHeightmap({ detail:{ cells, vertices}}) {
@@ -91,3 +92,22 @@ function simplifyLine(chain) {
     const n = simplification + 1; // filter each nth element
     return chain.filter((d, i) => i % n === 0);
 }
+
+onStyleEvent('change', e => {
+    if (e.detail.layer !== 'heightmap')
+        return;
+
+    const { scheme, terracing, skip, relax, curve } = e.detail;
+    if (scheme !== undefined)
+        view.terrs.attr("scheme", scheme);
+    if (terracing !== undefined)
+        view.terrs.attr("terracing", terracing);
+    if (skip !== undefined)
+        view.terrs.attr("skip", skip);
+    if (relax !== undefined)
+        view.terrs.attr("relax", relax);
+    if (curve !== undefined)
+        view.terrs.attr("curve", curve);
+
+    drawHeightmap({ detail: grid });
+})

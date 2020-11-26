@@ -1599,7 +1599,7 @@
                         <tr data-tip="Select color scheme for the element">
                             <td>Color scheme</td>
                             <td>
-                                <select id="styleHeightmapScheme" onchange="drawHeightmap()">
+                                <select id="styleHeightmapScheme">
                                     <option value="bright" selected>Bright</option>
                                     <option value="light">Light</option>
                                     <option value="green">Green</option>
@@ -1618,7 +1618,7 @@
                         <tr data-tip="Layers reduction rate. Increase to improve performance">
                             <td>Reduce layers</td>
                             <td>
-                                <input id="styleHeightmapSkip" type="range" min=0 max=10 step=1 value=5 oninput="styleHeightmapSkipOutput.value = this.value; drawHeightmap()">
+                                <input id="styleHeightmapSkip" type="range" min=0 max=10 step=1 value=5>
                                 <output id="styleHeightmapSkipOutput">5</output>
                             </td>
                         </tr>
@@ -1626,7 +1626,7 @@
                         <tr data-tip="Line simplification rate. Increase to slightly improve performance">
                             <td>Simplify line</td>
                             <td>
-                                <input id="styleHeightmapSimplification" type="range" min=0 max=10 step=1 value=0 oninput="styleHeightmapSimplificationOutput.value = this.value; drawHeightmap()">
+                                <input id="styleHeightmapSimplification" type="range" min=0 max=10 step=1 value=0>
                                 <output id="styleHeightmapSimplificationOutput">0</output>
                             </td>
                         </tr>
@@ -1634,7 +1634,7 @@
                         <tr data-tip="Select line interpolation type">
                             <td>Line style</td>
                             <td>
-                                <select id="styleHeightmapCurve" onchange="drawHeightmap()">
+                                <select id="styleHeightmapCurve">
                                     <option value=0 selected>Curved</option>
                                     <option value=1>Linear</option>
                                     <option value=2>Rectangular</option>
