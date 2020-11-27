@@ -31,7 +31,7 @@ const dispatchEvent = (...args) => emitter.dispatchEvent(...args);
 //export const HeightmapStyle = Emitter();
 
 export function initialize() {
-    let { svg, legend, texture, terrs, terrain } = view;
+    let { legend, terrain } = view;
     styleElementSelect.addEventListener("change", selectStyleElement);
 
     // Handle style inputs change
@@ -215,11 +215,15 @@ export function initialize() {
 
     styleCompassSizeInput.addEventListener("input", function () {
         styleCompassSizeOutput.value = this.value;
-        shiftCompass();
+        dispatchEvent(StyleEvent('compass', { size: this.value }));
     });
 
-    styleCompassShiftX.addEventListener("input", shiftCompass);
-    styleCompassShiftY.addEventListener("input", shiftCompass);
+    styleCompassShiftX.addEventListener("input", function () {
+        dispatchEvent(StyleEvent('compass', { xShift: this.value }));
+    });
+    styleCompassShiftY.addEventListener("input", function () {
+        dispatchEvent(StyleEvent('compass', { yShift: this.value }));
+    });
 
 
     styleLegendColItems.addEventListener("input", function () {
@@ -335,7 +339,6 @@ export function initialize() {
     mapFilters.addEventListener("click", applyMapFilter);
 
     window.textureProvideURL = textureProvideURL;
-    window.changeStylePreset = changeStylePreset;
     document.getElementById('stylePreset').addEventListener('change', changeStylePreset);
     document.getElementById('addStyleButton').addEventListener('click', addStylePreset);
     document.getElementById('removeStyleButton').addEventListener('click', removeStylePreset);
@@ -597,7 +600,8 @@ function selectStyleElement() {
 }
 
 function getEl() {
-    const el = styleElementSelect.value, g = styleGroupSelect.value;
+    const el = styleElementSelect.value,
+        g = styleGroupSelect.value;
     if (g === el)
         return view.svg.select("#" + el);
     else return view.svg.select("#" + el).select("#" + g);
@@ -614,11 +618,6 @@ function shiftElement() {
     const x = styleShiftX.value || 0;
     const y = styleShiftY.value || 0;
     getEl().attr("transform", `translate(${x},${y})`);
-}
-
-export function shiftCompass() {
-    const tr = `translate(${styleCompassShiftX.value} ${styleCompassShiftY.value}) scale(${styleCompassSizeInput.value})`;
-    d3.select("#rose").attr("transform", tr);
 }
 
 function changeFont() {
@@ -703,7 +702,7 @@ export function setBase64Texture(url) {
     xhr.send();
 };
 
-function fetchTextureURLfetchTextureURL(url) {
+function fetchTextureURL(url) {
     console.log("Provided URL is", url);
     const img = new Image();
     img.onload = function () {
@@ -765,27 +764,91 @@ export function addDefaulsStyles() {
 // set default style
 function applyDefaultStyle() {
     let { legend, lakes, texture, coastline } = view;
-    view.armies.attr("opacity", 1).attr("fill-opacity", 1).attr("font-size", 6).attr("box-size", 3).attr("stroke", "#000").attr("stroke-width", .3);
+    view.armies.attr("opacity", 1)
+        .attr("fill-opacity", 1)
+        .attr("font-size", 6)
+        .attr("box-size", 3)
+        .attr("stroke", "#000")
+        .attr("stroke-width", .3);
 
-    view.biomes.attr("opacity", null).attr("filter", null).attr("mask", null);
-    view.ice.attr("opacity", .8).attr("fill", "#e8f0f6").attr("stroke", "#e8f0f6").attr("stroke-width", 1).attr("filter", "url(#dropShadow05)");
-    stateBorders.attr("opacity", .8).attr("stroke", "#56566d").attr("stroke-width", 1).attr("stroke-dasharray", "2").attr("stroke-linecap", "butt").attr("filter", null);
-    provinceBorders.attr("opacity", .8).attr("stroke", "#56566d").attr("stroke-width", .2).attr("stroke-dasharray", "1").attr("stroke-linecap", "butt").attr("filter", null);
-    view.cells.attr("opacity", null).attr("stroke", "#808080").attr("stroke-width", .1).attr("filter", null).attr("mask", null);
+    view.biomes.attr("opacity", null)
+        .attr("filter", null)
+        .attr("mask", null);
+    view.ice.attr("opacity", .8)
+        .attr("fill", "#e8f0f6")
+        .attr("stroke", "#e8f0f6")
+        .attr("stroke-width", 1)
+        .attr("filter", "url(#dropShadow05)");
+    stateBorders.attr("opacity", .8)
+        .attr("stroke", "#56566d")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "2")
+        .attr("stroke-linecap", "butt")
+        .attr("filter", null);
+    provinceBorders.attr("opacity", .8)
+        .attr("stroke", "#56566d")
+        .attr("stroke-width", .2)
+        .attr("stroke-dasharray", "1")
+        .attr("stroke-linecap", "butt")
+        .attr("filter", null);
+    view.cells.attr("opacity", null)
+        .attr("stroke", "#808080")
+        .attr("stroke-width", .1)
+        .attr("filter", null)
+        .attr("mask", null);
 
-    view.gridOverlay.attr("opacity", .8).attr("type", "pointyHex").attr("size", 10).attr("stroke", "#808080").attr("stroke-width", .5).attr("stroke-dasharray", null).attr("transform", null).attr("filter", null).attr("mask", null);
-    view.coordinates.attr("opacity", 1).attr("data-size", 12).attr("font-size", 12).attr("stroke", "#d4d4d4").attr("stroke-width", 1).attr("stroke-dasharray", 5).attr("filter", null).attr("mask", null);
-    view.compass.attr("opacity", .8).attr("transform", null).attr("filter", null).attr("mask", "url(#water)").attr("shape-rendering", "optimizespeed");
-    if (!d3.select("#initial").size()) d3.select("#rose").attr("transform", "translate(80 80) scale(.25)");
+    view.gridOverlay.attr("opacity", .8)
+        .attr("type", "pointyHex")
+        .attr("size", 10)
+        .attr("stroke", "#808080")
+        .attr("stroke-width", .5)
+        .attr("stroke-dasharray", null)
+        .attr("transform", null)
+        .attr("filter", null)
+        .attr("mask", null);
+    view.coordinates.attr("opacity", 1)
+        .attr("data-size", 12)
+        .attr("font-size", 12)
+        .attr("stroke", "#d4d4d4")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", 5)
+        .attr("filter", null)
+        .attr("mask", null);
+    view.compass.attr("opacity", .8)
+        .attr("transform", null)
+        .attr("filter", null)
+        .attr("mask", "url(#water)")
+        .attr("shape-rendering", "optimizespeed");
+    if (!d3.select("#initial").size())
+        d3.select("#rose").attr("transform", "translate(80 80) scale(.25)");
 
-    view.relig.attr("opacity", .7).attr("stroke", null).attr("stroke-width", null).attr("filter", null);
-    view.cults.attr("opacity", .6).attr("stroke", "#777777").attr("stroke-width", .5).attr("filter", null);
-    view.landmass.attr("opacity", 1).attr("fill", "#eef6fb").attr("filter", null);
-    view.markers.attr("opacity", null).attr("rescale", 1).attr("filter", "url(#dropShadow01)");
+    view.relig.attr("opacity", .7)
+        .attr("stroke", null)
+        .attr("stroke-width", null)
+        .attr("filter", null);
+    view.cults.attr("opacity", .6)
+        .attr("stroke", "#777777")
+        .attr("stroke-width", .5)
+        .attr("filter", null);
+    view.landmass.attr("opacity", 1)
+        .attr("fill", "#eef6fb")
+        .attr("filter", null);
+    view.markers.attr("opacity", null)
+        .attr("rescale", 1)
+        .attr("filter", "url(#dropShadow01)");
 
-    view.prec.attr("opacity", null).attr("stroke", "#000000").attr("stroke-width", .1).attr("fill", "#003dff").attr("filter", null);
+    view.prec.attr("opacity", null)
+        .attr("stroke", "#000000")
+        .attr("stroke-width", .1)
+        .attr("fill", "#003dff")
+        .attr("filter", null);
+
     let { population } = view;
-    population.attr("opacity", null).attr("stroke-width", 1.6).attr("stroke-dasharray", null).attr("stroke-linecap", "butt").attr("filter", null);
+    population.attr("opacity", null)
+        .attr("stroke-width", 1.6)
+        .attr("stroke-dasharray", null)
+        .attr("stroke-linecap", "butt")
+        .attr("filter", null);
     population.select("#rural").attr("stroke", "#0000ff");
     population.select("#urban").attr("stroke", "#ff0000");
 
@@ -803,9 +866,22 @@ function applyDefaultStyle() {
         .attr("filter", null);
     lakes.select("#sinkhole")
         .attr("opacity", 1)
-        .attr("fill", "#5bc9fd").attr("stroke", "#53a3b0").attr("stroke-width", .7).attr("filter", null);
-    lakes.select("#frozen").attr("opacity", .95).attr("fill", "#cdd4e7").attr("stroke", "#cfe0eb").attr("stroke-width", 0).attr("filter", null);
-    lakes.select("#lava").attr("opacity", .7).attr("fill", "#90270d").attr("stroke", "#f93e0c").attr("stroke-width", 2).attr("filter", "url(#crumpled)");
+        .attr("fill", "#5bc9fd")
+        .attr("stroke", "#53a3b0")
+        .attr("stroke-width", .7)
+        .attr("filter", null);
+    lakes.select("#frozen")
+        .attr("opacity", .95)
+        .attr("fill", "#cdd4e7")
+        .attr("stroke", "#cfe0eb")
+        .attr("stroke-width", 0)
+        .attr("filter", null);
+    lakes.select("#lava")
+        .attr("opacity", .7)
+        .attr("fill", "#90270d")
+        .attr("stroke", "#f93e0c")
+        .attr("stroke-width", 2)
+        .attr("filter", "url(#crumpled)");
     lakes.select("#dry")
         .attr("opacity", 1)
         .attr("fill", "#c9bfa7")
@@ -903,30 +979,104 @@ function applyDefaultStyle() {
         .attr("filter", "url(#pattern1)");
 
     // heightmap style
-    view.terrs.attr("opacity", null).attr("filter", null).attr("mask", "url(#land)").attr("stroke", "none")
-        .attr("scheme", "bright").attr("terracing", 0).attr("skip", 5).attr("relax", 0).attr("curve", 0);
+    view.terrs.attr("opacity", null)
+        .attr("filter", null)
+        .attr("mask", "url(#land)")
+        .attr("stroke", "none")
+        .attr("scheme", "bright")
+        .attr("terracing", 0)
+        .attr("skip", 5)
+        .attr("relax", 0)
+        .attr("curve", 0);
 
     // legend
-    legend.attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", 13).attr("data-size", 13)
-        .attr("data-x", 99).attr("data-y", 93).attr("data-columns", 8)
-        .attr("stroke-width", 2.5).attr("stroke", "#812929").attr("stroke-dasharray", "0 4 10 4").attr("stroke-linecap", "round");
-    legend.select("#legendBox").attr("fill", "#ffffff").attr("fill-opacity", .8);
+    legend.attr("font-family", "Almendra SC")
+        .attr("data-font", "Almendra+SC")
+        .attr("font-size", 13)
+        .attr("data-size", 13)
+        .attr("data-x", 99)
+        .attr("data-y", 93)
+        .attr("data-columns", 8)
+        .attr("stroke-width", 2.5)
+        .attr("stroke", "#812929")
+        .attr("stroke-dasharray", "0 4 10 4")
+        .attr("stroke-linecap", "round");
+    legend.select("#legendBox")
+        .attr("fill", "#ffffff")
+        .attr("fill-opacity", .8);
 
     const citiesSize = Math.max(rn(8 - regionsInput.value / 20), 3);
-    burgLabels.select("#cities").attr("fill", "#3e3e4b").attr("opacity", 1).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", citiesSize).attr("data-size", citiesSize);
-    burgIcons.select("#cities").attr("opacity", 1).attr("size", 1).attr("stroke-width", .24).attr("fill", "#ffffff").attr("stroke", "#3e3e4b").attr("fill-opacity", .7).attr("stroke-dasharray", "").attr("stroke-linecap", "butt");
-    anchors.select("#cities").attr("opacity", 1).attr("fill", "#ffffff").attr("stroke", "#3e3e4b").attr("stroke-width", 1.2).attr("size", 2);
+    burgLabels.select("#cities")
+        .attr("fill", "#3e3e4b")
+        .attr("opacity", 1)
+        .attr("font-family", "Almendra SC")
+        .attr("data-font", "Almendra+SC")
+        .attr("font-size", citiesSize)
+        .attr("data-size", citiesSize);
+    burgIcons.select("#cities")
+        .attr("opacity", 1)
+        .attr("size", 1)
+        .attr("stroke-width", .24)
+        .attr("fill", "#ffffff")
+        .attr("stroke", "#3e3e4b")
+        .attr("fill-opacity", .7)
+        .attr("stroke-dasharray", "")
+        .attr("stroke-linecap", "butt");
+    anchors.select("#cities")
+        .attr("opacity", 1)
+        .attr("fill", "#ffffff")
+        .attr("stroke", "#3e3e4b")
+        .attr("stroke-width", 1.2)
+        .attr("size", 2);
 
-    burgLabels.select("#towns").attr("fill", "#3e3e4b").attr("opacity", 1).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", 3).attr("data-size", 4);
-    burgIcons.select("#towns").attr("opacity", 1).attr("size", .5).attr("stroke-width", .12).attr("fill", "#ffffff").attr("stroke", "#3e3e4b").attr("fill-opacity", .7).attr("stroke-dasharray", "").attr("stroke-linecap", "butt");
-    anchors.select("#towns").attr("opacity", 1).attr("fill", "#ffffff").attr("stroke", "#3e3e4b").attr("stroke-width", 1.2).attr("size", 1);
+    burgLabels.select("#towns")
+        .attr("fill", "#3e3e4b")
+        .attr("opacity", 1)
+        .attr("font-family", "Almendra SC")
+        .attr("data-font", "Almendra+SC")
+        .attr("font-size", 3)
+        .attr("data-size", 4);
+    burgIcons.select("#towns")
+        .attr("opacity", 1)
+        .attr("size", .5)
+        .attr("stroke-width", .12)
+        .attr("fill", "#ffffff")
+        .attr("stroke", "#3e3e4b")
+        .attr("fill-opacity", .7)
+        .attr("stroke-dasharray", "")
+        .attr("stroke-linecap", "butt");
+    anchors.select("#towns")
+        .attr("opacity", 1)
+        .attr("fill", "#ffffff")
+        .attr("stroke", "#3e3e4b")
+        .attr("stroke-width", 1.2)
+        .attr("size", 1);
 
     let { labels } = view;
     const stateLabelSize = Math.max(rn(24 - regionsInput.value / 6), 6);
-    labels.select("#states").attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a").attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", stateLabelSize).attr("data-size", stateLabelSize).attr("filter", null);
-    labels.select("#addedLabels").attr("fill", "#3e3e4b").attr("opacity", 1).attr("stroke", "#3a3a3a").attr("stroke-width", 0).attr("font-family", "Almendra SC").attr("data-font", "Almendra+SC").attr("font-size", 18).attr("data-size", 18).attr("filter", null);
+    labels.select("#states")
+        .attr("fill", "#3e3e4b")
+        .attr("opacity", 1)
+        .attr("stroke", "#3a3a3a")
+        .attr("stroke-width", 0)
+        .attr("font-family", "Almendra SC")
+        .attr("data-font", "Almendra+SC")
+        .attr("font-size", stateLabelSize)
+        .attr("data-size", stateLabelSize)
+        .attr("filter", null);
+    labels.select("#addedLabels")
+        .attr("fill", "#3e3e4b")
+        .attr("opacity", 1)
+        .attr("stroke", "#3a3a3a")
+        .attr("stroke-width", 0)
+        .attr("font-family", "Almendra SC")
+        .attr("data-font", "Almendra+SC")
+        .attr("font-size", 18)
+        .attr("data-size", 18)
+        .attr("filter", null);
 
-    view.fogging.attr("opacity", .98).attr("fill", "#30426f");
+    view.fogging.attr("opacity", .98)
+        .attr("fill", "#30426f");
 }
 
 // apply style settings in JSON
